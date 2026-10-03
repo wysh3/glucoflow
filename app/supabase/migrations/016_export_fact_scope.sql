@@ -22,4 +22,3 @@ as $$
       f.status
     ) = 'retained';
 $$;
-
