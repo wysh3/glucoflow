@@ -11,3 +11,5 @@ export * from './documents';
 export * from './exports';
 export * from './me';
 export * from './env';
+
+export * from "./master";

@@ -89,7 +89,7 @@ export function ClinicPatientsPage(): React.ReactElement {
                   </TD>
                   <TD>
                     <Link
-                      to={`/clinic/patients/${patient.patientId}/progression`}
+                      to={`/clinic/patients/${patient.patientId}/master`}
                       className="inline-flex min-h-11 items-center rounded-[10px] border border-line px-4 text-sm text-ink hover:bg-canvas"
                     >
                       Open patient

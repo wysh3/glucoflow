@@ -1,3 +1,4 @@
+import {MasterPage} from './features/master/page';
 import * as React from 'react';
 import {
   BrowserRouter,
@@ -38,11 +39,13 @@ export function AppRoutes(): React.ReactElement {
           <Route path="/clinic/queue" element={<ClinicQueuePage />} />
           <Route path="/clinic/patients/:patientId" element={<ClinicPatientLayout />}>
             <Route index element={<Navigate to="progression" replace />} />
+            <Route path="master" element={<MasterPage />} />
             <Route path="progression" element={<ProgressionPage />} />
             <Route path="documents" element={<DocumentsPage />} />
             <Route path="history" element={<HistoryPage />} />
           </Route>
           <Route path="/clinic/review/:documentId" element={<ReviewPage />} />
+          <Route path="/patient/master" element={<MasterPage />} />
           <Route path="/patient/records" element={<PatientRecordsPage />} />
           <Route path="/patient/add-report" element={<PatientAddReportPage />} />
           <Route path="/patient/visit-notes" element={<PatientVisitNotesPage />} />

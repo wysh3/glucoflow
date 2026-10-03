@@ -1,47 +1,94 @@
 # Glucoflow
 
-Local status, 3 October 2026: **the local completion pass is implemented under [`app/`](app/)**. Read the [current handoff](HANDOFF.md) and [local completion evidence](app/reports/local-fixes-2026-10-03.md). Deployment is deferred at the user's request. GPT-6 Luna is enabled locally and has passed bounded synthetic evaluation and the full API smoke flow. Read [latest evidence](app/reports/key-cleanup-and-luna-2026-10-03.md). Hosted services, phone OTP, independent clinical validation and the latest physical Android pass remain outstanding.
+A shared workspace for patients and clinic teams to turn scattered diabetes records into a reviewed, source-backed history. Upload a report, check the extracted draft against the original, approve it, and explore the published timeline.
 
-Start with [the MVP documents](docs/mvp/README.md), then follow [the implementation plan](docs/mvp/06-build-plan.md). The [acceptance checklist](docs/mvp/10-acceptance-checklist.md) defines how the finished build is checked; the mapping to what was actually verified is in [app/reports/acceptance.md](app/reports/acceptance.md).
+**[Open the hosted demo](https://glucoflow.vercel.app)** · [Setup guide](app/docs/SETUP.md) · [Demo walkthrough](app/docs/DEMO.md) · [Android APK](deliverables/Glucoflow_Android.apk)
 
-| Start here | |
-|---|---|
-| [app/README.md](app/README.md) | What the implementation is and how to run it |
-| [app/docs/SETUP.md](app/docs/SETUP.md) | Setup, run, verify, Android build |
-| [app/docs/DEMO.md](app/docs/DEMO.md) | Reproducible demonstration script |
-| [app/reports/test-results.md](app/reports/test-results.md) | Measured results |
-| [HANDOFF.md](HANDOFF.md) | What works, what is unverified, what is next |
+![Glucoflow clinic progression workspace](app/reports/evidence/hosted/clinic-progression.png)
 
-## Current files
+## What it does
 
-| Location | Purpose |
-|---|---|
-| app/ | The implementation: API, worker, web client, Android shell, migrations, tests, reports |
-| docs/mvp/ | Authoritative scope, UI, architecture, extraction, data/API, build tasks and tests |
-| deliverables/Glucoflow_Pitch.pdf | Current pitch; claims must be reconciled with final takeover evidence |
-| deliverables/Glucoflow_Pitch.pptx | Editable version of the same deck |
-| deliverables/Submission_Answers.md | Submission draft; final evidence and real team details still required |
-| HANDOFF.md | Current execution status and dependencies |
-| archive/ | Historical material and source assets; excluded from the build baseline |
+- **Patient workspace:** upload PDFs or ordered photos, open original reports, view approved records, add patient-reported notes, and export a visit summary.
+- **Clinic workspace:** review extracted drafts beside source evidence, correct fields before publication, explore progression, search records, and retain amendment history.
+- **Synthetic Master dashboard:** illustrative multi-year measurements and medication phases, home glucose/symptom entries, clinician-configured screening tracking, manual care categories, and an append-only demo SOS snapshot inbox.
+- **Shared web and Android experience:** one React client packaged with Capacitor, with separate patient and clinic permissions enforced on the server and in PostgreSQL.
+- **Two extraction modes:** a labelled deterministic fixture engine for local demos and an optional live model adapter with explicit call/token/cost limits. Model output remains a draft until human approval.
 
-## Fixed product
+The Master dashboard is newer than the hosted verification screenshots above. Source availability in this repository does not establish that every recent change has been deployed. Demo SOS creates a snapshot for the synthetic clinic inbox; it does not dispatch emergency services. Configured flags and categories are for human review. Glucoflow does not diagnose, recommend treatment, infer missing measurements, or integrate live ABHA/ABDM.
 
-Patient and clinic roles on web and Android. Shared Vite/React/TypeScript frontend with Capacitor, shadcn/ui, Inter Variable and Lucide Animated. Fastify API and separate worker on Railway, Supabase Auth/PostgreSQL/private Storage, web assets on Vercel.
+## Stack
 
-Core flow: upload records, extract draft facts with evidence, review and approve, explore progression, search original reports, retain history and export a visit summary. Patient notes remain patient-reported. ABHA is a later extension. No clinical risk alerts, causal treatment claims, inferred missing measurements or automated screening deadlines.
+| Layer | Implementation |
+| --- | --- |
+| Web and Android | Vite, React, TypeScript, Tailwind, Radix/shadcn primitives, Capacitor |
+| API | Fastify with authenticated, tenant-scoped routes |
+| Processing | Separate Node worker, durable jobs, PDF/image preparation and OCR |
+| Data | PostgreSQL with row-level security, Supabase Auth and private Storage |
+| Hosted demo | Vercel frontend; Azure Container Apps API/worker; Supabase database/auth/storage |
+| Verification | Vitest, SQL isolation checks, Playwright desktop/mobile workflows |
 
-The application uses a restrained Apple/medical visual style. The pitch retains the user's original teal presentation theme. Use the takeover audit for current verification; archived ratings and older concept materials are historical.
+## Run locally
 
-[Audit details](docs/PREBUILD_AUDIT.md) record the cleanup, verification and remaining execution dependencies.
+Prerequisites: **Node.js 22.12–22.x**, **pnpm 12.5.1**, and **PostgreSQL 16** binaries on your PATH. The local database helper also discovers Homebrew PostgreSQL. Android builds additionally need JDK 21 and Android SDK 36.
 
-## Implementation notes
+```bash
+git clone https://github.com/wysh3/glucoflow.git
+cd glucoflow/app
+pnpm install --frozen-lockfile
+cp .env.example .env
+pnpm db:start
+pnpm db:migrate
+pnpm fixtures:generate
+pnpm fixtures:reference
+pnpm seed:demo -- --clinic demo --confirm-demo
+pnpm dev
+```
 
-Read AGENTS.md and the current specifications before changing the product. Do not treat
-older proposals, generated mockups or historical agent scores as product requirements or
-evidence of a working application.
+Open **http://127.0.0.1:5173**. The API runs at **http://127.0.0.1:8787**. Local demo credentials are generated in `app/.local/demo-credentials.json`; the dev server can use these to show role-entry buttons. This file and `.env` are ignored by Git. The default local extraction mode uses labelled synthetic fixtures and requires no model key.
 
-The default extraction provider is a deterministic rule engine over labelled synthetic
-fixtures; every surface that shows its output says so. No diagnosis, risk score, treatment
-causation, screening-deadline inference, imputation or live ABHA claim exists anywhere in
-the product. [app/docs/DECISIONS.md](app/docs/DECISIONS.md) records every contradiction that
-was resolved while building and every deviation that remains open.
+Use these database and seed commands only with the local development database. They are not the hosted bootstrap procedure. See the [full setup guide](app/docs/SETUP.md) for database roles, signing and model configuration, and [hosted operations](app/docs/HOSTED.md) for deployment details.
+
+## Verify
+
+Run from `app/` after setting up the local database and demo accounts:
+
+```bash
+pnpm typecheck
+pnpm test
+pnpm db:test
+pnpm build
+pnpm e2e
+pnpm smoke
+```
+
+The API and worker must be running for `pnpm smoke`. Playwright starts or reuses local services. Integration and browser tests create synthetic records; avoid pointing them at a real patient database.
+
+The GitHub preparation check on 3 October 2026 passed both TypeScript projects, **135 tests across 21 files**, **12 SQL isolation/constraint checks**, and the client/API/worker production build. Browser results and the source scan are recorded in the [upload verification report](app/reports/github-upload-2026-10-03.md). The build currently reports a large frontend bundle warning.
+
+The earlier [hosted deployment report](app/reports/hosted-deployment-2026-10-03.md) documents a synthetic upload → live extraction → review → approval → export flow. It is historical evidence for that deployed revision, not a clinical accuracy claim or verification of every subsequent edit.
+
+## Repository layout
+
+```text
+app/
+  apps/client/         Shared web UI and Capacitor Android project
+  apps/api/            Authentication, records, uploads, review and exports
+  apps/worker/         Document processing and export jobs
+  packages/            Contracts, domain rules, data, extraction and UI
+  supabase/            Additive migrations and SQL checks
+  scripts/             Local setup, seed, evaluation and verification
+  tests/               Integration and browser workflows
+  docs/                Setup, demo, deployment and decisions
+  reports/             Measured results and screenshots
+docs/mvp/              Original scope, architecture and acceptance baseline
+docs/superpowers/      Revised dashboard implementation plan
+deliverables/          Android APK, pitch decks and submission drafts
+```
+
+## Status and limitations
+
+This is a hackathon prototype using synthetic records. Hosted authentication, private source access and live processing have dated verification evidence. Physical-device camera/session/export checks, phone OTP, independent extraction validation and clinical/productivity outcomes remain pending. The included APK predates the latest Master dashboard work. Submission decks and answers are drafts; their claims require reconciliation with the dated evidence before external submission.
+
+For detailed context, see the [acceptance mapping](app/reports/acceptance.md), [product specification](docs/mvp/01-product.md), [revised dashboard plan](docs/superpowers/plans/2026-10-03-pdf-demo.md), and [implementation decisions](app/docs/DECISIONS.md).
+
+No license has been selected for this repository.

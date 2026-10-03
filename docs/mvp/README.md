@@ -42,4 +42,4 @@ These dependencies do not block implementing local synthetic fixtures and a prov
 
 The hackathon permits assistive workflow tools and excludes clinical interpretation and clinical decision support. This product prepares and displays source records. It does not decide diagnosis, medication changes, screening intervals or clinical risk. Demonstrations use synthetic records. Real clinical deployment requires a separate operational and security review.
 
-The current workspace is not a Git repository. Documentation is saved locally; no commit or remote repository was created.
+This directory preserves the original pre-build specification. The implementation now lives in `../../app/`; consult the repository README and dated verification reports for current status.

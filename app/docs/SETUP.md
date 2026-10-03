@@ -187,8 +187,9 @@ The examined synthetic corpus reports 0.9091 complete observation fields; this i
 
 ## 9. Hosted authentication and storage
 
-`AUTH_MODE=local` and `STORAGE_MODE=local` are the paths that were executed. The hosted
-path (`AUTH_MODE=supabase`, `STORAGE_MODE=supabase`) is implemented — JWKS verification
-with issuer, audience and expiry checks; private buckets with short-lived signed URLs —
-but it was **not** exercised here because no hosted project was available. `AUTH_MODE=local`
-is refused when `APP_ENV=production`.
+`AUTH_MODE=local` and `STORAGE_MODE=local` support local development.
+The hosted path (`AUTH_MODE=supabase`, `STORAGE_MODE=supabase`) uses JWKS verification
+with issuer, audience and expiry checks and private buckets with short-lived signed URLs.
+It was exercised in the dated [hosted deployment report](../reports/hosted-deployment-2026-10-03.md).
+Follow [HOSTED.md](HOSTED.md) for hosted setup rather than using the local bootstrap.
+`AUTH_MODE=local` is refused when `APP_ENV=production`.

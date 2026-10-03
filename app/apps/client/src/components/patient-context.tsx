@@ -17,6 +17,7 @@ export function PatientContextHeader({
   testSelector?: React.ReactNode;
 }): React.ReactElement {
   const tabs = [
+    { to: 'master', label: 'Master dashboard' },
     { to: 'progression', label: 'Progression' },
     { to: 'documents', label: 'Documents' },
     { to: 'history', label: 'History' },

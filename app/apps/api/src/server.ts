@@ -1,3 +1,4 @@
+import { registerMasterRoutes } from './routes/master';
 import cors from '@fastify/cors';
 import rateLimit from '@fastify/rate-limit';
 import Fastify, { type FastifyInstance } from 'fastify';
@@ -92,6 +93,7 @@ export async function buildServer(existingContext?: AppContext): Promise<Fastify
     });
 
     registerPatientRoutes(instance, ctx);
+    registerMasterRoutes(instance, ctx);
     registerDocumentRoutes(instance, ctx);
     registerUploadRoutes(instance, ctx);
   });

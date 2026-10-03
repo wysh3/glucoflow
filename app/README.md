@@ -59,19 +59,15 @@ reports           Measured results and acceptance mapping
 | `pnpm evaluate:extraction` | Measured extraction report (`--live` for a model) |
 | `pnpm android:keystore` / `android:sync` / `android:apk` | Android signing and release build |
 
-## What this implementation does not claim
+## Current verification and limits
 
-* The default extraction provider is a deterministic rule engine over labelled synthetic
-  fixtures. Every surface that shows its output says
-  *Fixture data: deterministic rule engine, not an AI model*.
-* A live model provider is implemented and refuses to run without credentials and a
-  positive budget. It has not been exercised here.
-* Hosted authentication (Supabase Auth with JWKS verification) and hosted storage are
-  implemented and gated; they have not been exercised here. `AUTH_MODE=local` is refused
-  in production.
-* No diagnosis, risk score, treatment causation, screening deadline, imputation or live
-  ABHA/ABDM claim exists anywhere in the product.
-* Android was verified on an emulator. A physical-device pass is outstanding.
+The [repository README](../README.md) and [GitHub preparation report](reports/github-upload-2026-10-03.md)
+record the current local checks. The [hosted deployment report](reports/hosted-deployment-2026-10-03.md)
+documents the deployed synthetic flow, including Supabase Auth/Storage and live extraction.
+The newer Master dashboard is covered by domain/API tests; see the revised plan in
+[`../docs/superpowers/plans/2026-10-03-pdf-demo.md`](../docs/superpowers/plans/2026-10-03-pdf-demo.md).
 
-Measured results: [`reports/test-results.md`](reports/test-results.md) and
-[`reports/acceptance.md`](reports/acceptance.md).
+Local extraction defaults to a labelled deterministic fixture engine. Live extraction requires
+credentials and a positive budget and keeps output in human-reviewed drafts. No clinical
+validation, treatment decisions, live ABHA integration or real emergency dispatch is claimed.
+Physical-device checks and phone OTP remain pending. The bundled APK predates the latest dashboard.

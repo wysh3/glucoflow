@@ -1,3 +1,4 @@
+import {demoAccounts,demoEnabled,type DemoAccount} from '../../auth/demo';
 import * as React from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Card, CardBody, Input, Label, ScreenTitle } from '@glucoflow/ui';
@@ -19,7 +20,7 @@ export function SignInPage(): React.ReactElement {
 
   if (status === 'signed-in' && me) {
     const target = (location.state as { from?: string } | null)?.from;
-    if (target) return <Navigate to={target} replace />;
+    if (target && !demoEnabled) return <Navigate to={target} replace />;
     const clinic = me.contexts.some((context) => context.kind === 'clinic');
     const patient = me.contexts.some((context) => context.kind === 'patient');
     return <Navigate to={clinic && !patient ? '/clinic/patients' : patient ? '/patient/records' : '/account'} replace />;
@@ -38,6 +39,33 @@ export function SignInPage(): React.ReactElement {
       setBusy(false);
     }
   };
+
+  const enterDemo=async(account:DemoAccount):Promise<void>=>{
+    setBusy(true);setError(null);
+    try{await signIn(account.email,account.password);navigate(account.key.includes('patient')?'/patient/master':'/clinic/patients',{replace:true});}
+    catch(caught){setError(caught instanceof Error?caught.message:'Could not open this demo role.');}
+    finally{setBusy(false);}
+  };
+  if(demoEnabled)return (
+    <div className="safe-top min-h-screen bg-canvas px-5 py-12 sm:py-20">
+      <div className="mx-auto max-w-[760px] space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-5">
+          <h1 className="text-2xl font-semibold text-ink">Glucoflow</h1>
+          <span className="rounded-full border border-line px-3 py-1 text-xs text-ink-soft">Interactive demo</span>
+        </div>
+        <p className="text-sm text-ink-soft">Choose a role to explore. All patient records in this demo are synthetic.</p>
+        <div className="grid gap-3 sm:grid-cols-2">{demoAccounts.map(account=>(
+          <button key={account.key} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)}
+            className="min-h-[116px] rounded-2xl border border-line bg-surface p-5 text-left transition hover:border-primary hover:bg-primary/5 disabled:opacity-50">
+            <span className="block text-base font-semibold text-ink">{account.label}</span>
+            <span className="mt-2 block text-sm leading-6 text-ink-soft">{account.description}</span>
+          </button>
+        ))}</div>
+        {busy?<p role="status" className="text-sm text-ink-soft">Opening workspace…</p>:null}
+        {error?<p role="alert" className="text-sm text-danger">{error}</p>:null}
+      </div>
+    </div>
+  );
 
   return (
     <div className="safe-top flex min-h-screen items-center justify-center bg-canvas px-4 py-10">

@@ -6,3 +6,10 @@ node_modules/
 !.env.example
 *.jks
 *.keystore
+
+# Temporary chart rendering workspaces
+.chart-data-*/
+
+# Local private state and signing material anywhere in the repository
+.local/
+*.pem

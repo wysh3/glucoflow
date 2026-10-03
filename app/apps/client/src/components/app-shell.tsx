@@ -1,3 +1,4 @@
+import {demoEnabled} from '../auth/demo';
 import * as React from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { CircleCheckIcon, FileTextIcon, HistoryIcon, SearchIcon, UsersIcon } from 'lucide-animated';
@@ -72,6 +73,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
     { to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon },
   ];
   const patientLinks = [
+    { to: '/patient/master', label: 'Home readings', icon: HistoryIcon },
     { to: '/patient/records', label: 'Records', icon: FileTextIcon },
     { to: '/patient/add-report', label: 'Add report', icon: SearchIcon },
     { to: '/patient/visit-notes', label: 'Visit notes', icon: HistoryIcon },
@@ -126,6 +128,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
                 <span>{describeRoles(me)}</span>
               </div>
               <div className="flex items-center gap-2">
+                {demoEnabled?<Button variant="secondary" onClick={()=>void signOut()}>Switch role</Button>:null}
                 <DemoLabel />
                 {backReady ? null : null}
               </div>
