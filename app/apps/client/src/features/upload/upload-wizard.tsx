@@ -1,14 +1,16 @@
 import * as React from 'react';
-import { CameraIcon } from 'lucide-react';
+import { CameraIcon, FileTextIcon, FlaskConicalIcon, UploadIcon } from 'lucide-react';
 import { Alert, Badge, Button, Dialog, DialogContent, DialogHeader, Progress, Spinner, formatBytes } from '@glucoflow/ui';
-import { UPLOAD_MAX_BYTES, UPLOAD_MAX_PHOTOS, type UploadSessionDto } from '@glucoflow/contracts';
+import { UPLOAD_MAX_BYTES, UPLOAD_MAX_PHOTOS, type DocumentDto, type UploadSessionDto } from '@glucoflow/contracts';
 import { randomIdempotencyKey } from '../../lib/api';
-import { useApi, describeApiError } from '../../auth/session';
+import { useApi, useSession, describeApiError } from '../../auth/session';
 import { captureReport, type CapturedPage } from '../../platform/camera';
 import { uploadToSignedUrl } from '../../platform/download';
 import { useJob } from '../../lib/queries';
 import { PROCESS_LOSS_NOTICE } from '../../components/state-views';
 import { Capacitor } from '@capacitor/core';
+import { Link } from 'react-router-dom';
+import { demoEnabled } from '../../auth/demo';
 
 /**
  * Upload wizard shared by the patient and clinic screens.
@@ -38,6 +40,8 @@ type Stage = 'select' | 'uploading' | 'processing' | 'done';
 
 export function UploadWizard(props: UploadWizardProps): React.ReactElement {
   const api = useApi();
+  const { me } = useSession();
+  const [loadingSample, setLoadingSample] = React.useState(false);
   const notified = React.useRef<string | null>(null);
   const [stage, setStage] = React.useState<Stage>('select');
   const [files, setFiles] = React.useState<SelectedFile[]>([]);
@@ -45,6 +49,7 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
   const [notice, setNotice] = React.useState<string | null>(null);
   const [session, setSession] = React.useState<UploadSessionDto | null>(null);
   const [jobId, setJobId] = React.useState<string | null>(null);
+  const [completedDocument, setCompletedDocument] = React.useState<DocumentDto | null>(null);
   const [documentId, setDocumentId] = React.useState<string | null>(null);
   const [progress, setProgress] = React.useState(0);
   const [cameraAvailable, setCameraAvailable] = React.useState(false);
@@ -57,18 +62,27 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
 
   React.useEffect(() => {
     if (!job.data) return;
-    if (job.data.state === 'succeeded') {
-      setStage('done');
-      if (documentId && notified.current !== documentId) {
-        notified.current = documentId;
-        props.onUploaded?.(documentId, session?.sessionId);
-      }
+    if (job.data.state === 'succeeded' && documentId && notified.current !== documentId) {
+      notified.current = documentId;
+      void api.request<DocumentDto>(`/api/v1/documents/${documentId}`).then(async document => {
+        let original = document;
+        const visited = new Set([document.documentId]);
+        while (original.duplicateOfDocumentId) {
+          if (visited.has(original.duplicateOfDocumentId) || visited.size > 20) throw new Error('This report could not be opened. Please use Documents to inspect its history.');
+          visited.add(original.duplicateOfDocumentId);
+          original = await api.request<DocumentDto>(`/api/v1/documents/${original.duplicateOfDocumentId}`);
+        }
+        document = {...document, duplicateOfDocumentId: document.duplicateOfDocumentId ? original.documentId : null};
+        setCompletedDocument(document);
+        setStage('done');
+        props.onUploaded?.(document.duplicateOfDocumentId ?? documentId, session?.sessionId);
+      }).catch(caught => {setError(describeApiError(caught));setStage('done');});
     }
     if (job.data.state === 'failed') {
       setError(job.data.errorMessage ?? 'Processing could not finish. A retry may be available.');
       setStage('done');
     }
-  }, [job.data, documentId, session?.sessionId, props]);
+  }, [job.data, documentId, session?.sessionId, props, api]);
 
   const reset = (): void => {
     notified.current = null;
@@ -79,6 +93,7 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
     setSession(null);
     setJobId(null);
     setDocumentId(null);
+    setCompletedDocument(null);
     setProgress(0);
   };
 
@@ -86,6 +101,9 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
     setError(null);
     const accepted: SelectedFile[] = [];
     for (const file of incoming) {
+      if (!/\.(pdf|jpe?g|png)$/i.test(file.filename) || file.byteCount === 0) {
+        setError('Choose a non-empty PDF, JPEG or PNG report.'); continue;
+      }
       if (file.byteCount > UPLOAD_MAX_BYTES) {
         setError(`${file.filename} is larger than 15 MiB. Reduce the file size and choose it again.`);
         continue;
@@ -135,19 +153,19 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
     );
   };
 
-  const upload = async (): Promise<void> => {
-    if (files.length === 0) return;
+  const upload = async (selected = files): Promise<void> => {
+    if (selected.length === 0) return;
     setStage('uploading');
     setError(null);
     try {
-      const kind = files.length > 1 ? 'photos' : 'file';
+      const kind = selected.length > 1 ? 'photos' : 'file';
       const created = await api.request<UploadSessionDto>('/api/v1/uploads', {
         method: 'POST',
         idempotencyKey: randomIdempotencyKey(),
         body: {
           patientId: props.patientId,
           kind,
-          files: files.map((file) => ({
+          files: selected.map((file) => ({
             filename: file.filename,
             contentType:
               file.contentType && ['application/pdf', 'image/jpeg', 'image/png'].includes(file.contentType)
@@ -164,9 +182,9 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
       setSession(created);
 
       let sent = 0;
-      const totalBytes = files.reduce((sum, file) => sum + file.byteCount, 0);
+      const totalBytes = selected.reduce((sum, file) => sum + file.byteCount, 0);
       for (const [index, target] of created.items.entries()) {
-        const file = files[index];
+        const file = selected[index];
         if (!file) continue;
         await uploadToSignedUrl(
           target.uploadUrl,
@@ -194,6 +212,19 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
       setError(describeApiError(caught));
       setStage('select');
     }
+  };
+
+  const trySample = async (filename: string): Promise<void> => {
+    setLoadingSample(true); setError(null);
+    try {
+      const response = await fetch(`/demo/${filename}`);
+      if (!response.ok) throw new Error('The sample could not load. Please try again.');
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      const selected = [{ filename, contentType: 'application/pdf', byteCount: bytes.byteLength, bytes }];
+      setFiles(selected);
+      await upload(selected);
+    } catch (caught) { setError(describeApiError(caught)); }
+    finally { setLoadingSample(false); }
   };
 
   const cancelUpload = async (): Promise<void> => {
@@ -251,6 +282,24 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
 
         {stage === 'select' ? (
           <div className="space-y-4">
+            {demoEnabled ? <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
+              <div className="flex items-center gap-2 text-primary"><FlaskConicalIcon size={20} aria-hidden /><h3 className="font-semibold">Try a synthetic sample</h3></div>
+              <p className="mt-2 text-xs leading-5 text-ink-soft">No documents needed. Upload a sample, check the source, then approve as Clinic team or Reviewer. Samples use the same extraction workflow as your own uploads.</p>
+              <div className="mt-3 space-y-2">
+                {[
+                  {file:'synthetic-lab.pdf',name:'lab',title:'Lab report',detail:'HbA1c, kidney markers and blood pressure. Start here.'},
+                  {file:'synthetic-identity-check.pdf',name:'identity check',title:'Missing patient identifier',detail:'Practice confirming identity against the source.'},
+                  {file:'synthetic-wrong-patient.pdf',name:'wrong patient',title:'Different patient',detail:'See how a mismatched identifier blocks publication.'},
+                ].map(sample => <div key={sample.file} className="rounded-xl border border-line bg-surface p-3">
+                  <div className="flex items-center gap-2"><FileTextIcon size={16} className="text-primary" aria-hidden /><p className="text-sm font-medium">{sample.title}</p><Badge>Synthetic</Badge></div>
+                  <p className="mt-1 text-xs leading-5 text-ink-soft">{sample.detail}</p>
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    <Button size="sm" variant="secondary" disabled={loadingSample} onClick={() => void trySample(sample.file)}><UploadIcon size={14} aria-hidden />Upload {sample.name} sample</Button>
+                    <a className="inline-flex min-h-9 items-center px-2 text-xs text-primary underline underline-offset-4" href={`/demo/${sample.file}`} target="_blank" rel="noreferrer" aria-label={`Preview ${sample.name} sample`}>Preview PDF</a>
+                  </div>
+                </div>)}
+              </div>
+            </section> : null}
             <div className="flex flex-wrap gap-2">
               <label className="inline-flex min-h-11 cursor-pointer items-center rounded-[10px] border border-line bg-surface px-4 text-sm font-medium text-ink hover:bg-canvas">
                 Choose PDF or image
@@ -299,7 +348,7 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
             <p className="text-[12px] text-ink-soft">{PROCESS_LOSS_NOTICE}</p>
 
             <div className="flex flex-wrap gap-2">
-              <Button variant="primary" disabled={files.length === 0} onClick={() => void upload()}>
+              <Button variant="primary" disabled={files.length === 0 || loadingSample} onClick={() => void upload()}>
                 Upload {files.length > 1 ? `${files.length} pages` : 'report'}
               </Button>
             </div>
@@ -340,13 +389,14 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
           <div className="space-y-3">
             <Alert
               tone={job.data?.state === 'succeeded' ? 'success' : 'error'}
-              title={job.data?.state === 'succeeded' ? 'Upload complete' : 'Processing stopped'}
+              title={job.data?.state === 'succeeded' ? completedDocument?.state === 'duplicate' ? 'Already uploaded' : 'Upload complete' : 'Processing stopped'}
             >
               {job.data?.state === 'succeeded'
-                ? `The document reached the clinic queue as ${job.data.state}. A reviewer will check every proposed entry against the source.`
+                ? completedDocument?.state === 'duplicate' ? 'This exact report is already in the patient record. Open the existing report to continue; no extra review is needed.' : 'The report is ready for source review. Entries appear in the approved record only after a reviewer checks and publishes them.'
                 : (job.data?.errorMessage ?? 'The document could not be read. A retry may be available in the review queue.')}
             </Alert>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
+              {job.data?.state === 'succeeded' ? <Button asChild variant="primary"><Link to={me?.capabilities.canReview ? `/clinic/review/${completedDocument?.duplicateOfDocumentId ?? documentId}` : '/patient/records'} onClick={() => {props.onOpenChange(false);reset();}}>{me?.capabilities.canReview ? completedDocument?.state === 'duplicate' ? 'Open existing report' : 'Review this report' : 'View my records'}</Link></Button> : null}
               <Button variant="secondary" onClick={() => { props.onOpenChange(false); reset(); }}>
                 Close
               </Button>

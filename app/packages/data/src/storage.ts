@@ -308,6 +308,12 @@ export class SupabaseStorageAdapter implements StorageAdapter {
       headers: this.headers(),
     });
     if (response.status === 404) return null;
+    // Supabase can transport NoSuchKey as HTTP 400 with an embedded 404.
+    // Permission and other storage failures must still surface to the caller.
+    if (response.status === 400) {
+      const error = await response.clone().json().catch(() => null) as {statusCode?: string | number; error?: string; code?: string} | null;
+      if (String(error?.statusCode) === '404' && (error?.error === 'not_found' || error?.code === 'NoSuchKey')) return null;
+    }
     await this.expectOk(response, 'object info');
     const payload = (await response.json()) as { size?: number; created_at?: string };
     return {

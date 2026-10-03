@@ -1,0 +1,199 @@
+{
+  "date": "2026-10-04",
+  "timezone": "Asia/Kolkata",
+  "target": "https://glucoflow.vercel.app",
+  "method": "Manual live browser click-through, DOM/accessibility observations, screenshots and downloaded PDF inspection. No application fixes or deployments performed.",
+  "summary": "Core hosted synthetic workflow passed; five actionable UI/data-presentation issues confirmed. Additional scenario-provenance concern and JSON-download limitation recorded.",
+  "roles_verified": [
+    "Patient",
+    "Doctor",
+    "Clinic team",
+    "Reviewer",
+    "Second clinic",
+    "Second patient"
+  ],
+  "checks": [
+    {
+      "check": "All six role-entry buttons",
+      "result": "passed"
+    },
+    {
+      "check": "Sign out, Switch role, authenticated deep-link reload",
+      "result": "passed"
+    },
+    {
+      "check": "Patient records, approved document list and biomarker switching",
+      "result": "passed"
+    },
+    {
+      "check": "Patient search for HbA1c",
+      "result": "passed; four original observations each matched label and evidence, producing separate rows"
+    },
+    {
+      "check": "Original PDF opening, rotation control, signed-source refresh",
+      "result": "passed"
+    },
+    {
+      "check": "Visit summary generation, download and visual rendering",
+      "result": "passed with ambiguous blood-pressure labels"
+    },
+    {
+      "check": "Home reading submission and persistence",
+      "result": "passed; 123 mg/dL synthetic fasting reading saved"
+    },
+    {
+      "check": "Problem report submission and persistence",
+      "result": "passed; explicitly labelled synthetic test symptom saved"
+    },
+    {
+      "check": "SOS frozen snapshot creation, inspection and clinic acknowledgement",
+      "result": "passed; emergencyDispatch false and SHA-256 digest shown"
+    },
+    {
+      "check": "JSON snapshot download",
+      "result": "unverified; download event timed out and no snapshot file was found in Downloads in the Codex in-app browser; no console error observed. Requires reproduction in Chrome/Android before attributing to the application."
+    },
+    {
+      "check": "Visit-note validation, preview, submission and clinic read acknowledgement",
+      "result": "passed; blank note disabled, synthetic note saved and marked read"
+    },
+    {
+      "check": "Patient note correction",
+      "result": "failed; unchanged note immediately republished as version 2"
+    },
+    {
+      "check": "Clinic patient search, empty search and clear search",
+      "result": "passed"
+    },
+    {
+      "check": "Master dashboard, expandable event timeline, clinic screening-rule save",
+      "result": "passed; saved the existing no-date 365-day rule without changing its effective configuration"
+    },
+    {
+      "check": "Progression, comparison, plot/table and custom date range",
+      "result": "passed; 2026-07-01 to 2026-10-04 limited observations and prescription/examination context appropriately"
+    },
+    {
+      "check": "Clinic documents and audit history",
+      "result": "passed; approval, note correction, note acknowledgement and export events visible"
+    },
+    {
+      "check": "Doctor access to review queue",
+      "result": "passed; clinician-only account shown reviewer-capability restriction"
+    },
+    {
+      "check": "Reviewer queue filter and source/fields tabs",
+      "result": "passed"
+    },
+    {
+      "check": "Reviewer correction form",
+      "result": "opened and inspected; requires a reason, cancellation worked; no corrected source field was submitted"
+    },
+    {
+      "check": "Synthetic PDF upload, extraction, review, approval, patient release",
+      "result": "passed; report synthetic-deployment-audit-2026-10-04.pdf extracted HbA1c 6.73%, source collection date 2026-10-03; published revision 8; patient result and original source verified after reload"
+    },
+    {
+      "check": "Cross-clinic direct access",
+      "result": "passed; second clinic could see only its own patient and primary patient direct link returned record unavailable"
+    },
+    {
+      "check": "Second-patient clinic-history access",
+      "result": "passed; redirected to own empty records"
+    },
+    {
+      "check": "Empty records and disabled export for revision 0",
+      "result": "passed"
+    },
+    {
+      "check": "Responsive layouts",
+      "result": "mobile 390x844 and desktop 1440x1000 exercised; no document-wide horizontal overflow measured on tested Master dashboard/review layouts. Desktop screenshot capture was limited by the narrow in-app host, so full desktop visual QA is not claimed."
+    },
+    {
+      "check": "Browser warning/error logs",
+      "result": "no warning/error entries returned by the browser log API at sampled checkpoints"
+    }
+  ],
+  "confirmed_issues": [
+    {
+      "id": "AUDIT-01",
+      "priority": "P2",
+      "title": "Note correction republishes unchanged text",
+      "reproduction": "Patient > Visit notes > Send a corrected version on the new synthetic note.",
+      "observed": "Version 1 became version 2 with identical content, without any editor or confirmation.",
+      "impact": "Patients cannot use this control to correct their note; it creates a misleading correction event.",
+      "source": "app/apps/client/src/features/patient/visit-notes/page.tsx:206",
+      "suggested_fix": "Open a prefilled edit/preview flow and submit only intentional corrected content."
+    },
+    {
+      "id": "AUDIT-02",
+      "priority": "P2",
+      "title": "Reading and symptom timestamps share state",
+      "reproduction": "Patient > Home readings; set Measured at to 2026-10-03T12:00.",
+      "observed": "Occurred at changed to 2026-10-03T12:00 as well, confirmed through both visible fields and DOM values. No extra event was saved.",
+      "impact": "Editing one form can silently change the time used by the other form.",
+      "source": "app/apps/client/src/features/master/page.tsx",
+      "suggested_fix": "Maintain independent timestamp state for readings and symptoms."
+    },
+    {
+      "id": "AUDIT-03",
+      "priority": "P2",
+      "title": "PDF blood-pressure labels lose systolic/diastolic distinction",
+      "reproduction": "Patient > Export visit summary > Download summary.",
+      "observed": "PDF lists Blood pressure: 138 mmhg and Blood pressure: 86 mmhg with identical labels; patient UI labels 138 as Systolic BP.",
+      "impact": "The exported record is ambiguous outside the application.",
+      "suggested_fix": "Export canonical Systolic BP/Diastolic BP labels or a paired 138/86 mmHg row while preserving source evidence."
+    },
+    {
+      "id": "AUDIT-04",
+      "priority": "P2",
+      "title": "Successful approval is presented as not ready to publish",
+      "reproduction": "Reviewer > uploaded audit report > Review > Approve 1 reviewed entry.",
+      "observed": "Publication succeeded at revision 8, but the page remained with This review is not ready to publish / This review was already published, plus Review, Exclude, Correct and manual-entry controls.",
+      "impact": "Successful completion looks like a warning/failure and exposes actions that should appear locked or start a separate amendment.",
+      "suggested_fix": "Show Published status, link to the released record and disable draft editing for published batches."
+    },
+    {
+      "id": "AUDIT-05",
+      "priority": "P2",
+      "title": "Patient note and upload dates disagree with local clinic timestamps",
+      "reproduction": "Submit the synthetic note and upload shortly after midnight on 4 October 2026 in Asia/Kolkata.",
+      "observed": "Patient UI says submitted/uploaded 03 October 2026, while clinic history/queue shows Oct 04, 2026, 12:07/12:11 AM.",
+      "impact": "The same event appears to happen on different dates across roles.",
+      "suggested_fix": "Format timestamp-derived calendar dates in one documented local timezone; keep actual source collection dates separate."
+    }
+  ],
+  "additional_concerns": [
+    {
+      "title": "Static five-year scenario appears for the second clinic patient with no approved results",
+      "observed": "Second clinic own P0482 patient has approval revision 0 and no documents, but its Master dashboard shows the same static 2022\u20132026 scenario. The scenario API checks the identifier P0482 rather than an explicit scenario assignment.",
+      "interpretation": "This is a synthetic fixture-provenance/UI concern, not evidence that private observations or events crossed tenants. Explicit scenario assignment or more prominent separation from real record data would reduce confusion."
+    },
+    {
+      "title": "History role labels are confusing for export events",
+      "observed": "System export-ready events and an earlier export-request event for Dr Meera Nair appeared with Patient role in history.",
+      "interpretation": "Verify whether actorRole captures identity capability or action context; use consistent labels."
+    }
+  ],
+  "synthetic_changes_retained": [
+    "One home glucose entry, 123 mg/dL, with synthetic audit label",
+    "One synthetic problem report",
+    "One demo SOS snapshot and clinic acknowledgement",
+    "One synthetic visit note, unintentionally advanced to version 2 by the correction control, and clinic read acknowledgement",
+    "One screening-rule event preserving the existing null date / 365-day configuration",
+    "One approved synthetic PDF with HbA1c 6.73%, approval revision 8",
+    "One generated visit-summary export"
+  ],
+  "not_claimed": [
+    "Exhaustive security audit",
+    "Every chart option and queue filter",
+    "Manual transcription or full field-correction submission",
+    "Amendment/rejection/cancellation persistence",
+    "Camera capture, multi-image uploads and physical Android behavior",
+    "Load, long-session expiry or provider accuracy benchmarks",
+    "Successful JSON snapshot download",
+    "A fresh full Playwright suite"
+  ],
+  "evidence_directory": "app/reports/evidence/live-audit-2026-10-04",
+  "cleanup": "Signed out of the live app and restored the temporary viewport override. Synthetic records retained; no database reset or deletion."
+}

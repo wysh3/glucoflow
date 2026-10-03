@@ -8,18 +8,26 @@ import { Capacitor } from '@capacitor/core';
  */
 
 export async function openAuthorizedUrl(url: string, filename?: string): Promise<void> {
+  const target = new URL(url);
+  if (filename && target.pathname.includes('/storage/v1/object/sign/')) target.searchParams.set('download', filename);
   if (Capacitor.isNativePlatform()) {
     // The platform-appropriate action on Android is the system handler for the URL.
     const { Browser } = await import('@capacitor/browser');
-    await Browser.open({url});
+    await Browser.open({url:target.toString()});
     return;
   }
   if (filename) {
     const anchor = document.createElement('a');
-    anchor.href = url;
+    const response = await fetch(target.toString());
+    if (!response.ok) throw new Error('The download link expired. Please try again.');
+    const blobUrl = URL.createObjectURL(await response.blob());
+    anchor.href = blobUrl;
     anchor.download = filename;
     anchor.rel = 'noreferrer';
+    document.body.appendChild(anchor);
     anchor.click();
+    anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
     return;
   }
   window.open(url, '_blank', 'noopener,noreferrer');

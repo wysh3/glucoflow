@@ -5,14 +5,14 @@ import { cn } from '../utils';
 export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>): React.ReactElement {
   return (
     <div
-      className={cn('rounded-[12px] border border-line bg-surface shadow-[0_1px_2px_rgba(23,43,51,0.04)]', className)}
+      className={cn('rounded-[18px] border border-line bg-surface shadow-[0_3px_16px_rgba(32,59,56,0.035)]', className)}
       {...props}
     />
   );
 }
 
 export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>): React.ReactElement {
-  return <div className={cn('flex flex-wrap items-center justify-between gap-8 px-6 py-4', className)} {...props} />;
+  return <div className={cn('flex flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6', className)} {...props} />;
 }
 
 export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>): React.ReactElement {
@@ -20,7 +20,7 @@ export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHead
 }
 
 export function CardBody({ className, ...props }: React.HTMLAttributes<HTMLDivElement>): React.ReactElement {
-  return <div className={cn('px-6 pb-6', className)} {...props} />;
+  return <div className={cn('px-4 pb-5 sm:px-6 sm:pb-6', className)} {...props} />;
 }
 
 const badgeVariants = cva(

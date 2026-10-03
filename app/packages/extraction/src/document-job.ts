@@ -160,6 +160,9 @@ export async function processDocumentJob(deps: DocumentJobDeps, job: LeasedJob):
            from sutra.document_versions v
            join sutra.documents d on d.id = v.document_id
           where v.clinic_id = $1 and d.patient_id = $2 and v.sha256 = $3 and d.id <> $4
+            and d.duplicate_of_document_id is null
+            and exists (select 1 from sutra.review_batches b where b.document_id = d.id)
+          order by d.created_at, d.id
           limit 1`,
         [context.clinicId, context.patientId, manifestChecksum, context.documentId],
       );

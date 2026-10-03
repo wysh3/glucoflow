@@ -76,7 +76,7 @@ test.describe('upload to approval', () => {
     await approve.click();
 
     // The publication must be accepted, not refused as stale.
-    await expect(page.getByText('This review was already published', { exact: false })).toBeVisible({
+    await expect(page.getByText('Published to the approved record', { exact: true })).toBeVisible({
       timeout: 30_000,
     });
 
@@ -88,6 +88,7 @@ test.describe('upload to approval', () => {
     });
     await page.goto('/clinic/patients');
     await page.getByRole('link', { name: 'Open patient' }).first().click();
+    await page.getByRole('link', {name:'Progression',exact:true}).click();
     await expect(page.getByRole('heading', { name: 'Progression' })).toBeVisible();
     // The table lists every recorded value, including the one just approved.
     await page.getByRole('button', { name: 'Table' }).click();

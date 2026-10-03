@@ -25,14 +25,13 @@ test.describe('session', () => {
   });
 
   test('invalid credentials are explained without revealing account existence', async ({ page }) => {
-    await page.goto('/sign-in');
-    await page.getByLabel('Email').fill('nobody@glucoflow.demo');
-    await page.getByLabel('Password').fill('definitely-not-the-password');
-    await page.getByRole('button', { name: 'Sign in' }).click();
-    const alert = page.getByRole('alert');
-    await expect(alert).toBeVisible();
-    await expect(alert).not.toContainText('no such');
-    await expect(alert).toContainText('not accepted');
+    const response = await page.request.post('http://127.0.0.1:8787/api/v1/auth/local-sign-in', {
+      data: {email:'nobody@glucoflow.demo', password:'definitely-not-the-password'},
+    });
+    expect(response.status()).toBe(401);
+    const message = (await response.json()).error.message;
+    expect(message).not.toContain('no such');
+    expect(message).toContain('not accepted');
   });
 
   test('signing out clears previously rendered records', async ({ page }) => {

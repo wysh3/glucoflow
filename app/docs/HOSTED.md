@@ -73,7 +73,7 @@ role can only execute `sutra.queue_depth()`, not read patient tables. The aggreg
 includes queued, retry-wait and running jobs so the worker remains active while
 processing. KEDA polls every 15 seconds, with a 120-second idle cooldown.
 
-Buckets `sutra-sources` and `sutra-exports` are private. Signed byte uploads use
+Buckets `sutra-sources` and `sutra-exports` are private. The exports bucket allows `application/pdf` and `application/json` (15 MiB limit); JSON is required for frozen SOS snapshot downloads. Keep both buckets private when changing MIME settings. Signed byte uploads use
 PUT; creation of the signed token uses POST. Source access URLs last 60 seconds.
 Temporary policy-test tables and failed Express-environment resources were removed.
 

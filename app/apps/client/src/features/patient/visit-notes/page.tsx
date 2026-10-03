@@ -33,6 +33,7 @@ export function PatientVisitNotesPage(): React.ReactElement {
   const [category, setCategory] = React.useState('diet_activity');
   const [eventDate, setEventDate] = React.useState('');
   const [body, setBody] = React.useState('');
+  const [correction, setCorrection] = React.useState<{noteId:string; body:string; category:string; eventDate:string} | null>(null);
   const [reviewing, setReviewing] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
@@ -46,13 +47,13 @@ export function PatientVisitNotesPage(): React.ReactElement {
   }
 
   const trimmed = body.trim();
-  const invalid = trimmed.length === 0 || trimmed.length > NOTE_MAX_CHARS;
+  const invalid = trimmed.length === 0 || trimmed.length > NOTE_MAX_CHARS || !!(correction && trimmed === correction.body.trim() && category === correction.category && eventDate === correction.eventDate);
 
   const send = async (): Promise<void> => {
     setBusy(true);
     setError(null);
     try {
-      await api.request(`/api/v1/patients/${patientId}/notes`, {
+      await api.request(correction ? `/api/v1/notes/${correction.noteId}/corrections` : `/api/v1/patients/${patientId}/notes`, {
         method: 'POST',
         body: {
           category,
@@ -60,6 +61,7 @@ export function PatientVisitNotesPage(): React.ReactElement {
           ...(eventDate ? { eventDate } : {}),
         },
       });
+      setCorrection(null);
       setBody('');
       setEventDate('');
       setReviewing(false);
@@ -77,7 +79,8 @@ export function PatientVisitNotesPage(): React.ReactElement {
 
       <Card>
         <CardHeader>
-          <CardTitle>New note</CardTitle>
+          <CardTitle>{correction ? 'Correct your note' : 'New note'}</CardTitle>
+          {correction ? <Button variant="quiet" size="sm" onClick={() => {setCorrection(null);setBody('');setEventDate('');setReviewing(false);setError(null);}}>Cancel correction</Button> : null}
         </CardHeader>
         <CardBody className="space-y-3">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -137,7 +140,7 @@ export function PatientVisitNotesPage(): React.ReactElement {
               </p>
               <div className="flex flex-wrap gap-2">
                 <Button variant="primary" disabled={busy || invalid} onClick={() => void send()}>
-                  {busy ? 'Sending' : 'Send note'}
+                  {busy ? 'Sending' : correction ? 'Send correction' : 'Send note'}
                 </Button>
                 <Button variant="quiet" onClick={() => setReviewing(false)}>
                   Edit
@@ -179,7 +182,7 @@ export function PatientVisitNotesPage(): React.ReactElement {
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <Badge tone="neutral">{NOTE_CATEGORY_LABELS[note.category] ?? note.category}</Badge>
                     <span className="text-[12px] text-ink-soft">
-                      submitted {formatDateOnly(note.submittedAt.slice(0, 10))} · version {note.version}
+                      submitted {formatDateOnly(note.submittedAt)} · version {note.version}
                     </span>
                   </div>
                   <p className="mt-2 text-sm text-ink">{note.body}</p>
@@ -203,16 +206,12 @@ export function PatientVisitNotesPage(): React.ReactElement {
                       size="sm"
                       variant="quiet"
                       className="mt-2"
-                      onClick={async () => {
-                        await api.request(`/api/v1/notes/${note.noteId}/corrections`, {
-                          method: 'POST',
-                          body: {
-                            category: note.category,
-                            body: note.body,
-                            ...(note.eventDate ? { eventDate: note.eventDate } : {}),
-                          },
-                        });
-                        await queryClient.invalidateQueries({ queryKey: ['notes'] });
+                      disabled={busy}
+                      onClick={() => {
+                        setCorrection({noteId:note.noteId, body:note.body, category:note.category, eventDate:note.eventDate ?? ''});
+                        setCategory(note.category); setBody(note.body); setEventDate(note.eventDate ?? '');
+                        setReviewing(false); setError(null);
+                        document.getElementById('note-body')?.focus();
                       }}
                     >
                       Send a corrected version

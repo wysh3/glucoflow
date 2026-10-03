@@ -216,7 +216,7 @@ export function PatientRecordsPage(): React.ReactElement {
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs text-ink-soft">
                         Uploaded{' '}
-                        {formatDateOnly(document.uploadedAt.slice(0, 10))}
+                        {formatDateOnly(document.uploadedAt)}
                       </span>
                       {document.currentVersion ? (
                         <Button
@@ -266,7 +266,7 @@ export function PatientRecordsPage(): React.ReactElement {
                       note.category as keyof typeof NOTE_CATEGORY_LABELS
                     ] ?? 'Note'}{' '}
                     · patient-reported ·{' '}
-                    {formatDateOnly(note.submittedAt.slice(0, 10))}
+                    {formatDateOnly(note.submittedAt)}
                     {note.seenAt ? ' · read by clinic' : ''}
                   </p>
                 </div>

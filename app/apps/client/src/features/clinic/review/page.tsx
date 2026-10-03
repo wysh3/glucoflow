@@ -113,7 +113,7 @@ export function ReviewPage(): React.ReactElement {
   }, [data, selectedFactId, openEvidence]);
 
   const patch = async (body: Record<string, unknown>): Promise<void> => {
-    if (!data) return;
+    if (!data || data.publishedAt) return;
     setBusy(true);
     setError(null);
     try {
@@ -136,7 +136,7 @@ export function ReviewPage(): React.ReactElement {
   };
 
   const approve = async (): Promise<void> => {
-    if (!data) return;
+    if (!data || data.publishedAt) return;
     setBusy(true);
     setError(null);
     try {
@@ -212,11 +212,10 @@ export function ReviewPage(): React.ReactElement {
                     </Button>
                     <Button
                       variant="primary"
-                      disabled={!data.canPublish || busy}
+                      disabled={!data.canPublish || busy || !!data.publishedAt}
                       onClick={() => void approve()}
                     >
-                      Approve {reviewedCount} reviewed{' '}
-                      {reviewedCount === 1 ? 'entry' : 'entries'}
+                      {data.publishedAt ? 'Published' : `Approve ${reviewedCount} reviewed ${reviewedCount === 1 ? 'entry' : 'entries'}`}
                     </Button>
                   </div>
                 }
@@ -256,7 +255,16 @@ export function ReviewPage(): React.ReactElement {
               </Alert>
             ) : null}
 
-            {data.publishBlockers.length > 0 ? (
+            {data.publishedAt ? (
+              <Alert tone="success" title="Published to the approved record">
+                <p>Revision {data.publishedRevision}. These entries are now part of the patient’s approved record.</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Button asChild variant="secondary"><Link to={`/clinic/patients/${data.patient.patientId}/progression`}>View approved record</Link></Button>
+                  <Button asChild variant="quiet"><Link to={`/clinic/patients/${data.patient.patientId}/documents`}>Documents & corrections</Link></Button>
+                </div>
+              </Alert>
+            ) : null}
+            {!data.publishedAt && data.publishBlockers.length > 0 ? (
               <Alert tone="review" title="This review is not ready to publish">
                 <ul className="list-disc pl-5">
                   {data.publishBlockers.map((blocker) => (
@@ -356,7 +364,7 @@ export function ReviewPage(): React.ReactElement {
                 <TabsContent value="fields" className="pt-4">
                   <FieldList
                     review={data}
-                    busy={busy}
+                    busy={busy || !!data.publishedAt}
                     selectedFactId={selectedFactId}
                     onSelect={(fact) => void openEvidence(fact)}
                     onPatch={patch}
@@ -385,7 +393,7 @@ export function ReviewPage(): React.ReactElement {
               />
               <FieldList
                 review={data}
-                busy={busy}
+                busy={busy || !!data.publishedAt}
                 selectedFactId={selectedFactId}
                 onSelect={(fact) => void openEvidence(fact)}
                 onPatch={patch}
@@ -756,6 +764,7 @@ function FieldList({
                   <Button
                     size="sm"
                     variant="quiet"
+                    disabled={busy}
                     onClick={() => {
                       setCorrecting(fact.factId);
                       setCorrection({
@@ -1058,7 +1067,7 @@ function FieldList({
           })}
         </ul>
 
-        <Button variant="secondary" onClick={onManual}>
+        <Button variant="secondary" disabled={busy} onClick={onManual}>
           Add an entry transcribed from the source
         </Button>
         <p className="text-[12px] text-ink-soft">

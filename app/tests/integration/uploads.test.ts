@@ -323,5 +323,10 @@ describe('upload sessions', () => {
     });
     // The duplicate job succeeds: a duplicate is a receipt, not a failure.
     expect(secondJobs).toBe('succeeded');
+    const third = await stageFixtureUpload(context, fixture, {filename: '2026-09-14_lab_report_copy.pdf'});
+    await runOneJob(context, third.jobId);
+    const thirdState = await documentState(context, third.documentId);
+    expect(thirdState.assignment_state).toBe('duplicate');
+    expect(thirdState.duplicate_of_document_id).toBe(first.documentId);
   });
 });

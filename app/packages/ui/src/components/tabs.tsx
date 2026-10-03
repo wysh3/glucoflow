@@ -57,9 +57,9 @@ export const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed z-50 border border-line bg-surface p-6 shadow-lg focus-visible:outline-none',
+        'fixed z-50 border border-line bg-surface p-4 shadow-xl sm:p-6 focus-visible:outline-none',
         side === 'center' &&
-          'left-1/2 top-1/2 max-h-[85vh] w-[min(92vw,560px)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-[12px]',
+          'left-1/2 top-1/2 max-h-[85vh] w-[min(92vw,560px)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-[20px]',
         side === 'right' &&
           'right-0 top-0 h-full w-[min(94vw,640px)] overflow-y-auto rounded-l-[12px]',
         side === 'bottom' && 'bottom-0 left-0 h-[92vh] w-full overflow-y-auto rounded-t-[12px]',

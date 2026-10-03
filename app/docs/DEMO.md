@@ -4,6 +4,23 @@ A reproducible walkthrough of both roles on web and Android, using the seeded sy
 tenant. Every screen named here exists in the current build; the observed values are the
 seeded ones.
 
+## Judge walkthrough — no local files needed
+
+Open [the live demo](https://glucoflow.vercel.app) and choose a role. All accounts and reports are synthetic.
+
+1. Choose **Clinic team**, then **Try a sample report** on the Patients screen.
+2. Choose **Upload lab sample**. The bundled PDF goes through the regular authenticated upload and extraction pipeline.
+3. Click **Review this report**, compare each proposed entry with its original page, and explicitly Review, Correct or Exclude each one.
+4. Approve the reviewed entries. A green publication state links straight to the approved record.
+5. Switch to **Patient** to explore approved records, submit home readings or problems, write and correct a visit note, and send a demo SOS snapshot.
+6. Try the other two samples to exercise a missing identifier and a mismatched patient. A repeated exact sample opens the existing report instead of creating another review.
+
+**Doctor** provides approved-record access; **Reviewer** provides source review and publication. The second clinic/patient roles demonstrate tenant separation. Only the primary demo patient is assigned the illustrative five-year scenario.
+
+The hosted app labels live extraction. Local automated browser tests use the deterministic fixture engine and label it accordingly. SOS freezes a synthetic snapshot for the demo clinic desk; it does not contact emergency responders.
+
+Public sample PDFs live in `apps/client/public/demo/`. Regenerate them with `python3 scripts/generate-demo-samples.py` (requires ReportLab). Each PDF prints its synthetic status.
+
 ## 0. Prepare (once)
 
 ```bash
@@ -15,8 +32,7 @@ pnpm seed:demo -- --clinic demo --confirm-demo
 pnpm dev
 ```
 
-Accounts and passwords are written to `app/.local/demo-credentials.json`. Open that file
-to copy a password; do not paste passwords into tickets, screenshots or chat.
+The local role picker uses the generated synthetic accounts in `app/.local/demo-credentials.json`. This ignored file is for local setup; no password copying is needed in the demo.
 
 | Account | Role |
 | --- | --- |
@@ -37,7 +53,7 @@ pnpm reset:demo -- --clinic demo --confirm-demo
 
 1. Open <http://127.0.0.1:5173> and sign in as `clinic@glucoflow.demo`.
 2. `Patients` lists P0482 Asha Rao (synthetic). Open the patient.
-3. `Progression` opens with **HbA1c** selected: three approved points (8.2 % on
+3. Select the `Progression` tab. It opens with **HbA1c** selected: three approved points (8.2 % on
    12 January 2026, 7.9 % on 10 April 2026, 7.5 % on 09 July 2026) on a date-proportional
    axis. Run `pnpm reset:demo -- --clinic demo --confirm-demo && pnpm seed:demo -- --clinic
    demo --confirm-demo` first if earlier runs added uploads; the seed restores exactly

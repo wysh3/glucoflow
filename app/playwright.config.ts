@@ -40,6 +40,7 @@ export default defineConfig({
   webServer: [
     {
       command: 'pnpm --filter @glucoflow/api exec tsx src/main.ts',
+      env: { EXTRACTION_PROVIDER: 'fixture' },
       url: 'http://127.0.0.1:8787/health/live',
       reuseExistingServer: true,
       timeout: 120_000,
@@ -48,6 +49,7 @@ export default defineConfig({
     },
     {
       command: 'pnpm --filter @glucoflow/worker exec tsx src/main.ts',
+      env: { EXTRACTION_PROVIDER: 'fixture' },
       reuseExistingServer: true,
       timeout: 120_000,
     },

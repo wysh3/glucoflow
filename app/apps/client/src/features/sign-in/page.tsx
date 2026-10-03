@@ -1,3 +1,4 @@
+import { HeartPulse, ArrowUpRight, Stethoscope, User, ClipboardCheck, Users } from 'lucide-react';
 import {demoAccounts,demoEnabled,type DemoAccount} from '../../auth/demo';
 import * as React from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
@@ -23,7 +24,7 @@ export function SignInPage(): React.ReactElement {
     if (target && !demoEnabled) return <Navigate to={target} replace />;
     const clinic = me.contexts.some((context) => context.kind === 'clinic');
     const patient = me.contexts.some((context) => context.kind === 'patient');
-    return <Navigate to={clinic && !patient ? '/clinic/patients' : patient ? '/patient/records' : '/account'} replace />;
+    return <Navigate to={clinic && !patient ? '/clinic/patients' : patient ? (demoEnabled ? '/patient/master' : '/patient/records') : '/account'} replace />;
   }
 
   const submit = async (event: React.FormEvent): Promise<void> => {
@@ -50,15 +51,16 @@ export function SignInPage(): React.ReactElement {
     <div className="safe-top min-h-screen bg-canvas px-5 py-12 sm:py-20">
       <div className="mx-auto max-w-[760px] space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-5">
-          <h1 className="text-2xl font-semibold text-ink">Glucoflow</h1>
+          <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-white"><HeartPulse size={24} aria-hidden /></span><h1 className="text-2xl font-semibold tracking-tight text-primary">Glucoflow</h1></div>
           <span className="rounded-full border border-line px-3 py-1 text-xs text-ink-soft">Interactive demo</span>
         </div>
-        <p className="text-sm text-ink-soft">Choose a role to explore. All patient records in this demo are synthetic.</p>
-        <div className="grid gap-3 sm:grid-cols-2">{demoAccounts.map(account=>(
+        <h2 className="text-3xl font-semibold tracking-tight text-ink">Care records, in one calm place.</h2>
+        <p className="text-sm leading-6 text-ink-soft">Choose a role to explore. All patient records in this demo are synthetic.</p>
+        <div className="grid grid-cols-2 gap-3">{demoAccounts.map(account=>(
           <button key={account.key} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)}
-            className="min-h-[116px] rounded-2xl border border-line bg-surface p-5 text-left transition hover:border-primary hover:bg-primary/5 disabled:opacity-50">
-            <span className="block text-base font-semibold text-ink">{account.label}</span>
-            <span className="mt-2 block text-sm leading-6 text-ink-soft">{account.description}</span>
+            className="group relative min-h-[156px] rounded-2xl border border-line bg-surface p-4 text-left sm:p-5 shadow-[0_3px_16px_rgba(32,59,56,0.035)] transition hover:border-primary hover:bg-primary/5 disabled:opacity-50">
+            <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/8 text-primary">{account.key.includes('patient') ? <User size={21} aria-hidden /> : account.key === 'clinician' ? <Stethoscope size={21} aria-hidden /> : account.key === 'reviewer' ? <ClipboardCheck size={21} aria-hidden /> : <Users size={21} aria-hidden />}</span><ArrowUpRight size={18} className="absolute right-5 top-5 text-ink-soft transition group-hover:text-primary" aria-hidden /><span className="block text-base font-semibold text-ink">{account.label}</span>
+            <span className="mt-2 block text-xs leading-5 text-ink-soft sm:text-sm sm:leading-6">{account.description}</span>
           </button>
         ))}</div>
         {busy?<p role="status" className="text-sm text-ink-soft">Opening workspace…</p>:null}

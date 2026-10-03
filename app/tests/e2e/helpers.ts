@@ -35,6 +35,15 @@ export async function signIn(page: Page, account: 'patient' | 'clinic' | 'review
   const credentials = demoCredentials().accounts[account];
   if (!credentials) throw new Error(`No seeded account named ${account}`);
   await page.goto('/sign-in');
+  const roleLabels = { patient: 'Patient', clinic: 'Clinic team', reviewer: 'Reviewer', clinician: 'Doctor' };
+  const role = page.getByRole('button', { name: new RegExp(`^${roleLabels[account]} `) });
+  await expect(role.or(page.getByLabel('Email'))).toBeVisible();
+  if (await role.count()) {
+    await role.click();
+    await page.waitForURL((url) => !url.pathname.startsWith('/sign-in'), { timeout: 30_000 });
+    if (account === 'patient') await page.goto('/patient/records');
+    return;
+  }
   await page.getByLabel('Email').fill(credentials.email);
   await page.getByLabel('Password').fill(credentials.password);
   await page.getByRole('button', { name: 'Sign in' }).click();
@@ -91,5 +100,6 @@ export async function switchAccount(
 export async function openDemoPatient(page: Page): Promise<void> {
   await page.goto('/clinic/patients');
   await page.getByRole('link', { name: 'Open patient' }).first().click();
-  await page.waitForURL(/\/clinic\/patients\/[0-9a-f-]+\/progression/);
+  await page.waitForURL(/\/clinic\/patients\/[0-9a-f-]+\//);
+  await page.getByRole('link', { name: 'Progression', exact: true }).click();
 }

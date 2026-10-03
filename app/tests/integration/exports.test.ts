@@ -217,6 +217,16 @@ describe('export snapshots', () => {
     const bytes = await context.storage.getObject(context.exportBucket, rendered.objectPath);
     expect(bytes.subarray(0, 5).toString('latin1')).toBe('%PDF-');
     expect(bytes.length).toBeGreaterThan(1000);
+    const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+    const pdf = await pdfjs.getDocument({ data: new Uint8Array(bytes), useSystemFonts: true }).promise;
+    let text = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const content = await (await pdf.getPage(i)).getTextContent();
+      text += content.items.map(item => 'str' in item ? item.str : '').join(' ');
+    }
+    await pdf.cleanup();
+    expect(text).toContain('Systolic blood pressure');
+    expect(text).toContain('Diastolic blood pressure');
 
     // A later amendment must not change the frozen manifest of this export.
     const beforeManifest = await context.owner(async (client) => {

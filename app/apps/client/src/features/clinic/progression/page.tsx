@@ -559,7 +559,7 @@ export function ProgressionPage(): React.ReactElement {
                       </Badge>
                       <span className="text-[12px] text-ink-soft">
                         uploaded{' '}
-                        {formatDateOnly(document.uploadedAt.slice(0, 10))}
+                        {formatDateOnly(document.uploadedAt)}
                       </span>
                       {document.coverageNote ? (
                         <span className="text-[12px] text-review">
@@ -668,7 +668,7 @@ function NoteRow({ note }: { note: TimelineNote }): React.ReactElement {
           {note.eventDate
             ? `Event ${formatDateOnly(note.eventDate)}`
             : 'No event date'}{' '}
-          · submitted {formatDateOnly(note.submittedAt.slice(0, 10))}
+          · submitted {formatDateOnly(note.submittedAt)}
         </span>
       </div>
       <p className="mt-1 text-[13px] text-ink">{note.body}</p>

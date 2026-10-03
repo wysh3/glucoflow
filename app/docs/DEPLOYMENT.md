@@ -13,7 +13,7 @@ each item says whether it was exercised.
 | API | `deploy/api.Dockerfile` | Fastify, port `8787`, non-root user, runs as the API privilege role |
 | Worker | `deploy/worker.Dockerfile` | No inbound route; leases jobs from the database. Includes the fonts and native libraries the PDF/OCR stages need |
 | Database | Supabase PostgreSQL or any PostgreSQL 16 | Apply `supabase/migrations` in order |
-| Storage | Supabase Storage (private buckets) or the local filesystem adapter | `sutra-sources` and `sutra-exports` are private |
+| Storage | Supabase Storage (private buckets) or the local filesystem adapter | `sutra-sources` and `sutra-exports` are private; exports allow PDF and JSON for summaries and snapshots |
 
 `deploy/worker.Dockerfile` is the required native-module smoke test target: build it and
 confirm `@napi-rs/canvas`, `sharp` and the Tesseract language data load before trusting

@@ -1,5 +1,9 @@
 # Screens and design system
 
+## Approved visual revision — 4 October 2026
+
+The user requested a warm, clean clinical design, clearer icons, fewer steps and a ready-to-use sample library. This supersedes the original exact styling and no-banner restriction: use warm mint/white surfaces, restrained rounded panels, compact contextual demo guidance and distinct role cards. Keep identity, units, source evidence and draft/publication states explicit. Navigation uses Lucide Animated; utility illustrations use the matching Lucide icon family where animation adds no value. No clinical values are animated.
+
 ## Visual constraints
 
 Apple-inspired restraint means readable typography, spacing, consistent alignment and quiet surfaces. Medical clarity means persistent patient identity, explicit units, source access and distinguishable draft states. Do not imitate Apple trademarks or add ornamental glass layers over records.
@@ -10,34 +14,34 @@ Use the font stack `"Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe 
 
 | Token | Value |
 |---|---|
-| Canvas | #F7F8FA |
+| Canvas | #F5F8F5 |
 | Surface | #FFFFFF |
-| Main text | #172B33 |
-| Secondary text | #52636C |
-| Primary/action | #12606F |
-| Primary hover | #0B3C49 |
-| Border | #DCE3E8 |
+| Main text | #203B38 |
+| Secondary text | #5B706B |
+| Primary/action | #26796E |
+| Primary hover | #1B5C53 |
+| Border | #DCE7E1 |
 | Review emphasis | #A85B00 on #FFF4E5 |
 | Error | #B42318 on #FFF1F0 |
 | Success action | #176B46 on #ECF8F1 |
 | Spacing scale | 4, 8, 12, 16, 24, 32 px |
 | Controls | 10 px radius; at least 44 px mobile hit area |
-| Panels | 12 px radius; thin border; minimal shadow |
+| Panels | 18 px radius; thin border; minimal shadow |
 | Body | 14 px desktop, 16 px mobile |
 | Screen title | 22–24 px, weight 600 |
 | Table numbers | Tabular numerals |
 
 Verify contrast of actual foreground/background combinations against WCAG AA during implementation. Colour never carries status alone. Use actual labels and icons. Success colour describes completed actions, never a medical result.
 
-No slogan, greeting banner, oversized title followed by a small promotional subtitle, gradient hero, floating AI orb, decorative KPI cards or sparkle branding. Use a single compact page title inside the toolbar. Helper text belongs next to a control only when it helps the user make a choice.
+The approved demo revision permits a restrained contextual welcome and subtle mint gradient. Avoid floating AI orbs, decorative medical KPI cards and sparkle branding. Use a single compact page title inside the toolbar. Helper text belongs next to a control only when it helps the user make a choice.
 
 ## Navigation
 
-Desktop clinic: left rail 216 px with Patients, Review queue and Account. Patient context remains pinned above record tabs. Desktop content has 24 px padding and expands to available width.
+Desktop clinic: left rail 240 px with Patients, Review queue and Account. Patient context remains pinned above record tabs. Desktop content has 24 px padding and expands to available width.
 
 Mobile clinic: bottom navigation Patients, Queue, Account. Patient detail tabs scroll horizontally if necessary. The document reviewer becomes two explicit tabs, Source and Fields, preserving selection and scroll. It must support approval on Android, not just read-only viewing.
 
-Patient navigation on all platforms: Records, Add report, Visit notes, Account. On desktop these can be a compact rail. On mobile they are bottom tabs. No clinic-wide patient list appears in a patient account.
+Patient navigation on all platforms: Home readings, Records, Add report, Visit notes, Account. On desktop these can be a compact rail. On mobile they are bottom tabs. No clinic-wide patient list appears in a patient account.
 
 ## Screen contracts
 

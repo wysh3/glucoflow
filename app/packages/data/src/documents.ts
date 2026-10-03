@@ -369,6 +369,7 @@ export async function listHistory(
   const offset = decodeCursor(options.cursor);
   const result = await client.query<{
     id: string;
+    actor_id: string | null;
     actor_name: string | null;
     reviewer: boolean | null;
     clinician: boolean | null;
@@ -379,7 +380,7 @@ export async function listHistory(
     reason: string | null;
     created_at: string;
   }>(
-    `select e.id, a.display_name as actor_name, m.reviewer, m.clinician,
+    `select e.id, e.actor_id, a.display_name as actor_name, m.reviewer, m.clinician,
             e.action, e.entity_type, e.entity_id, e.revision, e.reason, e.created_at
        from sutra.audit_events e
        left join sutra.app_users a on a.id = e.actor_id
@@ -394,7 +395,7 @@ export async function listHistory(
     items: rows.map((row) => ({
       auditEventId: row.id,
       actorName: row.actor_name ?? 'System',
-      actorRole: row.reviewer ? 'Reviewer' : row.clinician ? 'Clinician' : 'Patient',
+      actorRole: !row.actor_id ? 'System' : row.reviewer ? 'Reviewer' : row.clinician ? 'Clinician' : 'Patient',
       action: row.action,
       entityType: row.entity_type,
       entityId: row.entity_id,

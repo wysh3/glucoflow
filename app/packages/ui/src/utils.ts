@@ -29,7 +29,12 @@ export function formatDateTime(value: string | null | undefined): string {
 
 export function formatDateOnly(value: string | null | undefined): string {
   if (!value) return '';
-  const [year, month, day] = value.slice(0, 10).split('-');
+  if (value.includes('T')) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '';
+    return `${String(date.getDate()).padStart(2, '0')} ${monthName(date.getMonth() + 1)} ${date.getFullYear()}`;
+  }
+  const [year, month, day] = value.split('-');
   if (!year || !month || !day) return value;
   return `${day} ${monthName(Number(month))} ${year}`;
 }

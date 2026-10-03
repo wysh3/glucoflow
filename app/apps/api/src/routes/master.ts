@@ -15,10 +15,24 @@ export function registerMasterRoutes(app:FastifyInstance,ctx:AppContext):void{
   const patient=await getPatientSummary(client,request.params.id);
   if(!patient)throw ApiError.notFound();
   assertPatientAccess(requireActor(request),patient.patientId,patient.clinicId);
-  const demo=await client.query('select is_demo from sutra.clinics where id=$1',[patient.clinicId]);
+  const demo=await client.query('select c.is_demo,p.master_scenario from sutra.clinics c join sutra.patients p on p.clinic_id=c.id where p.id=$1',[patient.patientId]);
   if(!demo.rows[0]?.is_demo)throw ApiError.forbidden('The master scenario is available only in the synthetic demo clinic.');
   const rows=await client.query<Row>('select * from sutra.master_events where patient_id=$1 order by created_at desc,id desc limit 500',[patient.patientId]);
-  return {patientId:patient.patientId,scenario:patient.clinicIdentifier==='P0482',events:rows.rows.map(map),serverTime:new Date().toISOString()} satisfies MasterProfile;
+  return {patientId:patient.patientId,scenario:!!demo.rows[0]?.master_scenario,events:rows.rows.map(map),serverTime:new Date().toISOString()} satisfies MasterProfile;
+ }));
+ app.get<{Params:{id:string;snapshotId:string}}>('/api/v1/patients/:id/master/snapshots/:snapshotId/download',async request=>withActorTx(ctx,request,async client=>{
+  const patient=await getPatientSummary(client,request.params.id);if(!patient)throw ApiError.notFound();
+  assertPatientAccess(requireActor(request),patient.patientId,patient.clinicId);
+  const result=await client.query<Row>("select * from sutra.master_events where patient_id=$1 and id=$2 and kind='sos'",[patient.patientId,request.params.snapshotId]);
+  const event=result.rows[0];if(!event)throw ApiError.notFound('That snapshot is not available.');
+  const path=`snapshots/${patient.clinicId}/${patient.patientId}/${event.id}.json`;
+  const bucket=ctx.config.STORAGE_BUCKET_EXPORTS;
+  if(!await ctx.storage.headObject(bucket,path)){
+   try{await ctx.storage.putObject(bucket,path,Buffer.from(JSON.stringify({id:event.id,digest:event.digest,...event.payload},null,2)),'application/json');}
+   catch(error){if(!await ctx.storage.headObject(bucket,path))throw error;}
+  }
+  const url=await ctx.storage.createDownloadUrl(bucket,path,60);
+  return {url,filename:`glucoflow-snapshot-${event.id}.json`,expiresAt:new Date(Date.now()+60000).toISOString()};
  }));
  app.post<{Params:{id:string}}>('/api/v1/patients/:id/master/events',{config:{rateLimit:{max:20,timeWindow:'1 minute'}}},async(request,reply)=>{
   const input=parseBody(masterEventSchema,request.body);const key=idempotencyKey(request,true)!;
@@ -42,7 +56,8 @@ export function registerMasterRoutes(app:FastifyInstance,ctx:AppContext):void{
     const timeline=await loadTimelinePage(client,patient.patientId,{testCodes:[]},2000,0);
     const notes=await listNotes(client,patient.patientId);
     const history=await client.query<Row>('select * from sutra.master_events where patient_id=$1 order by created_at asc,id asc limit 500',[patient.patientId]);
-    payload={patient:{id:patient.patientId,name:patient.displayName,identifier:patient.clinicIdentifier},capturedAt:new Date().toISOString(),approvalRevision:patient.approvalRevision,scenario:patient.clinicIdentifier==='P0482'?{measurements:MASTER_SCENARIO,medications:MEDICATION_PHASES}:null,approvedRecords:timeline,patientNotes:notes,homeEvents:history.rows.filter(e=>['glucose','symptom'].includes(e.kind)).map(map),delivery:'Demo clinic desk',emergencyDispatch:false};
+    const assigned=await client.query('select master_scenario from sutra.patients where id=$1',[patient.patientId]);
+    payload={patient:{id:patient.patientId,name:patient.displayName,identifier:patient.clinicIdentifier},capturedAt:new Date().toISOString(),approvalRevision:patient.approvalRevision,scenario:assigned.rows[0]?.master_scenario?{measurements:MASTER_SCENARIO,medications:MEDICATION_PHASES}:null,approvedRecords:timeline,patientNotes:notes,homeEvents:history.rows.filter(e=>['glucose','symptom'].includes(e.kind)).map(map),delivery:'Demo clinic desk',emergencyDispatch:false};
     digest=sha(JSON.stringify(payload));
    }
    const rows=await client.query<Row>('insert into sutra.master_events(patient_id,actor_id,kind,payload,input_hash,request_key,digest) values($1,$2,$3,$4,$5,$6,$7) on conflict(actor_id,patient_id,request_key) do nothing returning *',[patient.patientId,actor.profile.userId,input.kind,JSON.stringify(payload),inputHash,key,digest]);

@@ -345,6 +345,7 @@ async function main(): Promise<void> {
 
     const patientId = await ownerTx((client) => ensurePatient(client, demoClinicId, 'P0482', 'Asha Rao (synthetic)'));
     // A deliberately identical name and identifier in the second clinic, to prove isolation.
+    await ownerTx(client => client.query('update sutra.patients set master_scenario = true where id=$1', [patientId]));
     const otherPatientId = await ownerTx((client) => ensurePatient(client, testClinicId, 'P0482', 'Asha Rao (synthetic)'));
     await ownerTx((client) => linkPatientAccount(client, demoClinicId, patientId, patientUser));
     await ownerTx((client) => linkPatientAccount(client, testClinicId, otherPatientId, otherPatientUser));

@@ -55,7 +55,7 @@ export function DocumentsPage(): React.ReactElement {
   const [reason, setReason] = React.useState('');
   const [changing, setChanging] = React.useState(false);
   const [changeError, setChangeError] = React.useState<string | null>(null);
-  const [uploadOpen, setUploadOpen] = React.useState(false);
+  const [uploadOpen, setUploadOpen] = React.useState(() => new URLSearchParams(window.location.search).has('sample'));
 
   const linkAmendment = async (completed: {
     documentId: string;

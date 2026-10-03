@@ -1,7 +1,7 @@
 import {demoEnabled} from '../auth/demo';
 import * as React from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { CircleCheckIcon, FileTextIcon, HistoryIcon, SearchIcon, UsersIcon } from 'lucide-animated';
+import { ArrowLeftIcon, CircleCheckIcon, FileTextIcon, HeartPulseIcon, FilePenLineIcon, UploadIcon, UserIcon, UsersIcon } from 'lucide-animated';
 import { Alert, Button, cn, useAnimatedIcon } from '@glucoflow/ui';
 import { useSession } from '../auth/session';
 import { installBackHandler } from '../platform/back';
@@ -73,19 +73,20 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
     { to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon },
   ];
   const patientLinks = [
-    { to: '/patient/master', label: 'Home readings', icon: HistoryIcon },
+    { to: '/patient/master', label: 'Home readings', icon: HeartPulseIcon },
     { to: '/patient/records', label: 'Records', icon: FileTextIcon },
-    { to: '/patient/add-report', label: 'Add report', icon: SearchIcon },
-    { to: '/patient/visit-notes', label: 'Visit notes', icon: HistoryIcon },
+    { to: '/patient/add-report', label: 'Add report', icon: UploadIcon },
+    { to: '/patient/visit-notes', label: 'Visit notes', icon: FilePenLineIcon },
   ];
   const links = isClinicView ? clinicLinks : isPatientView ? patientLinks : clinicContexts.length > 0 ? clinicLinks : patientContexts.length > 0 ? patientLinks : [];
 
   return (
     <div className="min-h-screen bg-canvas">
       <div className="mx-auto flex w-full max-w-[1440px] flex-col lg:flex-row">
-        <aside className="safe-top sticky top-0 hidden h-screen w-[216px] shrink-0 border-r border-line bg-surface/80 px-4 py-6 lg:block">
+        <aside className="safe-top sticky top-0 hidden h-screen w-[240px] shrink-0 border-r border-line bg-surface/90 px-4 py-6 lg:block">
           <div className="mb-6 px-2">
-            <p className="text-[15px] font-semibold text-ink">Glucoflow</p>
+            <HeartPulseIcon size={28} className="mb-3 text-primary" aria-hidden />
+            <p className="text-[19px] font-semibold tracking-tight text-primary">Glucoflow</p>
             <p className="mt-1 text-[12px] text-ink-soft">
               {isClinicView ? 'Clinic workspace' : isPatientView ? 'Patient workspace' : 'Account'}
             </p>
@@ -93,12 +94,12 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
           <nav className="flex flex-col gap-1" aria-label="Main">
             {links.map((link) => (
               <NavLink key={link.to} to={link.to} className={railLinkClass}>
-                <link.icon size={16} aria-hidden />
+                <link.icon size={20} aria-hidden />
                 {link.label}
               </NavLink>
             ))}
             <NavLink to="/account" className={railLinkClass}>
-              Account
+              <UserIcon size={20} aria-hidden /> Account
             </NavLink>
           </nav>
           {me ? (
@@ -120,7 +121,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
           <header className="safe-top sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur">
             <div className="flex items-center justify-between gap-3 px-4 py-2.5 lg:px-6">
               <div className="flex items-center gap-2 lg:hidden">
-                <span className="text-[15px] font-semibold text-ink">Glucoflow</span>
+                <span className="text-[19px] font-semibold tracking-tight text-primary">Glucoflow</span>
               </div>
               <div className="hidden items-center gap-3 text-[12px] text-ink-soft lg:flex">
                 <span>{me?.actor.email}</span>
@@ -150,7 +151,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
 
       {links.length > 0 ? (
         <nav
-          className="safe-bottom fixed bottom-0 left-0 right-0 z-30 flex border-t border-line bg-surface lg:hidden"
+          className="safe-bottom fixed bottom-0 left-0 right-0 z-30 flex border-t border-line bg-surface/95 shadow-[0_-4px_24px_rgba(24,76,68,0.05)] backdrop-blur lg:hidden"
           aria-label="Main"
         >
           {links.map((link) => (
@@ -159,12 +160,12 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
               to={link.to}
               className={({ isActive }) =>
                 cn(
-                  'flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1 text-[11px] font-medium',
-                  isActive ? 'text-primary' : 'text-ink-soft',
+                  'flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1.5 px-1 text-[10px] font-medium sm:text-[11px]',
+                  isActive ? 'bg-primary/8 text-primary' : 'text-ink-soft hover:bg-canvas',
                 )
               }
             >
-              <link.icon size={18} aria-hidden />
+              <link.icon size={20} aria-hidden />
               {link.label}
             </NavLink>
           ))}
@@ -172,12 +173,12 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
             to="/account"
             className={({ isActive }) =>
               cn(
-                'flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1 text-[11px] font-medium',
-                isActive ? 'text-primary' : 'text-ink-soft',
+                'flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1.5 px-1 text-[10px] font-medium sm:text-[11px]',
+                isActive ? 'bg-primary/8 text-primary' : 'text-ink-soft hover:bg-canvas',
               )
             }
           >
-            Account
+            <UserIcon size={20} aria-hidden /> Account
           </NavLink>
         </nav>
       ) : null}
@@ -202,8 +203,8 @@ export function BackLink({ to, label = 'Back' }: { to: string; label?: string })
   return (
     <Button asChild variant="quiet" size="sm" onClick={play}>
       <Link to={to}>
-        <span ref={ref as never} aria-hidden className="sr-only" />
-        ← {label}
+        <ArrowLeftIcon ref={ref} size={16} aria-hidden />
+        {label}
       </Link>
     </Button>
   );

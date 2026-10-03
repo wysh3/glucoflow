@@ -1,3 +1,5 @@
+import { FlaskConical, ArrowRight, HeartPulse } from 'lucide-react';
+import { demoEnabled } from '../../../auth/demo';
 import { LoadMore } from '../../../components/load-more';
 import * as React from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
@@ -30,6 +32,18 @@ export function ClinicPatientsPage(): React.ReactElement {
         title="Patients"
         meta={me.capabilities.canReview ? 'Review queue and records' : 'Approved records'}
       />
+      {demoEnabled && patients.data?.items[0] ? <section className="rounded-[20px] border border-primary/20 bg-gradient-to-br from-[#e7f3ec] to-surface p-5 sm:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="max-w-lg"><div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-surface text-primary"><HeartPulse size={22} aria-hidden /></div>
+            <h2 className="text-lg font-semibold tracking-tight">A ready-to-explore clinic</h2>
+            <p className="mt-2 text-sm leading-6 text-ink-soft">Meet Asha, our synthetic patient. Explore her records, or upload a sample and follow it from source to approved timeline.</p>
+          </div>
+          <Button asChild variant="primary"><Link to={`/clinic/patients/${patients.data.items[0].patientId}/${me.capabilities.canReview ? 'documents?sample=1' : 'progression'}`}>
+            {me.capabilities.canReview ? <FlaskConical size={18} aria-hidden /> : <HeartPulse size={18} aria-hidden />}{me.capabilities.canReview ? 'Try a sample report' : 'Explore approved records'}<ArrowRight size={16} aria-hidden />
+          </Link></Button>
+        </div>
+        <ol className="mt-5 grid gap-2 text-xs text-ink-soft sm:grid-cols-3">{['1 · Upload a labelled sample','2 · Check each entry against its source','3 · Publish and view the timeline'].map(step=><li key={step} className="rounded-xl border border-line bg-surface/75 px-3 py-3">{step}</li>)}</ol>
+      </section> : null}
       <div className="max-w-[420px]">
         <label className="sr-only" htmlFor="patient-search">
           Search patients

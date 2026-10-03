@@ -4,17 +4,17 @@ A shared workspace for patients and clinic teams to turn scattered diabetes reco
 
 **[Open the hosted demo](https://glucoflow.vercel.app)** · [Setup guide](app/docs/SETUP.md) · [Demo walkthrough](app/docs/DEMO.md) · [Android APK](deliverables/Glucoflow_Android.apk)
 
-![Glucoflow clinic progression workspace](app/reports/evidence/hosted/clinic-progression.png)
+![Glucoflow built-in synthetic sample library](app/reports/evidence/polish-2026-10-04/sample-library.png)
 
 ## What it does
 
-- **Patient workspace:** upload PDFs or ordered photos, open original reports, view approved records, add patient-reported notes, and export a visit summary.
+- **Patient workspace:** try built-in synthetic samples, upload PDFs or ordered photos, open original reports, view approved records, add patient-reported notes, and export a visit summary.
 - **Clinic workspace:** review extracted drafts beside source evidence, correct fields before publication, explore progression, search records, and retain amendment history.
 - **Synthetic Master dashboard:** illustrative multi-year measurements and medication phases, home glucose/symptom entries, clinician-configured screening tracking, manual care categories, and an append-only demo SOS snapshot inbox.
 - **Shared web and Android experience:** one React client packaged with Capacitor, with separate patient and clinic permissions enforced on the server and in PostgreSQL.
 - **Two extraction modes:** a labelled deterministic fixture engine for local demos and an optional live model adapter with explicit call/token/cost limits. Model output remains a draft until human approval.
 
-The Master dashboard is newer than the hosted verification screenshots above. Source availability in this repository does not establish that every recent change has been deployed. Demo SOS creates a snapshot for the synthetic clinic inbox; it does not dispatch emergency services. Configured flags and categories are for human review. Glucoflow does not diagnose, recommend treatment, infer missing measurements, or integrate live ABHA/ABDM.
+The live demo includes the warm clinical interface, desktop/mobile navigation, editable note corrections and a built-in synthetic sample library. Choose **Clinic team → Try a sample report → Upload lab sample** to start without finding a document. Demo SOS creates a snapshot for the synthetic clinic inbox; it does not dispatch emergency services. Configured flags and categories are for human review. Glucoflow does not diagnose, recommend treatment, infer missing measurements, or integrate live ABHA/ABDM.
 
 ## Stack
 
@@ -63,7 +63,7 @@ pnpm smoke
 
 The API and worker must be running for `pnpm smoke`. Playwright starts or reuses local services. Integration and browser tests create synthetic records; avoid pointing them at a real patient database.
 
-The GitHub preparation check on 3 October 2026 passed both TypeScript projects, **135 tests across 21 files**, **12 SQL isolation/constraint checks**, and the client/API/worker production build. Browser results and the source scan are recorded in the [upload verification report](app/reports/github-upload-2026-10-03.md). The build currently reports a large frontend bundle warning.
+The 4 October 2026 polish check passed both TypeScript projects, **143 tests across 25 files**, **12 SQL isolation/constraint checks**, 70 desktop/mobile browser checks, and the client/API/worker production build. Desktop/mobile and live deployment results are recorded in the [polish verification report](app/reports/polish-2026-10-04.md). The build currently reports a large frontend bundle warning.
 
 The earlier [hosted deployment report](app/reports/hosted-deployment-2026-10-03.md) documents a synthetic upload → live extraction → review → approval → export flow. It is historical evidence for that deployed revision, not a clinical accuracy claim or verification of every subsequent edit.
 

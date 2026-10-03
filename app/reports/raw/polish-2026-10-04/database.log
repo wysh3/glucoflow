@@ -1,0 +1,15 @@
+$ tsx scripts/db-test.ts
+running isolation.sql ... ok (12 checks)
+  PASS  clinic A sees only its own patient — 1 patient row(s) visible to clinic A
+  PASS  clinic A cannot read clinic B patient with the same name and identifier — 0 row(s) for the other clinic patient
+  PASS  inactive membership removes record access — 0 row(s) visible after deactivation
+  PASS  patient account reads only its own linked record — 1 patient row(s) visible to the patient account
+  PASS  patient account cannot read clinic audit metadata — 0 audit row(s) visible to the patient account
+  PASS  patient cannot publish an approval batch — sqlstate 42501
+  PASS  clinic B sees only its own patient — 1 patient row(s) visible to clinic B
+  PASS  unsupported fact kind is rejected — check constraint refused the row
+  PASS  note above 1,000 characters is rejected — check constraint refused the row
+  PASS  second active patient link is rejected — partial unique index refused the row
+  PASS  api role cannot insert an audit row directly — permission denied for table audit_events
+  PASS  api role cannot publish an approved fact directly — permission denied for table approved_facts
+All database isolation and constraint checks passed.

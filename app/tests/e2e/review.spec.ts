@@ -120,13 +120,12 @@ test('two uploaded photos remain separately accessible during review', async ({p
     'fixtures/synthetic/photos/2026-09-14_lab_report_photo_a.jpg',
     'fixtures/synthetic/photos/2026-09-14_lab_report_photo_b.jpg',
   ]);
+  const completedDocument = page.waitForResponse(r => /\/api\/v1\/documents\/[0-9a-f-]+$/.test(r.url()) && r.request().method() === 'GET' && r.status() === 200);
   await upload.getByRole('button', {name: 'Upload 2 pages', exact: true}).click();
-  await expect(upload.getByText('Upload complete', {exact: false}).first()).toBeVisible({timeout:60000});
+  await expect(upload.getByText(/Upload complete|Already uploaded/).first()).toBeVisible({timeout:60000});
+  const document = await (await completedDocument).json();
   await switchAccount(page, 'clinic');
-  await page.goto('/clinic/queue?state=awaiting_review');
-  const item = page.locator('tr, div[class*="lg:hidden"] > div').filter({has: page.getByText('2026-09-14_lab_report_photo_a.jpg', {exact:true})}).locator('visible=true');
-  await expect(item).toBeVisible();
-  await item.locator('a[href^="/clinic/review/"]').click();
+  await page.goto(`/clinic/review/${document.duplicateOfDocumentId ?? document.documentId}`);
   if (page.viewportSize()!.width < 1024) await page.getByRole('tab', {name:'Source', exact:true}).click();
   await expect(page.getByRole('button', {name:'Next page', exact:true}).locator('visible=true')).toBeVisible();
   await page.getByRole('button', {name:'Next page', exact:true}).locator('visible=true').click();

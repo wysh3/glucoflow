@@ -2,6 +2,7 @@ import { createWriteStream } from 'node:fs';
 import { mkdir, rm } from 'node:fs/promises';
 import { dirname } from 'node:path';
 import PDFDocument from 'pdfkit';
+import { testDisplayName } from '@glucoflow/contracts';
 import {
   loadSnapshotContent,
   patientHeader,
@@ -95,7 +96,7 @@ export async function renderExportSummary(
       `${patient?.displayName ?? 'Patient'} · ${patient?.clinicIdentifier ?? ''} · ${patient?.clinicName ?? ''}`,
     );
   document.text(`Approved record revision ${input.manifest.approvalRevision}`);
-  document.text(`Data cutoff ${input.manifest.dataCutoffAt}`);
+  document.text(`Data cutoff ${input.manifest.dataCutoffAt} (timestamp with timezone)`);
   if (input.manifest.synthetic) {
     document.moveDown(0.3);
     document
@@ -117,13 +118,13 @@ export async function renderExportSummary(
     document.fontSize(11).fillColor('#172B33').text('Measured results', { continued: false });
     document.moveDown(0.2);
     for (const fact of observations) {
-      const normalized = fact.normalized as { numericValue?: number; unitCode?: string; referenceRangeText?: string };
+      const normalized = fact.normalized as { testCode?: string; numericValue?: number; unitCode?: string; referenceRangeText?: string };
       const value = `${normalized.numericValue ?? fact.rawValue ?? ''} ${normalized.unitCode ?? fact.rawUnit ?? ''}`.trim();
       const range = normalized.referenceRangeText ? ` (source range ${normalized.referenceRangeText})` : '';
       document
         .fontSize(10)
         .fillColor('#172B33')
-        .text(`${fact.rawLabel}: ${value}${range}`, { continued: false });
+        .text(`${normalized.testCode === 'bp_systolic' ? 'Systolic blood pressure' : normalized.testCode === 'bp_diastolic' ? 'Diastolic blood pressure' : normalized.testCode ? testDisplayName(normalized.testCode) : fact.rawLabel}: ${value}${range}`, { continued: false });
       document
         .fontSize(9)
         .fillColor('#52636C')
@@ -196,7 +197,7 @@ export async function renderExportSummary(
       .fontSize(9)
       .fillColor('#52636C')
       .text(
-        `Patient reported · ${note.category.replace(/_/g, ' ')}${note.eventDate ? ` · event date ${note.eventDate}` : ''} · submitted ${note.submittedAt.slice(0, 10)} · note version ${note.version}`,
+        `Patient reported · ${note.category.replace(/_/g, ' ')}${note.eventDate ? ` · event date ${note.eventDate}` : ''} · submitted ${new Date(note.submittedAt).toLocaleString('en-IN', {timeZone: 'Asia/Kolkata'}) + ' IST'} · note version ${note.version}`,
       );
     document.moveDown(0.2);
   }

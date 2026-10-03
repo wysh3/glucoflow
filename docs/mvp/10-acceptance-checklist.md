@@ -45,3 +45,9 @@ Each requirement must be traceable to a task and observable behavior. Check boxe
 ## Scope change rule
 
 If a proposed implementation changes a locked behavior, update the product specification, its API/data implications and the matching checklist row before proceeding. Routine implementation choices may follow the fixed contracts. New clinical interpretation, live integrations or unrelated product modules require explicit user direction. Archives are historical evidence and cannot override these active files.
+
+## 4 October 2026 UI and demo revision
+
+R03: warm clinical tokens, semantic navigation icons, responsive role/sample controls and mobile-safe form text. R06/R17: three bundled labelled synthetic PDFs enter the ordinary authenticated upload pipeline; repeated samples open the original report. R08/R09: publication displays success, locks draft mutation controls and links the approved record. R10/R12: corrected visit notes require editable text and explicit preview/send, preserving earlier versions. R13: unambiguous systolic/diastolic PDF labels and authorized frozen JSON downloads. Timestamp-derived dates use the local calendar day; source date-only fields retain their printed date.
+
+Measured results, deployment identities, APK signature/hash and limitations are in `app/reports/polish-2026-10-04.md`. This revision does not claim a new physical-device installation or clinical validation.
