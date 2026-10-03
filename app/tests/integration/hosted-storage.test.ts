@@ -36,6 +36,16 @@ beforeAll(async () => {
         response.end(JSON.stringify(payload));
       };
 
+      if (request.method === 'PUT' && rest.startsWith('/object/upload/sign/')) {
+        if (url.searchParams.get('token') !== 'stub-upload-token') {
+          json(403, { error: 'invalid upload token' });
+          return;
+        }
+        const key = decodeURIComponent(rest.replace('/object/upload/sign/', ''));
+        objects.set(key, Buffer.concat(chunks));
+        json(200, { Key: key });
+        return;
+      }
       if (request.method === 'POST' && rest.startsWith('/object/upload/sign/')) {
         const key = decodeURIComponent(rest.replace('/object/upload/sign/', ''));
         json(200, { url: `/object/upload/sign/${key}?token=stub-upload-token` });
@@ -128,8 +138,13 @@ describe('hosted storage (Storage API stub, not a Supabase bucket)', () => {
 
   it('issues an upload URL whose token is carried separately from the object path', async () => {
     const upload = await adapter().createUploadUrl('sutra-sources', SOURCE_PATH, 900);
-    expect(upload.method).toBe('POST');
+    expect(upload.method).toBe('PUT');
     expect(upload.token).toBe('stub-upload-token');
+    const bytes = Buffer.from('%PDF-1.4 signed upload');
+    const response = await fetch(upload.uploadUrl, { method: upload.method, body: bytes });
+    expect(response.status).toBe(200);
+    expect(storageCalls.at(-1)?.authorization).toBeNull();
+    expect(objects.get(`sutra-sources/${SOURCE_PATH}`)).toEqual(bytes);
     expect(upload.uploadUrl).toContain('/object/upload/sign/sutra-sources/');
     // The provider issues two hour tokens; the application window is shorter.
     expect(new Date(upload.expiresAt).getTime()).toBeLessThanOrEqual(Date.now() + 900_000 + 1_000);

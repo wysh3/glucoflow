@@ -1,0 +1,170 @@
+{
+  "location": "centralindia",
+  "identity": {
+    "type": "UserAssigned",
+    "userAssignedIdentities": {
+      "/subscriptions/bd8258cf-d425-494a-8e6d-0de3e6b09236/resourcegroups/glucoflow-demo/providers/Microsoft.ManagedIdentity/userAssignedIdentities/glucoflow-runtime": {}
+    }
+  },
+  "tags": {
+    "product": "Glucoflow",
+    "purpose": "synthetic-demo"
+  },
+  "properties": {
+    "managedEnvironmentId": "/subscriptions/bd8258cf-d425-494a-8e6d-0de3e6b09236/resourceGroups/glucoflow-demo/providers/Microsoft.App/managedEnvironments/glucoflow-standard",
+    "workloadProfileName": "Consumption",
+    "configuration": {
+      "activeRevisionsMode": "Single",
+      "secrets": [
+        {
+          "name": "storage-key",
+          "value": "REPLACE_LOCALLY_DO_NOT_COMMIT_CREDENTIALS"
+        },
+        {
+          "name": "database-url",
+          "value": "REPLACE_LOCALLY_DO_NOT_COMMIT_CREDENTIALS"
+        }
+      ],
+      "registries": [
+        {
+          "server": "glucoflowwysh2026.azurecr.io",
+          "identity": "/subscriptions/bd8258cf-d425-494a-8e6d-0de3e6b09236/resourcegroups/glucoflow-demo/providers/Microsoft.ManagedIdentity/userAssignedIdentities/glucoflow-runtime"
+        }
+      ],
+      "ingress": {
+        "external": true,
+        "targetPort": 8787,
+        "transport": "auto",
+        "allowInsecure": false,
+        "traffic": [
+          {
+            "latestRevision": true,
+            "weight": 100
+          }
+        ]
+      }
+    },
+    "template": {
+      "containers": [
+        {
+          "name": "api",
+          "image": "glucoflowwysh2026.azurecr.io/glucoflow-api@sha256:ba48d699966b2d3f35ae87a83ec212958aad2edc2b2f4a14485a4a2f175051b4",
+          "resources": {
+            "cpu": 0.25,
+            "memory": "0.5Gi"
+          },
+          "env": [
+            {
+              "name": "APP_ENV",
+              "value": "production"
+            },
+            {
+              "name": "AUTH_MODE",
+              "value": "supabase"
+            },
+            {
+              "name": "STORAGE_MODE",
+              "value": "supabase"
+            },
+            {
+              "name": "SUPABASE_URL",
+              "value": "https://fynlsoxyazizblbmhwkn.supabase.co"
+            },
+            {
+              "name": "STORAGE_BUCKET_SOURCES",
+              "value": "sutra-sources"
+            },
+            {
+              "name": "STORAGE_BUCKET_EXPORTS",
+              "value": "sutra-exports"
+            },
+            {
+              "name": "EXTRACTION_PROVIDER",
+              "value": "openai-compatible"
+            },
+            {
+              "name": "EXTRACTION_MODEL",
+              "value": "gpt-6-luna"
+            },
+            {
+              "name": "DEMO_LABEL",
+              "value": "Synthetic demo"
+            },
+            {
+              "name": "DATABASE_ROLE_API",
+              "value": "sutra_api"
+            },
+            {
+              "name": "DATABASE_ROLE_WORKER",
+              "value": "sutra_worker"
+            },
+            {
+              "name": "PORT",
+              "value": "8787"
+            },
+            {
+              "name": "ALLOWED_ORIGINS",
+              "value": "https://glucoflow.vercel.app,https://localhost"
+            },
+            {
+              "name": "SUPABASE_JWKS_URL",
+              "value": "https://fynlsoxyazizblbmhwkn.supabase.co/auth/v1/.well-known/jwks.json"
+            },
+            {
+              "name": "SUPABASE_JWT_ISSUER",
+              "value": "https://fynlsoxyazizblbmhwkn.supabase.co/auth/v1"
+            },
+            {
+              "name": "API_DB_POOL_MAX",
+              "value": "3"
+            },
+            {
+              "name": "SUPABASE_STORAGE_SERVER_KEY",
+              "secretRef": "storage-key"
+            },
+            {
+              "name": "DATABASE_URL_API",
+              "secretRef": "database-url"
+            }
+          ],
+          "probes": [
+            {
+              "type": "Liveness",
+              "httpGet": {
+                "path": "/health/live",
+                "port": 8787
+              },
+              "initialDelaySeconds": 10,
+              "periodSeconds": 20
+            },
+            {
+              "type": "Readiness",
+              "httpGet": {
+                "path": "/health/ready",
+                "port": 8787
+              },
+              "initialDelaySeconds": 10,
+              "periodSeconds": 10
+            }
+          ]
+        }
+      ],
+      "scale": {
+        "minReplicas": 0,
+        "maxReplicas": 1,
+        "cooldownPeriod": 120,
+        "rules": [
+          {
+            "name": "http",
+            "http": {
+              "metadata": {
+                "concurrentRequests": "20"
+              }
+            }
+          }
+        ]
+      },
+      "revisionSuffix": "live2"
+    }
+  }
+}

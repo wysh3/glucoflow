@@ -5,12 +5,12 @@
 | Service | Host | Responsibility |
 |---|---|---|
 | Frontend | Vercel static deployment | Vite assets and SPA route fallback |
-| API | Railway Node container | Token verification, authorization and transactions |
-| Worker | Railway separate Node container | PDF/OCR, model calls, export and durable retries |
+| API | Azure Container Apps Consumption | Token verification, authorization and transactions |
+| Worker | Azure Container Apps Consumption | PDF/OCR, model calls, export and durable retries |
 | Database/Auth/Storage | Supabase | Private records, sessions and files |
 | Android | Signed APK distributed privately | Bundled frontend assets and native camera bridge |
 
-This is a deployment recommendation, not a claim that accounts or services exist. Choose compatible available regions and measure round-trip latency. Configure spend limits before enabling model processing. Do not provision paid plans without explicit authorization.
+The deployed demo uses Vercel Hobby, Supabase Free in Mumbai and Azure Consumption in Central India. API and worker have minReplicas=0 and maxReplicas=1. Private ACR Basic is the baseline paid resource; its approximately US$5/30-day price was checked before provisioning. The user authorized up to US$10 of Azure credits with no subscription upgrade. See `app/docs/HOSTED.md` and the dated hosted evidence report. Future paid changes still require authorization.
 
 ## Environment contract
 
@@ -18,7 +18,7 @@ Frontend public: `VITE_API_BASE_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLIS
 
 API private: `SUPABASE_URL`, `SUPABASE_JWKS_URL`, `SUPABASE_STORAGE_SERVER_KEY`, `DATABASE_URL_API`, `ALLOWED_ORIGINS`, `APP_ENV`, `UPLOAD_MAX_BYTES=15728640`, `UPLOAD_MAX_PAGES=10`.
 
-Worker private: `DATABASE_URL_WORKER`, `SUPABASE_URL`, `SUPABASE_STORAGE_SERVER_KEY`, `EXTRACTION_PROVIDER`, `EXTRACTION_MODEL`, `EXTRACTION_API_KEY`, `MAX_DOCUMENT_MODEL_CALLS=12`, `MAX_DOCUMENT_COST_USD`, `MAX_RUN_TOKENS`, `WORKER_CONCURRENCY=2`.
+Worker private: `DATABASE_URL_WORKER`, `SUPABASE_URL`, `SUPABASE_STORAGE_SERVER_KEY`, `EXTRACTION_PROVIDER`, `EXTRACTION_MODEL`, `EXTRACTION_API_KEY`, `MAX_DOCUMENT_MODEL_CALLS=4`, `MAX_DOCUMENT_COST_USD`, `MAX_RUN_TOKENS`, `WORKER_CONCURRENCY=1`.
 
 Do not log values of these settings. `.env.example` includes names and harmless placeholders only. Storage server keys stay in authorized server-side modules, never a shared client import. Use separate credentials for API and worker with minimum practical scope. The worker must not expose an HTTP route that accepts arbitrary external source URLs.
 
@@ -73,7 +73,7 @@ For the demo environment, schedule removal of uploaded demo files and generated 
 
 ## Remaining gates
 
-Live extraction credentials/budget, hosting access, signed APK installation, actual Android device checks and clinician workflow evaluation. Do not mark the app complete when any required live flow only works with fixtures.
+Hosted authentication, private Storage, tenant isolation and live extraction now have measured deployment evidence. Signed APK installation against the hosted services, physical Android device checks, and clinician workflow evaluation remain pending. Do not mark the app complete when any required live flow only works with fixtures.
 
 References: [Railway Fastify deployment](https://docs.railway.com/guides/fastify), [Capacitor Android](https://capacitorjs.com/docs/android), [Supabase storage access control](https://supabase.com/docs/guides/storage/security/access-control).
 

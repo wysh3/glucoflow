@@ -281,7 +281,7 @@ export class SupabaseStorageAdapter implements StorageAdapter {
     const token = new URL(absolute).searchParams.get('token');
     return {
       uploadUrl: absolute,
-      method: 'POST',
+      method: 'PUT',
       token,
       // The provider issues two hour upload tokens; the application completion
       // window is shorter and tracked separately.

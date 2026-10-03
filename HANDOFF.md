@@ -1,8 +1,13 @@
-# Glucoflow handoff — local completion pass, 3 October 2026
+# Glucoflow handoff — hosted deployment, 3 October 2026
 
-The local application is running at http://127.0.0.1:5173. The user requested local work only; deployment is deferred. OpenAI credentials were added locally and verified. The running local worker now uses GPT-6 Luna for new uploads; historical fixture records retain their fixture provenance. Read the [latest cleanup and Luna evidence](app/reports/key-cleanup-and-luna-2026-10-03.md) first.
+Glucoflow is deployed at https://glucoflow.vercel.app. Vercel serves the frontend;
+Azure Container Apps runs the API and the live GPT-6 Luna worker; Supabase provides
+Auth, PostgreSQL and private Storage. Read [hosted deployment evidence](app/reports/hosted-deployment-2026-10-03.md)
+and [hosted operations](app/docs/HOSTED.md) first. Deployment was authorized with up
+to US$10 of Azure credits, without a subscription upgrade. Synthetic demo credentials
+are private in `app/.local/hosted-demo-credentials.json`.
 
-## Latest verification
+## Local verification before deployment
 
 126 tests, 56 fixture browser checks, 12 database checks, 6 mutation checks, production bundles, three real Luna production-worker documents and 25/25 real Luna API smoke checks pass. Corrected observation-only evaluation on 12 examined synthetic documents: complete fields 0.9091, precision/recall 1.0000, identity-state accuracy 1.0000, date exact 0.9091. This is not independent clinical validation.
 
@@ -21,7 +26,7 @@ Read [local completion report](app/reports/local-fixes-2026-10-03.md), [completi
 - Doctor progression has context alongside the chart on desktop. Mobile report cards keep filenames, states and actions together. Buttons meet the 44 px mobile target; account navigation returns to the authorized workspace.
 - English OCR language data ships as a pinned dependency, rather than downloading during jobs. Android opens external sources through the Capacitor Browser plugin.
 - Historical fact lookup now checks actor and patient-release access. Sign-in rate limits and correct 429/413 responses are enabled; signed URL query tokens are omitted from request logs.
-- Hosted session refresh/sign-out uses one managed Supabase client and existing secure native storage. Native foreground/background refresh handling and hosted PDF/image CSP settings are prepared, but are not hosted-service verification.
+- Hosted session refresh/sign-out uses one managed Supabase client and existing secure native storage. Hosted browser sign-in/sign-out and private PDF rendering have now been exercised against the real services. Native physical-device verification remains pending.
 
 ## Earlier measurement (superseded)
 
@@ -31,7 +36,7 @@ The unfamiliar-layout synthetic regression corpus still gives complete-field acc
 
 1. Review the corrected Luna evaluation and prepare an independent holdout. Keep the key in ignored `app/.env`. Current local limits: $0.10/document, four calls/document, 120,000 tokens/document and $2/evaluation.
 2. Review unsupported fields and identity/date errors; keep publication blocked until human review. Prepare a new independent holdout before claiming better generalization.
-3. When the user authorizes deployment, verify actual Supabase Auth/Storage, hosted tenant isolation and containers. The session implementation is currently locally compiled only.
+3. Hosted API smoke passed 25/25 with actual Supabase Auth/Storage and Azure worker processing; hosted database policy checks passed 12/12. Maintain the budget and retire demo resources when finished.
 4. Verify the latest APK on emulator and an authorized physical device, including camera, source opening, exports and session recovery. This pass built the APK; it did not install it on a physical phone.
 5. Prepare the demo tenant for recording, measure review time with real users, and reconcile the deck/submission against that evidence. Browser and smoke runs have left extra synthetic reports and notes in the local demo tenant; it was not reset or purged.
 

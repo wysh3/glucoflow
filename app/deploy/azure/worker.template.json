@@ -1,0 +1,176 @@
+{
+  "location": "centralindia",
+  "identity": {
+    "type": "UserAssigned",
+    "userAssignedIdentities": {
+      "/subscriptions/bd8258cf-d425-494a-8e6d-0de3e6b09236/resourcegroups/glucoflow-demo/providers/Microsoft.ManagedIdentity/userAssignedIdentities/glucoflow-runtime": {}
+    }
+  },
+  "tags": {
+    "product": "Glucoflow",
+    "purpose": "synthetic-demo"
+  },
+  "properties": {
+    "managedEnvironmentId": "/subscriptions/bd8258cf-d425-494a-8e6d-0de3e6b09236/resourceGroups/glucoflow-demo/providers/Microsoft.App/managedEnvironments/glucoflow-standard",
+    "workloadProfileName": "Consumption",
+    "configuration": {
+      "activeRevisionsMode": "Single",
+      "secrets": [
+        {
+          "name": "storage-key",
+          "value": "REPLACE_LOCALLY_DO_NOT_COMMIT_CREDENTIALS"
+        },
+        {
+          "name": "database-url",
+          "value": "REPLACE_LOCALLY_DO_NOT_COMMIT_CREDENTIALS"
+        },
+        {
+          "name": "model-key",
+          "value": "REPLACE_LOCALLY_DO_NOT_COMMIT_CREDENTIALS"
+        },
+        {
+          "name": "scale-database-url",
+          "value": "REPLACE_LOCALLY_DO_NOT_COMMIT_CREDENTIALS"
+        }
+      ],
+      "registries": [
+        {
+          "server": "glucoflowwysh2026.azurecr.io",
+          "identity": "/subscriptions/bd8258cf-d425-494a-8e6d-0de3e6b09236/resourcegroups/glucoflow-demo/providers/Microsoft.ManagedIdentity/userAssignedIdentities/glucoflow-runtime"
+        }
+      ]
+    },
+    "template": {
+      "containers": [
+        {
+          "name": "worker",
+          "image": "glucoflowwysh2026.azurecr.io/glucoflow-worker:20261003",
+          "resources": {
+            "cpu": 0.5,
+            "memory": "1Gi"
+          },
+          "env": [
+            {
+              "name": "APP_ENV",
+              "value": "production"
+            },
+            {
+              "name": "AUTH_MODE",
+              "value": "supabase"
+            },
+            {
+              "name": "STORAGE_MODE",
+              "value": "supabase"
+            },
+            {
+              "name": "SUPABASE_URL",
+              "value": "https://fynlsoxyazizblbmhwkn.supabase.co"
+            },
+            {
+              "name": "STORAGE_BUCKET_SOURCES",
+              "value": "sutra-sources"
+            },
+            {
+              "name": "STORAGE_BUCKET_EXPORTS",
+              "value": "sutra-exports"
+            },
+            {
+              "name": "EXTRACTION_PROVIDER",
+              "value": "openai-compatible"
+            },
+            {
+              "name": "EXTRACTION_MODEL",
+              "value": "gpt-6-luna"
+            },
+            {
+              "name": "DEMO_LABEL",
+              "value": "Synthetic demo"
+            },
+            {
+              "name": "DATABASE_ROLE_API",
+              "value": "sutra_api"
+            },
+            {
+              "name": "DATABASE_ROLE_WORKER",
+              "value": "sutra_worker"
+            },
+            {
+              "name": "WORKER_CONCURRENCY",
+              "value": "1"
+            },
+            {
+              "name": "OCR_ENABLED",
+              "value": "true"
+            },
+            {
+              "name": "TMP_ROOT",
+              "value": "/tmp/sutra-worker"
+            },
+            {
+              "name": "EXTRACTION_BASE_URL",
+              "value": "https://api.openai.com/v1"
+            },
+            {
+              "name": "MAX_DOCUMENT_COST_USD",
+              "value": "0.10"
+            },
+            {
+              "name": "MAX_DOCUMENT_MODEL_CALLS",
+              "value": "4"
+            },
+            {
+              "name": "MAX_RUN_TOKENS",
+              "value": "120000"
+            },
+            {
+              "name": "MAX_DOCUMENT_USD_PER_MTOK_INPUT",
+              "value": "0.125"
+            },
+            {
+              "name": "MAX_DOCUMENT_USD_PER_MTOK_OUTPUT",
+              "value": "0.5"
+            },
+            {
+              "name": "SUPABASE_STORAGE_SERVER_KEY",
+              "secretRef": "storage-key"
+            },
+            {
+              "name": "DATABASE_URL_WORKER",
+              "secretRef": "database-url"
+            },
+            {
+              "name": "EXTRACTION_API_KEY",
+              "secretRef": "model-key"
+            }
+          ]
+        }
+      ],
+      "scale": {
+        "minReplicas": 0,
+        "maxReplicas": 1,
+        "pollingInterval": 15,
+        "cooldownPeriod": 120,
+        "rules": [
+          {
+            "name": "postgres-queue",
+            "custom": {
+              "type": "postgresql",
+              "metadata": {
+                "query": "SELECT sutra.queue_depth()",
+                "targetQueryValue": "1",
+                "activationTargetQueryValue": "0"
+              },
+              "auth": [
+                {
+                  "secretRef": "scale-database-url",
+                  "triggerParameter": "connection"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "revisionSuffix": "live1"
+    }
+  }
+}

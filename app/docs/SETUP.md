@@ -44,12 +44,11 @@ pnpm db:status    # confirms the server is running
 
 `pnpm db:reset` drops and recreates the schema, then reapplies every migration.
 
-For a hosted PostgreSQL (Supabase), apply the same files and substitute the API role
-name:
-
-```bash
-pnpm db:migrate --api-role authenticated
-```
+Hosted setup differs from this local procedure: Supabase Auth identities must match
+`app_users`, backend login roles remain separate, and Supabase's managed `postgres`
+role cannot execute every role alteration in the local bootstrap. Follow
+[HOSTED.md](HOSTED.md) for the deployed environment. Do not substitute `authenticated`
+for the API privilege role or run the local seed/reset commands against hosted data.
 
 ## 4. Seed the demonstration tenant
 

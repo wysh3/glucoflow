@@ -1,0 +1,54 @@
+$ vitest run
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ✓ tests/integration/notes.test.ts (7 tests) 369ms
+ ✓ tests/integration/timeline-pagination.test.ts (3 tests) 401ms
+ ✓ tests/integration/isolation.test.ts (7 tests) 453ms
+ ✓ tests/integration/jobs.test.ts (11 tests) 479ms
+Warning: Invalid resolution 25 dpi. Using 70 instead.
+ ✓ tests/integration/exports.test.ts (6 tests) 744ms
+   ✓ export snapshots (6)
+     ✓ scopes direct historical-fact reads and excludes unreleased facts from patient exports 317ms
+ ✓ apps/api/src/hosted-auth.test.ts (5 tests) 193ms
+ ✓ tests/integration/uploads.test.ts (9 tests) 161ms
+ ✓ tests/integration/review.test.ts (15 tests) 816ms
+stdout | tests/integration/maintenance.test.ts > retention maintenance > changes nothing in a dry run and removes exactly the out-of-window rows on apply
+Dry run maintenance for 14 demo tenant(s).
+  orphaned_upload_sessions: 5
+  expired_upload_sessions: 0
+  exports_past_retention: 0
+  documents_past_retention: 0
+  audit_events_past_retention: 0
+  objects_removed: 0
+  objects_pending: 7
+Nothing was changed. Re-run with --apply --confirm-demo to remove these rows and objects.
+
+ ✓ tests/integration/hosted-storage.test.ts (6 tests) 54ms
+ ✓ tests/extraction/evaluation-metrics.test.ts (7 tests) 5ms
+ ✓ tests/integration/maintenance.test.ts (4 tests) 81ms
+ ✓ tests/integration/provider-budget.test.ts (3 tests) 90ms
+ ✓ packages/domain/src/timeline-loading.test.ts (3 tests) 5ms
+ ✓ packages/domain/src/timeline.test.ts (8 tests) 18ms
+ ✓ apps/api/src/errors.test.ts (1 test) 2ms
+ ✓ tests/extraction/evaluation-input.test.ts (3 tests) 2ms
+ ✓ tests/integration/live-provider.test.ts (11 tests) 2964ms
+   ✓ live provider adapter (protocol stub, not a real model) (11)
+     ✓ refuses to extract when credentials or a positive budget are missing 621ms
+     ✓ gives up on a provider that never answers 1457ms
+ ✓ tests/integration/worker-scan.test.ts (4 tests) 3034ms
+   ✓ the worker reads an uploaded scan (4)
+     ✓ processes both photo pages and checks later-page identity (mismatch=false) 1299ms
+     ✓ processes both photo pages and checks later-page identity (mismatch=true) 645ms
+     ✓ extracts facts from a scanned page with no page-image callback 988ms
+ ✓ tests/extraction/engine.test.ts (13 tests) 10905ms
+   ✓ extraction engine (13)
+     ✓ marks a blank scan unreadable instead of inventing values 10139ms
+     ✓ reads a phone photo through OCR without inventing values 464ms
+
+ Test Files  19 passed (19)
+      Tests  126 passed (126)
+   Start at  22:25:08
+   Duration  11.41s (tests 81%, import 14%, transform 5%)
+
