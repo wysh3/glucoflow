@@ -1,0 +1,18 @@
+$ tsx scripts/evaluate-extraction.ts -- --corpus eval-corpus-external --freeze
+Frozen record written to /Users/wysh/coding/thon/iitb-health/app/reports/frozen-evaluation.json
+Fixture data: deterministic rule engine, not an AI model
+Corpus: eval-corpus-external external-1 hash 53d251483d26… (12 documents, seed n/a)
+Engine: ef5435f935f1d803 · prompt c6ac68752ef4… · ablation none
+  complete fields     0.24 (patient+test+value+unit+date)
+  complete, no date   0.24
+  processing          52 ms median per document, 0 provider calls, $0 reserved
+  fact precision      0.875
+  fact recall         0.56
+  event date exact    0.8571
+  unit exact          1
+  identity state      0.3333
+  issue flag rate     0.5
+  recall, machine-readable 0.4737
+  recall, 300 dpi scan     0.75
+  recall, low-res scan     1
+Written to /Users/wysh/coding/thon/iitb-health/app/reports/extraction-evaluation-eval-corpus-external.json

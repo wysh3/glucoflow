@@ -1,0 +1,30 @@
+$ tsx scripts/evaluate-live-rehearsal.ts
+Protocol stub listening on http://127.0.0.1:8791 (not a model)
+  request: POST /v1/chat/completions · 146749 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  request: POST /v1/chat/completions · 115096 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  request: POST /v1/chat/completions · 84690 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  request: POST /v1/chat/completions · 100872 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  request: POST /v1/chat/completions · 129977 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  request: POST /v1/chat/completions · 243683 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  request: POST /v1/chat/completions · 48927 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  request: POST /v1/chat/completions · 73369 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  request: POST /v1/chat/completions · 58197 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  request: POST /v1/chat/completions · 54058 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  request: POST /v1/chat/completions · 69369 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  request: POST /v1/chat/completions · 112265 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  complete fields     0.04 (patient+test+value+unit+date)
+  complete, no date   0.08
+  processing          56 ms median per document, 12 provider calls, $0.02364 reserved
+  fact precision      0.0833
+  fact recall         0.08
+  event date exact    0.5
+  unit exact          1
+  identity state      0.9167
+  issue flag rate     0.5
+  recall, machine-readable 0.1053
+  recall, 300 dpi scan     0
+  recall, low-res scan     0
+Written to /Users/wysh/coding/thon/iitb-health/app/reports/extraction-evaluation-eval-corpus-external-live.json
+
+
+These numbers come from a fixed stub answer, not from a model. They show that the live path measures complete-field accuracy, time and cost; they are not an accuracy claim.

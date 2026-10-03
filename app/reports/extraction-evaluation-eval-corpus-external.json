@@ -1,0 +1,448 @@
+{
+  "generatedAt": "2026-10-03T11:16:32.525Z",
+  "provider": "fixture",
+  "mode": "fixture",
+  "model": "deterministic-rules-v1",
+  "providerLabel": "Fixture data: deterministic rule engine, not an AI model",
+  "corpus": "eval-corpus-external",
+  "corpusVersion": "external-1",
+  "corpusHash": "53d251483d2694682f5ca620628b8407577b788fb3006fc46342ccb6921afb4b",
+  "corpusSeed": null,
+  "providerCalls": 0,
+  "reservedCostUsd": 0,
+  "processingMs": {
+    "total": 1793,
+    "median": 54,
+    "perDocument": [
+      {
+        "key": "ext-01",
+        "ms": 461
+      },
+      {
+        "key": "ext-02",
+        "ms": 54
+      },
+      {
+        "key": "ext-03",
+        "ms": 50
+      },
+      {
+        "key": "ext-04",
+        "ms": 54
+      },
+      {
+        "key": "ext-05",
+        "ms": 63
+      },
+      {
+        "key": "ext-06",
+        "ms": 350
+      },
+      {
+        "key": "ext-07",
+        "ms": 310
+      },
+      {
+        "key": "ext-08",
+        "ms": 48
+      },
+      {
+        "key": "ext-09",
+        "ms": 45
+      },
+      {
+        "key": "ext-10",
+        "ms": 46
+      },
+      {
+        "key": "ext-11",
+        "ms": 47
+      },
+      {
+        "key": "ext-12",
+        "ms": 265
+      }
+    ]
+  },
+  "costPerDocumentUsd": 0,
+  "engineVersion": "ef5435f935f1d803",
+  "promptHash": "c6ac68752ef48ec0b145dc8084011f28",
+  "providerName": "fixture",
+  "frozen": {
+    "engineVersion": "ef5435f935f1d803",
+    "promptHash": "c6ac68752ef48ec0b145dc8084011f28",
+    "provider": "fixture",
+    "model": "deterministic-rules-v1",
+    "ablation": "none",
+    "features": {
+      "ocrPreprocess": true,
+      "ocrTolerance": true
+    },
+    "corpus": "eval-corpus-external",
+    "corpusVersion": "external-1",
+    "corpusHash": "53d251483d2694682f5ca620628b8407577b788fb3006fc46342ccb6921afb4b",
+    "documentHashes": [
+      {
+        "key": "ext-01",
+        "sha256": "ece13f581c3052b2d04234f7897285cd741ab0cfdd29c244010deb0eda1e5163"
+      },
+      {
+        "key": "ext-02",
+        "sha256": "973d916de3a845876d8f0922e5634c8b1222f148006e7b32db1bd78be4cc258d"
+      },
+      {
+        "key": "ext-03",
+        "sha256": "848414077ef3217f583a72a1badb80f4155482704290161790bedf064b9bee36"
+      },
+      {
+        "key": "ext-04",
+        "sha256": "373b6bad67572e39d97149f0bd449691ef76d5ab47d61738c8f85d86273c0742"
+      },
+      {
+        "key": "ext-05",
+        "sha256": "d408381e31e13249b6f88bfda28de9eec7cb4e35dd04769d4177845046b88d02"
+      },
+      {
+        "key": "ext-06",
+        "sha256": "30afb4889e88cf194064c7aca6c53e54104680c991efd8ac2097a76b93ccb852"
+      },
+      {
+        "key": "ext-07",
+        "sha256": "f34924371e825ad49ff9cebfb208898493aaaef771c0bf77db833ab048561928"
+      },
+      {
+        "key": "ext-08",
+        "sha256": "5d7cd24f41081e6b5b4086e2f6394c6eb7f57f1a8b31ddac480fc604b7d9f0e1"
+      },
+      {
+        "key": "ext-09",
+        "sha256": "c11c5db48cad91deb94810c00eb61f9da359a1ed8910b2f784d48c72047c1f8a"
+      },
+      {
+        "key": "ext-10",
+        "sha256": "e1ea81b38d679db612cdbcf96781b3fc09f8bfc61c5828757c2e02b611d4c888"
+      },
+      {
+        "key": "ext-11",
+        "sha256": "12f63ccf7d24a4e6bdd381b91cd9781871e0ce479b6370e9954ff6692cedd290"
+      },
+      {
+        "key": "ext-12",
+        "sha256": "e5da628556e80898e816d856a4b9ed0377c2f4219a7adb46a777c82bfcf19a3e"
+      }
+    ]
+  },
+  "ablation": "none",
+  "engineFeatures": {
+    "ocrPreprocess": true,
+    "ocrTolerance": true
+  },
+  "synthetic": true,
+  "documents": 12,
+  "metrics": {
+    "factPrecision": 0.875,
+    "factRecall": 0.56,
+    "matchedFacts": 14,
+    "missingFacts": 11,
+    "extraFacts": 2,
+    "eventDateExactRate": 0.8571,
+    "unitExactRate": 1,
+    "identityStateAccuracy": 0.3333,
+    "completeFieldAccuracy": 0.24,
+    "completeFieldAccuracyNoDate": 0.24,
+    "completeFieldNote": "A complete field means the patient, test, value, unit and date are all correct together.",
+    "reviewerCorrections": null,
+    "issueFlagRate": 0.5
+  },
+  "byVariant": {
+    "machineReadable": {
+      "documents": 9,
+      "factRecall": 0.4737
+    },
+    "scan300dpi": {
+      "documents": 2,
+      "factRecall": 0.75
+    },
+    "scanLowres": {
+      "documents": 1,
+      "factRecall": 1
+    }
+  },
+  "perDocument": [
+    {
+      "key": "ext-01",
+      "filename": "ext-01-right-aligned-columns.pdf",
+      "durationMs": 461,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 1,
+      "completeFieldsNoDate": 1,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "ece13f581c3052b2d04234f7897285cd741ab0cfdd29c244010deb0eda1e5163",
+      "expectedFacts": 3,
+      "extractedFacts": 2,
+      "matchedFacts": 1,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "ext-02",
+      "filename": "ext-02-two-column.pdf",
+      "durationMs": 54,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 2,
+      "completeFieldsNoDate": 2,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "973d916de3a845876d8f0922e5634c8b1222f148006e7b32db1bd78be4cc258d",
+      "expectedFacts": 4,
+      "extractedFacts": 2,
+      "matchedFacts": 2,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "ext-03",
+      "filename": "ext-03-bordered-table.pdf",
+      "durationMs": 50,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 2,
+      "completeFieldsNoDate": 2,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "848414077ef3217f583a72a1badb80f4155482704290161790bedf064b9bee36",
+      "expectedFacts": 2,
+      "extractedFacts": 2,
+      "matchedFacts": 2,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "ext-04",
+      "filename": "ext-04-prescription-table.pdf",
+      "durationMs": 54,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 0,
+      "completeFieldsNoDate": 0,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "373b6bad67572e39d97149f0bd449691ef76d5ab47d61738c8f85d86273c0742",
+      "expectedFacts": 2,
+      "extractedFacts": 0,
+      "matchedFacts": 0,
+      "identityState": "unchecked",
+      "expectedIdentity": "matched",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "ext-05",
+      "filename": "ext-05-examination-prose.pdf",
+      "durationMs": 63,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 0,
+      "completeFieldsNoDate": 0,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "d408381e31e13249b6f88bfda28de9eec7cb4e35dd04769d4177845046b88d02",
+      "expectedFacts": 1,
+      "extractedFacts": 0,
+      "matchedFacts": 0,
+      "identityState": "unchecked",
+      "expectedIdentity": "matched",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "ext-06",
+      "filename": "ext-06-photographed.jpg",
+      "durationMs": 350,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 0,
+      "completeFieldsNoDate": 2,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "30afb4889e88cf194064c7aca6c53e54104680c991efd8ac2097a76b93ccb852",
+      "expectedFacts": 2,
+      "extractedFacts": 2,
+      "matchedFacts": 2,
+      "identityState": "unchecked",
+      "expectedIdentity": "matched",
+      "issues": [
+        "identity_missing",
+        "date_ambiguous"
+      ],
+      "expectedIssues": [],
+      "ocrUsed": true
+    },
+    {
+      "key": "ext-07",
+      "filename": "ext-07-fax-lowres.jpg",
+      "durationMs": 310,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 2,
+      "completeFieldsNoDate": 2,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "f34924371e825ad49ff9cebfb208898493aaaef771c0bf77db833ab048561928",
+      "expectedFacts": 2,
+      "extractedFacts": 2,
+      "matchedFacts": 2,
+      "identityState": "unchecked",
+      "expectedIdentity": "matched",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [],
+      "ocrUsed": true
+    },
+    {
+      "key": "ext-08",
+      "filename": "ext-08-identifier-in-footer.pdf",
+      "durationMs": 48,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 2,
+      "completeFieldsNoDate": 2,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "5d7cd24f41081e6b5b4086e2f6394c6eb7f57f1a8b31ddac480fc604b7d9f0e1",
+      "expectedFacts": 2,
+      "extractedFacts": 2,
+      "matchedFacts": 2,
+      "identityState": "unchecked",
+      "expectedIdentity": "matched",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "ext-09",
+      "filename": "ext-09-no-identifier.pdf",
+      "durationMs": 45,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 1,
+      "completeFieldsNoDate": 1,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "c11c5db48cad91deb94810c00eb61f9da359a1ed8910b2f784d48c72047c1f8a",
+      "expectedFacts": 1,
+      "extractedFacts": 1,
+      "matchedFacts": 1,
+      "identityState": "unchecked",
+      "expectedIdentity": "missing",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [
+        "identity_missing"
+      ],
+      "ocrUsed": false
+    },
+    {
+      "key": "ext-10",
+      "filename": "ext-10-other-patient.pdf",
+      "durationMs": 46,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 1,
+      "completeFieldsNoDate": 1,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "e1ea81b38d679db612cdbcf96781b3fc09f8bfc61c5828757c2e02b611d4c888",
+      "expectedFacts": 1,
+      "extractedFacts": 1,
+      "matchedFacts": 1,
+      "identityState": "unchecked",
+      "expectedIdentity": "mismatch",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [
+        "identity_mismatch"
+      ],
+      "ocrUsed": false
+    },
+    {
+      "key": "ext-11",
+      "filename": "ext-11-multiple-dates.pdf",
+      "durationMs": 47,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 0,
+      "completeFieldsNoDate": 0,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "12f63ccf7d24a4e6bdd381b91cd9781871e0ce479b6370e9954ff6692cedd290",
+      "expectedFacts": 3,
+      "extractedFacts": 0,
+      "matchedFacts": 0,
+      "identityState": "unchecked",
+      "expectedIdentity": "matched",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "ext-12",
+      "filename": "ext-12-handwritten-annotation.jpg",
+      "durationMs": 265,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 1,
+      "completeFieldsNoDate": 1,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "e5da628556e80898e816d856a4b9ed0377c2f4219a7adb46a777c82bfcf19a3e",
+      "expectedFacts": 2,
+      "extractedFacts": 2,
+      "matchedFacts": 1,
+      "identityState": "unchecked",
+      "expectedIdentity": "matched",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [],
+      "ocrUsed": true
+    }
+  ]
+}

@@ -1,0 +1,423 @@
+{
+  "generatedAt": "2026-10-03T03:25:43.110Z",
+  "corpusVersion": "external-1",
+  "corpusHash": "53d251483d2694682f5ca620628b8407577b788fb3006fc46342ccb6921afb4b",
+  "seed": null,
+  "synthetic": true,
+  "purpose": "Independently authored report layouts rendered by Chromium rather than the development generator. Reference labels are written by hand beside each document. Used to measure unfamiliar layouts; it is not a substitute for real de-identified records.",
+  "counts": {
+    "histories": 12,
+    "scanned": 3,
+    "scanned300dpi": 2,
+    "scannedLowres": 1
+  },
+  "entries": [
+    {
+      "key": "ext-01",
+      "filename": "ext-01-right-aligned-columns.pdf",
+      "identifier": "P0482",
+      "name": "Asha Rao",
+      "sha256": "ece13f581c3052b2d04234f7897285cd741ab0cfdd29c244010deb0eda1e5163",
+      "synthetic": true,
+      "layout": "Letterhead, values right-aligned, unit in its own column, dotted leaders",
+      "variant": {
+        "scanned": false,
+        "scanQuality": "scan_300dpi",
+        "external": true,
+        "source": "digital"
+      },
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "7.6",
+          "unit": "%",
+          "date": "2026-08-12"
+        },
+        {
+          "kind": "observation",
+          "testCode": "glucose_fasting",
+          "value": "132",
+          "unit": "mg/dl",
+          "date": "2026-08-12"
+        },
+        {
+          "kind": "observation",
+          "testCode": "urine_acr",
+          "value": "42",
+          "unit": "mg/g",
+          "date": "2026-08-12"
+        }
+      ]
+    },
+    {
+      "key": "ext-02",
+      "filename": "ext-02-two-column.pdf",
+      "identifier": "P0482",
+      "name": "Asha Rao",
+      "sha256": "973d916de3a845876d8f0922e5634c8b1222f148006e7b32db1bd78be4cc258d",
+      "synthetic": true,
+      "layout": "Two-column body, label left, value in the right column, date in a footer",
+      "variant": {
+        "scanned": false,
+        "scanQuality": "scan_300dpi",
+        "external": true,
+        "source": "digital"
+      },
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "8.1",
+          "unit": "%",
+          "date": "2026-08-20"
+        },
+        {
+          "kind": "observation",
+          "testCode": "egfr",
+          "value": "58",
+          "unit": "ml/min/1.73 m2",
+          "date": "2026-08-20"
+        },
+        {
+          "kind": "observation",
+          "testCode": "bp_systolic",
+          "value": "148",
+          "unit": "mmhg",
+          "date": "2026-08-20"
+        },
+        {
+          "kind": "observation",
+          "testCode": "bp_diastolic",
+          "value": "88",
+          "unit": "mmhg",
+          "date": "2026-08-20"
+        }
+      ]
+    },
+    {
+      "key": "ext-03",
+      "filename": "ext-03-bordered-table.pdf",
+      "identifier": "P0482",
+      "name": "Asha Rao",
+      "sha256": "848414077ef3217f583a72a1badb80f4155482704290161790bedf064b9bee36",
+      "synthetic": true,
+      "layout": "Bordered table, date written as 14.09.2026, identifier in a footer",
+      "variant": {
+        "scanned": false,
+        "scanQuality": "scan_300dpi",
+        "external": true,
+        "source": "digital"
+      },
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "7.2",
+          "unit": "%",
+          "date": "2026-09-14"
+        },
+        {
+          "kind": "observation",
+          "testCode": "weight",
+          "value": "71",
+          "unit": "kg",
+          "date": "2026-09-14"
+        }
+      ]
+    },
+    {
+      "key": "ext-04",
+      "filename": "ext-04-prescription-table.pdf",
+      "identifier": "P0482",
+      "name": "Asha Rao",
+      "sha256": "373b6bad67572e39d97149f0bd449691ef76d5ab47d61738c8f85d86273c0742",
+      "synthetic": true,
+      "layout": "Prescription table with strength and frequency columns",
+      "variant": {
+        "scanned": false,
+        "scanQuality": "scan_300dpi",
+        "external": true,
+        "source": "digital"
+      },
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "prescription",
+          "testCode": null,
+          "value": "Metformin",
+          "unit": "1000 mg",
+          "date": "2026-09-02"
+        },
+        {
+          "kind": "prescription",
+          "testCode": null,
+          "value": "Atorvastatin",
+          "unit": "20 mg",
+          "date": "2026-09-02"
+        }
+      ]
+    },
+    {
+      "key": "ext-05",
+      "filename": "ext-05-examination-prose.pdf",
+      "identifier": "P0482",
+      "name": "Asha Rao",
+      "sha256": "d408381e31e13249b6f88bfda28de9eec7cb4e35dd04769d4177845046b88d02",
+      "synthetic": true,
+      "layout": "Examination note written as prose, no table",
+      "variant": {
+        "scanned": false,
+        "scanQuality": "scan_300dpi",
+        "external": true,
+        "source": "digital"
+      },
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "examination",
+          "testCode": null,
+          "value": null,
+          "unit": null,
+          "date": "2026-09-08"
+        }
+      ]
+    },
+    {
+      "key": "ext-06",
+      "filename": "ext-06-photographed.jpg",
+      "identifier": "P0482",
+      "name": "Asha Rao",
+      "sha256": "30afb4889e88cf194064c7aca6c53e54104680c991efd8ac2097a76b93ccb852",
+      "synthetic": true,
+      "layout": "The bordered table photographed at an angle with a shadow",
+      "variant": {
+        "scanned": true,
+        "scanQuality": "scan_300dpi",
+        "external": true,
+        "source": "photo"
+      },
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "9.1",
+          "unit": "%",
+          "date": "2026-09-05"
+        },
+        {
+          "kind": "observation",
+          "testCode": "glucose_fasting",
+          "value": "186",
+          "unit": "mg/dl",
+          "date": "2026-09-05"
+        }
+      ]
+    },
+    {
+      "key": "ext-07",
+      "filename": "ext-07-fax-lowres.jpg",
+      "identifier": "P0482",
+      "name": "Asha Rao",
+      "sha256": "f34924371e825ad49ff9cebfb208898493aaaef771c0bf77db833ab048561928",
+      "synthetic": true,
+      "layout": "Low-resolution fax of a cumulative table",
+      "variant": {
+        "scanned": true,
+        "scanQuality": "scan_lowres",
+        "external": true,
+        "source": "fax"
+      },
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "7.9",
+          "unit": "%",
+          "date": "2026-07-30"
+        },
+        {
+          "kind": "observation",
+          "testCode": "urine_acr",
+          "value": "65",
+          "unit": "mg/mmol",
+          "date": "2026-07-30"
+        }
+      ]
+    },
+    {
+      "key": "ext-08",
+      "filename": "ext-08-identifier-in-footer.pdf",
+      "identifier": "P0482",
+      "name": "Asha Rao",
+      "sha256": "5d7cd24f41081e6b5b4086e2f6394c6eb7f57f1a8b31ddac480fc604b7d9f0e1",
+      "synthetic": true,
+      "layout": "Identifier only in the page footer, values with unusual unit spellings",
+      "variant": {
+        "scanned": false,
+        "scanQuality": "scan_300dpi",
+        "external": true,
+        "source": "digital"
+      },
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "glucose_fasting",
+          "value": "108",
+          "unit": "mg/dl",
+          "date": "2026-08-28"
+        },
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "6.9",
+          "unit": "%",
+          "date": "2026-08-28"
+        }
+      ]
+    },
+    {
+      "key": "ext-09",
+      "filename": "ext-09-no-identifier.pdf",
+      "identifier": "",
+      "name": "",
+      "sha256": "c11c5db48cad91deb94810c00eb61f9da359a1ed8910b2f784d48c72047c1f8a",
+      "synthetic": true,
+      "layout": "No identifier and no name anywhere on the page",
+      "variant": {
+        "scanned": false,
+        "scanQuality": "scan_300dpi",
+        "external": true,
+        "source": "digital"
+      },
+      "expectedIdentity": "missing",
+      "expectedIssues": [
+        "identity_missing"
+      ],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "7.4",
+          "unit": "%",
+          "date": "2026-08-06"
+        }
+      ]
+    },
+    {
+      "key": "ext-10",
+      "filename": "ext-10-other-patient.pdf",
+      "identifier": "P0999",
+      "name": "Ravi Menon",
+      "sha256": "e1ea81b38d679db612cdbcf96781b3fc09f8bfc61c5828757c2e02b611d4c888",
+      "synthetic": true,
+      "layout": "A different patient identifier printed prominently",
+      "variant": {
+        "scanned": false,
+        "scanQuality": "scan_300dpi",
+        "external": true,
+        "source": "digital"
+      },
+      "expectedIdentity": "mismatch",
+      "expectedIssues": [
+        "identity_mismatch"
+      ],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "10.2",
+          "unit": "%",
+          "date": "2026-09-11"
+        }
+      ]
+    },
+    {
+      "key": "ext-11",
+      "filename": "ext-11-multiple-dates.pdf",
+      "identifier": "P0482",
+      "name": "Asha Rao",
+      "sha256": "12f63ccf7d24a4e6bdd381b91cd9781871e0ce479b6370e9954ff6692cedd290",
+      "synthetic": true,
+      "layout": "One page listing the same test on three different dates",
+      "variant": {
+        "scanned": false,
+        "scanQuality": "scan_300dpi",
+        "external": true,
+        "source": "digital"
+      },
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "8.4",
+          "unit": "%",
+          "date": "2026-03-11"
+        },
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "7.8",
+          "unit": "%",
+          "date": "2026-06-17"
+        },
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "7.1",
+          "unit": "%",
+          "date": "2026-09-23"
+        }
+      ]
+    },
+    {
+      "key": "ext-12",
+      "filename": "ext-12-handwritten-annotation.jpg",
+      "identifier": "P0482",
+      "name": "Asha Rao",
+      "sha256": "e5da628556e80898e816d856a4b9ed0377c2f4219a7adb46a777c82bfcf19a3e",
+      "synthetic": true,
+      "layout": "Printed panel with a handwritten correction beside one value",
+      "variant": {
+        "scanned": true,
+        "scanQuality": "scan_300dpi",
+        "external": true,
+        "source": "handwritten_annotation"
+      },
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "value": "7.3",
+          "unit": "%",
+          "date": "2026-08-15"
+        },
+        {
+          "kind": "observation",
+          "testCode": "weight",
+          "value": "68",
+          "unit": "kg",
+          "date": "2026-08-15"
+        }
+      ]
+    }
+  ]
+}

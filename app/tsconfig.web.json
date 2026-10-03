@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
+    "jsx": "react-jsx",
+    "allowImportingTsExtensions": true
+  },
+  "include": [
+    "apps/client/src/**/*.ts",
+    "apps/client/src/**/*.tsx",
+    "apps/client/vite.config.ts",
+    "apps/client/capacitor.config.ts",
+    "packages/ui/src/**/*.ts",
+    "packages/ui/src/**/*.tsx",
+    "packages/contracts/src/**/*.ts",
+    "packages/domain/src/**/*.ts"
+  ]
+}

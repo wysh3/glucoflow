@@ -1,0 +1,45 @@
+$ vitest run
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ✓ tests/integration/uploads.test.ts (9 tests) 184ms
+ ✓ tests/integration/notes.test.ts (7 tests) 312ms
+ ✓ tests/integration/isolation.test.ts (7 tests) 362ms
+ ✓ tests/integration/jobs.test.ts (11 tests) 434ms
+ ✓ apps/api/src/hosted-auth.test.ts (5 tests) 95ms
+ ✓ tests/integration/hosted-storage.test.ts (6 tests) 43ms
+ ✓ tests/integration/exports.test.ts (5 tests) 557ms
+ ✓ packages/domain/src/timeline.test.ts (8 tests) 17ms
+ ✓ tests/extraction/evaluation-metrics.test.ts (7 tests) 3ms
+ ✓ tests/integration/review.test.ts (12 tests) 588ms
+stdout | tests/integration/maintenance.test.ts
+Dry run maintenance for 9 demo tenant(s).
+  orphaned_upload_sessions: 5
+  expired_upload_sessions: 0
+  exports_past_retention: 0
+  documents_past_retention: 0
+  audit_events_past_retention: 0
+  objects_removed: 0
+  objects_pending: 7
+Nothing was changed. Re-run with --apply --confirm-demo to remove these rows and objects.
+
+ ✓ tests/integration/maintenance.test.ts (4 tests) 51ms
+Warning: Invalid resolution 25 dpi. Using 70 instead.
+ ✓ tests/integration/worker-scan.test.ts (2 tests) 2016ms
+   ✓ the worker reads an uploaded scan (2)
+     ✓ extracts facts from a scanned page with no page-image callback 1899ms
+ ✓ tests/integration/live-provider.test.ts (8 tests) 2428ms
+   ✓ live provider adapter (protocol stub, not a real model) (8)
+     ✓ refuses to extract when credentials or a positive budget are missing 468ms
+     ✓ gives up on a provider that never answers 1452ms
+ ✓ tests/extraction/engine.test.ts (13 tests) 11327ms
+   ✓ extraction engine (13)
+     ✓ marks a blank scan unreadable instead of inventing values 9958ms
+     ✓ reads a phone photo through OCR without inventing values 1177ms
+
+ Test Files  14 passed (14)
+      Tests  104 passed (104)
+   Start at  11:18:24
+   Duration  11.79s (tests 84%, import 11%, transform 4%)
+

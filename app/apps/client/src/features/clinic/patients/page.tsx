@@ -1,0 +1,109 @@
+import * as React from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Badge, Button, Card, Input, ScreenTitle, Table, TBody, TD, TH, THead, TR, formatDateOnly } from '@sutra/ui';
+import { useSession } from '../../../auth/session';
+import { usePatients } from '../../../lib/queries';
+import { QueryState } from '../../../components/state-views';
+
+/** Clinic patient list with search, identifier, last record date and pending count. */
+export function ClinicPatientsPage(): React.ReactElement {
+  const { me } = useSession();
+  const navigate = useNavigate();
+  const [search, setSearch] = React.useState('');
+  const [debounced, setDebounced] = React.useState('');
+
+  React.useEffect(() => {
+    const timer = window.setTimeout(() => setDebounced(search), 250);
+    return () => window.clearTimeout(timer);
+  }, [search]);
+
+  const patients = usePatients(debounced.trim());
+
+  if (!me?.contexts.some((context) => context.kind === 'clinic')) {
+    return <Navigate to="/patient/records" replace />;
+  }
+
+  return (
+    <div className="space-y-4">
+      <ScreenTitle
+        title="Patients"
+        meta={me.capabilities.canReview ? 'Review queue and records' : 'Approved records'}
+      />
+      <div className="max-w-[420px]">
+        <label className="sr-only" htmlFor="patient-search">
+          Search patients
+        </label>
+        <Input
+          id="patient-search"
+          value={search}
+          placeholder="Search by name or identifier"
+          onChange={(event) => setSearch(event.target.value)}
+        />
+      </div>
+
+      <QueryState
+        isLoading={patients.isLoading}
+        error={patients.error}
+        isEmpty={patients.data?.items.length === 0}
+        emptyTitle={debounced ? 'No matching patients' : 'No patients yet'}
+        emptyDescription={
+          debounced
+            ? 'Clear the search or check the spelling of the identifier.'
+            : 'Patients appear here after the seed command creates them.'
+        }
+        emptyAction={
+          debounced ? (
+            <Button variant="secondary" onClick={() => setSearch('')}>
+              Clear search
+            </Button>
+          ) : null
+        }
+        onRetry={() => void patients.refetch()}
+      >
+        <Card>
+          <Table>
+            <THead>
+              <TR>
+                <TH>Patient</TH>
+                <TH>Identifier</TH>
+                <TH>Last record</TH>
+                <TH>Pending</TH>
+                <TH />
+              </TR>
+            </THead>
+            <TBody>
+              {patients.data?.items.map((patient) => (
+                <TR key={patient.patientId}>
+                  <TD>
+                    <span className="font-medium text-ink">{patient.displayName}</span>
+                  </TD>
+                  <TD>{patient.clinicIdentifier}</TD>
+                  <TD>{patient.lastRecordDate ? formatDateOnly(patient.lastRecordDate) : 'None'}</TD>
+                  <TD>
+                    {patient.pendingCount > 0 ? (
+                      <Badge tone="review">{patient.pendingCount} awaiting review</Badge>
+                    ) : (
+                      <span className="text-ink-soft">None</span>
+                    )}
+                  </TD>
+                  <TD>
+                    <Link
+                      to={`/clinic/patients/${patient.patientId}/progression`}
+                      className="inline-flex min-h-11 items-center rounded-[10px] border border-line px-4 text-sm text-ink hover:bg-canvas"
+                    >
+                      Open patient
+                    </Link>
+                  </TD>
+                </TR>
+              ))}
+            </TBody>
+          </Table>
+        </Card>
+      </QueryState>
+
+      <Button variant="quiet" onClick={() => navigate('/clinic/queue')}>
+        Open the review queue
+      </Button>
+    </div>
+  );
+}

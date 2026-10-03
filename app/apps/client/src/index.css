@@ -1,0 +1,100 @@
+@import 'tailwindcss';
+
+/*
+ * The shared component package lives outside this application's root, so Tailwind's
+ * automatic source detection does not see it. Without this directive every utility
+ * used only inside @sutra/ui (dialog positioning, tabs, badges) is dropped from the
+ * generated stylesheet.
+ */
+@source '../../../packages/ui/src';
+
+/*
+ * Design tokens. Source: docs/mvp/02-screens-and-design.md "Tokens".
+ * Light mode only for this MVP; dark mode is deferred.
+ */
+@theme {
+  --color-canvas: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-ink: #172b33;
+  --color-ink-soft: #52636c;
+  --color-primary: #12606f;
+  --color-primary-hover: #0b3c49;
+  --color-line: #dce3e8;
+  --color-review: #a85b00;
+  --color-review-bg: #fff4e5;
+  --color-danger: #b42318;
+  --color-danger-bg: #fff1f0;
+  --color-success: #176b46;
+  --color-success-bg: #ecf8f1;
+
+  --radius-control: 10px;
+  --radius-panel: 12px;
+
+  --font-sans: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --text-body: 0.875rem;
+  --text-body-mobile: 1rem;
+
+  --spacing: 0.25rem;
+}
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('./assets/fonts/InterVariable.woff2') format('woff2-variations');
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: var(--text-body-mobile);
+  }
+}
+
+/* Safe areas for the installed Android application. */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

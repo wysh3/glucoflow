@@ -1,0 +1,13 @@
+$ tsx scripts/evaluate-extraction.ts
+Fixture data: deterministic rule engine, not an AI model
+Corpus: eval-corpus (30 documents, seed 20261002)
+  fact precision      0.988
+  fact recall         0.982
+  event date exact    0.7622
+  unit exact          0.9512
+  identity state      1
+  issue flag rate     1
+  recall, machine-readable 1
+  recall, 300 dpi scan     1
+  recall, low-res scan     0.8636
+Written to /Users/wysh/coding/thon/iitb-health/app/reports/extraction-evaluation.json

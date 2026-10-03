@@ -1,0 +1,32 @@
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Local environment and generated local state (never committed)
+.env
+.env.local
+.local/
+*.pem
+*.jks
+*.keystore
+keystores/
+apps/client/android/local.properties
+apps/client/android/keystore.properties
+apps/client/android/app/build/
+apps/client/android/build/
+apps/client/android/.gradle/
+apps/client/android/app/src/main/assets/public/
+apps/client/android/app/src/main/res/xml/config.xml
+
+# Test output
+test-results/
+playwright-report/
+tests/e2e/.auth/
+
+# Reports that contain machine-local paths only
+reports/local/
+
+*.log
+.DS_Store

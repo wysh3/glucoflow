@@ -1,0 +1,26 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# pnpm >= 10 blocks dependency lifecycle scripts by default. These packages need
+# their install scripts to fetch prebuilt native binaries or build tool binaries.
+# Everything else is intentionally left blocked.
+allowBuilds:
+  esbuild: true
+  tesseract.js: true
+  sharp: true
+  '@napi-rs/canvas': true
+  '@tailwindcss/oxide': true
+  unrs-resolver: true
+
+minimumReleaseAgeExclude:
+  - '@capacitor/camera@8.2.5'
+  - '@tanstack/query-core@5.104.1'
+  - '@tanstack/react-query@5.104.1'
+  - '@types/node@22.20.5'
+  - framer-motion@14.0.0
+  - lucide-react@1.50.0
+  - motion-dom@14.0.0
+  - motion-utils@14.0.0
+  - motion@14.0.0
+  - '@capacitor/app@8.1.2'

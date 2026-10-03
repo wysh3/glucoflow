@@ -1,0 +1,23 @@
+Mutation check for the restored job tests
+Run: 2026-10-03T05:50:18.910Z
+
+PASS  never retries an unsupported format failure
+      broke: an unsupported format is treated as retryable
+      the test failed, so the behaviour is covered
+PASS  quarantines a document above the page limit without a retry loop
+      broke: a page-limit failure is treated as retryable
+      the test failed, so the behaviour is covered
+PASS  preserves the model call ledger across a restart and caps the run
+      broke: the per-run model call cap is ignored
+      the test failed, so the behaviour is covered
+PASS  completes a successful job and clears the lease
+      broke: a completed job keeps its lease token
+      the test failed, so the behaviour is covered
+PASS  counts a manual retry as a new run subject to the hourly cap
+      broke: the hourly retry cap is removed
+      the test failed, so the behaviour is covered
+PASS  refuses a manual retry for a quarantined upload
+      broke: a quarantined upload may be retried
+      the test failed, so the behaviour is covered
+
+All 6 mutations were detected by their test.

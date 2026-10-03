@@ -1,0 +1,23 @@
+{
+  "name": "@sutra/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/server.mjs",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "node dist/server.mjs",
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@fastify/cors": "11.3.0",
+    "@fastify/rate-limit": "11.2.0",
+    "@sutra/contracts": "workspace:*",
+    "@sutra/data": "workspace:*",
+    "@sutra/domain": "workspace:*",
+    "fastify": "5.12.5",
+    "jose": "6.2.12",
+    "pg": "8.23.1",
+    "zod": "4.6.5"
+  }
+}

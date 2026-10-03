@@ -1,0 +1,24 @@
+{
+  "name": "@sutra/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/worker.mjs",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "node dist/worker.mjs",
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@sutra/contracts": "workspace:*",
+    "@sutra/data": "workspace:*",
+    "@sutra/domain": "workspace:*",
+    "@sutra/extraction": "workspace:*",
+    "pdfkit": "0.20.2",
+    "pg": "8.23.1",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/pdfkit": "0.17.6"
+  }
+}

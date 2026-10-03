@@ -1,0 +1,8 @@
+Built-worker verification against a local model stub
+Run: 2026-10-03T05:50:36.288Z
+Job state: succeeded
+Model requests captured: 1
+Draft facts written: 1
+Startup line: {"level":"info","message":"worker started","workerId":"worker-41302","concurrency":1,"extractionProvider":"openai-compatible","extractionMode":"live","extractionModel":"stub-model-v1","promptHash":"6acb44131292a56e4a3827bee27b4911","storageMode":"local","ocrEnabled":true}
+
+All wiring checks passed: prompt, evidence ids, bearer token and page image all reached the model endpoint.

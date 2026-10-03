@@ -1,0 +1,21 @@
+{
+  "name": "@sutra/data",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./runtime": "./src/runtime.ts",
+    "./storage": "./src/storage.ts",
+    "./pool": "./src/pool.ts",
+    "./password": "./src/password.ts"
+  },
+  "dependencies": {
+    "@sutra/contracts": "workspace:*",
+    "@sutra/domain": "workspace:*",
+    "pg": "8.23.1"
+  },
+  "devDependencies": {
+    "@types/pg": "8.23.1"
+  }
+}

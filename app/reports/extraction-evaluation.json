@@ -1,0 +1,1001 @@
+{
+  "generatedAt": "2026-10-03T05:51:10.672Z",
+  "provider": "fixture",
+  "mode": "fixture",
+  "model": "deterministic-rules-v1",
+  "providerLabel": "Fixture data: deterministic rule engine, not an AI model",
+  "corpus": "eval-corpus",
+  "corpusVersion": "v2",
+  "corpusHash": "e1e0b715f71069a1d21949bec02efce735e10ae6ef74a828d90594b314f5abf4",
+  "corpusSeed": 20261002,
+  "providerCalls": 0,
+  "reservedCostUsd": 0,
+  "processingMs": {
+    "total": 8784,
+    "median": 49,
+    "perDocument": [
+      {
+        "key": "eval-01",
+        "ms": 426
+      },
+      {
+        "key": "eval-02",
+        "ms": 52
+      },
+      {
+        "key": "eval-03",
+        "ms": 49
+      },
+      {
+        "key": "eval-04",
+        "ms": 49
+      },
+      {
+        "key": "eval-05",
+        "ms": 47
+      },
+      {
+        "key": "eval-06",
+        "ms": 47
+      },
+      {
+        "key": "eval-07",
+        "ms": 47
+      },
+      {
+        "key": "eval-08",
+        "ms": 49
+      },
+      {
+        "key": "eval-09",
+        "ms": 49
+      },
+      {
+        "key": "eval-10",
+        "ms": 46
+      },
+      {
+        "key": "eval-11",
+        "ms": 870
+      },
+      {
+        "key": "eval-12",
+        "ms": 49
+      },
+      {
+        "key": "eval-13",
+        "ms": 833
+      },
+      {
+        "key": "eval-14",
+        "ms": 47
+      },
+      {
+        "key": "eval-15",
+        "ms": 47
+      },
+      {
+        "key": "eval-16",
+        "ms": 48
+      },
+      {
+        "key": "eval-17",
+        "ms": 835
+      },
+      {
+        "key": "eval-18",
+        "ms": 50
+      },
+      {
+        "key": "eval-19",
+        "ms": 729
+      },
+      {
+        "key": "eval-20",
+        "ms": 630
+      },
+      {
+        "key": "eval-21",
+        "ms": 48
+      },
+      {
+        "key": "eval-22",
+        "ms": 48
+      },
+      {
+        "key": "eval-23",
+        "ms": 769
+      },
+      {
+        "key": "eval-24",
+        "ms": 47
+      },
+      {
+        "key": "eval-25",
+        "ms": 803
+      },
+      {
+        "key": "eval-26",
+        "ms": 649
+      },
+      {
+        "key": "eval-27",
+        "ms": 47
+      },
+      {
+        "key": "eval-28",
+        "ms": 673
+      },
+      {
+        "key": "eval-29",
+        "ms": 47
+      },
+      {
+        "key": "eval-30",
+        "ms": 654
+      }
+    ]
+  },
+  "costPerDocumentUsd": 0,
+  "engineVersion": "ef5435f935f1d803",
+  "promptHash": "c6ac68752ef48ec0b145dc8084011f28",
+  "providerName": "fixture",
+  "frozen": {
+    "engineVersion": "ef5435f935f1d803",
+    "promptHash": "c6ac68752ef48ec0b145dc8084011f28",
+    "provider": "fixture",
+    "model": "deterministic-rules-v1",
+    "ablation": "none",
+    "features": {
+      "ocrPreprocess": true,
+      "ocrTolerance": true
+    },
+    "corpus": "eval-corpus",
+    "corpusVersion": "v2",
+    "corpusHash": "e1e0b715f71069a1d21949bec02efce735e10ae6ef74a828d90594b314f5abf4",
+    "documentHashes": [
+      {
+        "key": "eval-01",
+        "sha256": "a2ba5d50fd946eaf5cd1ab8f450232c58f9514278cb4b0d88b514a5cb22c5db5"
+      },
+      {
+        "key": "eval-02",
+        "sha256": "866722549a2d25aaa68850a8f43e59852f53b93973e96a9ab967dbadfcece9ba"
+      },
+      {
+        "key": "eval-03",
+        "sha256": "2da874984c6142e3b8de9bc3a02bd0619531e4566ee97c27ca068ff3af72addc"
+      },
+      {
+        "key": "eval-04",
+        "sha256": "fe5c483737a0ebbcdebb7265c47fe87edf008d515003b633802522f664729758"
+      },
+      {
+        "key": "eval-05",
+        "sha256": "5adf91d4a55bed760e7e1bdea853d589a5a457d51f53346afa00091559caccdb"
+      },
+      {
+        "key": "eval-06",
+        "sha256": "c4fdcc258437a7b7017e4267a9aa5ba47861885b35d26a3e1017a17a1a25ac69"
+      },
+      {
+        "key": "eval-07",
+        "sha256": "96cd84f51293139cb986442bcdbf77434dc858f0060611b5d4d6b2957de30308"
+      },
+      {
+        "key": "eval-08",
+        "sha256": "fa1c021960a32beeb135b3f7b88ef0d8bc2aac659a38b03b2e919fcdf0a95ae2"
+      },
+      {
+        "key": "eval-09",
+        "sha256": "18f72b8356f8ea63797b3903c7d2ab5e78cb23285385ec4213abed6fb4746779"
+      },
+      {
+        "key": "eval-10",
+        "sha256": "ed42cf150305e748385d44b536ed75f5c3cf03167eb6a409dc465da579aef8f6"
+      },
+      {
+        "key": "eval-11",
+        "sha256": "4fe4d8ee06c9f59337a6faad1b85c0af421ff2bff3546b0f10ba3c8cef2bb8f0"
+      },
+      {
+        "key": "eval-12",
+        "sha256": "70abeab9bea5100d02816eb03ba9a279e1b56d20c132358b90cecdffd07dbfce"
+      },
+      {
+        "key": "eval-13",
+        "sha256": "339505a103a7f2366616943959d40f42f90c78d300a2e36eab98de8ca517a359"
+      },
+      {
+        "key": "eval-14",
+        "sha256": "118984fb9b672ad1f7f34f2b6c94495efcc6a3dd0677cdbeac24ca82c93b790c"
+      },
+      {
+        "key": "eval-15",
+        "sha256": "be2c88c244d83b4e476a65aab0ccc03b5dd10f360a0003e8af81d387a0f2b5f8"
+      },
+      {
+        "key": "eval-16",
+        "sha256": "454bd1e670f8e1ee0a3aec54c48822272082d52dc002e810d26054bbf1365a46"
+      },
+      {
+        "key": "eval-17",
+        "sha256": "8e3a1eb0c7ef5230191336ec5802a1b04a1d8b9b0394d3e6f5e7dde45a50bc17"
+      },
+      {
+        "key": "eval-18",
+        "sha256": "ac269a60bb71918e7c58b016d88a11fd0aec4b801ca646b169585a6c311665e8"
+      },
+      {
+        "key": "eval-19",
+        "sha256": "38fdd6ba624835e2b9597c7748b43318ed84e92893ab8c5936af9cb896611fa0"
+      },
+      {
+        "key": "eval-20",
+        "sha256": "1dd5940fcaa9d54798751c4ba5fa8af0b077445aacc501ad949451efdc9d4599"
+      },
+      {
+        "key": "eval-21",
+        "sha256": "6794140d664c5371f252c587d24b33e31cf85b271bc3e3e02a29a6c61f0c7ae7"
+      },
+      {
+        "key": "eval-22",
+        "sha256": "e576f2e3d95c2e63390bb44a85be8f3ee4f3b4220e7797b9fffd1b2dc2eb785c"
+      },
+      {
+        "key": "eval-23",
+        "sha256": "bc19dcf820a931543e5e2599438a6fdfc4fc14568275bb397c4011e0af089b05"
+      },
+      {
+        "key": "eval-24",
+        "sha256": "e1c311b9c4b72844801a09aef55d48e45c3157ffb4ee67f45bbab74798150267"
+      },
+      {
+        "key": "eval-25",
+        "sha256": "40ffb2edf9718c5459d8702557400fd743f53d7e08271fb4b8533d0c0760ba9f"
+      },
+      {
+        "key": "eval-26",
+        "sha256": "b1313ccc56c031728816fff43602a5d8041c3b5b6f270e926faf19373e5ff570"
+      },
+      {
+        "key": "eval-27",
+        "sha256": "7cfdf229b7c3e3ac5436aa8a3fa86cab333f5b0da382fe3358e61695213dcfd6"
+      },
+      {
+        "key": "eval-28",
+        "sha256": "2067d9958759e5a0de52ac7657f00d96aa23a814899857689fa8a73fd588ca72"
+      },
+      {
+        "key": "eval-29",
+        "sha256": "d5da1ef9b53dedf158ec71e75d72c1f077aa53a5b42ee1845cfb16a89d270722"
+      },
+      {
+        "key": "eval-30",
+        "sha256": "aee635b1e5bcfd2f82a4b5915e254d6b2d30e24501d372232240defdb0ddb114"
+      }
+    ]
+  },
+  "ablation": "none",
+  "engineFeatures": {
+    "ocrPreprocess": true,
+    "ocrTolerance": true
+  },
+  "synthetic": true,
+  "documents": 30,
+  "metrics": {
+    "factPrecision": 1,
+    "factRecall": 1,
+    "matchedFacts": 167,
+    "missingFacts": 0,
+    "extraFacts": 0,
+    "eventDateExactRate": 0.7665,
+    "unitExactRate": 0.982,
+    "identityStateAccuracy": 1,
+    "completeFieldAccuracy": 0.7485,
+    "completeFieldAccuracyNoDate": 0.982,
+    "completeFieldNote": "A complete field means the patient, test, value, unit and date are all correct together.",
+    "reviewerCorrections": null,
+    "issueFlagRate": 1
+  },
+  "byVariant": {
+    "machineReadable": {
+      "documents": 20,
+      "factRecall": 1
+    },
+    "scan300dpi": {
+      "documents": 6,
+      "factRecall": 1
+    },
+    "scanLowres": {
+      "documents": 4,
+      "factRecall": 1
+    }
+  },
+  "perDocument": [
+    {
+      "key": "eval-01",
+      "filename": "eval-01_E3000.pdf",
+      "durationMs": 426,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 4,
+      "completeFieldsNoDate": 4,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "a2ba5d50fd946eaf5cd1ab8f450232c58f9514278cb4b0d88b514a5cb22c5db5",
+      "expectedFacts": 4,
+      "extractedFacts": 4,
+      "matchedFacts": 4,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-02",
+      "filename": "eval-02_E3001.pdf",
+      "durationMs": 52,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 7,
+      "completeFieldsNoDate": 7,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "866722549a2d25aaa68850a8f43e59852f53b93973e96a9ab967dbadfcece9ba",
+      "expectedFacts": 7,
+      "extractedFacts": 7,
+      "matchedFacts": 7,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-03",
+      "filename": "eval-03_E3002.pdf",
+      "durationMs": 49,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 5,
+      "completeFieldsNoDate": 5,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "2da874984c6142e3b8de9bc3a02bd0619531e4566ee97c27ca068ff3af72addc",
+      "expectedFacts": 5,
+      "extractedFacts": 5,
+      "matchedFacts": 5,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-04",
+      "filename": "eval-04_E3003.pdf",
+      "durationMs": 49,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 6,
+      "completeFieldsNoDate": 6,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "fe5c483737a0ebbcdebb7265c47fe87edf008d515003b633802522f664729758",
+      "expectedFacts": 6,
+      "extractedFacts": 6,
+      "matchedFacts": 6,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-05",
+      "filename": "eval-05_E3004.pdf",
+      "durationMs": 47,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 0,
+      "completeFieldsNoDate": 6,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "5adf91d4a55bed760e7e1bdea853d589a5a457d51f53346afa00091559caccdb",
+      "expectedFacts": 6,
+      "extractedFacts": 6,
+      "matchedFacts": 6,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [
+        "date_ambiguous"
+      ],
+      "expectedIssues": [
+        "date_ambiguous"
+      ],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-06",
+      "filename": "eval-06_E3005.pdf",
+      "durationMs": 47,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 7,
+      "completeFieldsNoDate": 7,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "c4fdcc258437a7b7017e4267a9aa5ba47861885b35d26a3e1017a17a1a25ac69",
+      "expectedFacts": 7,
+      "extractedFacts": 7,
+      "matchedFacts": 7,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-07",
+      "filename": "eval-07_E3006.pdf",
+      "durationMs": 47,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 6,
+      "completeFieldsNoDate": 6,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "96cd84f51293139cb986442bcdbf77434dc858f0060611b5d4d6b2957de30308",
+      "expectedFacts": 6,
+      "extractedFacts": 6,
+      "matchedFacts": 6,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-08",
+      "filename": "eval-08_E3007.pdf",
+      "durationMs": 49,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 0,
+      "completeFieldsNoDate": 5,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "fa1c021960a32beeb135b3f7b88ef0d8bc2aac659a38b03b2e919fcdf0a95ae2",
+      "expectedFacts": 5,
+      "extractedFacts": 5,
+      "matchedFacts": 5,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [
+        "date_ambiguous"
+      ],
+      "expectedIssues": [
+        "date_ambiguous"
+      ],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-09",
+      "filename": "eval-09_E3008.pdf",
+      "durationMs": 49,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 0,
+      "completeFieldsNoDate": 7,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "18f72b8356f8ea63797b3903c7d2ab5e78cb23285385ec4213abed6fb4746779",
+      "expectedFacts": 7,
+      "extractedFacts": 7,
+      "matchedFacts": 7,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [
+        "date_ambiguous"
+      ],
+      "expectedIssues": [
+        "date_ambiguous"
+      ],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-10",
+      "filename": "eval-10_E3009.pdf",
+      "durationMs": 46,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 3,
+      "completeFieldsNoDate": 3,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "ed42cf150305e748385d44b536ed75f5c3cf03167eb6a409dc465da579aef8f6",
+      "expectedFacts": 3,
+      "extractedFacts": 3,
+      "matchedFacts": 3,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-11",
+      "filename": "eval-11_E3010.pdf",
+      "durationMs": 870,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 0,
+      "completeFieldsNoDate": 7,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "4fe4d8ee06c9f59337a6faad1b85c0af421ff2bff3546b0f10ba3c8cef2bb8f0",
+      "expectedFacts": 7,
+      "extractedFacts": 7,
+      "matchedFacts": 7,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [
+        "date_ambiguous"
+      ],
+      "expectedIssues": [
+        "date_ambiguous"
+      ],
+      "ocrUsed": true
+    },
+    {
+      "key": "eval-12",
+      "filename": "eval-12_E3011.pdf",
+      "durationMs": 49,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 7,
+      "completeFieldsNoDate": 7,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "70abeab9bea5100d02816eb03ba9a279e1b56d20c132358b90cecdffd07dbfce",
+      "expectedFacts": 7,
+      "extractedFacts": 7,
+      "matchedFacts": 7,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-13",
+      "filename": "eval-13_E3012.pdf",
+      "durationMs": 833,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 7,
+      "completeFieldsNoDate": 7,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "339505a103a7f2366616943959d40f42f90c78d300a2e36eab98de8ca517a359",
+      "expectedFacts": 7,
+      "extractedFacts": 7,
+      "matchedFacts": 7,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": true
+    },
+    {
+      "key": "eval-14",
+      "filename": "eval-14_E3013.pdf",
+      "durationMs": 47,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 0,
+      "completeFieldsNoDate": 4,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "118984fb9b672ad1f7f34f2b6c94495efcc6a3dd0677cdbeac24ca82c93b790c",
+      "expectedFacts": 4,
+      "extractedFacts": 4,
+      "matchedFacts": 4,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [
+        "date_ambiguous"
+      ],
+      "expectedIssues": [
+        "date_ambiguous"
+      ],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-15",
+      "filename": "eval-15_E3014.pdf",
+      "durationMs": 47,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 6,
+      "completeFieldsNoDate": 6,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "be2c88c244d83b4e476a65aab0ccc03b5dd10f360a0003e8af81d387a0f2b5f8",
+      "expectedFacts": 6,
+      "extractedFacts": 6,
+      "matchedFacts": 6,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-16",
+      "filename": "eval-16_E3015.pdf",
+      "durationMs": 48,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 0,
+      "completeFieldsNoDate": 4,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "454bd1e670f8e1ee0a3aec54c48822272082d52dc002e810d26054bbf1365a46",
+      "expectedFacts": 4,
+      "extractedFacts": 4,
+      "matchedFacts": 4,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [
+        "date_ambiguous"
+      ],
+      "expectedIssues": [
+        "date_ambiguous"
+      ],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-17",
+      "filename": "eval-17_E3016.pdf",
+      "durationMs": 835,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 7,
+      "completeFieldsNoDate": 7,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "8e3a1eb0c7ef5230191336ec5802a1b04a1d8b9b0394d3e6f5e7dde45a50bc17",
+      "expectedFacts": 7,
+      "extractedFacts": 7,
+      "matchedFacts": 7,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": true
+    },
+    {
+      "key": "eval-18",
+      "filename": "eval-18_E3017.pdf",
+      "durationMs": 50,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 6,
+      "completeFieldsNoDate": 6,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "ac269a60bb71918e7c58b016d88a11fd0aec4b801ca646b169585a6c311665e8",
+      "expectedFacts": 6,
+      "extractedFacts": 6,
+      "matchedFacts": 6,
+      "identityState": "unchecked",
+      "expectedIdentity": "missing",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [
+        "identity_missing"
+      ],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-19",
+      "filename": "eval-19_E3018.pdf",
+      "durationMs": 729,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 3,
+      "completeFieldsNoDate": 3,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "38fdd6ba624835e2b9597c7748b43318ed84e92893ab8c5936af9cb896611fa0",
+      "expectedFacts": 3,
+      "extractedFacts": 3,
+      "matchedFacts": 3,
+      "identityState": "unchecked",
+      "expectedIdentity": "missing",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [
+        "identity_missing"
+      ],
+      "ocrUsed": true
+    },
+    {
+      "key": "eval-20",
+      "filename": "eval-20_E3019.pdf",
+      "durationMs": 630,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 4,
+      "completeFieldsNoDate": 4,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "1dd5940fcaa9d54798751c4ba5fa8af0b077445aacc501ad949451efdc9d4599",
+      "expectedFacts": 4,
+      "extractedFacts": 4,
+      "matchedFacts": 4,
+      "identityState": "unchecked",
+      "expectedIdentity": "missing",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [
+        "identity_missing"
+      ],
+      "ocrUsed": true
+    },
+    {
+      "key": "eval-21",
+      "filename": "eval-21_E3020.pdf",
+      "durationMs": 48,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 5,
+      "completeFieldsNoDate": 5,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "6794140d664c5371f252c587d24b33e31cf85b271bc3e3e02a29a6c61f0c7ae7",
+      "expectedFacts": 5,
+      "extractedFacts": 5,
+      "matchedFacts": 5,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-22",
+      "filename": "eval-22_E3021.pdf",
+      "durationMs": 48,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 6,
+      "completeFieldsNoDate": 6,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "e576f2e3d95c2e63390bb44a85be8f3ee4f3b4220e7797b9fffd1b2dc2eb785c",
+      "expectedFacts": 6,
+      "extractedFacts": 6,
+      "matchedFacts": 6,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-23",
+      "filename": "eval-23_E3022.pdf",
+      "durationMs": 769,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 4,
+      "completeFieldsNoDate": 4,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "bc19dcf820a931543e5e2599438a6fdfc4fc14568275bb397c4011e0af089b05",
+      "expectedFacts": 4,
+      "extractedFacts": 4,
+      "matchedFacts": 4,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": true
+    },
+    {
+      "key": "eval-24",
+      "filename": "eval-24_E3023.pdf",
+      "durationMs": 47,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 5,
+      "completeFieldsNoDate": 5,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "e1c311b9c4b72844801a09aef55d48e45c3157ffb4ee67f45bbab74798150267",
+      "expectedFacts": 5,
+      "extractedFacts": 5,
+      "matchedFacts": 5,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [],
+      "expectedIssues": [],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-25",
+      "filename": "eval-25_E3024.pdf",
+      "durationMs": 803,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 5,
+      "completeFieldsNoDate": 5,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "40ffb2edf9718c5459d8702557400fd743f53d7e08271fb4b8533d0c0760ba9f",
+      "expectedFacts": 6,
+      "extractedFacts": 6,
+      "matchedFacts": 6,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [
+        "unit_unsupported"
+      ],
+      "expectedIssues": [],
+      "ocrUsed": true
+    },
+    {
+      "key": "eval-26",
+      "filename": "eval-26_E3025.pdf",
+      "durationMs": 649,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 4,
+      "completeFieldsNoDate": 4,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "b1313ccc56c031728816fff43602a5d8041c3b5b6f270e926faf19373e5ff570",
+      "expectedFacts": 5,
+      "extractedFacts": 5,
+      "matchedFacts": 5,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [
+        "unit_unsupported"
+      ],
+      "expectedIssues": [],
+      "ocrUsed": true
+    },
+    {
+      "key": "eval-27",
+      "filename": "eval-27_E3026.pdf",
+      "durationMs": 47,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 0,
+      "completeFieldsNoDate": 6,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "7cfdf229b7c3e3ac5436aa8a3fa86cab333f5b0da382fe3358e61695213dcfd6",
+      "expectedFacts": 6,
+      "extractedFacts": 6,
+      "matchedFacts": 6,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [
+        "date_ambiguous"
+      ],
+      "expectedIssues": [
+        "date_ambiguous"
+      ],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-28",
+      "filename": "eval-28_E3027.pdf",
+      "durationMs": 673,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 6,
+      "completeFieldsNoDate": 6,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "2067d9958759e5a0de52ac7657f00d96aa23a814899857689fa8a73fd588ca72",
+      "expectedFacts": 7,
+      "extractedFacts": 7,
+      "matchedFacts": 7,
+      "identityState": "matched",
+      "expectedIdentity": "matched",
+      "issues": [
+        "unit_unsupported"
+      ],
+      "expectedIssues": [],
+      "ocrUsed": true
+    },
+    {
+      "key": "eval-29",
+      "filename": "eval-29_E3028.pdf",
+      "durationMs": 47,
+      "pages": 1,
+      "ocrPages": 0,
+      "completeFields": 6,
+      "completeFieldsNoDate": 6,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "d5da1ef9b53dedf158ec71e75d72c1f077aa53a5b42ee1845cfb16a89d270722",
+      "expectedFacts": 6,
+      "extractedFacts": 6,
+      "matchedFacts": 6,
+      "identityState": "unchecked",
+      "expectedIdentity": "missing",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [
+        "identity_missing"
+      ],
+      "ocrUsed": false
+    },
+    {
+      "key": "eval-30",
+      "filename": "eval-30_E3029.pdf",
+      "durationMs": 654,
+      "pages": 1,
+      "ocrPages": 1,
+      "completeFields": 6,
+      "completeFieldsNoDate": 6,
+      "providerCalls": 0,
+      "tokens": 0,
+      "reservedCostUsd": 0,
+      "sha256": "aee635b1e5bcfd2f82a4b5915e254d6b2d30e24501d372232240defdb0ddb114",
+      "expectedFacts": 6,
+      "extractedFacts": 6,
+      "matchedFacts": 6,
+      "identityState": "unchecked",
+      "expectedIdentity": "missing",
+      "issues": [
+        "identity_missing"
+      ],
+      "expectedIssues": [
+        "identity_missing"
+      ],
+      "ocrUsed": true
+    }
+  ]
+}

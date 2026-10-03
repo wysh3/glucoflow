@@ -1,0 +1,832 @@
+{
+  "generatedAt": "2026-10-02T18:01:24.458Z",
+  "synthetic": true,
+  "purpose": "Reference labels for the synthetic regression corpus. Prepared from the source content specification, not from extractor output.",
+  "patient": {
+    "identifier": "P0482",
+    "name": "Asha Rao"
+  },
+  "counts": {
+    "documents": 16,
+    "photos": 2,
+    "devBundles": 12
+  },
+  "entries": [
+    {
+      "key": "labs-2026-01-12",
+      "filename": "2026-01-12_lab_report.pdf",
+      "directory": "sources",
+      "sha256": "0ed7fd221d7da45ede87ec997c989ac2fa4dd77ea1a7eca236d3991b036d7323",
+      "synthetic": true,
+      "description": "First historical laboratory report (approved reset history).",
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "rawLabel": "HbA1c",
+          "value": "8.2",
+          "unit": "%",
+          "eventDate": "2026-01-12",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "glucose_fasting",
+          "rawLabel": "Fasting glucose",
+          "value": "142",
+          "unit": "mg/dl",
+          "eventDate": "2026-01-12",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "cholesterol_total",
+          "rawLabel": "Total cholesterol",
+          "value": "212",
+          "unit": "mg/dl",
+          "eventDate": "2026-01-12",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "egfr",
+          "rawLabel": "Reported eGFR",
+          "value": "78",
+          "unit": "ml/min/1.73 m2",
+          "eventDate": "2026-01-12",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "bp_systolic",
+          "rawLabel": "Blood pressure",
+          "value": "138",
+          "unit": "mmhg",
+          "eventDate": "2026-01-12",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "bp_diastolic",
+          "rawLabel": "Blood pressure",
+          "value": "86",
+          "unit": "mmhg",
+          "eventDate": "2026-01-12",
+          "dateKind": "collection",
+          "plotEligible": true
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "labs-2026-04-10",
+      "filename": "2026-04-10_lab_report.pdf",
+      "directory": "sources",
+      "sha256": "13cc3e2e8e151bdd2baaca4293f449170cbf31997eb3ada7af793ef65ce23898",
+      "synthetic": true,
+      "description": "Second historical laboratory report (approved reset history).",
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "rawLabel": "HbA1c",
+          "value": "7.9",
+          "unit": "%",
+          "eventDate": "2026-04-10",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "glucose_fasting",
+          "rawLabel": "Fasting glucose",
+          "value": "131",
+          "unit": "mg/dl",
+          "eventDate": "2026-04-10",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "weight",
+          "rawLabel": "Weight",
+          "value": "74",
+          "unit": "kg",
+          "eventDate": "2026-04-10",
+          "dateKind": "collection",
+          "plotEligible": true
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "labs-2026-07-09",
+      "filename": "2026-07-09_lab_report.pdf",
+      "directory": "sources",
+      "sha256": "16be26ee1a27b37ab81ba55cd85cd031ddb1bf9a41d7630d20b152eceff40c4d",
+      "synthetic": true,
+      "description": "Third historical laboratory report (approved reset history).",
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "rawLabel": "HbA1c",
+          "value": "7.5",
+          "unit": "%",
+          "eventDate": "2026-07-09",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "triglycerides",
+          "rawLabel": "Triglycerides",
+          "value": "168",
+          "unit": "mg/dl",
+          "eventDate": "2026-07-09",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "urine_acr",
+          "rawLabel": "Urine ACR",
+          "value": "42",
+          "unit": "mg/g",
+          "eventDate": "2026-07-09",
+          "dateKind": "collection",
+          "plotEligible": true
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "labs-2026-09-14",
+      "filename": "2026-09-14_lab_report.pdf",
+      "directory": "sources",
+      "sha256": "ba2d84c2ac294fc0ed2aab6f3708c3594078308403756f001d80e130cfd69547",
+      "synthetic": true,
+      "description": "Return-visit report used in the live upload demonstration. Not part of the reset history.",
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "rawLabel": "HbA1c",
+          "value": "7.8",
+          "unit": "%",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "egfr",
+          "rawLabel": "Reported eGFR",
+          "value": "74",
+          "unit": "ml/min/1.73 m2",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "urine_acr",
+          "rawLabel": "Urine ACR",
+          "value": "55",
+          "unit": "mg/g",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "cholesterol_ldl",
+          "rawLabel": "LDL cholesterol",
+          "value": "118",
+          "unit": "mg/dl",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "bp_systolic",
+          "rawLabel": "Blood pressure",
+          "value": "136",
+          "unit": "mmhg",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "bp_diastolic",
+          "rawLabel": "Blood pressure",
+          "value": "84",
+          "unit": "mmhg",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "labs-2026-02-15-multipage",
+      "filename": "2026-02-15_lab_report_two_pages.pdf",
+      "directory": "sources",
+      "sha256": "8b98ac1e6d98ede148eb245c7b5cca670a06cabde4430bc5671b4669da69af09",
+      "synthetic": true,
+      "description": "Two-page report with a reference range, used for long values and multi-page export checks.",
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "rawLabel": "HbA1c",
+          "value": "8.0",
+          "unit": "%",
+          "eventDate": "2026-02-15",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "glucose_random",
+          "rawLabel": "Random glucose",
+          "value": "186",
+          "unit": "mg/dl",
+          "eventDate": "2026-02-15",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "cholesterol_hdl",
+          "rawLabel": "HDL cholesterol",
+          "value": "44",
+          "unit": "mg/dl",
+          "eventDate": "2026-02-16",
+          "dateKind": "report",
+          "plotEligible": true,
+          "note": "Page 2 states a report date, so the report-date label applies."
+        },
+        {
+          "kind": "observation",
+          "testCode": "cholesterol_ldl",
+          "rawLabel": "LDL cholesterol",
+          "value": "126",
+          "unit": "mg/dl",
+          "eventDate": "2026-02-16",
+          "dateKind": "report",
+          "plotEligible": true
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "prescription-2026-03-02",
+      "filename": "2026-03-02_prescription.pdf",
+      "directory": "sources",
+      "sha256": "e1e3ee07fd2fc2e2fee12ddeab1443cff90c2bd9eea520e191348dae246183e5",
+      "synthetic": true,
+      "description": "Dated prescription record. A prescription records what was written, not consumption.",
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "prescription",
+          "rawLabel": "Metformin",
+          "value": "500 mg",
+          "eventDate": "2026-03-02",
+          "dateKind": "prescription"
+        },
+        {
+          "kind": "prescription",
+          "rawLabel": "Atorvastatin",
+          "value": "10 mg",
+          "eventDate": "2026-03-02",
+          "dateKind": "prescription"
+        },
+        {
+          "kind": "prescription",
+          "rawLabel": "Telmisartan",
+          "value": "40 mg",
+          "eventDate": "2026-03-02",
+          "dateKind": "prescription"
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "eye-examination-2026-05-20",
+      "filename": "2026-05-20_eye_examination.pdf",
+      "directory": "sources",
+      "sha256": "d0f0a6697980471cf423afa932d20a34265c8113d099156afb1f588a80d909d2",
+      "synthetic": true,
+      "description": "Documented eye examination record, used for the record-search demonstration.",
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "examination",
+          "rawLabel": "Eye examination",
+          "eventDate": "2026-05-20",
+          "dateKind": "examination"
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "foot-examination-2026-06-11",
+      "filename": "2026-06-11_foot_examination.pdf",
+      "directory": "sources",
+      "sha256": "b38cdcf0fd9ddb5d761347e6e588e6460906f8006e18d98b25962d0380dc1d8c",
+      "synthetic": true,
+      "description": "Documented foot examination record.",
+      "expectedIdentity": "matched",
+      "expectedIssues": [],
+      "expectedFacts": [
+        {
+          "kind": "examination",
+          "rawLabel": "Foot examination",
+          "eventDate": "2026-06-11",
+          "dateKind": "examination"
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "wrong-patient-2026-09-20",
+      "filename": "2026-09-20_wrong_patient_report.pdf",
+      "directory": "sources",
+      "sha256": "a3d544ebee626c173140aae282fe7d22acd83e12d28294b4fd0ab2a94e45b10d",
+      "synthetic": true,
+      "description": "Identity conflict fixture. Prints a different patient identifier; publication must be blocked.",
+      "expectedIdentity": "mismatch",
+      "expectedIssues": [
+        "identity_mismatch"
+      ],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "rawLabel": "HbA1c",
+          "value": "9.1",
+          "unit": "%",
+          "eventDate": "2026-09-20",
+          "dateKind": "collection",
+          "plotEligible": false,
+          "note": "Held: the identifier belongs to a different patient."
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "mixed-identity-2026-09-21",
+      "filename": "2026-09-21_mixed_identity_two_pages.pdf",
+      "directory": "sources",
+      "sha256": "c6cdd23b2f353a1f52a8ab13d024d78936f0ec42833e0ec6a645f426ff817127",
+      "synthetic": true,
+      "description": "Two pages that print different patient identifiers. The whole upload is quarantined.",
+      "expectedIdentity": "mixed",
+      "expectedIssues": [
+        "identity_mismatch"
+      ],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "rawLabel": "HbA1c",
+          "value": "7.7",
+          "unit": "%",
+          "eventDate": "2026-09-21",
+          "dateKind": "collection",
+          "plotEligible": false
+        },
+        {
+          "kind": "observation",
+          "testCode": "glucose_fasting",
+          "rawLabel": "Fasting glucose",
+          "value": "129",
+          "unit": "mg/dl",
+          "eventDate": "2026-09-21",
+          "dateKind": "collection",
+          "plotEligible": false
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "no-identity-2026-09-18",
+      "filename": "2026-09-18_no_identifier_report.pdf",
+      "directory": "sources",
+      "sha256": "5085ebe5ccefbea7142764db4752e8fdc9c390b0b52941604beb4991a9692ff4",
+      "synthetic": true,
+      "description": "Missing identity fixture. Needs documented reviewer confirmation before publication.",
+      "expectedIdentity": "missing",
+      "expectedIssues": [
+        "identity_missing"
+      ],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "rawLabel": "HbA1c",
+          "value": "7.6",
+          "unit": "%",
+          "eventDate": "2026-09-18",
+          "dateKind": "collection",
+          "plotEligible": true
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "ambiguous-date-2026-09-19",
+      "filename": "2026-09-19_ambiguous_date_report.pdf",
+      "directory": "sources",
+      "sha256": "d92fa6c037b7038335490f3751ef9288e8d70f535ff1903c63a319228130da8d",
+      "synthetic": true,
+      "description": "Ambiguous numeric date. It stays unplotted until a reviewer resolves it.",
+      "expectedIdentity": "matched",
+      "expectedIssues": [
+        "date_ambiguous"
+      ],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "rawLabel": "HbA1c",
+          "value": "7.4",
+          "unit": "%",
+          "eventDate": null,
+          "dateKind": "collection",
+          "plotEligible": false,
+          "note": "Ambiguous date order: not plotted until reviewed."
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "unsupported-unit-2026-09-22",
+      "filename": "2026-09-22_unsupported_unit_report.pdf",
+      "directory": "sources",
+      "sha256": "c80e648ad60a851c36137f930d1dc35f2ca4e4ad519569a4babccd04066024f1",
+      "synthetic": true,
+      "description": "A unit that is not accepted for charting. It stays searchable as a source-only entry.",
+      "expectedIdentity": "matched",
+      "expectedIssues": [
+        "unit_unsupported"
+      ],
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "glucose_fasting",
+          "rawLabel": "Fasting glucose",
+          "value": "142",
+          "unit": "mg%",
+          "eventDate": "2026-09-22",
+          "dateKind": "collection",
+          "plotEligible": false,
+          "sourceOnly": true
+        }
+      ],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "unreadable-scan",
+      "filename": "2026-09-23_blank_scan.png",
+      "directory": "sources",
+      "sha256": "4394dfb2f49f16afb3e90af3ee4543bea9e8a49a6aceb2d0d941f3d2bff87440",
+      "synthetic": true,
+      "description": "A blank scan with no readable text. A reviewer must exclude the page with a reason.",
+      "expectedIdentity": "missing",
+      "expectedIssues": [
+        "page_unreadable"
+      ],
+      "expectedFacts": [],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "over-limit-11-pages",
+      "filename": "2026-09-24_eleven_page_report.pdf",
+      "directory": "sources",
+      "sha256": "783be7d1f64fcbd2345fc91c50cc9173083a22a69300ca4ac7d8ff982ef8826d",
+      "synthetic": true,
+      "description": "Eleven-page document used to check the ten-page limit.",
+      "expectedIdentity": null,
+      "expectedIssues": [],
+      "expectedFacts": [],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "password-protected-marker",
+      "filename": "2026-09-25_password_marker.pdf",
+      "directory": "sources",
+      "sha256": "d59e6aaf79d093d00059cfccda9f6336cfb2a0aef82ce4260bc846591bee6076",
+      "synthetic": true,
+      "description": "A minimal marker file that contains a PDF /Encrypt trailer entry so the encrypted-document rejection path can be tested. It is not a genuinely encrypted document and contains no readable values.",
+      "expectedIdentity": null,
+      "expectedIssues": [
+        "encrypted"
+      ],
+      "expectedFacts": [],
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "photo-2026-09-14-a",
+      "filename": "2026-09-14_lab_report_photo_a.jpg",
+      "directory": "photos",
+      "sha256": "d369a74bb83a8c716ab5563fc9ba2bdaf04affbe6cd58969d33429d3a76295be",
+      "synthetic": true,
+      "description": "Phone-photo variant of the return-visit report, slightly rotated.",
+      "derivedFrom": "2026-09-14_lab_report.pdf",
+      "rotationDegrees": 1.5,
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "rawLabel": "HbA1c",
+          "value": "7.8",
+          "unit": "%",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "egfr",
+          "rawLabel": "Reported eGFR",
+          "value": "74",
+          "unit": "ml/min/1.73 m2",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "urine_acr",
+          "rawLabel": "Urine ACR",
+          "value": "55",
+          "unit": "mg/g",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "cholesterol_ldl",
+          "rawLabel": "LDL cholesterol",
+          "value": "118",
+          "unit": "mg/dl",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "bp_systolic",
+          "rawLabel": "Blood pressure",
+          "value": "136",
+          "unit": "mmhg",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "bp_diastolic",
+          "rawLabel": "Blood pressure",
+          "value": "84",
+          "unit": "mmhg",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        }
+      ],
+      "note": "A phone-photo variant. Pixel-level rotation means optical reading may differ from the digital original; unresolved values require reviewer transcription.",
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "photo-2026-09-14-b",
+      "filename": "2026-09-14_lab_report_photo_b.jpg",
+      "directory": "photos",
+      "sha256": "5147366f7a9ff25d7e62e0b6d89ebbff8aef155dc8361fa66c9e5e415c12568b",
+      "synthetic": true,
+      "description": "Second phone-photo variant of the same report, rotated the other way.",
+      "derivedFrom": "2026-09-14_lab_report.pdf",
+      "rotationDegrees": -2.2,
+      "expectedFacts": [
+        {
+          "kind": "observation",
+          "testCode": "hba1c",
+          "rawLabel": "HbA1c",
+          "value": "7.8",
+          "unit": "%",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "egfr",
+          "rawLabel": "Reported eGFR",
+          "value": "74",
+          "unit": "ml/min/1.73 m2",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "urine_acr",
+          "rawLabel": "Urine ACR",
+          "value": "55",
+          "unit": "mg/g",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "cholesterol_ldl",
+          "rawLabel": "LDL cholesterol",
+          "value": "118",
+          "unit": "mg/dl",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "bp_systolic",
+          "rawLabel": "Blood pressure",
+          "value": "136",
+          "unit": "mmhg",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        },
+        {
+          "kind": "observation",
+          "testCode": "bp_diastolic",
+          "rawLabel": "Blood pressure",
+          "value": "84",
+          "unit": "mmhg",
+          "eventDate": "2026-09-14",
+          "dateKind": "collection",
+          "plotEligible": true
+        }
+      ],
+      "note": "A phone-photo variant. Pixel-level rotation means optical reading may differ from the digital original; unresolved values require reviewer transcription.",
+      "labelSource": "fixture content specification (scripts/fixture-content.ts)"
+    },
+    {
+      "key": "dev-01",
+      "filename": "dev-01_clean_lab.pdf",
+      "directory": "dev-bundles",
+      "sha256": "bcd400029c8263ebc85dac9afe58b7c73792010678cc348e05b44c441408f6db",
+      "synthetic": true,
+      "description": "Clean single-page laboratory report.",
+      "layout": "clean_pdf",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    },
+    {
+      "key": "dev-02",
+      "filename": "dev-02_dense_panel.pdf",
+      "directory": "dev-bundles",
+      "sha256": "a83d8d7c2f885d6ad68d33820274a4098dd240cf43423dc50d598151b96208ef",
+      "synthetic": true,
+      "description": "Dense panel with many result rows.",
+      "layout": "dense_pdf",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    },
+    {
+      "key": "dev-03",
+      "filename": "dev-03_mixed_scan.pdf",
+      "directory": "dev-bundles",
+      "sha256": "e041ac6983c5a1f3176dbc30a92aacfff978cecfba4d9897069f8f78a4855be7",
+      "synthetic": true,
+      "description": "Text header with a scanned result table.",
+      "layout": "mixed_text_and_scan",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    },
+    {
+      "key": "dev-04",
+      "filename": "dev-04_scan_only.pdf",
+      "directory": "dev-bundles",
+      "sha256": "c636f66a8f6c59c2cce486dcac36675705fa7f04d182b4c76a959668c5673187",
+      "synthetic": true,
+      "description": "Scanned page with no text layer.",
+      "layout": "scan_only",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    },
+    {
+      "key": "dev-05",
+      "filename": "dev-05_rotated_scan.pdf",
+      "directory": "dev-bundles",
+      "sha256": "5ab0ba9ebb9c538cf699c61c6e7770f710cc95c9c5398f280c31256101f784a2",
+      "synthetic": true,
+      "description": "Rotated scanned page.",
+      "layout": "rotated_scan",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    },
+    {
+      "key": "dev-06",
+      "filename": "dev-06_ambiguous_date.pdf",
+      "directory": "dev-bundles",
+      "sha256": "676df727b697ff48cae6c5c9a2ae16ba5f40116cdcdcfec98426bec5237f911b",
+      "synthetic": true,
+      "description": "Ambiguous numeric collection date.",
+      "layout": "ambiguous_date",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    },
+    {
+      "key": "dev-07",
+      "filename": "dev-07_duplicate.pdf",
+      "directory": "dev-bundles",
+      "sha256": "bcd400029c8263ebc85dac9afe58b7c73792010678cc348e05b44c441408f6db",
+      "synthetic": true,
+      "description": "Exact copy of dev-01.",
+      "layout": "duplicate",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    },
+    {
+      "key": "dev-08",
+      "filename": "dev-08_amendment.pdf",
+      "directory": "dev-bundles",
+      "sha256": "dd2453d00acc77cbe0956357ff4831a828563fe64f9a9b64b6dc0d11152da08f",
+      "synthetic": true,
+      "description": "Same visit re-issued with a corrected value.",
+      "layout": "amendment",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    },
+    {
+      "key": "dev-09",
+      "filename": "dev-09_identity_conflict.pdf",
+      "directory": "dev-bundles",
+      "sha256": "27bbf5f1725d68f990633947bfafbf36dde01a29b6a2900ca2c5445318631ca8",
+      "synthetic": true,
+      "description": "Different printed patient identifier.",
+      "layout": "identity_conflict",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    },
+    {
+      "key": "dev-10",
+      "filename": "dev-10_unsupported_unit.pdf",
+      "directory": "dev-bundles",
+      "sha256": "5f49738a2e2da88af300b76097a0c637da7c822206406c4d598eb964af9c6ac8",
+      "synthetic": true,
+      "description": "Result with a unit outside the accepted list.",
+      "layout": "unsupported_unit",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    },
+    {
+      "key": "dev-11",
+      "filename": "dev-11_multi_page.pdf",
+      "directory": "dev-bundles",
+      "sha256": "69df95f342cf76523dcd567220ad813ac9b43f820395191635baced0f502bf7e",
+      "synthetic": true,
+      "description": "Three-page report with a reference range.",
+      "layout": "multi_page",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    },
+    {
+      "key": "dev-12",
+      "filename": "dev-12_prescription_and_exam.pdf",
+      "directory": "dev-bundles",
+      "sha256": "4067546cb8083afcbb05e983b5f3255570e2cd80b0c1f31f2e470bbf3d5fac36",
+      "synthetic": true,
+      "description": "Prescription and examination record in one document.",
+      "layout": "prescription_and_exam",
+      "expectedFacts": [],
+      "note": "Development bundle for routing and provider comparison. Not held-out evaluation data."
+    }
+  ]
+}

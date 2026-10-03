@@ -1,0 +1,67 @@
+name: sutra-ci
+
+# Continuous integration for the application repository.
+# Database jobs use a PostgreSQL service container and the same migrations the local
+# cluster runs, so the checks match `pnpm db:migrate` and `pnpm test`.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: sutra_ci
+          POSTGRES_PASSWORD: sutra_ci_only
+          POSTGRES_DB: sutra
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U sutra_ci"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      APP_ENV: test
+      DATABASE_URL_OWNER: postgres://sutra_ci:sutra_ci_only@127.0.0.1:5432/sutra
+      DATABASE_URL_API: postgres://sutra_ci:sutra_ci_only@127.0.0.1:5432/sutra
+      DATABASE_URL_WORKER: postgres://sutra_ci:sutra_ci_only@127.0.0.1:5432/sutra
+      DATABASE_ROLE_API: sutra_api
+      DATABASE_ROLE_WORKER: sutra_worker
+      AUTH_MODE: local
+      AUTH_LOCAL_JWT_SECRET: ci-only-not-a-real-secret-value
+      AUTH_LOCAL_ISSUER: sutra-local
+      AUTH_LOCAL_AUDIENCE: sutra-api
+      STORAGE_MODE: local
+      STORAGE_LOCAL_ROOT: .local/storage
+      STORAGE_LOCAL_SECRET: ci-only-not-a-real-storage-secret
+      TMP_ROOT: .local/tmp
+      EXTRACTION_PROVIDER: fixture
+      EXTRACTION_MODEL: deterministic-rules-v1
+      OCR_ENABLED: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.5.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.12'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Apply migrations
+        # The CI database is owned by the login role, so the API privilege role is
+        # created by the migrations themselves.
+        run: pnpm db:migrate
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Fixtures
+        run: pnpm fixtures:generate && pnpm fixtures:reference
+      - name: Unit and integration tests
+        run: pnpm test
+      - name: Build the web client, API and worker
+        run: pnpm build

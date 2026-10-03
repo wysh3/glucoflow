@@ -1,0 +1,14 @@
+$ tsx scripts/evaluate-extraction.ts -- --corpus eval-corpus-final
+Fixture data: deterministic rule engine, not an AI model
+Corpus: eval-corpus-final final-1 hash fd604322282e… (30 documents, seed 20261009)
+Engine: a201085d83db447f · ablation none
+  fact precision      1
+  fact recall         1
+  event date exact    0.8834
+  unit exact          0.9939
+  identity state      1
+  issue flag rate     1
+  recall, machine-readable 1
+  recall, 300 dpi scan     1
+  recall, low-res scan     1
+Written to /Users/wysh/coding/thon/iitb-health/app/reports/extraction-evaluation.json
