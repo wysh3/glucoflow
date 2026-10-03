@@ -1,0 +1,18 @@
+$ tsx scripts/evaluate-extraction.ts --live --corpus eval-corpus-external --limit 12 --label luna-observation-v2
+WARNING: this run differs from the frozen record (engine ef5435f935f1d803 -> f114b09df705815b, prompt changed).
+Live model: gpt-6-luna
+Corpus: eval-corpus-external external-1 hash 53d251483d26… (12 documents, seed n/a)
+Engine: f114b09df705815b · prompt 03e425da0ac2… · ablation none
+  complete fields     0.9091 (patient+test+value+unit+date)
+  complete, no date   1
+  processing          6700 ms median per document, 12 provider calls, $0.010239 reserved
+  fact precision      1
+  fact recall         1
+  event date exact    0.9091
+  unit exact          1
+  identity state      1
+  issue flag rate     1
+  recall, machine-readable 1
+  recall, 300 dpi scan     1
+  recall, low-res scan     1
+Written to /Users/wysh/coding/thon/iitb-health/app/reports/extraction-evaluation-eval-corpus-external-live.json

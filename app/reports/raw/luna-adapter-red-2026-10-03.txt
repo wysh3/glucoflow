@@ -1,0 +1,51 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ❯ tests/integration/live-provider.test.ts (10 tests | 2 failed) 2184ms
+   ❯ live provider adapter (protocol stub, not a real model) (10)
+     ✓ refuses to extract when credentials or a positive budget are missing 211ms
+     × uses transport usage when model JSON omits bookkeeping fields 109ms
+     × sends Luna compatible completion limits without sampling parameters 54ms
+     ✓ sends the documented request and reads a valid response into proposals 51ms
+     ✓ repairs a response that does not match the schema and reserves a call for it 54ms
+     ✓ fails rather than falling back to fixture output when the schema cannot be satisfied 51ms
+     ✓ maps a rate limit to a retryable error and a client error to a permanent one 103ms
+     ✓ refuses to dispatch when the run budget is exhausted 45ms
+     ✓ reports unreadable model output instead of inventing facts 48ms
+     ✓ gives up on a provider that never answers 1453ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/live-provider.test.ts > live provider adapter (protocol stub, not a real model) > uses transport usage when model JSON omits bookkeeping fields
+ProviderRequestError: the model response could not be read as the required structure
+ ❯ LiveExtractionProvider.extract packages/extraction/src/providers/openai-compatible.ts:106:15
+    104|
+    105|       if (!outcome.ok) {
+    106|         throw new ProviderRequestError(outcome.error!);
+       |               ^
+    107|       }
+    108|       const result = outcome.result!;
+ ❯ runExtractionPipeline packages/extraction/src/pipeline.ts:186:28
+ ❯ tests/integration/live-provider.test.ts:219:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/integration/live-provider.test.ts > live provider adapter (protocol stub, not a real model) > sends Luna compatible completion limits without sampling parameters
+TypeError: actual value must be number or bigint, received "undefined"
+ ❯ tests/integration/live-provider.test.ts:231:53
+    229|     reset({ kind: 'valid' });
+    230|     await runPipeline(createExtractionProvider(providerConfig({model: …
+    231|     expect(requests[0]!.body.max_completion_tokens).toBeGreaterThan(0);
+       |                                                     ^
+    232|     expect(requests[0]!.body).not.toHaveProperty('max_tokens');
+    233|     expect(requests[0]!.body).not.toHaveProperty('temperature');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 8 passed (10)
+   Start at  19:13:51
+   Duration  2.62s (tests 90%, import 6%, transform 4%)
+

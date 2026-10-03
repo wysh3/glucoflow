@@ -211,6 +211,40 @@ describe('live provider adapter (protocol stub, not a real model)', () => {
     expect(requests).toHaveLength(0);
   });
 
+  it('uses transport usage when model JSON omits bookkeeping fields', async () => {
+    reset({ kind: 'valid' });
+    const { usage: ignored } = validPayload;
+    delete (validPayload as { usage?: unknown }).usage;
+    try {
+      const result = await runPipeline(createExtractionProvider(providerConfig() as never, budget()));
+      expect(result.facts).toHaveLength(1);
+      expect(result.usage.inputTokens).toBe(120);
+      expect(result.usage.outputTokens).toBe(40);
+    } finally {
+      Object.assign(validPayload, { usage: ignored });
+    }
+  });
+
+  it('preserves prescription fields even when the model includes unused observation keys', async () => {
+    reset({kind: 'valid'});
+    const original = validPayload.facts;
+    (validPayload as {facts: unknown[]}).facts = [{ ...original[0], kind: 'prescription', rawLabel: 'Metformin', rawValue: null, rawUnit: null,
+      normalized: { ...original[0]!.normalized, name: 'Metformin', strength: '1000 mg', instructions: 'Twice daily' } }];
+    try {
+      const result = await runPipeline(createExtractionProvider(providerConfig() as never, budget()));
+      expect(result.facts[0]!.input.normalized).toEqual({name: 'Metformin', strength: '1000 mg', instructions: 'Twice daily'});
+    } finally { validPayload.facts = original; }
+  });
+
+  it('sends Luna compatible completion limits without sampling parameters', async () => {
+    reset({ kind: 'valid' });
+    await runPipeline(createExtractionProvider(providerConfig({model: 'gpt-6-luna'}) as never, budget()));
+    expect(requests[0]!.body.max_completion_tokens).toBeGreaterThan(0);
+    expect(requests[0]!.body).not.toHaveProperty('max_tokens');
+    expect(requests[0]!.body).not.toHaveProperty('temperature');
+    expect(requests[0]!.body.reasoning_effort).toBe('low');
+  });
+
   it('sends the documented request and reads a valid response into proposals', async () => {
     reset({ kind: 'valid' });
     const provider = createExtractionProvider(providerConfig() as never, budget());

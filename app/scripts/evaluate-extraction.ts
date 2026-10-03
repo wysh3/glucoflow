@@ -13,6 +13,7 @@ import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { createExtractionProvider, runExtractionPipeline } from '@sutra/extraction';
 import { matchTestAlias } from '@sutra/domain';
+import {evaluationAssignment, evaluationObservations} from './lib/evaluation-input';
 import { appRoot, ensureLocalEnv, loadEnvFileIntoProcess } from './lib/env';
 import {
   computeMetrics,
@@ -35,6 +36,8 @@ type ReferenceEntry = {
   filename: string;
   identifier: string;
   name: string;
+  assignedIdentifier?: string;
+  assignedName?: string;
   variant: {
     scanned: boolean;
     scanQuality?: 'scan_300dpi' | 'scan_lowres';
@@ -118,6 +121,9 @@ function engineVersion(): string {
     'packages/extraction/src/pipeline.ts',
     'packages/extraction/src/validate.ts',
     'packages/extraction/src/providers/rules.ts',
+    'packages/extraction/src/providers/openai-compatible.ts',
+    'packages/extraction/src/providers/prompt.ts',
+    'packages/contracts/src/facts.ts',
     'packages/domain/src/aliases.ts',
     'packages/domain/src/units.ts',
   ];
@@ -295,6 +301,7 @@ async function main(): Promise<void> {
     const tokensBefore = tokensUsed;
     // The evaluation runs the same pipeline the worker runs, so the measured numbers
     // describe production behaviour rather than a separate code path.
+    const assignment = evaluationAssignment(entry);
     const result = await runExtractionPipeline(
       provider,
       {
@@ -302,8 +309,8 @@ async function main(): Promise<void> {
         filename: entry.filename,
         contentType: 'application/pdf',
         documentVersionId: `eval-${entry.key}`,
-        patientIdentifier: entry.identifier,
-        patientName: entry.name,
+        patientIdentifier: assignment.identifier,
+        patientName: assignment.name,
         // The pipeline renders pages only when a page image writer is supplied, and
         // OCR needs that render. The evaluation stores nothing.
         onPageImage: async () => null,
@@ -318,27 +325,8 @@ async function main(): Promise<void> {
       },
       new AbortController().signal,
     );
-    const observations: Observation[] = result.facts
-      .filter((fact) => fact.input.kind === 'observation')
-      .map((fact) => {
-        const normalized = fact.input.normalized as {
-          numericValue?: number | null;
-          textValue?: string | null;
-          testCode?: string | null;
-        } | null;
-        return {
-          rawLabel: fact.input.rawLabel,
-          testCode: normalized?.testCode ?? null,
-          value:
-            normalized?.numericValue !== undefined && normalized?.numericValue !== null
-              ? String(normalized.numericValue)
-              : (normalized?.textValue ?? ''),
-          unit: (fact.input.normalized as { unitCode?: string | null } | null)?.unitCode ?? fact.input.rawUnit ?? '',
-          eventDate: fact.input.eventDate,
-        };
-      });
-
-    const expected = entry.expectedFacts;
+    const observations = evaluationObservations(result.facts.map(f => f.input));
+    const expected = entry.expectedFacts.filter(f => f.kind === 'observation');
     const factMatches = matchFacts(expected, observations);
     const matched = new Set<number>(factMatches.map((match) => match.expectedIndex));
     const documentComplete = factMatches.filter((match) => match.complete).length;
@@ -397,6 +385,8 @@ async function main(): Promise<void> {
       tokens: tokensForDocument,
       reservedCostUsd: Number(reservedCostForDocument.toFixed(6)),
       sha256: createHash('sha256').update(bytes).digest('hex'),
+      expectedContextFacts: entry.expectedFacts.filter(f => f.kind !== 'observation').length,
+      extractedContextFacts: result.facts.filter(f => f.input.kind !== 'observation').length,
       expectedFacts: expected.length,
       extractedFacts: observations.length,
       matchedFacts: matched.size,
@@ -413,6 +403,9 @@ async function main(): Promise<void> {
   const metrics = computeMetrics({ documents: metricDocuments });
   const report = {
     generatedAt: new Date().toISOString(),
+    metricScope: 'Observation patient/test/value/unit/date accuracy; context counts are separate and do not establish text accuracy',
+    measurementVersion: 'observation-v2-explicit-assignment',
+    referenceManifestHash: createHash('sha256').update(readFileSync(manifestPath)).digest('hex'),
     provider: providerName,
     mode: options.live ? 'live' : 'fixture',
     model: options.live ? (env.EXTRACTION_MODEL ?? '') : 'deterministic-rules-v1',

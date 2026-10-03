@@ -50,7 +50,9 @@
           "unit": "mg/g",
           "date": "2026-08-12"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     },
     {
       "key": "ext-02",
@@ -97,7 +99,9 @@
           "unit": "mmhg",
           "date": "2026-08-20"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     },
     {
       "key": "ext-03",
@@ -130,7 +134,9 @@
           "unit": "kg",
           "date": "2026-09-14"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     },
     {
       "key": "ext-04",
@@ -163,7 +169,9 @@
           "unit": "20 mg",
           "date": "2026-09-02"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     },
     {
       "key": "ext-05",
@@ -189,7 +197,9 @@
           "unit": null,
           "date": "2026-09-08"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     },
     {
       "key": "ext-06",
@@ -222,7 +232,9 @@
           "unit": "mg/dl",
           "date": "2026-09-05"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     },
     {
       "key": "ext-07",
@@ -255,7 +267,9 @@
           "unit": "mg/mmol",
           "date": "2026-07-30"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     },
     {
       "key": "ext-08",
@@ -288,7 +302,9 @@
           "unit": "%",
           "date": "2026-08-28"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     },
     {
       "key": "ext-09",
@@ -316,7 +332,9 @@
           "unit": "%",
           "date": "2026-08-06"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     },
     {
       "key": "ext-10",
@@ -344,7 +362,9 @@
           "unit": "%",
           "date": "2026-09-11"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     },
     {
       "key": "ext-11",
@@ -384,7 +404,9 @@
           "unit": "%",
           "date": "2026-09-23"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     },
     {
       "key": "ext-12",
@@ -417,7 +439,9 @@
           "unit": "kg",
           "date": "2026-08-15"
         }
-      ]
+      ],
+      "assignedIdentifier": "P0482",
+      "assignedName": "Asha Rao"
     }
   ]
 }

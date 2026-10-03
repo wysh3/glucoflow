@@ -1,8 +1,12 @@
 # Sutra handoff — local completion pass, 3 October 2026
 
-The local application is running at http://127.0.0.1:5173. The user requested local work only; deployment is deferred. OpenAI credentials and an evaluation spending limit are still awaited. Fixture extraction is labelled as such throughout the app.
+The local application is running at http://127.0.0.1:5173. The user requested local work only; deployment is deferred. OpenAI credentials were added locally and verified. The running local worker now uses GPT-6 Luna for new uploads; historical fixture records retain their fixture provenance. Read the [latest cleanup and Luna evidence](app/reports/key-cleanup-and-luna-2026-10-03.md) first.
 
-## Current evidence
+## Latest verification
+
+126 tests, 56 fixture browser checks, 12 database checks, 6 mutation checks, production bundles, three real Luna production-worker documents and 25/25 real Luna API smoke checks pass. Corrected observation-only evaluation on 12 examined synthetic documents: complete fields 0.9091, precision/recall 1.0000, identity-state accuracy 1.0000, date exact 0.9091. This is not independent clinical validation.
+
+## Earlier local evidence
 
 Read [local completion report](app/reports/local-fixes-2026-10-03.md), [completion plan](app/docs/COMPLETION_PLAN.md), and the captured commands under `app/reports/raw/local-fixes-*`. The takeover audit records the earlier defects; older reports are historical.
 
@@ -19,13 +23,13 @@ Read [local completion report](app/reports/local-fixes-2026-10-03.md), [completi
 - Historical fact lookup now checks actor and patient-release access. Sign-in rate limits and correct 429/413 responses are enabled; signed URL query tokens are omitted from request logs.
 - Hosted session refresh/sign-out uses one managed Supabase client and existing secure native storage. Native foreground/background refresh handling and hosted PDF/image CSP settings are prepared, but are not hosted-service verification.
 
-## Measured limitation
+## Earlier measurement (superseded)
 
 The unfamiliar-layout synthetic regression corpus still gives complete-field accuracy **0.24**, precision **0.875**, recall **0.56**. No live model was called. These results are not a claim of clinical accuracy or time saved. The already examined corpus is regression data, not an independent holdout for the next engine iteration.
 
 ## Next steps
 
-1. Add the OpenAI key to `app/.env` as `EXTRACTION_API_KEY`; keep it out of chat and Git. Agree the total evaluation spend, verify current model support/pricing, configure per-document and whole-evaluation caps, then run a labelled live evaluation on synthetic documents.
+1. Review the corrected Luna evaluation and prepare an independent holdout. Keep the key in ignored `app/.env`. Current local limits: $0.10/document, four calls/document, 120,000 tokens/document and $2/evaluation.
 2. Review unsupported fields and identity/date errors; keep publication blocked until human review. Prepare a new independent holdout before claiming better generalization.
 3. When the user authorizes deployment, verify actual Supabase Auth/Storage, hosted tenant isolation and containers. The session implementation is currently locally compiled only.
 4. Verify the latest APK on emulator and an authorized physical device, including camera, source opening, exports and session recovery. This pass built the APK; it did not install it on a physical phone.

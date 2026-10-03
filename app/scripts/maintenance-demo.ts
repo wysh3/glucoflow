@@ -115,11 +115,21 @@ export async function runMaintenance(
         }
       }
 
-      // Expired completion windows are marked so the interface reports them honestly.
-      const expired = await client.query<{ expire_upload_sessions: number }>(
-        'select sutra.expire_upload_sessions() as expire_upload_sessions',
+      // A preview must not write, and a selected clinic must not expire other tenants.
+      const expired = await client.query<{ count: string }>(
+        `select count(*)::text as count from sutra.upload_sessions
+          where clinic_id = $1 and state = 'created' and completion_expires_at < now()`,
+        [clinic.id],
       );
-      summary['expired_upload_sessions'] = expired.rows[0]?.expire_upload_sessions ?? 0;
+      summary['expired_upload_sessions'] =
+        (summary['expired_upload_sessions'] ?? 0) + Number(expired.rows[0]?.count ?? '0');
+      if (options.apply) {
+        await client.query(
+          `update sutra.upload_sessions set state = 'expired'
+            where clinic_id = $1 and state = 'created' and completion_expires_at < now()`,
+          [clinic.id],
+        );
+      }
 
       const oldExports = await client.query<{ id: string; object_path: string | null }>(
         `select id, object_path from sutra.exports

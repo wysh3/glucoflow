@@ -1,0 +1,22 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+stdout | tests/integration/maintenance.test.ts
+Dry run maintenance for 12 demo tenant(s).
+  orphaned_upload_sessions: 5
+  expired_upload_sessions: 0
+  exports_past_retention: 0
+  documents_past_retention: 0
+  audit_events_past_retention: 0
+  objects_removed: 0
+  objects_pending: 7
+Nothing was changed. Re-run with --apply --confirm-demo to remove these rows and objects.
+
+ ✓ tests/integration/maintenance.test.ts (4 tests) 59ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  19:10:11
+   Duration  473ms (import 49%, transform 30%, tests 20%, worker 1%)
+

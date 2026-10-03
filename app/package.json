@@ -34,7 +34,8 @@
     "verify:job-tests": "tsx scripts/verify-job-tests.ts",
     "fixtures:external": "tsx scripts/generate-external-corpus.ts",
     "evaluate:live-rehearsal": "tsx scripts/evaluate-live-rehearsal.ts",
-    "verify:built-worker": "tsx scripts/verify-built-worker.ts"
+    "verify:built-worker": "tsx scripts/verify-built-worker.ts",
+    "verify:live-worker": "tsx scripts/verify-live-worker.ts"
   },
   "devDependencies": {
     "@napi-rs/canvas": "1.0.10",

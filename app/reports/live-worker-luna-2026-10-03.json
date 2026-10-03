@@ -1,0 +1,153 @@
+{
+  "synthetic": true,
+  "productionBundle": true,
+  "model": "gpt-6-luna",
+  "automaticPublication": false,
+  "documents": [
+    {
+      "filename": "2026-09-14_lab_report.pdf",
+      "facts": [
+        {
+          "kind": "observation",
+          "normalized_json": {
+            "groupId": null,
+            "testCode": "hba1c",
+            "unitCode": "%",
+            "numericValue": 7.8,
+            "plotEligible": true,
+            "rawNumericText": "7.8",
+            "referenceRangeText": "4.0-5.6"
+          }
+        },
+        {
+          "kind": "observation",
+          "normalized_json": {
+            "groupId": null,
+            "testCode": "egfr",
+            "unitCode": "ml/min/1.73 m2",
+            "numericValue": 74,
+            "plotEligible": true,
+            "rawNumericText": "74",
+            "referenceRangeText": ">90"
+          }
+        },
+        {
+          "kind": "observation",
+          "normalized_json": {
+            "groupId": null,
+            "testCode": "urine_acr",
+            "unitCode": "mg/g",
+            "numericValue": 55,
+            "plotEligible": true,
+            "rawNumericText": "55",
+            "referenceRangeText": "<30"
+          }
+        },
+        {
+          "kind": "observation",
+          "normalized_json": {
+            "groupId": null,
+            "testCode": "cholesterol_ldl",
+            "unitCode": "mg/dl",
+            "numericValue": 118,
+            "plotEligible": true,
+            "rawNumericText": "118",
+            "referenceRangeText": "<100"
+          }
+        },
+        {
+          "kind": "observation",
+          "normalized_json": {
+            "groupId": "blood-pressure-1",
+            "testCode": "bp_systolic",
+            "unitCode": "mmhg",
+            "numericValue": 136,
+            "plotEligible": true,
+            "rawNumericText": "136",
+            "referenceRangeText": null
+          }
+        },
+        {
+          "kind": "observation",
+          "normalized_json": {
+            "groupId": "blood-pressure-1",
+            "testCode": "bp_diastolic",
+            "unitCode": "mmhg",
+            "numericValue": 84,
+            "plotEligible": true,
+            "rawNumericText": "84",
+            "referenceRangeText": null
+          }
+        }
+      ],
+      "run": {
+        "provider": "openai-compatible",
+        "model": "gpt-6-luna",
+        "mode": "live",
+        "input_tokens": 4680,
+        "output_tokens": 1461,
+        "actual_cost_usd": "0.001316"
+      },
+      "releasedToPatient": false
+    },
+    {
+      "filename": "2026-03-02_prescription.pdf",
+      "facts": [
+        {
+          "kind": "prescription",
+          "normalized_json": {
+            "name": "Metformin",
+            "strength": "500 mg",
+            "instructions": "twice daily after meals"
+          }
+        },
+        {
+          "kind": "prescription",
+          "normalized_json": {
+            "name": "Atorvastatin",
+            "strength": "10 mg",
+            "instructions": "once daily at bedtime"
+          }
+        },
+        {
+          "kind": "prescription",
+          "normalized_json": {
+            "name": "Telmisartan",
+            "strength": "40 mg",
+            "instructions": "once daily in the morning"
+          }
+        }
+      ],
+      "run": {
+        "provider": "openai-compatible",
+        "model": "gpt-6-luna",
+        "mode": "live",
+        "input_tokens": 4607,
+        "output_tokens": 892,
+        "actual_cost_usd": "0.001022"
+      },
+      "releasedToPatient": false
+    },
+    {
+      "filename": "2026-05-20_eye_examination.pdf",
+      "facts": [
+        {
+          "kind": "examination",
+          "normalized_json": {
+            "category": "Eye examination",
+            "sourceText": "dilated fundus examination performed."
+          }
+        }
+      ],
+      "run": {
+        "provider": "openai-compatible",
+        "model": "gpt-6-luna",
+        "mode": "live",
+        "input_tokens": 4484,
+        "output_tokens": 340,
+        "actual_cost_usd": "0.000731"
+      },
+      "releasedToPatient": false
+    }
+  ]
+}

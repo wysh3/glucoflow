@@ -274,7 +274,7 @@ describe('retention maintenance', () => {
     expect(survivors.audit).not.toContain(seeded.oldAuditId);
   });
 
-  it('marks an expired upload session so the interface reports it honestly', async () => {
+  it('previews expiry without writes and applies it only to the selected demo clinic', async () => {
     const expiredSession = await context.owner(async (client) => {
       const result = await client.query<{ id: string }>(
         `insert into sutra.upload_sessions (
@@ -287,11 +287,37 @@ describe('retention maintenance', () => {
       return result.rows[0]!.id;
     });
 
-    await runMaintenance(
+    const otherSession = await context.owner(async (client) => {
+      const result = await client.query<{ id: string }>(
+        `insert into sutra.upload_sessions (
+           id, clinic_id, patient_id, actor_id, kind, manifest_json, state,
+           provider_token_expires_at, completion_expires_at, created_at
+         ) values ($1, $2, $3, $4, 'file', '{"kind":"file","items":[]}'::jsonb, 'created', now(), now() - interval '1 minute', now())
+         returning id`,
+        [randomUUID(), fixture.otherClinicId, fixture.otherPatientId, fixture.otherReviewerId],
+      );
+      return result.rows[0]!.id;
+    });
+    const dry = await runMaintenance(
       dependencies(),
       { apply: false, confirmDemo: false, clinicId: fixture.clinicId },
       context.env as unknown as Record<string, string>,
     );
+    expect(dry.summary['expired_upload_sessions']).toBe(1);
+    const states = () => context.owner(async (client) => {
+      const result = await client.query<{ id: string; state: string }>(
+        'select id, state from sutra.upload_sessions where id = any($1::uuid[])',
+        [[expiredSession, otherSession]],
+      );
+      return Object.fromEntries(result.rows.map(row => [row.id, row.state]));
+    });
+    expect(await states()).toEqual({ [expiredSession]: 'created', [otherSession]: 'created' });
+    await runMaintenance(
+      dependencies(),
+      { apply: true, confirmDemo: true, clinicId: fixture.clinicId },
+      context.env as unknown as Record<string, string>,
+    );
+    expect(await states()).toEqual({ [expiredSession]: 'expired', [otherSession]: 'created' });
 
     const state = await context.owner(async (client) => {
       const result = await client.query<{ state: string }>(

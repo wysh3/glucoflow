@@ -1,6 +1,6 @@
 # Sutra
 
-Local status, 3 October 2026: **the local completion pass is implemented under [`app/`](app/)**. Read the [current handoff](HANDOFF.md) and [local completion evidence](app/reports/local-fixes-2026-10-03.md). Deployment is deferred at the user's request. Live-model evaluation, hosted services, phone OTP and the latest physical Android pass remain outstanding.
+Local status, 3 October 2026: **the local completion pass is implemented under [`app/`](app/)**. Read the [current handoff](HANDOFF.md) and [local completion evidence](app/reports/local-fixes-2026-10-03.md). Deployment is deferred at the user's request. GPT-6 Luna is enabled locally and has passed bounded synthetic evaluation and the full API smoke flow. Read [latest evidence](app/reports/key-cleanup-and-luna-2026-10-03.md). Hosted services, phone OTP, independent clinical validation and the latest physical Android pass remain outstanding.
 
 Start with [the MVP documents](docs/mvp/README.md), then follow [the implementation plan](docs/mvp/06-build-plan.md). The [acceptance checklist](docs/mvp/10-acceptance-checklist.md) defines how the finished build is checked; the mapping to what was actually verified is in [app/reports/acceptance.md](app/reports/acceptance.md).
 

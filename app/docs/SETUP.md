@@ -173,8 +173,7 @@ MAX_DOCUMENT_USD_PER_MTOK_INPUT=<number>
 MAX_DOCUMENT_USD_PER_MTOK_OUTPUT=<number>
 ```
 
-Live mode has **not** been exercised against a real model in this environment: no
-credentials were available. What *is* verified, against labelled protocol stubs:
+GPT-6 Luna has now been exercised against synthetic documents through the production worker and full API flow. See [current evidence](../reports/key-cleanup-and-luna-2026-10-03.md). The protocol-stub checks below verify adapter behaviour separately:
 
 - the request carries the bearer token, the embedded prompt, the worker-supplied evidence
   ids and the rendered page image (`pnpm verify:built-worker`, which runs the **built**
@@ -185,7 +184,7 @@ credentials were available. What *is* verified, against labelled protocol stubs:
 - the evaluation harness measures complete-field accuracy, processing time, provider
   calls and reserved cost per document (`pnpm evaluate:live-rehearsal`).
 
-No accuracy claim is made: no model has been called.
+The examined synthetic corpus reports 0.9091 complete observation fields; this is not clinical accuracy or a fresh holdout claim.
 
 ## 9. Hosted authentication and storage
 

@@ -1,0 +1,10 @@
+$ tsx scripts/maintenance-demo.ts --dry-run
+Dry run maintenance for 12 demo tenant(s).
+  orphaned_upload_sessions: 5
+  expired_upload_sessions: 0
+  exports_past_retention: 0
+  documents_past_retention: 0
+  audit_events_past_retention: 0
+  objects_removed: 0
+  objects_pending: 7
+Nothing was changed. Re-run with --apply --confirm-demo to remove these rows and objects.

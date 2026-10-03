@@ -1,0 +1,55 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ❯ tests/integration/live-provider.test.ts (11 tests | 1 failed) 2183ms
+   ❯ live provider adapter (protocol stub, not a real model) (11)
+     ✓ refuses to extract when credentials or a positive budget are missing 207ms
+     ✓ uses transport usage when model JSON omits bookkeeping fields 56ms
+     × preserves prescription fields even when the model includes unused observation keys 54ms
+     ✓ sends Luna compatible completion limits without sampling parameters 50ms
+     ✓ sends the documented request and reads a valid response into proposals 50ms
+     ✓ repairs a response that does not match the schema and reserves a call for it 54ms
+     ✓ fails rather than falling back to fixture output when the schema cannot be satisfied 54ms
+     ✓ maps a rate limit to a retryable error and a client error to a permanent one 106ms
+     ✓ refuses to dispatch when the run budget is exhausted 45ms
+     ✓ reports unreadable model output instead of inventing facts 47ms
+     ✓ gives up on a provider that never answers 1454ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/live-provider.test.ts > live provider adapter (protocol stub, not a real model) > preserves prescription fields even when the model includes unused observation keys
+AssertionError: expected { testCode: 'hba1c', …(7) } to deeply equal { name: 'Metformin', …(2) }
+
+- Expected
++ Received
+
+  {
+-   "instructions": "Twice daily",
++   "groupId": null,
+    "name": "Metformin",
+-   "strength": "1000 mg",
++   "numericValue": 7.4,
++   "plotEligible": true,
++   "rawNumericText": "7.4",
++   "referenceRangeText": "4.0-5.6",
++   "testCode": "hba1c",
++   "unitCode": "%",
+  }
+
+ ❯ tests/integration/live-provider.test.ts:235:49
+    233|     try {
+    234|       const result = await runPipeline(createExtractionProvider(provid…
+    235|       expect(result.facts[0]!.input.normalized).toEqual({name: 'Metfor…
+       |                                                 ^
+    236|     } finally { validPayload.facts = original; }
+    237|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  19:19:12
+   Duration  2.63s (tests 89%, import 7%, transform 3%)
+

@@ -243,7 +243,26 @@ export class LiveExtractionProvider implements ExtractionProvider {
           outputTokens: response.outputTokens,
           state: 'succeeded',
         });
-        const parsed = extractionResultSchema.safeParse(response.json);
+        // Usage is transport bookkeeping, never a field the model must invent.
+        const modelJson = response.json !== null && typeof response.json === 'object' && !Array.isArray(response.json)
+          ? { ...response.json, usage: {
+              inputTokens: response.inputTokens ?? 0,
+              outputTokens: response.outputTokens ?? 0,
+              latencyMs: 0,
+            } }
+          : response.json;
+        if (modelJson !== null && typeof modelJson === 'object' && 'facts' in modelJson && Array.isArray(modelJson.facts)) {
+          modelJson.facts = modelJson.facts.map((fact: unknown) => {
+            if (fact === null || typeof fact !== 'object') return fact;
+            const value = fact as Record<string, unknown>;
+            if (value.normalized === null || typeof value.normalized !== 'object') return fact;
+            const normalized = value.normalized as Record<string, unknown>;
+            const keys = value.kind === 'prescription' ? ['name', 'strength', 'instructions']
+              : value.kind === 'examination' ? ['category', 'sourceText'] : null;
+            return keys ? { ...value, normalized: Object.fromEntries(keys.filter(key => key in normalized).map(key => [key, normalized[key]])) } : fact;
+          });
+        }
+        const parsed = extractionResultSchema.safeParse(modelJson);
         if (parsed.success) {
           return {
             ok: true,
@@ -374,8 +393,9 @@ export class LiveExtractionProvider implements ExtractionProvider {
           },
           body: JSON.stringify({
             model: this.config.model,
-            temperature: 0,
-            max_tokens: maxOutputTokens,
+            ...(this.config.model === 'gpt-6-luna' || this.config.model.startsWith('gpt-6-luna-')
+              ? { reasoning_effort: 'low', max_completion_tokens: maxOutputTokens }
+              : { temperature: 0, max_tokens: maxOutputTokens }),
             response_format: { type: 'json_object' },
             messages: [
               { role: 'system', content: this.prompt },

@@ -1,0 +1,3 @@
+$ tsx scripts/evaluate-extraction.ts --live --corpus eval-corpus-external --limit 12 --label openai-initial
+the model response could not be read as the required structure
+[ELIFECYCLE] Command failed with exit code 1.

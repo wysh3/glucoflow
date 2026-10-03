@@ -1,81 +1,78 @@
 {
-  "generatedAt": "2026-10-03T13:51:47.692Z",
-  "metricScope": "Observation patient/test/value/unit/date accuracy; context counts are separate and do not establish text accuracy",
-  "measurementVersion": "observation-v2-explicit-assignment",
-  "referenceManifestHash": "1fdea079b7fd3c33e807e654f99291e72db272481ead3f0f04c8a7ca15637e08",
-  "provider": "fixture",
-  "mode": "fixture",
-  "model": "deterministic-rules-v1",
-  "providerLabel": "Fixture data: deterministic rule engine, not an AI model",
+  "generatedAt": "2026-10-03T13:46:49.358Z",
+  "provider": "openai-compatible",
+  "mode": "live",
+  "model": "gpt-6-luna",
+  "providerLabel": "Live model: gpt-6-luna",
   "corpus": "eval-corpus-external",
   "corpusVersion": "external-1",
   "corpusHash": "53d251483d2694682f5ca620628b8407577b788fb3006fc46342ccb6921afb4b",
   "corpusSeed": null,
-  "providerCalls": 0,
-  "reservedCostUsd": 0,
+  "providerCalls": 12,
+  "reservedCostUsd": 0.010209,
   "processingMs": {
-    "total": 1780,
-    "median": 52,
+    "total": 113785,
+    "median": 8510,
     "perDocument": [
       {
         "key": "ext-01",
-        "ms": 455
+        "ms": 13273
       },
       {
         "key": "ext-02",
-        "ms": 56
+        "ms": 12727
       },
       {
         "key": "ext-03",
-        "ms": 51
+        "ms": 8274
       },
       {
         "key": "ext-04",
-        "ms": 50
+        "ms": 8179
       },
       {
         "key": "ext-05",
-        "ms": 52
+        "ms": 8712
       },
       {
         "key": "ext-06",
-        "ms": 337
+        "ms": 13313
       },
       {
         "key": "ext-07",
-        "ms": 301
+        "ms": 8501
       },
       {
         "key": "ext-08",
-        "ms": 49
+        "ms": 8390
       },
       {
         "key": "ext-09",
-        "ms": 47
+        "ms": 5941
       },
       {
         "key": "ext-10",
-        "ms": 47
+        "ms": 5077
       },
       {
         "key": "ext-11",
-        "ms": 47
+        "ms": 8519
       },
       {
         "key": "ext-12",
-        "ms": 288
+        "ms": 12879
       }
     ]
   },
-  "costPerDocumentUsd": 0,
-  "engineVersion": "f114b09df705815b",
-  "promptHash": "c6ac68752ef48ec0b145dc8084011f28",
-  "providerName": "fixture",
+  "costPerDocumentUsd": 0.000851,
+  "engineVersion": "d06e2f92acf3246e",
+  "promptHash": "4fc1be787a90048d3a513345ec1a8e7b",
+  "providerName": "openai-compatible",
   "frozen": {
-    "engineVersion": "f114b09df705815b",
-    "promptHash": "c6ac68752ef48ec0b145dc8084011f28",
-    "provider": "fixture",
-    "model": "deterministic-rules-v1",
+    "engineVersion": "d06e2f92acf3246e",
+    "promptHash": "4fc1be787a90048d3a513345ec1a8e7b",
+    "provider": "openai-compatible",
+    "model": "gpt-6-luna",
     "ablation": "none",
     "features": {
       "ocrPreprocess": true,
@@ -143,16 +140,16 @@
   "synthetic": true,
   "documents": 12,
   "metrics": {
-    "factPrecision": 0.875,
-    "factRecall": 0.6364,
-    "matchedFacts": 14,
-    "missingFacts": 8,
-    "extraFacts": 2,
-    "eventDateExactRate": 0.8571,
+    "factPrecision": 0.7273,
+    "factRecall": 0.64,
+    "matchedFacts": 16,
+    "missingFacts": 9,
+    "extraFacts": 6,
+    "eventDateExactRate": 0.875,
     "unitExactRate": 1,
-    "identityStateAccuracy": 0.3333,
-    "completeFieldAccuracy": 0.2727,
-    "completeFieldAccuracyNoDate": 0.2727,
+    "identityStateAccuracy": 0.9167,
+    "completeFieldAccuracy": 0.52,
+    "completeFieldAccuracyNoDate": 0.6,
     "completeFieldNote": "A complete field means the patient, test, value, unit and date are all correct together.",
     "reviewerCorrections": null,
     "issueFlagRate": 0.5
@@ -160,11 +157,11 @@
   "byVariant": {
     "machineReadable": {
       "documents": 9,
-      "factRecall": 0.5625
+      "factRecall": 0.5263
     },
     "scan300dpi": {
       "documents": 2,
-      "factRecall": 0.75
+      "factRecall": 1
     },
     "scanLowres": {
       "documents": 1,
@@ -175,19 +172,17 @@
     {
       "key": "ext-01",
       "filename": "ext-01-right-aligned-columns.pdf",
-      "durationMs": 455,
+      "durationMs": 13273,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 1,
       "completeFieldsNoDate": 1,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "providerCalls": 1,
+      "tokens": 5385,
+      "reservedCostUsd": 0.000982,
       "sha256": "ece13f581c3052b2d04234f7897285cd741ab0cfdd29c244010deb0eda1e5163",
-      "expectedContextFacts": 0,
-      "extractedContextFacts": 1,
       "expectedFacts": 3,
-      "extractedFacts": 2,
+      "extractedFacts": 3,
       "matchedFacts": 1,
       "identityState": "matched",
       "expectedIdentity": "matched",
@@ -198,20 +193,18 @@
     {
       "key": "ext-02",
       "filename": "ext-02-two-column.pdf",
-      "durationMs": 56,
+      "durationMs": 12727,
       "pages": 1,
       "ocrPages": 0,
-      "completeFields": 2,
-      "completeFieldsNoDate": 2,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "completeFields": 0,
+      "completeFieldsNoDate": 0,
+      "providerCalls": 1,
+      "tokens": 5507,
+      "reservedCostUsd": 0.001102,
       "sha256": "973d916de3a845876d8f0922e5634c8b1222f148006e7b32db1bd78be4cc258d",
-      "expectedContextFacts": 0,
-      "extractedContextFacts": 1,
       "expectedFacts": 4,
-      "extractedFacts": 2,
-      "matchedFacts": 2,
+      "extractedFacts": 4,
+      "matchedFacts": 0,
       "identityState": "matched",
       "expectedIdentity": "matched",
       "issues": [],
@@ -221,17 +214,15 @@
     {
       "key": "ext-03",
       "filename": "ext-03-bordered-table.pdf",
-      "durationMs": 51,
+      "durationMs": 8274,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 2,
       "completeFieldsNoDate": 2,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "providerCalls": 1,
+      "tokens": 4912,
+      "reservedCostUsd": 0.00083,
       "sha256": "848414077ef3217f583a72a1badb80f4155482704290161790bedf064b9bee36",
-      "expectedContextFacts": 0,
-      "extractedContextFacts": 0,
       "expectedFacts": 2,
       "extractedFacts": 2,
       "matchedFacts": 2,
@@ -244,100 +235,85 @@
     {
       "key": "ext-04",
       "filename": "ext-04-prescription-table.pdf",
-      "durationMs": 50,
+      "durationMs": 8179,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 0,
       "completeFieldsNoDate": 0,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "providerCalls": 1,
+      "tokens": 5011,
+      "reservedCostUsd": 0.000877,
       "sha256": "373b6bad67572e39d97149f0bd449691ef76d5ab47d61738c8f85d86273c0742",
-      "expectedContextFacts": 2,
-      "extractedContextFacts": 2,
-      "expectedFacts": 0,
+      "expectedFacts": 2,
       "extractedFacts": 0,
       "matchedFacts": 0,
-      "identityState": "unchecked",
+      "identityState": "matched",
       "expectedIdentity": "matched",
-      "issues": [
-        "identity_missing"
-      ],
+      "issues": [],
       "expectedIssues": [],
       "ocrUsed": false
     },
     {
       "key": "ext-05",
       "filename": "ext-05-examination-prose.pdf",
-      "durationMs": 52,
+      "durationMs": 8712,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 0,
       "completeFieldsNoDate": 0,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "providerCalls": 1,
+      "tokens": 4881,
+      "reservedCostUsd": 0.000794,
       "sha256": "d408381e31e13249b6f88bfda28de9eec7cb4e35dd04769d4177845046b88d02",
-      "expectedContextFacts": 1,
-      "extractedContextFacts": 3,
-      "expectedFacts": 0,
+      "expectedFacts": 1,
       "extractedFacts": 0,
       "matchedFacts": 0,
-      "identityState": "unchecked",
+      "identityState": "matched",
       "expectedIdentity": "matched",
-      "issues": [
-        "identity_missing"
-      ],
+      "issues": [],
       "expectedIssues": [],
       "ocrUsed": false
     },
     {
       "key": "ext-06",
       "filename": "ext-06-photographed.jpg",
-      "durationMs": 337,
+      "durationMs": 13313,
       "pages": 1,
       "ocrPages": 1,
       "completeFields": 0,
       "completeFieldsNoDate": 2,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "providerCalls": 1,
+      "tokens": 4990,
+      "reservedCostUsd": 0.00083,
       "sha256": "30afb4889e88cf194064c7aca6c53e54104680c991efd8ac2097a76b93ccb852",
-      "expectedContextFacts": 0,
-      "extractedContextFacts": 0,
       "expectedFacts": 2,
       "extractedFacts": 2,
       "matchedFacts": 2,
-      "identityState": "unchecked",
+      "identityState": "matched",
       "expectedIdentity": "matched",
-      "issues": [
-        "identity_missing",
-        "date_ambiguous"
-      ],
+      "issues": [],
       "expectedIssues": [],
       "ocrUsed": true
     },
     {
       "key": "ext-07",
       "filename": "ext-07-fax-lowres.jpg",
-      "durationMs": 301,
+      "durationMs": 8501,
       "pages": 1,
       "ocrPages": 1,
       "completeFields": 2,
       "completeFieldsNoDate": 2,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "providerCalls": 1,
+      "tokens": 2817,
+      "reservedCostUsd": 0.000645,
       "sha256": "f34924371e825ad49ff9cebfb208898493aaaef771c0bf77db833ab048561928",
-      "expectedContextFacts": 0,
-      "extractedContextFacts": 0,
       "expectedFacts": 2,
       "extractedFacts": 2,
       "matchedFacts": 2,
-      "identityState": "unchecked",
+      "identityState": "matched",
       "expectedIdentity": "matched",
       "issues": [
-        "identity_missing"
+        "evidence_unmatched"
       ],
       "expectedIssues": [],
       "ocrUsed": true
@@ -345,42 +321,36 @@
     {
       "key": "ext-08",
       "filename": "ext-08-identifier-in-footer.pdf",
-      "durationMs": 49,
+      "durationMs": 8390,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 2,
       "completeFieldsNoDate": 2,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "providerCalls": 1,
+      "tokens": 4876,
+      "reservedCostUsd": 0.000833,
       "sha256": "5d7cd24f41081e6b5b4086e2f6394c6eb7f57f1a8b31ddac480fc604b7d9f0e1",
-      "expectedContextFacts": 0,
-      "extractedContextFacts": 0,
       "expectedFacts": 2,
       "extractedFacts": 2,
       "matchedFacts": 2,
-      "identityState": "unchecked",
+      "identityState": "matched",
       "expectedIdentity": "matched",
-      "issues": [
-        "identity_missing"
-      ],
+      "issues": [],
       "expectedIssues": [],
       "ocrUsed": false
     },
     {
       "key": "ext-09",
       "filename": "ext-09-no-identifier.pdf",
-      "durationMs": 47,
+      "durationMs": 5941,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 1,
       "completeFieldsNoDate": 1,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "providerCalls": 1,
+      "tokens": 4575,
+      "reservedCostUsd": 0.000699,
       "sha256": "c11c5db48cad91deb94810c00eb61f9da359a1ed8910b2f784d48c72047c1f8a",
-      "expectedContextFacts": 0,
-      "extractedContextFacts": 0,
       "expectedFacts": 1,
       "extractedFacts": 1,
       "matchedFacts": 1,
@@ -397,25 +367,21 @@
     {
       "key": "ext-10",
       "filename": "ext-10-other-patient.pdf",
-      "durationMs": 47,
+      "durationMs": 5077,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 1,
       "completeFieldsNoDate": 1,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "providerCalls": 1,
+      "tokens": 4585,
+      "reservedCostUsd": 0.000705,
       "sha256": "e1ea81b38d679db612cdbcf96781b3fc09f8bfc61c5828757c2e02b611d4c888",
-      "expectedContextFacts": 0,
-      "extractedContextFacts": 0,
       "expectedFacts": 1,
       "extractedFacts": 1,
       "matchedFacts": 1,
-      "identityState": "unchecked",
+      "identityState": "matched",
       "expectedIdentity": "mismatch",
-      "issues": [
-        "identity_missing"
-      ],
+      "issues": [],
       "expectedIssues": [
         "identity_mismatch"
       ],
@@ -424,49 +390,43 @@
     {
       "key": "ext-11",
       "filename": "ext-11-multiple-dates.pdf",
-      "durationMs": 47,
+      "durationMs": 8519,
       "pages": 1,
       "ocrPages": 0,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "completeFields": 3,
+      "completeFieldsNoDate": 3,
+      "providerCalls": 1,
+      "tokens": 5145,
+      "reservedCostUsd": 0.000954,
       "sha256": "12f63ccf7d24a4e6bdd381b91cd9781871e0ce479b6370e9954ff6692cedd290",
-      "expectedContextFacts": 0,
-      "extractedContextFacts": 0,
       "expectedFacts": 3,
-      "extractedFacts": 0,
-      "matchedFacts": 0,
-      "identityState": "unchecked",
+      "extractedFacts": 3,
+      "matchedFacts": 3,
+      "identityState": "matched",
       "expectedIdentity": "matched",
-      "issues": [
-        "identity_missing"
-      ],
+      "issues": [],
       "expectedIssues": [],
       "ocrUsed": false
     },
     {
       "key": "ext-12",
       "filename": "ext-12-handwritten-annotation.jpg",
-      "durationMs": 288,
+      "durationMs": 12879,
       "pages": 1,
       "ocrPages": 1,
-      "completeFields": 1,
-      "completeFieldsNoDate": 1,
-      "providerCalls": 0,
-      "tokens": 0,
-      "reservedCostUsd": 0,
+      "completeFields": 2,
+      "completeFieldsNoDate": 2,
+      "providerCalls": 1,
+      "tokens": 5195,
+      "reservedCostUsd": 0.000958,
       "sha256": "e5da628556e80898e816d856a4b9ed0377c2f4219a7adb46a777c82bfcf19a3e",
-      "expectedContextFacts": 0,
-      "extractedContextFacts": 0,
       "expectedFacts": 2,
       "extractedFacts": 2,
-      "matchedFacts": 1,
-      "identityState": "unchecked",
+      "matchedFacts": 2,
+      "identityState": "matched",
       "expectedIdentity": "matched",
       "issues": [
-        "identity_missing"
+        "evidence_unmatched"
       ],
       "expectedIssues": [],
       "ocrUsed": true

@@ -6,7 +6,11 @@ Keep Vite/React/TypeScript, Capacitor, Fastify and PostgreSQL; deploy with Supab
 
 For each task: reproduce the specific failure, add a meaningful regression test, implement the minimum correction, run the relevant gate and update evidence. Keep migrations additive and authorization narrow. Start version control with existing secrets/build outputs excluded before application changes; do not reset or purge the database as a shortcut.
 
-## Local pass status — 3 October 2026
+## Live local status
+
+GPT-6 Luna is configured locally and verified on the production worker, synthetic observation evaluation and API smoke flow. See [current evidence](../reports/key-cleanup-and-luna-2026-10-03.md). Independent holdout, human review measurements, hosted services and latest device walkthrough remain gates.
+
+## Earlier local pass status — 3 October 2026
 
 Tasks 1–4 have local implementations and regression evidence, including ordered photo source navigation, large-history pagination, patient export, review corrections and mobile report cards. Pending-upload recovery finishes bytes already stored on the server; reselecting missing files is still required. Amendment entry points are implemented; a complete amendment publication browser walkthrough remains a follow-up gate.
 

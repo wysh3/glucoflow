@@ -1,0 +1,18 @@
+$ tsx scripts/evaluate-extraction.ts --corpus eval-corpus-external --limit 12 --label fixture-observation-v2
+WARNING: this run differs from the frozen record (engine ef5435f935f1d803 -> f114b09df705815b).
+Fixture data: deterministic rule engine, not an AI model
+Corpus: eval-corpus-external external-1 hash 53d251483d26… (12 documents, seed n/a)
+Engine: f114b09df705815b · prompt c6ac68752ef4… · ablation none
+  complete fields     0.2727 (patient+test+value+unit+date)
+  complete, no date   0.2727
+  processing          52 ms median per document, 0 provider calls, $0 reserved
+  fact precision      0.875
+  fact recall         0.6364
+  event date exact    0.8571
+  unit exact          1
+  identity state      0.3333
+  issue flag rate     0.5
+  recall, machine-readable 0.5625
+  recall, 300 dpi scan     0.75
+  recall, low-res scan     1
+Written to /Users/wysh/coding/thon/iitb-health/app/reports/extraction-evaluation-eval-corpus-external.json

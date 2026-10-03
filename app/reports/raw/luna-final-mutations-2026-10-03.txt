@@ -1,3 +1,4 @@
+$ tsx scripts/verify-job-tests.ts
 Mutation check for the restored job tests
 Run: 2026-10-03T13:52:27.557Z
 
@@ -20,3 +21,4 @@ PASS  refuses a manual retry for a quarantined upload
       the test failed, so the behaviour is covered
 
 All 6 mutations were detected by their test.
+

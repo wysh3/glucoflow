@@ -1,0 +1,1 @@
+{"passed":3,"productionBundle":true,"model":"gpt-6-luna","humanPublicationGate":true}

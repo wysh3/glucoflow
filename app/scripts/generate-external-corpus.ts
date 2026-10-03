@@ -421,6 +421,8 @@ async function main(): Promise<void> {
     entries.push({
       key: document.key,
       filename: document.filename,
+      assignedIdentifier: PATIENT.identifier,
+      assignedName: PATIENT.name,
       identifier: document.identifier ?? '',
       name: document.patientName ?? '',
       sha256: createHash('sha256').update(bytes).digest('hex'),

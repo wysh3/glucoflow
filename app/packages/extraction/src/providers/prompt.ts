@@ -7,7 +7,7 @@
  * exist, so a live run in the built worker failed before it ever called a model. Embedding
  * the text makes the source, the tests and the bundle read exactly the same prompt.
  *
- * The text is unchanged from `extract-v1.txt`, so the recorded prompt hash is unaffected.
+ * The prompt hash records this embedded text, including the current model contract.
  */
 export const EXTRACT_V1_PROMPT = `Sutra laboratory and clinical document extraction (schema v1).
 
@@ -64,6 +64,8 @@ Notes:
 - Use the worker-supplied evidence ids for text you can point to. Use newEvidence only when you transcribe something visible in the page image that has no matching text line, and reference its temporaryId from the fact.
 - Set plotEligible to false. The server decides chart eligibility.
 - Map a test code only for HbA1c, fasting/random/post-meal glucose, reported eGFR, urine ACR, total/LDL/HDL cholesterol, triglycerides, systolic and diastolic blood pressure, and weight. Leave testCode null for everything else and keep the raw label.
+- Use these exact testCode strings for supported observations: hba1c, glucose_fasting, glucose_random, glucose_postmeal, egfr, urine_acr, cholesterol_total, cholesterol_ldl, cholesterol_hdl, triglycerides, bp_systolic, bp_diastolic, weight. Do not invent other code names.
+- For prescriptions, normalized contains only name, strength and instructions. For examinations, normalized contains only category and sourceText. The laboratory normalization fields belong only to observations.
 - A blood pressure pair produces two observations that share groupId.
 `;
 
