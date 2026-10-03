@@ -1,4 +1,5 @@
 import {
+  useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
@@ -18,6 +19,7 @@ import type {
   TimelineResult,
 } from '@sutra/contracts';
 import { randomIdempotencyKey } from './api';
+import { collectTimelinePages } from '@sutra/domain';
 import { useApi, useSession } from '../auth/session';
 
 /**
@@ -26,6 +28,8 @@ import { useApi, useSession } from '../auth/session';
  */
 
 export type TimelineResponse = TimelineResult & {
+  snapshotRevision: number;
+  contextTruncated: boolean;
   availableTestCodes: string[];
   scopeNote: string;
   patient: { patientId: string; displayName: string; clinicIdentifier: string; clinicId: string };
@@ -37,16 +41,20 @@ function useActorKey(): string {
   return me?.actor.userId ?? 'anonymous';
 }
 
-export function usePatients(search: string): UseQueryResult<CursorPage<PatientSummaryDto>> {
+function usePaged<T extends {items: unknown[]; nextCursor: string | null}>(key: unknown[], path: string, params: Record<string, string | number | undefined> = {}, enabled = true, poll = false) {
   const api = useApi();
-  const actor = useActorKey();
-  return useQuery({
-    queryKey: ['patients', actor, search],
-    queryFn: () =>
-      api.request<CursorPage<PatientSummaryDto>>('/api/v1/patients', {
-        query: search ? { search } : {},
-      }),
+  const result = useInfiniteQuery({
+    queryKey: key, enabled, initialPageParam: undefined as string | undefined,
+    queryFn: ({pageParam}) => api.request<T>(path, {query: {...params, cursor: pageParam}}),
+    getNextPageParam: page => page.nextCursor ?? undefined,
+    refetchInterval: poll ? 2000 : false,
   });
+  return {...result, data: result.data ? {...result.data.pages[0]!, items: result.data.pages.flatMap(page => page.items), nextCursor: result.data.pages.at(-1)?.nextCursor ?? null} as T : undefined};
+}
+
+export function usePatients(search: string) {
+  const actor = useActorKey();
+  return usePaged<CursorPage<PatientSummaryDto>>(['patients', actor, search], '/api/v1/patients', {search: search || undefined});
 }
 
 export function usePatient(patientId: string | undefined): UseQueryResult<PatientSummaryDto> {
@@ -68,42 +76,27 @@ export function useTimeline(
   return useQuery({
     queryKey: ['timeline', actor, patientId, query.testCodes, query.from, query.to],
     enabled: Boolean(patientId),
-    queryFn: () =>
+    queryFn: () => collectTimelinePages(cursors =>
       api.request<TimelineResponse>(`/api/v1/patients/${patientId}/timeline`, {
         query: {
           testCode: query.testCodes,
           from: query.from,
           to: query.to,
           limit: 100,
+          ...cursors,
         },
-      }),
+      })),
   });
 }
 
-export function useDocuments(patientId: string | undefined): UseQueryResult<CursorPage<DocumentDto>> {
-  const api = useApi();
+export function useDocuments(patientId: string | undefined) {
   const actor = useActorKey();
-  return useQuery({
-    queryKey: ['documents', actor, patientId],
-    enabled: Boolean(patientId),
-    queryFn: () =>
-      api.request<CursorPage<DocumentDto>>(`/api/v1/patients/${patientId}/documents`, {
-        query: { limit: 50 },
-      }),
-  });
+  return usePaged<CursorPage<DocumentDto>>(['documents', actor, patientId], `/api/v1/patients/${patientId}/documents`, {limit: 50}, Boolean(patientId));
 }
 
-export function useHistory(patientId: string | undefined): UseQueryResult<CursorPage<AuditEventDto>> {
-  const api = useApi();
+export function useHistory(patientId: string | undefined) {
   const actor = useActorKey();
-  return useQuery({
-    queryKey: ['history', actor, patientId],
-    enabled: Boolean(patientId),
-    queryFn: () =>
-      api.request<CursorPage<AuditEventDto>>(`/api/v1/patients/${patientId}/history`, {
-        query: { limit: 50 },
-      }),
-  });
+  return usePaged<CursorPage<AuditEventDto>>(['history', actor, patientId], `/api/v1/patients/${patientId}/history`, {limit: 50}, Boolean(patientId));
 }
 
 export function useNotes(
@@ -122,20 +115,9 @@ export function useNotes(
   });
 }
 
-export function useQueue(state: string): UseQueryResult<CursorPage<QueueItemDto>> {
-  const api = useApi();
+export function useQueue(state: string) {
   const actor = useActorKey();
-  return useQuery({
-    queryKey: ['queue', actor, state],
-    queryFn: () => api.request<CursorPage<QueueItemDto>>('/api/v1/queue', { query: { state } }),
-    refetchInterval: (query) => {
-      const data = query.state.data as CursorPage<QueueItemDto> | undefined;
-      const active = data?.items.some((item) =>
-        ['queued', 'processing', 'uploading'].includes(item.state),
-      );
-      return active ? 2000 : false;
-    },
-  });
+  return usePaged<CursorPage<QueueItemDto>>(['queue', actor, state], '/api/v1/queue', {state}, true, true);
 }
 
 export function useReview(documentId: string | undefined): UseQueryResult<ReviewDto> {
@@ -168,25 +150,9 @@ export function useJob(jobId: string | null, options: JobPollingOptions = {}): U
   });
 }
 
-export function useSearchRecords(
-  patientId: string | undefined,
-  params: { q: string; from?: string; to?: string; category?: string },
-): UseQueryResult<RecordSearchResult> {
-  const api = useApi();
+export function useSearchRecords(patientId: string | undefined, params: {q: string; from?: string; to?: string; category?: string}) {
   const actor = useActorKey();
-  return useQuery({
-    queryKey: ['search', actor, patientId, params.q, params.from, params.to, params.category],
-    enabled: Boolean(patientId) && params.q.trim().length >= 2,
-    queryFn: () =>
-      api.request<RecordSearchResult>(`/api/v1/patients/${patientId}/search`, {
-        query: {
-          q: params.q.trim(),
-          from: params.from,
-          to: params.to,
-          category: params.category,
-        },
-      }),
-  });
+  return usePaged<RecordSearchResult>(['search', actor, patientId, params.q, params.from, params.to, params.category], `/api/v1/patients/${patientId}/search`, {...params, q: params.q.trim()}, Boolean(patientId) && params.q.trim().length >= 2);
 }
 
 export function useSourceUrl() {

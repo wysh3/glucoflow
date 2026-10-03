@@ -31,12 +31,12 @@ afterAll(async () => {
   await context.close();
 });
 
-async function publishDocument(filename: string): Promise<{
+async function publishDocument(filename: string, scopedFixture: TestFixture = fixture): Promise<{
   documentId: string;
   approvalRevision: number;
   factIds: string[];
 }> {
-  const staged = await stageFixtureUpload(context, fixture, { filename });
+  const staged = await stageFixtureUpload(context, scopedFixture, { filename });
   await runOneJob(context, staged.jobId);
   const batch = await context.owner(async (client) => {
     const result = await client.query<{ id: string; revision: number }>(
@@ -52,7 +52,7 @@ async function publishDocument(filename: string): Promise<{
     );
     return result.rows.map((row) => row.id);
   });
-  const updated = await context.asActor(fixture.reviewerId, (client) =>
+  const updated = await context.asActor(scopedFixture.reviewerId, (client) =>
     client.query<{ update_review: { revision: number } }>(
       'select sutra.update_review($1, $2, $3::jsonb)',
       [
@@ -62,7 +62,7 @@ async function publishDocument(filename: string): Promise<{
       ],
     ),
   );
-  const approval = await context.asActor(fixture.reviewerId, (client) =>
+  const approval = await context.asActor(scopedFixture.reviewerId, (client) =>
     client.query<{ publish_review: { approvalRevision: number; publishedFactIds: string[] } }>(
       'select sutra.publish_review($1, $2, $3::jsonb)',
       [staged.documentId, updated.rows[0]!.update_review.revision, '[]'],
@@ -76,6 +76,19 @@ async function publishDocument(filename: string): Promise<{
 }
 
 describe('export snapshots', () => {
+  it('scopes direct historical-fact reads and excludes unreleased facts from patient exports', async () => {
+    const isolated = await createFixture(context, 'export-release-scope');
+    try {
+    const published = await publishDocument('2026-03-02_prescription.pdf', isolated);
+    const foreign = await context.asActor(isolated.otherReviewerId, client => client.query('select id from sutra.facts_current_at($1, $2)', [isolated.patientId, published.approvalRevision]));
+    expect(foreign.rows).toHaveLength(0);
+    await context.owner(client => client.query('update sutra.documents set released_to_patient = false where id = $1', [published.documentId]));
+    const own = await context.asActor(isolated.patientUserId, client => client.query('select id from sutra.facts_current_at($1, $2)', [isolated.patientId, published.approvalRevision]));
+    expect(own.rows).toHaveLength(0);
+    const clinic = await context.asActor(isolated.reviewerId, client => client.query('select id from sutra.facts_current_at($1, $2)', [isolated.patientId, published.approvalRevision]));
+    expect(clinic.rows).toHaveLength(published.factIds.length);
+    } finally {await removeClinic(context, isolated.clinicId); await removeClinic(context, isolated.otherClinicId);}
+  });
   it('freezes approved facts and note versions at request time', async () => {
     const published = await publishDocument('2026-01-12_lab_report.pdf');
     const note = await context.asActor(fixture.patientUserId, (client) =>

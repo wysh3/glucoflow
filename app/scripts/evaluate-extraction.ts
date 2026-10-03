@@ -174,6 +174,7 @@ async function main(): Promise<void> {
     if (!(Number(env.MAX_DOCUMENT_COST_USD ?? '') > 0)) {
       problems.push('MAX_DOCUMENT_COST_USD must be a positive number');
     }
+    if (!(Number(env.MAX_RUN_COST_USD ?? '') > 0)) problems.push('MAX_RUN_COST_USD must cap the whole evaluation');
     if (!(Number(env.MAX_RUN_TOKENS ?? '') > 0)) {
       problems.push('MAX_RUN_TOKENS must be a positive number');
     }
@@ -213,11 +214,14 @@ async function main(): Promise<void> {
     // The evaluation holds its own ledger: one document, a bounded call count and the
     // configured spend limits. Nothing here is shared with the worker's ledger.
     const maxCalls = Number(env.MAX_DOCUMENT_MODEL_CALLS ?? '12');
-    const maxCostUsd = Number(env.MAX_DOCUMENT_COST_USD ?? '0') || null;
+    const documentCostCap = Number(env.MAX_DOCUMENT_COST_USD ?? '0');
+    const evaluationCostCap = Number(env.MAX_RUN_COST_USD ?? '0');
+    const maxCostUsd = options.live ? Math.max(0, Math.min(documentCostCap, evaluationCostCap - reservedCostTotal)) : null;
     const maxTokens = Number(env.MAX_RUN_TOKENS ?? '0') || null;
     let callsUsed = 0;
     let reservedCostUsd = 0;
     let tokensUsed = 0;
+    const reservations = new Map<number, {cost: number; tokens: number}>();
     const budget = {
       maxCalls,
       get callsUsed() {
@@ -231,20 +235,30 @@ async function main(): Promise<void> {
       get tokensUsed() {
         return tokensUsed;
       },
-      reserve: async () => {
+      reserve: async (request?: {costUsd: number; tokens: number}) => {
         if (callsUsed >= maxCalls) return { allowed: false, ordinal: null, reason: 'call_limit' };
-        if (maxTokens !== null && tokensUsed >= maxTokens) {
-          return { allowed: false, ordinal: null, reason: 'token_limit' };
-        }
+        const cost = request?.costUsd ?? 0;
+        const tokens = request?.tokens ?? 0;
+        if (maxTokens !== null && tokensUsed + tokens > maxTokens) return {allowed: false, ordinal: null, reason: 'token_limit'};
+        if (maxCostUsd !== null && reservedCostUsd + cost > maxCostUsd) return {allowed: false, ordinal: null, reason: 'cost_limit'};
         callsUsed += 1;
+        reservations.set(callsUsed, {cost, tokens});
+        reservedCostUsd += cost;
+        tokensUsed += tokens;
         return { allowed: true, ordinal: callsUsed };
       },
       reconcile: async (
-        _ordinal: number,
-        usage: { costUsd: number; tokens: number; state: 'succeeded' | 'failed' },
+        ordinal: number,
+        usage: { costUsd: number; tokens: number; state: 'succeeded' | 'failed'; inputTokens?: number; outputTokens?: number },
       ) => {
-        reservedCostUsd += usage.costUsd;
-        tokensUsed += usage.tokens;
+        const reserved = reservations.get(ordinal);
+        if (!reserved) return;
+        reservations.delete(ordinal);
+        // Unknown usage retains the dispatch reservation, including failed calls.
+        if (usage.inputTokens !== undefined && usage.outputTokens !== undefined) {
+          reservedCostUsd += usage.costUsd - reserved.cost;
+          tokensUsed += usage.tokens - reserved.tokens;
+        }
       },
     };
     const provider = createExtractionProvider(

@@ -1,8 +1,21 @@
+import { useSourcePane } from '../../../components/source-pane';
+import { useApi, useSession, describeApiError } from '../../../auth/session';
+import { useQueryClient } from '@tanstack/react-query';
+import { NOTE_CATEGORY_LABELS } from '@sutra/contracts';
 import * as React from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
-import type { PatientSummaryDto, TimelineEvent, TimelineNote, TimelineObservation } from '@sutra/contracts';
+import type {
+  PatientSummaryDto,
+  TimelineEvent,
+  TimelineNote,
+  TimelineObservation,
+} from '@sutra/contracts';
 import { testDisplayName, TIMELINE_DISPLAY_BOUND } from '@sutra/contracts';
-import { buildSeries, buildTableRows, recordAvailabilityLabel } from '@sutra/domain';
+import {
+  buildSeries,
+  buildTableRows,
+  recordAvailabilityLabel,
+} from '@sutra/domain';
 import {
   Alert,
   Badge,
@@ -11,9 +24,6 @@ import {
   CardBody,
   CardHeader,
   CardTitle,
-  Dialog,
-  DialogContent,
-  DialogHeader,
   ScreenTitle,
   Select,
   Table,
@@ -26,9 +36,13 @@ import {
   numeric,
 } from '@sutra/ui';
 import { ChartLegend, ProgressionPanel } from './chart';
-import { useDocuments, useExportStatus, useCreateExport, useSourceUrl, useTimeline } from '../../../lib/queries';
+import {
+  useDocuments,
+  useExportStatus,
+  useCreateExport,
+  useTimeline,
+} from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
-import { SourceViewer } from '../../../components/source-viewer';
 import { openAuthorizedUrl } from '../../../platform/download';
 
 /**
@@ -40,14 +54,15 @@ import { openAuthorizedUrl } from '../../../platform/download';
 export function ProgressionPage(): React.ReactElement {
   const patient = useOutletContext<PatientSummaryDto>();
   const { patientId } = useParams<{ patientId: string }>();
-  const [range, setRange] = React.useState<'6m' | '12m' | 'all' | 'custom'>('all');
+  const [range, setRange] = React.useState<'6m' | '12m' | 'all' | 'custom'>(
+    'all',
+  );
   const [from, setFrom] = React.useState('');
   const [to, setTo] = React.useState('');
   const [selected, setSelected] = React.useState<string[]>([]);
   const [view, setView] = React.useState<'plot' | 'table'>('plot');
-  const [openFact, setOpenFact] = React.useState<TimelineObservation | null>(null);
+  const sourcePane = useSourcePane();
   const [exportId, setExportId] = React.useState<string | null>(null);
-  const sourceUrl = useSourceUrl();
 
   const rangeBounds = React.useMemo(() => {
     if (range === 'all') return { from: undefined, to: undefined };
@@ -59,7 +74,13 @@ export function ProgressionPage(): React.ReactElement {
     }
     const now = new Date();
     const months = range === '6m' ? 6 : 12;
-    const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - months, now.getUTCDate()));
+    const start = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth() - months,
+        now.getUTCDate(),
+      ),
+    );
     return { from: start.toISOString().slice(0, 10), to: undefined };
   }, [range, from, to]);
 
@@ -72,12 +93,15 @@ export function ProgressionPage(): React.ReactElement {
   const exportStatus = useExportStatus(exportId);
 
   const availableCodes = timeline.data?.availableTestCodes ?? [];
-  const activeCodes = selected.length > 0 ? selected : availableCodes.slice(0, 1);
+  const activeCodes =
+    selected.length > 0 ? selected : availableCodes.slice(0, 1);
 
   React.useEffect(() => {
     if (selected.length === 0 && availableCodes.length > 0) {
       // Default to HbA1c when it is available, otherwise the first supported test.
-      const preferred = availableCodes.includes('hba1c') ? ['hba1c'] : [availableCodes[0]!];
+      const preferred = availableCodes.includes('hba1c')
+        ? ['hba1c']
+        : [availableCodes[0]!];
       setSelected(preferred);
     }
   }, [availableCodes, selected.length]);
@@ -89,9 +113,11 @@ export function ProgressionPage(): React.ReactElement {
     () =>
       buildSeries(
         activeCodes.length > 0
-          ? observations.filter((observation) => activeCodes.includes(observation.testCode))
+          ? observations.filter((observation) =>
+              activeCodes.includes(observation.testCode),
+            )
           : observations,
-      ).slice(0, 3),
+      ),
     [observations, activeCodes],
   );
   const tableRows = React.useMemo(
@@ -101,7 +127,9 @@ export function ProgressionPage(): React.ReactElement {
 
   const latest = React.useMemo(() => {
     const plotted = observations
-      .filter((observation) => observation.date && observation.numericValue !== null)
+      .filter(
+        (observation) => observation.date && observation.numericValue !== null,
+      )
       .sort((a, b) => (a.date! < b.date! ? 1 : -1));
     return plotted[0] ?? null;
   }, [observations]);
@@ -111,19 +139,30 @@ export function ProgressionPage(): React.ReactElement {
     awaitingReviewCount: timeline.data?.awaitingReviewCount ?? 0,
   });
 
-  const openSource = async (observation: TimelineObservation): Promise<void> => {
+  const openSource = async (
+    observation: TimelineObservation,
+  ): Promise<void> => {
     const evidence = observation.evidence[0];
-    const response = await sourceUrl.mutateAsync({
+    await sourcePane.openSource({
       documentId: observation.documentId,
       versionId: observation.documentVersionId,
       page: evidence?.page ?? 1,
+      quote: evidence?.quote,
+      bbox: evidence?.bbox,
     });
-    setOpenFact(observation);
-    return void response;
   };
 
   return (
     <div className="space-y-4">
+      {timeline.data?.contextTruncated ? (
+        <Alert
+          tone="review"
+          title="This range contains more context than can be shown"
+        >
+          Choose a shorter date range to see every prescription, examination and
+          visit note.
+        </Alert>
+      ) : null}
       <ScreenTitle
         title="Progression"
         meta={timeline.data?.scopeNote ?? 'Approved results only'}
@@ -131,7 +170,9 @@ export function ProgressionPage(): React.ReactElement {
           <div className="flex flex-wrap items-center gap-2">
             <Button
               variant="primary"
-              disabled={createExport.isPending || (patient.approvalRevision ?? 0) === 0}
+              disabled={
+                createExport.isPending || (patient.approvalRevision ?? 0) === 0
+              }
               onClick={() => {
                 createExport.mutate(patient.approvalRevision, {
                   onSuccess: (data) => setExportId(data.exportId),
@@ -146,7 +187,13 @@ export function ProgressionPage(): React.ReactElement {
 
       {exportStatus.data ? (
         <Alert
-          tone={exportStatus.data.state === 'ready' ? 'success' : exportStatus.data.state === 'failed' ? 'error' : 'neutral'}
+          tone={
+            exportStatus.data.state === 'ready'
+              ? 'success'
+              : exportStatus.data.state === 'failed'
+                ? 'error'
+                : 'neutral'
+          }
           title={exportStatus.data.stateLabel}
           action={
             exportStatus.data.downloadUrl ? (
@@ -173,7 +220,7 @@ export function ProgressionPage(): React.ReactElement {
         </Alert>
       ) : null}
 
-      <div className="flex flex-wrap items-end gap-3">
+      <div className="flex flex-wrap items-end gap-3 rounded-[14px] border border-line bg-surface px-4 py-3">
         <div>
           <label className="text-[12px] text-ink-soft" htmlFor="test-selector">
             Test
@@ -181,9 +228,13 @@ export function ProgressionPage(): React.ReactElement {
           <Select
             id="test-selector"
             value={activeCodes[0] ?? ''}
-            onChange={(event) => setSelected(event.target.value ? [event.target.value] : [])}
+            onChange={(event) =>
+              setSelected(event.target.value ? [event.target.value] : [])
+            }
           >
-            {availableCodes.length === 0 ? <option value="">No approved test yet</option> : null}
+            {availableCodes.length === 0 ? (
+              <option value="">No approved test yet</option>
+            ) : null}
             {availableCodes.map((code) => (
               <option key={code} value={code}>
                 {testDisplayName(code)}
@@ -284,155 +335,213 @@ export function ProgressionPage(): React.ReactElement {
       >
         {timeline.data ? (
           <>
-            <Card>
-              <CardHeader>
-                <CardTitle>
-                  {latest
-                    ? `Most recent recorded ${testDisplayName(latest.testCode)}`
-                    : 'No approved result in this range'}
-                </CardTitle>
-                <div className="flex flex-wrap items-center gap-2">
-                  {latest ? (
-                    <>
-                      <span className={`text-[15px] font-semibold text-ink ${numeric}`}>
-                        {latest.numericValue} {latest.unit ?? ''}
-                      </span>
-                      <span className="text-[12px] text-ink-soft">
-                        {formatDateOnly(latest.date)}
-                      </span>
-                      <Button size="sm" variant="secondary" onClick={() => void openSource(latest)}>
-                        Open source
-                      </Button>
-                    </>
-                  ) : null}
-                </div>
-              </CardHeader>
-              <CardBody className="space-y-3">
-                <p className="text-[12px] text-ink-soft">
-                  {availability} · scope: {timeline.data.scopeNote}
-                </p>
-                {timeline.data.coverage.truncated ? (
-                  <Alert tone="review" title="Narrow the date range">
-                    This range holds {timeline.data.coverage.observationCount} recorded results, and
-                    the interactive view is limited to {TIMELINE_DISPLAY_BOUND}. No chart is drawn
-                    because it would look complete when it is not.
-                  </Alert>
-                ) : observations.length === 0 ? (
-                  <Alert tone="neutral" title="No approved results for this selection">
-                    Missing records are not inferred. A test that is not in the uploaded, reviewed
-                    collection is not shown as missed or overdue.{' '}
-                    {patient.pendingCount > 0 ? (
-                      <Link to="/clinic/queue" className="underline">
-                        {patient.pendingCount} document(s) are awaiting review.
-                      </Link>
-                    ) : null}
-                  </Alert>
-                ) : view === 'plot' ? (
-                  <div className="space-y-3">
-                    {series.map((item) => (
-                      <ProgressionPanel key={item.key} series={item} />
-                    ))}
-                    <ChartLegend />
-                    {series.length > 1 ? (
-                      <p className="text-[12px] text-ink-soft">
-                        Each panel keeps its own unit and axis. Values in different units are never
-                        combined or converted.
-                      </p>
+            <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1.8fr)_minmax(280px,1fr)]">
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    {latest
+                      ? `Most recent recorded ${testDisplayName(latest.testCode)}`
+                      : 'No approved result in this range'}
+                  </CardTitle>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {latest ? (
+                      <>
+                        <span
+                          className={`text-[15px] font-semibold text-ink ${numeric}`}
+                        >
+                          {latest.numericValue} {latest.unit ?? ''}
+                        </span>
+                        <span className="text-[12px] text-ink-soft">
+                          {formatDateOnly(latest.date)}
+                        </span>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => void openSource(latest)}
+                        >
+                          Open source
+                        </Button>
+                      </>
                     ) : null}
                   </div>
-                ) : (
-                  <Table>
-                    <THead>
-                      <TR>
-                        <TH>Date</TH>
-                        <TH>Entry</TH>
-                        <TH>Value</TH>
-                        <TH>Unit</TH>
-                        <TH>Source</TH>
-                      </TR>
-                    </THead>
-                    <TBody>
-                      {tableRows.map((row) => (
-                        <TR key={row.key}>
-                          <TD className="whitespace-nowrap">{row.date ? formatDateOnly(row.date) : 'Date not recorded'}</TD>
-                          <TD>{row.label}</TD>
-                          <TD numeric>{row.value}</TD>
-                          <TD>{row.unit ?? ''}</TD>
-                          <TD>
-                            <span className="text-[12px] text-ink-soft">
-                              {row.seriesKey.includes('source-only') ? 'Source only' : 'Approved record'}
-                            </span>
-                          </TD>
-                        </TR>
+                </CardHeader>
+                <CardBody className="space-y-3">
+                  {!timeline.data.observationsComplete ? (
+                    <Alert tone="review" title="Narrow the date range">
+                      This range holds {timeline.data.coverage.observationCount}{' '}
+                      recorded results, and the interactive view is limited to{' '}
+                      {TIMELINE_DISPLAY_BOUND}. No chart is drawn because it
+                      would look complete when it is not.
+                    </Alert>
+                  ) : observations.length === 0 ? (
+                    <Alert
+                      tone="neutral"
+                      title="No approved results for this selection"
+                    >
+                      Missing records are not inferred. A test that is not in
+                      the uploaded, reviewed collection is not shown as missed
+                      or overdue.{' '}
+                      {patient.pendingCount > 0 ? (
+                        <Link to="/clinic/queue" className="underline">
+                          {patient.pendingCount} document(s) are awaiting
+                          review.
+                        </Link>
+                      ) : null}
+                    </Alert>
+                  ) : view === 'plot' ? (
+                    <div className="space-y-3">
+                      {series.map((item) => (
+                        <ProgressionPanel key={item.key} series={item} />
                       ))}
-                    </TBody>
-                  </Table>
-                )}
-              </CardBody>
-            </Card>
+                      <ChartLegend />
+                      {series.length > 1 ? (
+                        <p className="text-[12px] text-ink-soft">
+                          Each panel keeps its own unit and axis. Values in
+                          different units are never combined or converted.
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <Table>
+                      <THead>
+                        <TR>
+                          <TH>Date</TH>
+                          <TH>Entry</TH>
+                          <TH>Value</TH>
+                          <TH>Unit</TH>
+                          <TH>Source</TH>
+                        </TR>
+                      </THead>
+                      <TBody>
+                        {tableRows.map((row) => (
+                          <TR key={row.key}>
+                            <TD className="whitespace-nowrap">
+                              {row.date
+                                ? formatDateOnly(row.date)
+                                : 'Date not recorded'}
+                            </TD>
+                            <TD>{row.label}</TD>
+                            <TD numeric>{row.value}</TD>
+                            <TD>{row.unit ?? ''}</TD>
+                            <TD>
+                              {row.key.startsWith('note-') ? (
+                                <span className="text-xs text-ink-soft">
+                                  Patient reported
+                                </span>
+                              ) : (
+                                <Button
+                                  size="sm"
+                                  onClick={() => {
+                                    const fact = [
+                                      ...observations,
+                                      ...events,
+                                    ].find(
+                                      (item) =>
+                                        row.key === `obs-${item.factId}` ||
+                                        row.key === `src-${item.factId}` ||
+                                        row.key === `evt-${item.factId}`,
+                                    );
+                                    if (fact)
+                                      void sourcePane.openSource({
+                                        documentId: fact.documentId,
+                                        versionId: fact.documentVersionId,
+                                        page: fact.evidence[0]?.page ?? 1,
+                                        quote: fact.evidence[0]?.quote,
+                                        bbox: fact.evidence[0]?.bbox,
+                                      });
+                                  }}
+                                >
+                                  Open source
+                                </Button>
+                              )}
+                            </TD>
+                          </TR>
+                        ))}
+                      </TBody>
+                    </Table>
+                  )}
+                </CardBody>
+              </Card>
 
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-              <Lane title="Prescriptions" emptyText="No approved prescription record in this range.">
-                {events
-                  .filter((event) => event.kind === 'prescription')
-                  .map((event) => (
-                    <LaneRow
-                      key={event.factId}
-                      label={event.label}
-                      detail={event.detail}
-                      date={event.date}
-                      dateKind={event.dateKind}
-                      kindLabel="Prescription"
-                      onOpen={() =>
-                        void sourceUrl.mutateAsync({
-                          documentId: event.documentId,
-                          versionId: event.documentVersionId,
-                          page: event.evidence[0]?.page ?? 1,
-                        })
-                      }
-                    />
+              <div className="space-y-4">
+                <Lane
+                  title="Prescriptions"
+                  emptyText="No approved prescription record in this range."
+                >
+                  {events
+                    .filter((event) => event.kind === 'prescription')
+                    .map((event) => (
+                      <LaneRow
+                        key={event.factId}
+                        label={event.label}
+                        detail={event.detail}
+                        date={event.date}
+                        dateKind={event.dateKind}
+                        kindLabel="Prescription"
+                        onOpen={() =>
+                          void sourcePane.openSource({
+                            documentId: event.documentId,
+                            versionId: event.documentVersionId,
+                            page: event.evidence[0]?.page ?? 1,
+                            quote: event.evidence[0]?.quote,
+                            bbox: event.evidence[0]?.bbox,
+                          })
+                        }
+                      />
+                    ))}
+                </Lane>
+                <Lane
+                  title="Examinations"
+                  emptyText="No approved examination record in this range."
+                >
+                  {events
+                    .filter((event) => event.kind === 'examination')
+                    .map((event) => (
+                      <LaneRow
+                        key={event.factId}
+                        label={event.label}
+                        detail={event.detail}
+                        date={event.date}
+                        dateKind={event.dateKind}
+                        kindLabel="Examination record"
+                        onOpen={() =>
+                          void sourcePane.openSource({
+                            documentId: event.documentId,
+                            versionId: event.documentVersionId,
+                            page: event.evidence[0]?.page ?? 1,
+                            quote: event.evidence[0]?.quote,
+                            bbox: event.evidence[0]?.bbox,
+                          })
+                        }
+                      />
+                    ))}
+                </Lane>
+                <Lane
+                  title="Patient-reported notes"
+                  emptyText="No patient note in this range."
+                >
+                  {notes.map((note) => (
+                    <NoteRow key={note.noteId} note={note} />
                   ))}
-              </Lane>
-              <Lane title="Examinations" emptyText="No approved examination record in this range.">
-                {events
-                  .filter((event) => event.kind === 'examination')
-                  .map((event) => (
-                    <LaneRow
-                      key={event.factId}
-                      label={event.label}
-                      detail={event.detail}
-                      date={event.date}
-                      dateKind={event.dateKind}
-                      kindLabel="Examination record"
-                      onOpen={() =>
-                        void sourceUrl.mutateAsync({
-                          documentId: event.documentId,
-                          versionId: event.documentVersionId,
-                          page: event.evidence[0]?.page ?? 1,
-                        })
-                      }
-                    />
-                  ))}
-              </Lane>
-              <Lane title="Patient-reported notes" emptyText="No patient note in this range.">
-                {notes.map((note) => (
-                  <NoteRow key={note.noteId} note={note} />
-                ))}
-              </Lane>
+                </Lane>
+              </div>
             </div>
-
             <Card>
               <CardHeader>
                 <CardTitle>Document availability</CardTitle>
               </CardHeader>
               <CardBody className="space-y-2 text-sm">
                 <p className="text-ink-soft">
-                  {availability}. This states what is present in the uploaded, reviewed collection
-                  for this patient; it is not a statement about whether a test was performed.
+                  {availability}. This states what is present in the uploaded,
+                  reviewed collection for this patient; it is not a statement
+                  about whether a test was performed.
                 </p>
                 <ul className="space-y-1">
                   {(documents.data?.items ?? []).slice(0, 5).map((document) => (
-                    <li key={document.documentId} className="flex flex-wrap items-center gap-2">
+                    <li
+                      key={document.documentId}
+                      className="flex flex-wrap items-center gap-2"
+                    >
                       <span className="text-ink">{document.filename}</span>
                       <Badge
                         tone={
@@ -449,15 +558,20 @@ export function ProgressionPage(): React.ReactElement {
                         {document.stateLabel}
                       </Badge>
                       <span className="text-[12px] text-ink-soft">
-                        uploaded {formatDateOnly(document.uploadedAt.slice(0, 10))}
+                        uploaded{' '}
+                        {formatDateOnly(document.uploadedAt.slice(0, 10))}
                       </span>
                       {document.coverageNote ? (
-                        <span className="text-[12px] text-review">{document.coverageNote}</span>
+                        <span className="text-[12px] text-review">
+                          {document.coverageNote}
+                        </span>
                       ) : null}
                     </li>
                   ))}
                   {documents.data?.items.length === 0 ? (
-                    <li className="text-ink-soft">No document has been uploaded for this patient.</li>
+                    <li className="text-ink-soft">
+                      No document has been uploaded for this patient.
+                    </li>
                   ) : null}
                 </ul>
               </CardBody>
@@ -466,33 +580,7 @@ export function ProgressionPage(): React.ReactElement {
         ) : null}
       </QueryState>
 
-      {openFact && sourceUrl.data ? (
-        <Dialog open onOpenChange={() => setOpenFact(null)}>
-          <DialogContent side="right">
-            <DialogHeader
-              title="Source document"
-              description={`${openFact.displayName} · ${openFact.rawValue ?? ''} ${openFact.rawUnit ?? ''}`}
-              actions={
-                <Button variant="quiet" size="sm" onClick={() => setOpenFact(null)}>
-                  Back
-                </Button>
-              }
-            />
-            <SourceViewer
-              documentId={openFact.documentId}
-              versionId={openFact.documentVersionId}
-              page={openFact.evidence[0]?.page ?? 1}
-              quote={openFact.evidence[0]?.quote ?? null}
-              bbox={openFact.evidence[0]?.bbox ?? null}
-              url={sourceUrl.data.url}
-              expiresAt={sourceUrl.data.expiresAt}
-              documentName={sourceUrl.data.documentName}
-              pageCount={sourceUrl.data.pageCount}
-              onRequestNewUrl={() => void openSource(openFact)}
-            />
-          </DialogContent>
-        </Dialog>
-      ) : null}
+      {sourcePane.pane}
     </div>
   );
 }
@@ -513,7 +601,11 @@ function Lane({
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardBody className="space-y-3">
-        {hasChildren ? children : <p className="text-sm text-ink-soft">{emptyText}</p>}
+        {hasChildren ? (
+          children
+        ) : (
+          <p className="text-sm text-ink-soft">{emptyText}</p>
+        )}
       </CardBody>
     </Card>
   );
@@ -542,10 +634,14 @@ function LaneRow({
           {date ? formatDateOnly(date) : 'Date not recorded'}
         </span>
       </div>
-      {detail ? <p className="mt-1 text-[13px] text-ink-soft">{detail}</p> : null}
+      {detail ? (
+        <p className="mt-1 text-[13px] text-ink-soft">{detail}</p>
+      ) : null}
       <div className="mt-1 flex flex-wrap items-center gap-2">
         <Badge tone="neutral">{kindLabel}</Badge>
-        <Badge tone="neutral">{dateKind}</Badge>
+        {dateKind === 'report' ? (
+          <span className="text-xs text-ink-soft">Report date</span>
+        ) : null}
         <Button size="sm" variant="quiet" onClick={onOpen}>
           Open source
         </Button>
@@ -555,24 +651,61 @@ function LaneRow({
 }
 
 function NoteRow({ note }: { note: TimelineNote }): React.ReactElement {
+  const api = useApi();
+  const { me } = useSession();
+  const cache = useQueryClient();
+  const [busy, setBusy] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
   return (
     <div className="rounded-[10px] border border-line px-3 py-2">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="text-sm font-medium text-ink">
-          {note.category.replace(/_/g, ' ')}
+          {NOTE_CATEGORY_LABELS[
+            note.category as keyof typeof NOTE_CATEGORY_LABELS
+          ] ?? 'Note'}
         </span>
         <span className="text-[12px] text-ink-soft">
-          {note.eventDate ? `Event ${formatDateOnly(note.eventDate)}` : 'No event date'} · submitted{' '}
-          {formatDateOnly(note.submittedAt.slice(0, 10))}
+          {note.eventDate
+            ? `Event ${formatDateOnly(note.eventDate)}`
+            : 'No event date'}{' '}
+          · submitted {formatDateOnly(note.submittedAt.slice(0, 10))}
         </span>
       </div>
       <p className="mt-1 text-[13px] text-ink">{note.body}</p>
       <div className="mt-1 flex flex-wrap items-center gap-2">
         <Badge tone="neutral">Patient reported</Badge>
+        {error ? (
+          <span role="alert" className="text-xs text-danger">
+            {error}
+          </span>
+        ) : null}
         {note.seenBy ? (
           <Badge tone="primary">Seen by clinic · {note.seenBy}</Badge>
+        ) : me?.capabilities.canAcknowledgeNote ? (
+          <Button
+            size="sm"
+            variant="secondary"
+            disabled={busy}
+            onClick={async () => {
+              setBusy(true);
+              setError(null);
+              try {
+                await api.request(`/api/v1/notes/${note.noteId}/acknowledge`, {
+                  method: 'POST',
+                });
+                await cache.invalidateQueries({ queryKey: ['timeline'] });
+                await cache.invalidateQueries({ queryKey: ['notes'] });
+              } catch (e) {
+                setError(describeApiError(e));
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            {busy ? 'Saving…' : 'Mark as read'}
+          </Button>
         ) : (
-          <span className="text-[12px] text-ink-soft">Not yet acknowledged</span>
+          <span className="text-xs text-ink-soft">Not yet read</span>
         )}
       </div>
     </div>

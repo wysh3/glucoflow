@@ -1,0 +1,45 @@
+$ pnpm --filter @sutra/client build && pnpm --filter @sutra/api build && pnpm --filter @sutra/worker build
+$ vite build
+vite v8.3.2 building client environment for production...
+transforming...
+✓ 3198 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                               0.50 kB │ gzip:   0.30 kB
+dist/assets/InterVariable-DiVDrmQJ.woff2    352.24 kB
+dist/assets/pdf.worker.min-Dswkl-cV.mjs   1,265.41 kB
+dist/assets/index-Dp6u_ODH.css               29.86 kB │ gzip:   6.36 kB
+dist/assets/pdf.worker.min-zC6nfbxG.js        0.06 kB │ gzip:   0.08 kB
+dist/assets/esm-DpIjXmCJ.js                   0.32 kB │ gzip:   0.23 kB
+dist/assets/esm-Cj7atuTr.js                   0.33 kB │ gzip:   0.23 kB
+dist/assets/web-Dz5JqN4N.js                   0.36 kB │ gzip:   0.24 kB
+dist/assets/native-Dkt0srvr.js                0.77 kB │ gzip:   0.33 kB
+dist/assets/web-DfzfUu9h.js                   0.79 kB │ gzip:   0.39 kB
+dist/assets/web-qI0F4Vkk.js                   0.84 kB │ gzip:   0.40 kB
+dist/assets/esm-BazgkVpj.js                   1.26 kB │ gzip:   0.54 kB
+dist/assets/base-CNJNXdSE.js                  2.86 kB │ gzip:   1.01 kB
+dist/assets/esm-CarTe_dD.js                   9.73 kB │ gzip:   3.14 kB
+dist/assets/dist-BBX5mN6s.js                213.60 kB │ gzip:  54.81 kB
+dist/assets/pdf-BuGAKxCU.js                 430.93 kB │ gzip: 129.03 kB
+dist/assets/index-Be8e2VzB.js             1,670.67 kB │ gzip: 385.32 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 1200 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0m../../node_modules/.pnpm/@capacitor+core@8.5.2/node_modules/@capacitor/core/dist/index.js is dynamically imported by src/auth/session.tsx but also statically imported by src/components/source-viewer.tsx, src/features/upload/upload-wizard.tsx, src/platform/back.ts, src/platform/camera.ts, src/platform/download.ts, ..., dynamic import will not move module into another chunk.
+
+✓ built in 412ms
+$ node build.mjs
+
+  dist/server.mjs      888.4kb
+  dist/server.mjs.map    1.7mb
+
+⚡ Done in 23ms
+$ node build.mjs
+
+  dist/worker.mjs      903.7kb
+  dist/worker.mjs.map    1.7mb
+
+⚡ Done in 75ms

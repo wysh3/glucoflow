@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { getDocumentRow, listDocuments, updateReview, getReviewDto } from '@sutra/data';
 import { buildSyntheticReport, smokerunDate } from '../../scripts/lib/synthetic-report';
 import {
   createFixture,
@@ -34,7 +35,7 @@ afterAll(async () => {
   await context.close();
 });
 
-async function prepareDocument(filename: string): Promise<{
+async function prepareDocument(filename: string, bytes?: Buffer): Promise<{
   documentId: string;
   versionId: string;
   batchId: string;
@@ -42,7 +43,7 @@ async function prepareDocument(filename: string): Promise<{
   factIds: string[];
   identityState: string;
 }> {
-  const staged = await stageFixtureUpload(context, fixture, { filename });
+  const staged = await stageFixtureUpload(context, fixture, { filename, ...(bytes ? {bytes} : {}) });
   await runOneJob(context, staged.jobId);
   const batch = await latestBatch(context, staged.documentId);
   const facts = await context.owner(async (client) => {
@@ -79,6 +80,38 @@ async function reviewAll(documentId: string, revision: number, factIds: string[]
 }
 
 describe('review and publication', () => {
+  it('renormalizes corrected values and removes obsolete chart eligibility for unsupported units', async () => {
+    const bytes = await buildSyntheticReport({identifier: 'P0482', patientName: 'Ravi Menon', collectedOn: '16/02/2026', hba1c: '8.0', filename: 'correction-regression.pdf'});
+    const prepared = await prepareDocument('correction-regression.pdf', bytes);
+    const before = await context.asActor(fixture.reviewerId, client => getReviewDto(client, prepared.documentId));
+    const fact = before!.facts.find(item => item.rawLabel === 'HbA1c')!;
+    const changed = await context.asActor(fixture.reviewerId, client => updateReview(client, prepared.documentId, {expectedRevision: prepared.revision, factUpdates: [{factId: fact.factId, action: 'correct', reason: 'Checked against the source', correction: {rawValue: '6.4', rawUnit: '%', eventDate: '2026-02-16', datePrecision: 'day'}}], manualFacts: [], pageExclusions: []}));
+    let after = await context.asActor(fixture.reviewerId, client => getReviewDto(client, prepared.documentId));
+    expect((after!.facts.find(item => item.factId === fact.factId)!.normalized as {numericValue:number}).numericValue).toBe(6.4);
+    await context.asActor(fixture.reviewerId, client => updateReview(client, prepared.documentId, {expectedRevision: changed.revision, factUpdates: [{factId: fact.factId, action: 'correct', reason: 'Unrecognized literal value and unit', correction: {rawValue: 'unreadable', rawUnit: 'unknown'}}], manualFacts: [], pageExclusions: []}));
+    after = await context.asActor(fixture.reviewerId, client => getReviewDto(client, prepared.documentId));
+    const normalized = after!.facts.find(item => item.factId === fact.factId)!.normalized as {numericValue:number|null; plotEligible:boolean};
+    expect(normalized.numericValue).toBeNull();
+    expect(normalized.plotEligible).toBe(false);
+  });
+  it.each(['patient', 'clinic'] as const)('shows a published %s upload to its patient without exposing staff review data', async (uploader) => {
+    const filename = `visibility-${uploader}.pdf`;
+    const bytes = await buildSyntheticReport({ identifier: fixture.patientIdentifier, patientName: 'Asha Rao', collectedOn: '03 October 2026', hba1c: uploader === 'patient' ? '9.11' : '9.12', filename });
+    const staged = await stageFixtureUpload(context, fixture, { filename, bytes, uploaderId: uploader === 'patient' ? fixture.patientUserId : fixture.reviewerId });
+    await runOneJob(context, staged.jobId);
+    const batch = await latestBatch(context, staged.documentId);
+    const facts = await context.owner(async (client) => (await client.query<{id: string}>('select id from sutra.draft_facts where review_batch_id = $1', [batch!.id])).rows.map(row => row.id));
+    const revision = await reviewAll(staged.documentId, batch!.revision, facts);
+    await context.asActor(fixture.reviewerId, client => client.query('select sutra.publish_review($1, $2, $3::jsonb)', [staged.documentId, revision, '[]']));
+    const result = await context.asActor(fixture.patientUserId, client => getDocumentRow(client, staged.documentId));
+    expect(result?.state).toBe('approved');
+    const list = await context.asActor(fixture.patientUserId, client => listDocuments(client, fixture.patientId, { limit: 100 }));
+    expect(list.items.some(item => item.documentId === staged.documentId)).toBe(true);
+    const hidden = await context.asActor(fixture.patientUserId, client => client.query('select id from sutra.review_batches where document_id = $1', [staged.documentId]));
+    expect(hidden.rows).toHaveLength(0);
+    const other = await context.asActor(fixture.otherReviewerId, client => getDocumentRow(client, staged.documentId));
+    expect(other).toBeNull();
+  });
   it('refuses publication while an entry is unreviewed', async () => {
     const prepared = await prepareDocument('2026-01-12_lab_report.pdf');
     const code = await errorCode(

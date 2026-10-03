@@ -1,3 +1,4 @@
+import { LoadMore } from '../../../components/load-more';
 import * as React from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Badge, Button, Card, Input, ScreenTitle, Table, TBody, TD, TH, THead, TR, formatDateOnly } from '@sutra/ui';
@@ -49,7 +50,7 @@ export function ClinicPatientsPage(): React.ReactElement {
         emptyDescription={
           debounced
             ? 'Clear the search or check the spelling of the identifier.'
-            : 'Patients appear here after the seed command creates them.'
+            : 'Patients linked to this clinic appear here.'
         }
         emptyAction={
           debounced ? (
@@ -65,9 +66,9 @@ export function ClinicPatientsPage(): React.ReactElement {
             <THead>
               <TR>
                 <TH>Patient</TH>
-                <TH>Identifier</TH>
-                <TH>Last record</TH>
-                <TH>Pending</TH>
+                <TH className="hidden sm:table-cell">Identifier</TH>
+                <TH className="hidden md:table-cell">Last record</TH>
+                <TH className="hidden sm:table-cell">Pending</TH>
                 <TH />
               </TR>
             </THead>
@@ -75,11 +76,11 @@ export function ClinicPatientsPage(): React.ReactElement {
               {patients.data?.items.map((patient) => (
                 <TR key={patient.patientId}>
                   <TD>
-                    <span className="font-medium text-ink">{patient.displayName}</span>
+                    <span className="font-medium text-ink">{patient.displayName}</span><div className="mt-1 text-xs text-ink-soft sm:hidden">{patient.clinicIdentifier}{patient.pendingCount > 0 ? ` · ${patient.pendingCount} awaiting review` : ''}</div>
                   </TD>
-                  <TD>{patient.clinicIdentifier}</TD>
-                  <TD>{patient.lastRecordDate ? formatDateOnly(patient.lastRecordDate) : 'None'}</TD>
-                  <TD>
+                  <TD className="hidden sm:table-cell">{patient.clinicIdentifier}</TD>
+                  <TD className="hidden md:table-cell">{patient.lastRecordDate ? formatDateOnly(patient.lastRecordDate) : 'None'}</TD>
+                  <TD className="hidden sm:table-cell">
                     {patient.pendingCount > 0 ? (
                       <Badge tone="review">{patient.pendingCount} awaiting review</Badge>
                     ) : (
@@ -100,6 +101,7 @@ export function ClinicPatientsPage(): React.ReactElement {
           </Table>
         </Card>
       </QueryState>
+      <LoadMore query={patients} />
 
       <Button variant="quiet" onClick={() => navigate('/clinic/queue')}>
         Open the review queue

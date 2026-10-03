@@ -17,7 +17,7 @@ export type SyntheticReportOptions = {
 };
 
 export async function buildSyntheticReport(options: SyntheticReportOptions): Promise<Buffer> {
-  const document = new PDFDocument({ size: 'A4', margin: 54 });
+  const document = new PDFDocument({ size: 'A4', margin: 54, info: {Title: options.filename} });
   const chunks: Buffer[] = [];
   document.on('data', (chunk: Buffer) => chunks.push(chunk));
   const done = new Promise<void>((resolve) => document.on('end', () => resolve()));

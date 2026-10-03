@@ -1,3 +1,4 @@
+import { createRequire } from 'node:module';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { createCanvas } from '@napi-rs/canvas';
@@ -194,7 +195,7 @@ async function ocrImage(
 ): Promise<{ text: string; lines: PreparedLine[] }> {
   const { createWorker } = await import('tesseract.js');
   const worker = await createWorker('eng', 1, {
-    ...(options.ocrLanguagePath ? { langPath: options.ocrLanguagePath } : {}),
+    langPath: options.ocrLanguagePath ?? (createRequire(import.meta.url)('@tesseract.js-data/eng') as {langPath: string}).langPath,
     cachePath: options.workDir,
     gzip: true,
     logger: () => undefined,

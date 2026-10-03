@@ -1,3 +1,4 @@
+import { LoadMore } from '../../components/load-more';
 import * as React from 'react';
 import { SearchIcon } from 'lucide-animated';
 import { Badge, Button, Input, Select, Spinner, useAnimatedIcon } from '@sutra/ui';
@@ -192,6 +193,7 @@ export function PatientSearch({ patientId }: { patientId: string }): React.React
                   ))}
                 </ul>
               )}
+              <LoadMore query={results} />
               {results.data ? (
                 <p className="mt-3 text-[12px] text-ink-soft">{results.data.scopeNote}</p>
               ) : null}

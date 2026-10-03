@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, test } from '@playwright/test';
 import { buildSyntheticReport, smokerunDate } from '../../scripts/lib/synthetic-report';
-import { signIn } from './helpers';
+import { signIn, switchAccount } from './helpers';
 
 /**
  * The full demonstration path: a patient uploads a synthetic report, the worker
@@ -95,5 +95,10 @@ test.describe('upload to approval', () => {
     await expect(page.getByRole('cell', { name: String(Number(hba1c)), exact: true }).first()).toBeVisible({
       timeout: 30_000,
     });
+    await switchAccount(page, 'patient');
+    await page.goto('/patient/records');
+    const report = page.locator('li').filter({hasText: filename});
+    await expect(report).toContainText('Approved');
+    await expect(report).not.toContainText('Awaiting review');
   });
 });

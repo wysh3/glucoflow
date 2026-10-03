@@ -1,7 +1,16 @@
 import * as React from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import type { DraftFactDto, FactDisposition, IssueCode, ReviewDto } from '@sutra/contracts';
-import { ISSUE_LABELS } from '@sutra/contracts';
+import type {
+  DraftFactDto,
+  FactDisposition,
+  IssueCode,
+  ReviewDto,
+} from '@sutra/contracts';
+import {
+  ISSUE_LABELS,
+  SUPPORTED_TEST_CODES,
+  testDisplayName,
+} from '@sutra/contracts';
 import {
   Alert,
   Badge,
@@ -48,20 +57,29 @@ export function ReviewPage(): React.ReactElement {
   const navigate = useNavigate();
   const review = useReview(documentId);
   const sourceUrl = useSourceUrl();
-  const [selectedFactId, setSelectedFactId] = React.useState<string | null>(null);
+  const [selectedFactId, setSelectedFactId] = React.useState<string | null>(
+    null,
+  );
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const [identityDialog, setIdentityDialog] = React.useState<'reject' | 'confirm' | null>(null);
+  const [identityDialog, setIdentityDialog] = React.useState<
+    'reject' | 'confirm' | null
+  >(null);
   const [manualOpen, setManualOpen] = React.useState(false);
-  const [dispositions, setDispositions] = React.useState<Record<string, FactDisposition>>({});
+  const [dispositions, setDispositions] = React.useState<
+    Record<string, FactDisposition>
+  >({});
   // The revision returned by the most recent accepted change. A decision and the
   // publication that follows it can otherwise race: the publication would send the
   // revision the screen was rendered with and be refused as stale.
-  const [latestRevision, setLatestRevision] = React.useState<number | null>(null);
+  const [latestRevision, setLatestRevision] = React.useState<number | null>(
+    null,
+  );
   const [tab, setTab] = React.useState<'source' | 'fields'>('fields');
 
   const data = review.data;
-  const selectedFact = data?.facts.find((fact) => fact.factId === selectedFactId) ?? null;
+  const selectedFact =
+    data?.facts.find((fact) => fact.factId === selectedFactId) ?? null;
 
   // A refetched review is authoritative: adopt its revision when it moves ahead.
   React.useEffect(() => {
@@ -75,14 +93,18 @@ export function ReviewPage(): React.ReactElement {
       setSelectedFactId(fact.factId);
       const evidence = fact.evidence[0];
       if (!data || !evidence) return;
-      await sourceUrl.mutateAsync({
-        documentId: data.documentId,
-        versionId: evidence.documentVersionId,
-        page: evidence.page,
-      });
+      try {
+        await sourceUrl.mutateAsync({documentId: data.documentId, versionId: evidence.documentVersionId, page: evidence.page});
+      } catch (caught) {setError(describeApiError(caught));}
     },
     [data, sourceUrl],
   );
+
+  const openPage = async (page: number) => {
+    if (!data) return;
+    try {await sourceUrl.mutateAsync({documentId: data.documentId, versionId: data.documentVersionId, page});}
+    catch (caught) {setError(describeApiError(caught));}
+  };
 
   React.useEffect(() => {
     if (data && !selectedFactId && data.facts.length > 0) {
@@ -103,7 +125,8 @@ export function ReviewPage(): React.ReactElement {
         },
       );
       // The response carries the new revision, so the next call never sends a stale one.
-      if (typeof updated?.revision === 'number') setLatestRevision(updated.revision);
+      if (typeof updated?.revision === 'number')
+        setLatestRevision(updated.revision);
       await queryClient.invalidateQueries({ queryKey: ['review'] });
     } catch (caught) {
       setError(describeApiError(caught));
@@ -137,17 +160,22 @@ export function ReviewPage(): React.ReactElement {
   if (!me?.capabilities.canReview) {
     return (
       <Alert tone="neutral" title="Reviewer capability required">
-        A clinician-only account can read approved records and document status. Editing and approval
-        need reviewer capability.
+        A clinician-only account can read approved records and document status.
+        Editing and approval need reviewer capability.
       </Alert>
     );
   }
 
-  const reviewedCount = data?.facts.filter((fact) => fact.reviewState === 'reviewed').length ?? 0;
+  const reviewedCount =
+    data?.facts.filter((fact) => fact.reviewState === 'reviewed').length ?? 0;
 
   return (
     <div className="space-y-4">
-      <QueryState isLoading={review.isLoading} error={review.error} onRetry={() => void review.refetch()}>
+      <QueryState
+        isLoading={review.isLoading}
+        error={review.error}
+        onRetry={() => void review.refetch()}
+      >
         {data ? (
           <>
             <div className="rounded-[12px] border border-line bg-surface px-4 py-3">
@@ -155,12 +183,18 @@ export function ReviewPage(): React.ReactElement {
                 title={data.documentName}
                 meta={
                   <span className="flex flex-wrap items-center gap-2">
-                    <span className="font-medium text-ink">{data.patient.displayName}</span>
+                    <span className="font-medium text-ink">
+                      {data.patient.displayName}
+                    </span>
                     <span>·</span>
                     <span>{data.patient.clinicIdentifier}</span>
                     <span>·</span>
                     <span>{data.patient.clinicName}</span>
-                    <Badge tone={data.extractionMode === 'fixture' ? 'review' : 'primary'}>
+                    <Badge
+                      tone={
+                        data.extractionMode === 'fixture' ? 'review' : 'primary'
+                      }
+                    >
                       {data.extractionMode === 'fixture'
                         ? 'Fixture data: rule engine'
                         : `Live extraction: ${data.extractionModel}`}
@@ -170,14 +204,19 @@ export function ReviewPage(): React.ReactElement {
                 actions={
                   <div className="flex flex-wrap items-center gap-2">
                     <Button asChild variant="quiet" size="sm">
-                      <Link to={`/clinic/patients/${data.patient.patientId}/documents`}>Back</Link>
+                      <Link
+                        to={`/clinic/patients/${data.patient.patientId}/documents`}
+                      >
+                        Back
+                      </Link>
                     </Button>
                     <Button
                       variant="primary"
                       disabled={!data.canPublish || busy}
                       onClick={() => void approve()}
                     >
-                      Approve {reviewedCount} reviewed {reviewedCount === 1 ? 'entry' : 'entries'}
+                      Approve {reviewedCount} reviewed{' '}
+                      {reviewedCount === 1 ? 'entry' : 'entries'}
                     </Button>
                   </div>
                 }
@@ -186,11 +225,15 @@ export function ReviewPage(): React.ReactElement {
 
             {data.identityState === 'mismatch' ? (
               <Alert tone="error" title="Patient details need checking">
-                The identifier printed on this source does not match {data.assignedIdentifier}. This
-                upload cannot be published. Reject the assignment and upload it under the correct
-                patient.
+                The identifier printed on this source does not match{' '}
+                {data.assignedIdentifier}. This upload cannot be published.
+                Reject the assignment and upload it under the correct patient.
                 <div className="mt-2">
-                  <Button variant="danger" size="sm" onClick={() => setIdentityDialog('reject')}>
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => setIdentityDialog('reject')}
+                  >
                     Reject wrong-patient upload
                   </Button>
                 </div>
@@ -202,7 +245,11 @@ export function ReviewPage(): React.ReactElement {
                 {data.identityReason ??
                   'No patient identifier was read from this source. A reviewer must confirm it with a reason before publication.'}
                 <div className="mt-2">
-                  <Button variant="review" size="sm" onClick={() => setIdentityDialog('confirm')}>
+                  <Button
+                    variant="review"
+                    size="sm"
+                    onClick={() => setIdentityDialog('confirm')}
+                  >
                     Confirm the patient with a reason
                   </Button>
                 </div>
@@ -232,12 +279,13 @@ export function ReviewPage(): React.ReactElement {
                 </CardHeader>
                 <CardBody className="space-y-3">
                   <p className="text-[13px] text-ink-soft">
-                    Every earlier approved entry affected by this amendment needs an explicit
-                    decision: retain it, supersede it with a named replacement, or withdraw it with a
-                    reason.
+                    Every earlier approved entry affected by this amendment
+                    needs an explicit decision: retain it, supersede it with a
+                    named replacement, or withdraw it with a reason.
                   </p>
                   {data.priorFacts.map((prior) => {
-                    const decision = dispositions[prior.factId]?.status ?? 'retained';
+                    const decision =
+                      dispositions[prior.factId]?.status ?? 'retained';
                     return (
                       <div
                         key={prior.factId}
@@ -246,7 +294,8 @@ export function ReviewPage(): React.ReactElement {
                         <div className="text-sm">
                           <span className="text-ink">{prior.label}</span>{' '}
                           <span className={numeric}>
-                            {prior.value ?? ''} {prior.date ? `· ${prior.date}` : ''}
+                            {prior.value ?? ''}{' '}
+                            {prior.date ? `· ${prior.date}` : ''}
                           </span>
                         </div>
                         <div className="flex flex-wrap items-center gap-2">
@@ -257,7 +306,8 @@ export function ReviewPage(): React.ReactElement {
                                 ...current,
                                 [prior.factId]: {
                                   factId: prior.factId,
-                                  status: event.target.value as FactDisposition['status'],
+                                  status: event.target
+                                    .value as FactDisposition['status'],
                                 },
                               }))
                             }
@@ -295,7 +345,10 @@ export function ReviewPage(): React.ReactElement {
 
             {/* Mobile: explicit Source and Fields tabs; desktop: two panes. */}
             <div className="lg:hidden">
-              <Tabs value={tab} onValueChange={(value) => setTab(value as 'source' | 'fields')}>
+              <Tabs
+                value={tab}
+                onValueChange={(value) => setTab(value as 'source' | 'fields')}
+              >
                 <TabsList>
                   <TabsTrigger value="fields">Fields</TabsTrigger>
                   <TabsTrigger value="source">Source</TabsTrigger>
@@ -315,7 +368,8 @@ export function ReviewPage(): React.ReactElement {
                     review={data}
                     sourceUrl={sourceUrl}
                     fact={selectedFact}
-                    onRequestNewUrl={() => selectedFact && void openEvidence(selectedFact)}
+                    onChangePage={page => void openPage(page)}
+                    onRequestNewUrl={() => void openPage(sourceUrl.variables?.page ?? 1)}
                   />
                 </TabsContent>
               </Tabs>
@@ -326,7 +380,8 @@ export function ReviewPage(): React.ReactElement {
                 review={data}
                 sourceUrl={sourceUrl}
                 fact={selectedFact}
-                onRequestNewUrl={() => selectedFact && void openEvidence(selectedFact)}
+                onChangePage={page => void openPage(page)}
+                onRequestNewUrl={() => void openPage(sourceUrl.variables?.page ?? 1)}
               />
               <FieldList
                 review={data}
@@ -351,10 +406,13 @@ export function ReviewPage(): React.ReactElement {
           onConfirm={async (reason) => {
             setBusy(true);
             try {
-              await api.request(`/api/v1/documents/${data.documentId}/reject-assignment`, {
-                method: 'POST',
-                body: { expectedRevision: data.revision, reason },
-              });
+              await api.request(
+                `/api/v1/documents/${data.documentId}/reject-assignment`,
+                {
+                  method: 'POST',
+                  body: { expectedRevision: data.revision, reason },
+                },
+              );
               setIdentityDialog(null);
               navigate(`/clinic/patients/${data.patient.patientId}/documents`);
             } catch (caught) {
@@ -411,14 +469,17 @@ function SourcePane({
   review,
   sourceUrl,
   fact,
+  onChangePage,
   onRequestNewUrl,
 }: {
   review: ReviewDto;
   sourceUrl: ReturnType<typeof useSourceUrl>;
   fact: DraftFactDto | null;
   onRequestNewUrl: () => void;
+  onChangePage: (page: number) => void;
 }): React.ReactElement {
-  const evidence = fact?.evidence[0] ?? null;
+  const page = sourceUrl.variables?.page ?? 1;
+  const evidence = fact?.evidence.find(item => item.page === page) ?? null;
   return (
     <Card className="lg:sticky lg:top-[76px] lg:h-[calc(100vh-120px)]">
       <CardHeader>
@@ -428,23 +489,23 @@ function SourcePane({
         </span>
       </CardHeader>
       <CardBody className="h-[calc(100%-64px)]">
-        {sourceUrl.data && evidence ? (
+        {sourceUrl.isPending ? <p className="text-sm text-ink-soft">Opening source…</p> : sourceUrl.data ? (
           <SourceViewer
             documentId={review.documentId}
-            versionId={evidence.documentVersionId}
-            page={evidence.page}
-            quote={evidence.quote}
-            bbox={evidence.bbox}
+            versionId={review.documentVersionId}
+            page={page}
+            quote={evidence?.quote}
+            bbox={evidence?.bbox}
             url={sourceUrl.data.url}
             expiresAt={sourceUrl.data.expiresAt}
-            documentName={review.documentName}
+            documentName={sourceUrl.data.documentName}
             pageCount={sourceUrl.data.pageCount}
             onRequestNewUrl={onRequestNewUrl}
+            onChangePage={onChangePage}
           />
         ) : (
           <p className="text-sm text-ink-soft">
-            Select an entry to open its evidence page. Pages marked unreadable are listed in the
-            field pane.
+            Select an entry to open its evidence page, or <Button size="sm" onClick={() => onChangePage(1)}>Open first page</Button>.
           </p>
         )}
       </CardBody>
@@ -468,31 +529,66 @@ function FieldList({
   onManual: () => void;
 }): React.ReactElement {
   const [correcting, setCorrecting] = React.useState<string | null>(null);
-  const [correction, setCorrection] = React.useState<{ value: string; unit: string; reason: string }>({
+  const [correction, setCorrection] = React.useState({
     value: '',
     unit: '',
     reason: '',
+    label: '',
+    date: '',
+    dateRaw: '',
+    dateKind: 'collection',
+    datePrecision: 'day',
+    testCode: '',
+    name: '',
+    strength: '',
+    instructions: '',
+    category: '',
+    sourceText: '',
   });
-  const [excludeReason, setExcludeReason] = React.useState<Record<string, string>>({});
-  const [pageReason, setPageReason] = React.useState<Record<number, string>>({});
+  const [excludeReason, setExcludeReason] = React.useState<
+    Record<string, string>
+  >({});
+  const [pageReason, setPageReason] = React.useState<Record<number, string>>(
+    {},
+  );
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Proposed entries</CardTitle>
         <span className="text-[12px] text-ink-soft">
-          {review.facts.filter((fact) => fact.reviewState === 'reviewed').length} reviewed ·{' '}
-          {review.facts.filter((fact) => fact.reviewState === 'excluded').length} excluded ·{' '}
-          {review.facts.filter((fact) => fact.reviewState === 'unreviewed').length} not decided
+          {
+            review.facts.filter((fact) => fact.reviewState === 'reviewed')
+              .length
+          }{' '}
+          reviewed ·{' '}
+          {
+            review.facts.filter((fact) => fact.reviewState === 'excluded')
+              .length
+          }{' '}
+          excluded ·{' '}
+          {
+            review.facts.filter((fact) => fact.reviewState === 'unreviewed')
+              .length
+          }{' '}
+          not decided
         </span>
       </CardHeader>
       <CardBody className="space-y-3">
         {review.pages.length > 0 ? (
           <div className="space-y-2">
             {review.pages
-              .filter((page) => page.coverage === 'unreadable' || page.coverage === 'excluded' || page.coverageNote)
+              .filter(
+                (page) =>
+                  page.coverage === 'unreadable' ||
+                  page.coverage === 'excluded' ||
+                  page.coverageNote,
+              )
               .map((page) => (
-                <div key={page.page} className="rounded-[10px] border border-review/30 bg-review-bg px-3 py-2">
+                <div
+                  key={page.page}
+                  className="rounded-[10px] border border-review/30 bg-review-bg px-3 py-2"
+                >
                   <p className="text-[13px] text-review">
                     {page.coverage === 'excluded'
                       ? `Page ${page.page} is excluded from the approved record.`
@@ -504,17 +600,28 @@ function FieldList({
                         placeholder="Reason for excluding this page"
                         value={pageReason[page.page] ?? ''}
                         onChange={(event) =>
-                          setPageReason((current) => ({ ...current, [page.page]: event.target.value }))
+                          setPageReason((current) => ({
+                            ...current,
+                            [page.page]: event.target.value,
+                          }))
                         }
                         className="max-w-[280px]"
                       />
                       <Button
                         size="sm"
                         variant="secondary"
-                        disabled={busy || (pageReason[page.page] ?? '').trim().length < 3}
+                        disabled={
+                          busy ||
+                          (pageReason[page.page] ?? '').trim().length < 3
+                        }
                         onClick={() =>
                           void onPatch({
-                            pageExclusions: [{ page: page.page, reason: pageReason[page.page] }],
+                            pageExclusions: [
+                              {
+                                page: page.page,
+                                reason: pageReason[page.page],
+                              },
+                            ],
                           })
                         }
                       >
@@ -546,7 +653,9 @@ function FieldList({
                 key={fact.factId}
                 className={cn(
                   'rounded-[12px] border px-4 py-3',
-                  isSelected ? 'border-primary bg-primary/5' : 'border-line bg-surface',
+                  isSelected
+                    ? 'border-primary bg-primary/5'
+                    : 'border-line bg-surface',
                 )}
               >
                 <button
@@ -573,13 +682,19 @@ function FieldList({
                             : 'review'
                       }
                     >
-                      {fact.reviewState === 'unreviewed' ? 'Awaiting review' : fact.reviewState}
+                      {fact.reviewState === 'unreviewed'
+                        ? 'Awaiting review'
+                        : fact.reviewState}
                     </Badge>
                   </div>
                   <div className="mt-1 text-[12px] text-ink-soft">
                     {fact.kind}
-                    {normalized.testCode ? ` · ${normalized.testCode}` : ' · unmapped test'}
-                    {fact.eventDate ? ` · ${fact.eventDate}` : ' · date not recorded'}
+                    {normalized.testCode
+                      ? ` · ${normalized.testCode}`
+                      : ' · unmapped test'}
+                    {fact.eventDate
+                      ? ` · ${fact.eventDate}`
+                      : ' · date not recorded'}
                     {fact.dateKind ? ` (${fact.dateKind})` : ''}
                     {fact.evidence[0] ? ` · page ${fact.evidence[0].page}` : ''}
                   </div>
@@ -589,14 +704,18 @@ function FieldList({
                   <ul className="mt-2 flex flex-wrap gap-2">
                     {fact.issues.map((issue: IssueCode) => (
                       <li key={issue}>
-                        <Badge tone="review">{ISSUE_LABELS[issue] ?? issue}</Badge>
+                        <Badge tone="review">
+                          {ISSUE_LABELS[issue] ?? issue}
+                        </Badge>
                       </li>
                     ))}
                   </ul>
                 ) : null}
 
                 {fact.reviewReason ? (
-                  <p className="mt-1 text-[12px] text-ink-soft">Reviewer note: {fact.reviewReason}</p>
+                  <p className="mt-1 text-[12px] text-ink-soft">
+                    Reviewer note: {fact.reviewReason}
+                  </p>
                 ) : null}
 
                 <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -604,7 +723,13 @@ function FieldList({
                     size="sm"
                     variant="secondary"
                     disabled={busy}
-                    onClick={() => void onPatch({ factUpdates: [{ factId: fact.factId, action: 'review' }] })}
+                    onClick={() =>
+                      void onPatch({
+                        factUpdates: [
+                          { factId: fact.factId, action: 'review' },
+                        ],
+                      })
+                    }
                   >
                     Review
                   </Button>
@@ -618,7 +743,9 @@ function FieldList({
                           {
                             factId: fact.factId,
                             action: 'exclude',
-                            reason: excludeReason[fact.factId] ?? 'Excluded by the reviewer.',
+                            reason:
+                              excludeReason[fact.factId] ??
+                              'Excluded by the reviewer.',
                           },
                         ],
                       })
@@ -635,6 +762,17 @@ function FieldList({
                         value: fact.rawValue ?? '',
                         unit: fact.rawUnit ?? '',
                         reason: '',
+                        label: fact.rawLabel,
+                        date: fact.eventDate ?? '',
+                        dateRaw: fact.dateRaw ?? '',
+                        dateKind: fact.dateKind,
+                        datePrecision: fact.datePrecision,
+                        testCode: String(normalized.testCode ?? ''),
+                        name: String(normalized.name ?? ''),
+                        strength: String(normalized.strength ?? ''),
+                        instructions: String(normalized.instructions ?? ''),
+                        category: String(normalized.category ?? ''),
+                        sourceText: String(normalized.sourceText ?? ''),
                       });
                     }}
                   >
@@ -642,42 +780,219 @@ function FieldList({
                   </Button>
                   {!normalized.unitCode && fact.kind === 'observation' ? (
                     <span className="text-[12px] text-ink-soft">
-                      This value is kept as a source-only record and is not charted.
+                      This value is kept as a source-only record and is not
+                      charted.
                     </span>
                   ) : null}
                 </div>
 
                 {correcting === fact.factId ? (
                   <div className="mt-3 space-y-2 rounded-[10px] border border-line bg-canvas px-3 py-3">
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid gap-3 sm:grid-cols-2">
                       <div>
-                        <Label htmlFor={`value-${fact.factId}`}>Value as printed</Label>
+                        <Label htmlFor={`label-${fact.factId}`}>
+                          Label as printed
+                        </Label>
                         <Input
-                          id={`value-${fact.factId}`}
-                          value={correction.value}
+                          id={`label-${fact.factId}`}
+                          value={correction.label}
                           onChange={(event) =>
-                            setCorrection((current) => ({ ...current, value: event.target.value }))
+                            setCorrection((current) => ({
+                              ...current,
+                              label: event.target.value,
+                            }))
+                          }
+                        />
+                      </div>
+                      {fact.kind === 'observation' ? (
+                        <div>
+                          <Label htmlFor={`test-${fact.factId}`}>Test</Label>
+                          <Select
+                            id={`test-${fact.factId}`}
+                            value={correction.testCode}
+                            onChange={(event) =>
+                              setCorrection((current) => ({
+                                ...current,
+                                testCode: event.target.value,
+                              }))
+                            }
+                          >
+                            <option value="">Source only / unmapped</option>
+                            {SUPPORTED_TEST_CODES.map((code) => (
+                              <option key={code} value={code}>
+                                {testDisplayName(code)}
+                              </option>
+                            ))}
+                          </Select>
+                        </div>
+                      ) : null}
+                      <div>
+                        <Label htmlFor={`date-${fact.factId}`}>
+                          Event date
+                        </Label>
+                        <Input
+                          id={`date-${fact.factId}`}
+                          type="date"
+                          value={correction.date}
+                          onChange={(event) =>
+                            setCorrection((current) => ({
+                              ...current,
+                              date: event.target.value,
+                            }))
                           }
                         />
                       </div>
                       <div>
-                        <Label htmlFor={`unit-${fact.factId}`}>Unit as printed</Label>
+                        <Label htmlFor={`date-raw-${fact.factId}`}>
+                          Date as printed
+                        </Label>
+                        <Input
+                          id={`date-raw-${fact.factId}`}
+                          value={correction.dateRaw}
+                          onChange={(event) =>
+                            setCorrection((current) => ({
+                              ...current,
+                              dateRaw: event.target.value,
+                            }))
+                          }
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`date-kind-${fact.factId}`}>
+                          Date type
+                        </Label>
+                        <Select
+                          id={`date-kind-${fact.factId}`}
+                          value={correction.dateKind}
+                          onChange={(event) =>
+                            setCorrection((current) => ({
+                              ...current,
+                              dateKind: event.target.value,
+                            }))
+                          }
+                        >
+                          {[
+                            'collection',
+                            'report',
+                            'prescription',
+                            'examination',
+                            'reported',
+                          ].map((kind) => (
+                            <option key={kind} value={kind}>
+                              {kind === 'reported'
+                                ? 'Patient reported'
+                                : kind.charAt(0).toUpperCase() + kind.slice(1)}
+                            </option>
+                          ))}
+                        </Select>
+                      </div>
+                      <div>
+                        <Label htmlFor={`date-precision-${fact.factId}`}>
+                          Date precision
+                        </Label>
+                        <Select
+                          id={`date-precision-${fact.factId}`}
+                          value={correction.datePrecision}
+                          onChange={(event) =>
+                            setCorrection((current) => ({
+                              ...current,
+                              datePrecision: event.target.value,
+                            }))
+                          }
+                        >
+                          {['day', 'month', 'year', 'unknown'].map((value) => (
+                            <option key={value} value={value}>
+                              {value}
+                            </option>
+                          ))}
+                        </Select>
+                      </div>
+                    </div>
+                    {fact.kind === 'prescription' ? (
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {(['name', 'strength', 'instructions'] as const).map(
+                          (field) => (
+                            <div key={field}>
+                              <Label htmlFor={`${field}-${fact.factId}`}>
+                                {field.charAt(0).toUpperCase() + field.slice(1)}{' '}
+                                as printed
+                              </Label>
+                              <Input
+                                id={`${field}-${fact.factId}`}
+                                value={correction[field]}
+                                onChange={(event) =>
+                                  setCorrection((current) => ({
+                                    ...current,
+                                    [field]: event.target.value,
+                                  }))
+                                }
+                              />
+                            </div>
+                          ),
+                        )}
+                      </div>
+                    ) : null}
+                    {fact.kind === 'examination' ? (
+                      <div>
+                        <Label htmlFor={`exam-text-${fact.factId}`}>
+                          Examination text as printed
+                        </Label>
+                        <Textarea
+                          id={`exam-text-${fact.factId}`}
+                          value={correction.sourceText}
+                          onChange={(event) =>
+                            setCorrection((current) => ({
+                              ...current,
+                              sourceText: event.target.value,
+                            }))
+                          }
+                        />
+                      </div>
+                    ) : null}
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label htmlFor={`value-${fact.factId}`}>
+                          Value as printed
+                        </Label>
+                        <Input
+                          id={`value-${fact.factId}`}
+                          value={correction.value}
+                          onChange={(event) =>
+                            setCorrection((current) => ({
+                              ...current,
+                              value: event.target.value,
+                            }))
+                          }
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`unit-${fact.factId}`}>
+                          Unit as printed
+                        </Label>
                         <Input
                           id={`unit-${fact.factId}`}
                           value={correction.unit}
                           onChange={(event) =>
-                            setCorrection((current) => ({ ...current, unit: event.target.value }))
+                            setCorrection((current) => ({
+                              ...current,
+                              unit: event.target.value,
+                            }))
                           }
                         />
                       </div>
                     </div>
                     <div>
-                      <Label htmlFor={`reason-${fact.factId}`}>Reason for the correction</Label>
+                      <Label htmlFor={`reason-${fact.factId}`}>
+                        Reason for the correction
+                      </Label>
                       <Input
                         id={`reason-${fact.factId}`}
                         value={correction.reason}
                         onChange={(event) =>
-                          setCorrection((current) => ({ ...current, reason: event.target.value }))
+                          setCorrection((current) => ({
+                            ...current,
+                            reason: event.target.value,
+                          }))
                         }
                       />
                     </div>
@@ -696,6 +1011,26 @@ function FieldList({
                                 correction: {
                                   rawValue: correction.value,
                                   rawUnit: correction.unit || null,
+                                  rawLabel: correction.label,
+                                  eventDate: correction.date || null,
+                                  dateRaw: correction.dateRaw || null,
+                                  dateKind: correction.dateKind,
+                                  datePrecision: correction.date
+                                    ? correction.datePrecision
+                                    : 'unknown',
+                                  ...(fact.kind === 'observation'
+                                    ? { testCode: correction.testCode || null }
+                                    : {}),
+                                  ...(fact.kind === 'prescription'
+                                    ? {
+                                        name: correction.name,
+                                        strength: correction.strength,
+                                        instructions: correction.instructions,
+                                      }
+                                    : {}),
+                                  ...(fact.kind === 'examination'
+                                    ? { sourceText: correction.sourceText }
+                                    : {}),
                                 },
                               },
                             ],
@@ -705,7 +1040,11 @@ function FieldList({
                       >
                         Save correction
                       </Button>
-                      <Button size="sm" variant="quiet" onClick={() => setCorrecting(null)}>
+                      <Button
+                        size="sm"
+                        variant="quiet"
+                        onClick={() => setCorrecting(null)}
+                      >
                         Cancel
                       </Button>
                     </div>
@@ -723,8 +1062,8 @@ function FieldList({
           Add an entry transcribed from the source
         </Button>
         <p className="text-[12px] text-ink-soft">
-          Manual transcription requires the source page, the quoted text and a reviewer reason.
-          Nothing is approved automatically.
+          Manual transcription requires the source page, the quoted text and a
+          reviewer reason. Nothing is approved automatically.
         </p>
       </CardBody>
     </Card>
@@ -819,7 +1158,9 @@ function ManualEntryDialog({
             <Select
               id="manual-kind"
               value={form.kind}
-              onChange={(event) => setForm({ ...form, kind: event.target.value })}
+              onChange={(event) =>
+                setForm({ ...form, kind: event.target.value })
+              }
             >
               <option value="observation">Measured result</option>
               <option value="prescription">Prescription</option>
@@ -831,7 +1172,9 @@ function ManualEntryDialog({
             <Input
               id="manual-label"
               value={form.rawLabel}
-              onChange={(event) => setForm({ ...form, rawLabel: event.target.value })}
+              onChange={(event) =>
+                setForm({ ...form, rawLabel: event.target.value })
+              }
             />
           </div>
           <div>
@@ -839,7 +1182,9 @@ function ManualEntryDialog({
             <Input
               id="manual-value"
               value={form.rawValue}
-              onChange={(event) => setForm({ ...form, rawValue: event.target.value })}
+              onChange={(event) =>
+                setForm({ ...form, rawValue: event.target.value })
+              }
             />
           </div>
           <div>
@@ -847,7 +1192,9 @@ function ManualEntryDialog({
             <Input
               id="manual-unit"
               value={form.rawUnit}
-              onChange={(event) => setForm({ ...form, rawUnit: event.target.value })}
+              onChange={(event) =>
+                setForm({ ...form, rawUnit: event.target.value })
+              }
             />
           </div>
           <div>
@@ -855,7 +1202,9 @@ function ManualEntryDialog({
             <Input
               id="manual-date"
               value={form.eventDate}
-              onChange={(event) => setForm({ ...form, eventDate: event.target.value })}
+              onChange={(event) =>
+                setForm({ ...form, eventDate: event.target.value })
+              }
             />
           </div>
           <div>
@@ -863,7 +1212,9 @@ function ManualEntryDialog({
             <Input
               id="manual-page"
               value={form.page}
-              onChange={(event) => setForm({ ...form, page: event.target.value })}
+              onChange={(event) =>
+                setForm({ ...form, page: event.target.value })
+              }
             />
           </div>
           <div className="col-span-2">
@@ -871,7 +1222,9 @@ function ManualEntryDialog({
             <Textarea
               id="manual-quote"
               value={form.quote}
-              onChange={(event) => setForm({ ...form, quote: event.target.value })}
+              onChange={(event) =>
+                setForm({ ...form, quote: event.target.value })
+              }
               rows={2}
             />
           </div>
@@ -880,7 +1233,9 @@ function ManualEntryDialog({
             <Input
               id="manual-reason"
               value={form.reason}
-              onChange={(event) => setForm({ ...form, reason: event.target.value })}
+              onChange={(event) =>
+                setForm({ ...form, reason: event.target.value })
+              }
             />
           </div>
         </div>
@@ -903,15 +1258,22 @@ function ManualEntryDialog({
                   rawUnit: form.rawUnit || null,
                   eventDate: form.eventDate || null,
                   dateRaw: form.eventDate || null,
-                  dateKind: form.kind === 'prescription' ? 'prescription' : form.kind === 'examination' ? 'examination' : 'collection',
+                  dateKind:
+                    form.kind === 'prescription'
+                      ? 'prescription'
+                      : form.kind === 'examination'
+                        ? 'examination'
+                        : 'collection',
                   datePrecision: form.eventDate ? 'day' : 'unknown',
                   normalized:
                     form.kind === 'observation'
                       ? {
                           testCode: form.testCode || null,
-                          numericValue: Number.isFinite(Number(form.rawValue)) && form.rawValue !== ''
-                            ? Number(form.rawValue)
-                            : null,
+                          numericValue:
+                            Number.isFinite(Number(form.rawValue)) &&
+                            form.rawValue !== ''
+                              ? Number(form.rawValue)
+                              : null,
                           unitCode: form.rawUnit || null,
                           rawNumericText: form.rawValue || null,
                           referenceRangeText: null,
@@ -919,7 +1281,11 @@ function ManualEntryDialog({
                           groupId: null,
                         }
                       : form.kind === 'prescription'
-                        ? { name: form.rawLabel, strength: form.rawValue || null, instructions: null }
+                        ? {
+                            name: form.rawLabel,
+                            strength: form.rawValue || null,
+                            instructions: null,
+                          }
                         : { category: form.rawLabel, sourceText: form.quote },
                   evidenceIds: [],
                   page: Number(form.page) || 1,

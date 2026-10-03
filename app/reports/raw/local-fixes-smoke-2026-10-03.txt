@@ -1,0 +1,28 @@
+$ tsx scripts/smoke.ts
+PASS  API is alive — GET /health/live returned 200
+PASS  Database is reachable — GET /health/ready returned 200
+PASS  Seeded accounts sign in — patient, clinic reviewer and the isolated clinic account
+PASS  Reviewer capabilities come from the database — canReview=true
+PASS  Patient account holds no reviewer capability — canReview=false
+PASS  Second clinic cannot read this patient record — GET timeline returned 404
+PASS  Patient cannot call the approval route — POST approve returned 403
+PASS  Upload session created — POST /uploads returned 201
+PASS  Bytes reached the private source bucket — signed upload returned 201
+PASS  Completion queued exactly one processing job — POST complete returned 202
+PASS  Worker processed the document — job finished in 1.0s with state succeeded
+PASS  Uploaded document appears in the clinic queue — 20 document(s) awaiting review
+PASS  Reviewer sees every proposed entry with its issues — 1 proposed entries, identity matched
+PASS  Every entry can be explicitly reviewed — review state ready, blockers none
+PASS  A stale reviewer receives a conflict — PATCH with the previous revision (0) returned 409
+PASS  Publication commits one approval revision — status 200, approval revision 24, 1 entries
+PASS  A repeated approval returns the original batch — repeat returned 200 with approval revision 24
+PASS  Export request queued — POST exports returned 202
+PASS  Export rendered — export state ready
+PASS  Export downloads as a PDF — 4810 bytes, signature %PDF-
+PASS  A second clinic cannot read the export — GET export returned 404
+PASS  Patient timeline reflects the approved update — approved HbA1c results: 20 before, 21 after (latest 2026-10-03)
+PASS  Patient sees the review status of their own uploads — 25 document(s) with their state
+PASS  Search retrieves the examination record with its source — matched examination_text
+PASS  An empty search returns no result and no verdict label — 0 results for an absent term
+
+25 of 25 checks passed.

@@ -49,6 +49,8 @@ const patientListQuery = z.object({
 });
 
 const timelineQueryParams = z.object({
+  eventsCursor: z.string().max(512).optional(),
+  notesCursor: z.string().max(512).optional(),
   testCode: z.union([z.string(), z.array(z.string())]).optional(),
   from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
@@ -125,13 +127,21 @@ export function registerPatientRoutes(app: FastifyInstance, ctx: AppContext): vo
       if (!patient) throw ApiError.notFound('That patient record is not available.');
       assertPatientAccess(actor, patient.patientId, patient.clinicId);
 
-      const offset = query.cursor ? Number(Buffer.from(query.cursor, 'base64url').toString('utf8')) : 0;
+      const decodeOffset = (cursor?: string): number => {
+        const value = cursor ? Number(Buffer.from(cursor, 'base64url').toString('utf8')) : 0;
+        if (!Number.isInteger(value) || value < 0 || value > TIMELINE_DISPLAY_BOUND) throw ApiError.validation('Invalid timeline cursor.');
+        return value;
+      };
+      const offset = decodeOffset(query.cursor);
+      const eventsOffset = decodeOffset(query.eventsCursor);
+      const notesOffset = decodeOffset(query.notesCursor);
       const page = await loadTimelinePage(
         client,
         request.params.id,
         { testCodes, from: query.from, to: query.to },
         limit,
         Number.isFinite(offset) && offset >= 0 ? offset : 0,
+        { events: eventsOffset, notes: notesOffset },
       );
       const tests = await availableTestCodes(client, request.params.id);
 
@@ -156,7 +166,11 @@ export function registerPatientRoutes(app: FastifyInstance, ctx: AppContext): vo
 
       return {
         ...timeline,
+        snapshotRevision: patient.approvalRevision,
         nextCursor,
+        eventsNextCursor: eventsOffset + page.events.length < page.eventTotal && eventsOffset + page.events.length < TIMELINE_DISPLAY_BOUND ? Buffer.from(String(eventsOffset + page.events.length)).toString('base64url') : null,
+        notesNextCursor: notesOffset + page.notes.length < page.noteTotal && notesOffset + page.notes.length < TIMELINE_DISPLAY_BOUND ? Buffer.from(String(notesOffset + page.notes.length)).toString('base64url') : null,
+        contextTruncated: page.eventTotal > TIMELINE_DISPLAY_BOUND || page.noteTotal > TIMELINE_DISPLAY_BOUND,
         availableTestCodes: tests,
         scopeNote: describeCoverageScope(timeline),
         patient: {
@@ -273,11 +287,11 @@ export function registerPatientRoutes(app: FastifyInstance, ctx: AppContext): vo
     const body = parseBody(createExportSchema, request.body);
     const key = idempotencyKey(request, true) ?? '';
     const actor = requireActor(request);
-    requireCapability(actor, 'clinic');
     const patient = await withActorTx(ctx, request, (client) =>
       getPatientSummary(client, request.params.id),
     );
     if (!patient) throw ApiError.notFound('That patient record is not available.');
+    assertPatientAccess(actor, patient.patientId, patient.clinicId);
 
     const result = (await withIdempotency({
       ctx,

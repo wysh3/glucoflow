@@ -45,6 +45,12 @@ test.describe('progression', () => {
     await expect(page.getByRole('button', { name: 'Refresh access' })).toBeVisible();
   });
 
+  test('opens original prescription evidence from the context lane', async ({page}) => {
+    const lane = page.locator('section, div').filter({has: page.getByRole('heading', {name: 'Prescriptions', exact: true})}).filter({has: page.getByRole('button', {name: 'Open source', exact: true})}).last();
+    await lane.getByRole('button', {name: 'Open source', exact: true}).first().click();
+    await expect(page.getByRole('dialog')).toContainText('Quoted source text');
+  });
+
   test('offers the summary export action', async ({ page }) => {
     await expect(page.getByRole('button', { name: 'Export visit summary' })).toBeVisible();
     await expect(page.getByText('Document availability')).toBeVisible();
@@ -59,4 +65,13 @@ test.describe('progression', () => {
     // The scope note is always shown with results.
     await expect(page.getByText('No result means no match in these records.', { exact: false })).toBeVisible();
   });
+});
+
+test('custom dates constrain progression to the selected historical range', async ({page}) => {
+  await signIn(page, 'clinic');
+  await openDemoPatient(page);
+  await page.getByLabel('Range', {exact:true}).selectOption('custom');
+  await page.getByLabel('From', {exact:true}).fill('2026-01-01');
+  await page.getByLabel('To', {exact:true}).fill('2026-07-31');
+  await expect(page.getByText('3 recorded results in approved records', {exact:false})).toBeVisible();
 });

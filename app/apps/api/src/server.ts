@@ -18,9 +18,10 @@ export async function buildServer(existingContext?: AppContext): Promise<Fastify
       level: process.env.LOG_LEVEL ?? 'info',
       // Request bodies and medical text are never logged.
       redact: ['req.headers.authorization', 'req.headers.cookie', 'req.headers["idempotency-key"]'],
+      serializers: {req: (request) => ({method: request.method, url: request.url?.split('?')[0], remoteAddress: request.ip})},
     },
     bodyLimit: UPLOAD_MAX_BYTES + 1024,
-    trustProxy: true,
+    trustProxy: false,
   });
 
   await app.register(cors, {

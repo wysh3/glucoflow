@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Alert, Button, Spinner, cn } from '@sutra/ui';
+import { openAuthorizedUrl } from '../platform/download';
 import { Capacitor } from '@capacitor/core';
 
 /**
@@ -22,6 +23,7 @@ export type SourceViewerProps = {
   documentName: string;
   pageCount: number | null;
   onRequestNewUrl: () => void;
+  onChangePage?: (page: number) => void;
 };
 
 type RenderState =
@@ -40,6 +42,7 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
   const isPdf = /\.pdf(\?|$)/i.test(props.documentName) || props.url.includes('pdf');
 
   React.useEffect(() => {
+    setExpired(false);
     const timer = window.setTimeout(
       () => setExpired(true),
       Math.max(0, new Date(props.expiresAt).getTime() - Date.now() - 2_000),
@@ -49,6 +52,8 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
 
   React.useEffect(() => {
     let cancelled = false;
+    let destroy: (() => void) | undefined;
+    let cancelRender: (() => void) | undefined;
     if (!isPdf) {
       setState({ status: 'ready', pageCount: props.pageCount ?? 1 });
       return () => {
@@ -61,7 +66,9 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
         const pdfjs = await import('pdfjs-dist');
         const worker = await import('pdfjs-dist/build/pdf.worker.min.mjs?url');
         pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
-        const document = await pdfjs.getDocument({ url: props.url, withCredentials: false }).promise;
+        const loading = pdfjs.getDocument({ url: props.url, withCredentials: false });
+        destroy = () => { void loading.destroy(); };
+        const document = await loading.promise;
         if (cancelled) return;
         const pageNumber = Math.min(Math.max(props.page, 1), document.numPages);
         const page = await document.getPage(pageNumber);
@@ -75,7 +82,9 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
         canvas.height = Math.floor(scaled.height);
         const context = canvas.getContext('2d');
         if (!context) throw new Error('canvas unavailable');
-        await page.render({ canvas, canvasContext: context, viewport: scaled }).promise;
+        const rendering = page.render({ canvas, canvasContext: context, viewport: scaled });
+        cancelRender = () => rendering.cancel();
+        await rendering.promise;
         if (cancelled) return;
         setState({ status: 'ready', pageCount: document.numPages });
       } catch (error) {
@@ -92,6 +101,8 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
     })();
     return () => {
       cancelled = true;
+      cancelRender?.();
+      destroy?.();
     };
   }, [props.url, props.page, isPdf, props.pageCount, rotation]);
 
@@ -119,6 +130,7 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
           ) : null}
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          {props.onChangePage && (props.pageCount ?? 1) > 1 ? <><Button size="sm" variant="secondary" disabled={props.page <= 1} onClick={() => props.onChangePage!(props.page - 1)}>Previous page</Button><Button size="sm" variant="secondary" disabled={props.page >= (props.pageCount ?? 1)} onClick={() => props.onChangePage!(props.page + 1)}>Next page</Button></> : null}
           {isPdf ? (
             <>
               <Button size="sm" variant="quiet" onClick={() => setRotation((value) => value - 90)}>
@@ -133,7 +145,7 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
             <Button
               size="sm"
               variant="secondary"
-              onClick={() => window.open(props.url, '_system')}
+              onClick={() => void openAuthorizedUrl(props.url)}
             >
               Open with the device viewer
             </Button>
@@ -182,7 +194,7 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
         {isPdf ? (
           <div className="relative mx-auto w-fit">
             <canvas ref={canvasRef} className="max-w-full" aria-label="Source document page" />
-            {highlight ? (
+            {highlight && rotation === 0 ? (
               <span
                 aria-hidden
                 className="pointer-events-none absolute rounded-[2px] border border-review bg-review/20"
@@ -192,7 +204,7 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
           </div>
         ) : (
           <div className="relative mx-auto w-fit">
-            <img src={props.url} alt="Source document page" className="max-w-full rounded-[8px]" />
+            <img onError={() => setState({status: 'error', message: 'The image could not be loaded. Refresh access and try again.', canUsePlatformViewer: true})} src={props.url} alt="Source document page" className="max-w-full rounded-[8px]" />
           </div>
         )}
       </div>

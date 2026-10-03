@@ -78,6 +78,10 @@ export function isPgLikeError(error: unknown): error is PgLikeError {
 
 export function toApiError(error: unknown): ApiError {
   if (error instanceof ApiError) return error;
+  if (typeof error === 'object' && error !== null && 'statusCode' in error) {
+    if (error.statusCode === 429) return ApiError.rateLimited('Too many requests. Try again shortly.');
+    if (error.statusCode === 413) return ApiError.tooLarge('The upload exceeds the allowed size.');
+  }
   if (isPgLikeError(error) && typeof error.code === 'string') {
     const mapped = PG_CODE_MAP[error.code];
     if (mapped) {

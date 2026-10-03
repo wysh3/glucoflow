@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-03T05:50:21.081Z",
+  "generatedAt": "2026-10-03T13:00:44.463Z",
   "provider": "openai-compatible",
   "mode": "live",
   "model": "stub-model-v1",
@@ -8,68 +8,24 @@
   "corpusVersion": "external-1",
   "corpusHash": "53d251483d2694682f5ca620628b8407577b788fb3006fc46342ccb6921afb4b",
   "corpusSeed": null,
-  "providerCalls": 12,
-  "reservedCostUsd": 0.02364,
+  "providerCalls": 1,
+  "reservedCostUsd": 0.00197,
   "processingMs": {
-    "total": 1750,
-    "median": 56,
+    "total": 475,
+    "median": 475,
     "perDocument": [
       {
         "key": "ext-01",
-        "ms": 453
-      },
-      {
-        "key": "ext-02",
-        "ms": 58
-      },
-      {
-        "key": "ext-03",
-        "ms": 53
-      },
-      {
-        "key": "ext-04",
-        "ms": 55
-      },
-      {
-        "key": "ext-05",
-        "ms": 56
-      },
-      {
-        "key": "ext-06",
-        "ms": 324
-      },
-      {
-        "key": "ext-07",
-        "ms": 296
-      },
-      {
-        "key": "ext-08",
-        "ms": 49
-      },
-      {
-        "key": "ext-09",
-        "ms": 48
-      },
-      {
-        "key": "ext-10",
-        "ms": 49
-      },
-      {
-        "key": "ext-11",
-        "ms": 50
-      },
-      {
-        "key": "ext-12",
-        "ms": 259
+        "ms": 475
       }
     ]
   },
   "costPerDocumentUsd": 0.00197,
-  "engineVersion": "ef5435f935f1d803",
+  "engineVersion": "d06e2f92acf3246e",
   "promptHash": "6acb44131292a56e4a3827bee27b4911",
   "providerName": "openai-compatible",
   "frozen": {
-    "engineVersion": "ef5435f935f1d803",
+    "engineVersion": "d06e2f92acf3246e",
     "promptHash": "6acb44131292a56e4a3827bee27b4911",
     "provider": "openai-compatible",
     "model": "stub-model-v1",
@@ -85,50 +41,6 @@
       {
         "key": "ext-01",
         "sha256": "ece13f581c3052b2d04234f7897285cd741ab0cfdd29c244010deb0eda1e5163"
-      },
-      {
-        "key": "ext-02",
-        "sha256": "973d916de3a845876d8f0922e5634c8b1222f148006e7b32db1bd78be4cc258d"
-      },
-      {
-        "key": "ext-03",
-        "sha256": "848414077ef3217f583a72a1badb80f4155482704290161790bedf064b9bee36"
-      },
-      {
-        "key": "ext-04",
-        "sha256": "373b6bad67572e39d97149f0bd449691ef76d5ab47d61738c8f85d86273c0742"
-      },
-      {
-        "key": "ext-05",
-        "sha256": "d408381e31e13249b6f88bfda28de9eec7cb4e35dd04769d4177845046b88d02"
-      },
-      {
-        "key": "ext-06",
-        "sha256": "30afb4889e88cf194064c7aca6c53e54104680c991efd8ac2097a76b93ccb852"
-      },
-      {
-        "key": "ext-07",
-        "sha256": "f34924371e825ad49ff9cebfb208898493aaaef771c0bf77db833ab048561928"
-      },
-      {
-        "key": "ext-08",
-        "sha256": "5d7cd24f41081e6b5b4086e2f6394c6eb7f57f1a8b31ddac480fc604b7d9f0e1"
-      },
-      {
-        "key": "ext-09",
-        "sha256": "c11c5db48cad91deb94810c00eb61f9da359a1ed8910b2f784d48c72047c1f8a"
-      },
-      {
-        "key": "ext-10",
-        "sha256": "e1ea81b38d679db612cdbcf96781b3fc09f8bfc61c5828757c2e02b611d4c888"
-      },
-      {
-        "key": "ext-11",
-        "sha256": "12f63ccf7d24a4e6bdd381b91cd9781871e0ce479b6370e9954ff6692cedd290"
-      },
-      {
-        "key": "ext-12",
-        "sha256": "e5da628556e80898e816d856a4b9ed0377c2f4219a7adb46a777c82bfcf19a3e"
       }
     ]
   },
@@ -138,41 +50,41 @@
     "ocrTolerance": true
   },
   "synthetic": true,
-  "documents": 12,
+  "documents": 1,
   "metrics": {
-    "factPrecision": 0.0833,
-    "factRecall": 0.08,
+    "factPrecision": 1,
+    "factRecall": 0.6667,
     "matchedFacts": 2,
-    "missingFacts": 23,
-    "extraFacts": 22,
+    "missingFacts": 1,
+    "extraFacts": 0,
     "eventDateExactRate": 0.5,
     "unitExactRate": 1,
-    "identityStateAccuracy": 0.9167,
-    "completeFieldAccuracy": 0.04,
-    "completeFieldAccuracyNoDate": 0.08,
+    "identityStateAccuracy": 1,
+    "completeFieldAccuracy": 0.3333,
+    "completeFieldAccuracyNoDate": 0.6667,
     "completeFieldNote": "A complete field means the patient, test, value, unit and date are all correct together.",
     "reviewerCorrections": null,
-    "issueFlagRate": 0.5
+    "issueFlagRate": null
   },
   "byVariant": {
     "machineReadable": {
-      "documents": 9,
-      "factRecall": 0.1053
+      "documents": 1,
+      "factRecall": 0.6667
     },
     "scan300dpi": {
-      "documents": 2,
-      "factRecall": 0
+      "documents": 0,
+      "factRecall": null
     },
     "scanLowres": {
-      "documents": 1,
-      "factRecall": 0
+      "documents": 0,
+      "factRecall": null
     }
   },
   "perDocument": [
     {
       "key": "ext-01",
       "filename": "ext-01-right-aligned-columns.pdf",
-      "durationMs": 453,
+      "durationMs": 475,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 1,
@@ -191,265 +103,6 @@
       ],
       "expectedIssues": [],
       "ocrUsed": false
-    },
-    {
-      "key": "ext-02",
-      "filename": "ext-02-two-column.pdf",
-      "durationMs": 58,
-      "pages": 1,
-      "ocrPages": 0,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 1,
-      "tokens": 1710,
-      "reservedCostUsd": 0.00197,
-      "sha256": "973d916de3a845876d8f0922e5634c8b1222f148006e7b32db1bd78be4cc258d",
-      "expectedFacts": 4,
-      "extractedFacts": 2,
-      "matchedFacts": 0,
-      "identityState": "matched",
-      "expectedIdentity": "matched",
-      "issues": [
-        "evidence_unmatched"
-      ],
-      "expectedIssues": [],
-      "ocrUsed": false
-    },
-    {
-      "key": "ext-03",
-      "filename": "ext-03-bordered-table.pdf",
-      "durationMs": 53,
-      "pages": 1,
-      "ocrPages": 0,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 1,
-      "tokens": 1710,
-      "reservedCostUsd": 0.00197,
-      "sha256": "848414077ef3217f583a72a1badb80f4155482704290161790bedf064b9bee36",
-      "expectedFacts": 2,
-      "extractedFacts": 2,
-      "matchedFacts": 0,
-      "identityState": "matched",
-      "expectedIdentity": "matched",
-      "issues": [
-        "evidence_unmatched"
-      ],
-      "expectedIssues": [],
-      "ocrUsed": false
-    },
-    {
-      "key": "ext-04",
-      "filename": "ext-04-prescription-table.pdf",
-      "durationMs": 55,
-      "pages": 1,
-      "ocrPages": 0,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 1,
-      "tokens": 1710,
-      "reservedCostUsd": 0.00197,
-      "sha256": "373b6bad67572e39d97149f0bd449691ef76d5ab47d61738c8f85d86273c0742",
-      "expectedFacts": 2,
-      "extractedFacts": 2,
-      "matchedFacts": 0,
-      "identityState": "matched",
-      "expectedIdentity": "matched",
-      "issues": [
-        "evidence_unmatched"
-      ],
-      "expectedIssues": [],
-      "ocrUsed": false
-    },
-    {
-      "key": "ext-05",
-      "filename": "ext-05-examination-prose.pdf",
-      "durationMs": 56,
-      "pages": 1,
-      "ocrPages": 0,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 1,
-      "tokens": 1710,
-      "reservedCostUsd": 0.00197,
-      "sha256": "d408381e31e13249b6f88bfda28de9eec7cb4e35dd04769d4177845046b88d02",
-      "expectedFacts": 1,
-      "extractedFacts": 2,
-      "matchedFacts": 0,
-      "identityState": "matched",
-      "expectedIdentity": "matched",
-      "issues": [
-        "evidence_unmatched"
-      ],
-      "expectedIssues": [],
-      "ocrUsed": false
-    },
-    {
-      "key": "ext-06",
-      "filename": "ext-06-photographed.jpg",
-      "durationMs": 324,
-      "pages": 1,
-      "ocrPages": 1,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 1,
-      "tokens": 1710,
-      "reservedCostUsd": 0.00197,
-      "sha256": "30afb4889e88cf194064c7aca6c53e54104680c991efd8ac2097a76b93ccb852",
-      "expectedFacts": 2,
-      "extractedFacts": 2,
-      "matchedFacts": 0,
-      "identityState": "matched",
-      "expectedIdentity": "matched",
-      "issues": [
-        "evidence_unmatched"
-      ],
-      "expectedIssues": [],
-      "ocrUsed": true
-    },
-    {
-      "key": "ext-07",
-      "filename": "ext-07-fax-lowres.jpg",
-      "durationMs": 296,
-      "pages": 1,
-      "ocrPages": 1,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 1,
-      "tokens": 1710,
-      "reservedCostUsd": 0.00197,
-      "sha256": "f34924371e825ad49ff9cebfb208898493aaaef771c0bf77db833ab048561928",
-      "expectedFacts": 2,
-      "extractedFacts": 2,
-      "matchedFacts": 0,
-      "identityState": "matched",
-      "expectedIdentity": "matched",
-      "issues": [
-        "evidence_unmatched"
-      ],
-      "expectedIssues": [],
-      "ocrUsed": true
-    },
-    {
-      "key": "ext-08",
-      "filename": "ext-08-identifier-in-footer.pdf",
-      "durationMs": 49,
-      "pages": 1,
-      "ocrPages": 0,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 1,
-      "tokens": 1710,
-      "reservedCostUsd": 0.00197,
-      "sha256": "5d7cd24f41081e6b5b4086e2f6394c6eb7f57f1a8b31ddac480fc604b7d9f0e1",
-      "expectedFacts": 2,
-      "extractedFacts": 2,
-      "matchedFacts": 0,
-      "identityState": "matched",
-      "expectedIdentity": "matched",
-      "issues": [
-        "evidence_unmatched"
-      ],
-      "expectedIssues": [],
-      "ocrUsed": false
-    },
-    {
-      "key": "ext-09",
-      "filename": "ext-09-no-identifier.pdf",
-      "durationMs": 48,
-      "pages": 1,
-      "ocrPages": 0,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 1,
-      "tokens": 1710,
-      "reservedCostUsd": 0.00197,
-      "sha256": "c11c5db48cad91deb94810c00eb61f9da359a1ed8910b2f784d48c72047c1f8a",
-      "expectedFacts": 1,
-      "extractedFacts": 2,
-      "matchedFacts": 0,
-      "identityState": "mismatch",
-      "expectedIdentity": "missing",
-      "issues": [
-        "identity_mismatch",
-        "evidence_unmatched"
-      ],
-      "expectedIssues": [
-        "identity_missing"
-      ],
-      "ocrUsed": false
-    },
-    {
-      "key": "ext-10",
-      "filename": "ext-10-other-patient.pdf",
-      "durationMs": 49,
-      "pages": 1,
-      "ocrPages": 0,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 1,
-      "tokens": 1710,
-      "reservedCostUsd": 0.00197,
-      "sha256": "e1ea81b38d679db612cdbcf96781b3fc09f8bfc61c5828757c2e02b611d4c888",
-      "expectedFacts": 1,
-      "extractedFacts": 2,
-      "matchedFacts": 0,
-      "identityState": "mismatch",
-      "expectedIdentity": "mismatch",
-      "issues": [
-        "identity_mismatch",
-        "evidence_unmatched"
-      ],
-      "expectedIssues": [
-        "identity_mismatch"
-      ],
-      "ocrUsed": false
-    },
-    {
-      "key": "ext-11",
-      "filename": "ext-11-multiple-dates.pdf",
-      "durationMs": 50,
-      "pages": 1,
-      "ocrPages": 0,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 1,
-      "tokens": 1710,
-      "reservedCostUsd": 0.00197,
-      "sha256": "12f63ccf7d24a4e6bdd381b91cd9781871e0ce479b6370e9954ff6692cedd290",
-      "expectedFacts": 3,
-      "extractedFacts": 2,
-      "matchedFacts": 0,
-      "identityState": "matched",
-      "expectedIdentity": "matched",
-      "issues": [
-        "evidence_unmatched"
-      ],
-      "expectedIssues": [],
-      "ocrUsed": false
-    },
-    {
-      "key": "ext-12",
-      "filename": "ext-12-handwritten-annotation.jpg",
-      "durationMs": 259,
-      "pages": 1,
-      "ocrPages": 1,
-      "completeFields": 0,
-      "completeFieldsNoDate": 0,
-      "providerCalls": 1,
-      "tokens": 1710,
-      "reservedCostUsd": 0.00197,
-      "sha256": "e5da628556e80898e816d856a4b9ed0377c2f4219a7adb46a777c82bfcf19a3e",
-      "expectedFacts": 2,
-      "extractedFacts": 2,
-      "matchedFacts": 0,
-      "identityState": "matched",
-      "expectedIdentity": "matched",
-      "issues": [
-        "evidence_unmatched"
-      ],
-      "expectedIssues": [],
-      "ocrUsed": true
     }
   ]
 }

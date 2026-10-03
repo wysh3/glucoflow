@@ -12,6 +12,7 @@ import {
   createReviewRevision,
   documentVersions,
   getDocumentRow,
+  getDocumentSource,
   getJobDto,
   getReviewDto,
   linkAmendment,
@@ -169,7 +170,8 @@ export function registerDocumentRoutes(app: FastifyInstance, ctx: AppContext): v
     async (request) => {
       const actor = requireActor(request);
       const versionId = request.query.versionId;
-      const page = request.query.page ? Number(request.query.page) : null;
+      const page = request.query.page ? Number(request.query.page) : 1;
+      if (!Number.isInteger(page) || page < 1 || page > 10) throw ApiError.validation('Choose a valid source page.');
       return withActorTx(ctx, request, async (client) => {
         const document = await getDocumentRow(client, request.params.id);
         if (!document) throw ApiError.notFound('That document is not available.');
@@ -178,28 +180,19 @@ export function registerDocumentRoutes(app: FastifyInstance, ctx: AppContext): v
           ? versions.find((item) => item.documentVersionId === versionId)
           : versions.find((item) => item.isCurrent);
         if (!version) throw ApiError.notFound('That document version is not available.');
-        const versionRow = await client.query<{ object_path: string; source_kind: string; page_count: number | null }>(
-          `select item ->> 'objectPath' as object_path, v.source_kind, v.page_count
-             from sutra.document_versions v
-             cross join lateral jsonb_array_elements(v.source_manifest_json -> 'items') as item
-            where v.id = $1
-            order by (item ->> 'index')::int
-            limit 1`,
-          [version.documentVersionId],
-        );
-        const row = versionRow.rows[0];
+        const row = await getDocumentSource(client, version.documentVersionId, page);
         if (!row) throw ApiError.notFound('That document version has no source object.');
         const url = await ctx.storage.createDownloadUrl(
           ctx.config.STORAGE_BUCKET_SOURCES,
-          row.object_path,
+          row.objectPath,
           DOWNLOAD_URL_SECONDS,
         );
         return {
           documentId: request.params.id,
           documentVersionId: version.documentVersionId,
-          documentName: document.filename,
+          documentName: row.filename,
           page,
-          pageCount: row.page_count,
+          pageCount: row.pageCount,
           url,
           expiresAt: new Date(Date.now() + DOWNLOAD_URL_SECONDS * 1000).toISOString(),
           authorizedActor: actor.profile.userId,

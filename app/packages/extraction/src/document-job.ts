@@ -95,7 +95,7 @@ async function loadContext(client: DbClient, job: LeasedJob): Promise<DocumentCo
     patientName: row.patient_name,
     patientIdentifier: row.clinic_identifier,
     storedChecksum: row.sha256,
-    items: row.items ?? [],
+    items: [...(row.items ?? [])].sort((a, b) => ((a as typeof a & {index?: number}).index ?? 0) - ((b as typeof b & {index?: number}).index ?? 0)),
     runNumber: job.runNumber,
   };
 }
@@ -207,6 +207,10 @@ export async function processDocumentJob(deps: DocumentJobDeps, job: LeasedJob):
     return;
   }
   const bytes = await deps.storage.getObject(deps.sourceBucket, primary.objectPath);
+  const sources = [];
+  for (const item of context.items) {
+    sources.push({ bytes: item === primary ? bytes : await deps.storage.getObject(deps.sourceBucket, item.objectPath), filename: item.filename, contentType: item.contentType });
+  }
   const workDir = join(deps.tmpRoot, job.jobId);
   await mkdir(workDir, { recursive: true });
 
@@ -252,14 +256,15 @@ export async function processDocumentJob(deps: DocumentJobDeps, job: LeasedJob):
   );
 
   const budget: ProviderBudget = {
-    async reserve() {
+    async reserve(request) {
       return deps.tx(async (client) => {
-        const reserved = await reserveProviderCall(client, runId, deps.maxCalls, 0);
+        if (!request) return {allowed: false, ordinal: null, reason: 'A bounded request reservation is required.'};
+        const reserved = await reserveProviderCall(client, runId, deps.maxCalls, request.costUsd, {tokens: request.tokens, maxTokens: request.maxTokens, maxCostUsd: request.maxCostUsd});
         if (!reserved) {
           return {
             allowed: false,
             ordinal: null,
-            reason: 'the model call limit for this document is reached',
+            reason: 'The document call, time, dollar or token budget is exhausted.',
           };
         }
         return { allowed: true, ordinal: reserved.ordinal };
@@ -271,6 +276,8 @@ export async function processDocumentJob(deps: DocumentJobDeps, job: LeasedJob):
           state: usage.state,
           actualCostUsd: usage.costUsd,
           tokenCount: usage.tokens,
+          inputTokens: usage.inputTokens,
+          outputTokens: usage.outputTokens,
           errorCategory: null,
         }),
       );
@@ -295,6 +302,7 @@ export async function processDocumentJob(deps: DocumentJobDeps, job: LeasedJob):
         bytes,
         filename: primary.filename,
         contentType: primary.contentType,
+        sources,
         documentVersionId: context.versionId,
         patientIdentifier: context.patientIdentifier,
         patientName: context.patientName,

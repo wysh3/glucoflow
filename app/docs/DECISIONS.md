@@ -164,3 +164,16 @@ recorded with its consequence.
 | Physical Android device pass | Not done; emulator pass recorded |
 | APNs/FCM push | Out of scope for this milestone, as the plan states |
 | Live ABHA/ABDM | Not implemented, and not claimed in the interface |
+
+## Local completion decisions — 3 October 2026
+
+1. Retain Vite/React, Fastify, PostgreSQL and Capacitor; deployment is deferred by the user.
+2. Use the patient-release marker for patient document state instead of expanding review/staff visibility. Historical fact lookup checks current actor authorization and release.
+3. Assemble separate bounded timeline cursors and check publication revisions before displaying progression. Preserve every unit variant.
+4. Apply corrections to normalization and preserve explicit nulls. Published correction/amendment entry points require reasons and existing revision checks.
+5. Reserve cost/tokens before dispatch; store actual input/output transport usage separately. Unknown usage keeps a conservative reservation. Whole-evaluation spend uses MAX_RUN_COST_USD.
+6. Ship English OCR data as a pinned package. Use the Capacitor Browser plugin for native source URLs.
+7. One managed Supabase session owns refresh and sign-out; hosted/device lifecycle verification remains open.
+8. Keep fixture extraction explicitly labelled; the external-layout regression remains 0.24 complete-field accuracy. A live model and fresh independent holdout are required before any improved accuracy claim.
+
+Evidence: ../reports/local-fixes-2026-10-03.md.

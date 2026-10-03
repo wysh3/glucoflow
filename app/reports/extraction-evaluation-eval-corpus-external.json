@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-03T11:16:32.525Z",
+  "generatedAt": "2026-10-03T13:01:22.557Z",
   "provider": "fixture",
   "mode": "fixture",
   "model": "deterministic-rules-v1",
@@ -11,65 +11,65 @@
   "providerCalls": 0,
   "reservedCostUsd": 0,
   "processingMs": {
-    "total": 1793,
-    "median": 54,
+    "total": 1907,
+    "median": 53,
     "perDocument": [
       {
         "key": "ext-01",
-        "ms": 461
+        "ms": 454
       },
       {
         "key": "ext-02",
-        "ms": 54
+        "ms": 55
       },
       {
         "key": "ext-03",
-        "ms": 50
+        "ms": 52
       },
       {
         "key": "ext-04",
-        "ms": 54
+        "ms": 50
       },
       {
         "key": "ext-05",
-        "ms": 63
+        "ms": 53
       },
       {
         "key": "ext-06",
-        "ms": 350
+        "ms": 398
       },
       {
         "key": "ext-07",
-        "ms": 310
+        "ms": 346
       },
       {
         "key": "ext-08",
-        "ms": 48
-      },
-      {
-        "key": "ext-09",
-        "ms": 45
-      },
-      {
-        "key": "ext-10",
-        "ms": 46
-      },
-      {
-        "key": "ext-11",
         "ms": 47
       },
       {
+        "key": "ext-09",
+        "ms": 46
+      },
+      {
+        "key": "ext-10",
+        "ms": 45
+      },
+      {
+        "key": "ext-11",
+        "ms": 48
+      },
+      {
         "key": "ext-12",
-        "ms": 265
+        "ms": 313
       }
     ]
   },
   "costPerDocumentUsd": 0,
-  "engineVersion": "ef5435f935f1d803",
+  "engineVersion": "d06e2f92acf3246e",
   "promptHash": "c6ac68752ef48ec0b145dc8084011f28",
   "providerName": "fixture",
   "frozen": {
-    "engineVersion": "ef5435f935f1d803",
+    "engineVersion": "d06e2f92acf3246e",
     "promptHash": "c6ac68752ef48ec0b145dc8084011f28",
     "provider": "fixture",
     "model": "deterministic-rules-v1",
@@ -172,7 +172,7 @@
     {
       "key": "ext-01",
       "filename": "ext-01-right-aligned-columns.pdf",
-      "durationMs": 461,
+      "durationMs": 454,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 1,
@@ -193,7 +193,7 @@
     {
       "key": "ext-02",
       "filename": "ext-02-two-column.pdf",
-      "durationMs": 54,
+      "durationMs": 55,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 2,
@@ -214,7 +214,7 @@
     {
       "key": "ext-03",
       "filename": "ext-03-bordered-table.pdf",
-      "durationMs": 50,
+      "durationMs": 52,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 2,
@@ -235,7 +235,7 @@
     {
       "key": "ext-04",
       "filename": "ext-04-prescription-table.pdf",
-      "durationMs": 54,
+      "durationMs": 50,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 0,
@@ -258,7 +258,7 @@
     {
       "key": "ext-05",
       "filename": "ext-05-examination-prose.pdf",
-      "durationMs": 63,
+      "durationMs": 53,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 0,
@@ -281,7 +281,7 @@
     {
       "key": "ext-06",
       "filename": "ext-06-photographed.jpg",
-      "durationMs": 350,
+      "durationMs": 398,
       "pages": 1,
       "ocrPages": 1,
       "completeFields": 0,
@@ -305,7 +305,7 @@
     {
       "key": "ext-07",
       "filename": "ext-07-fax-lowres.jpg",
-      "durationMs": 310,
+      "durationMs": 346,
       "pages": 1,
       "ocrPages": 1,
       "completeFields": 2,
@@ -328,7 +328,7 @@
     {
       "key": "ext-08",
       "filename": "ext-08-identifier-in-footer.pdf",
-      "durationMs": 48,
+      "durationMs": 47,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 2,
@@ -351,7 +351,7 @@
     {
       "key": "ext-09",
       "filename": "ext-09-no-identifier.pdf",
-      "durationMs": 45,
+      "durationMs": 46,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 1,
@@ -376,7 +376,7 @@
     {
       "key": "ext-10",
       "filename": "ext-10-other-patient.pdf",
-      "durationMs": 46,
+      "durationMs": 45,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 1,
@@ -401,7 +401,7 @@
     {
       "key": "ext-11",
       "filename": "ext-11-multiple-dates.pdf",
-      "durationMs": 47,
+      "durationMs": 48,
       "pages": 1,
       "ocrPages": 0,
       "completeFields": 0,
@@ -424,7 +424,7 @@
     {
       "key": "ext-12",
       "filename": "ext-12-handwritten-annotation.jpg",
-      "durationMs": 265,
+      "durationMs": 313,
       "pages": 1,
       "ocrPages": 1,
       "completeFields": 1,

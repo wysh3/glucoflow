@@ -57,6 +57,7 @@ export async function loadActorContexts(client: DbClient, userId: string): Promi
     contexts.push({
       kind: 'clinic',
       clinicId: row.clinic_id,
+      clinicName: (await clinicName(client, row.clinic_id)) ?? undefined,
       reviewer: row.reviewer,
       clinician: row.clinician,
     });
@@ -66,7 +67,7 @@ export async function loadActorContexts(client: DbClient, userId: string): Promi
     }
   }
   for (const row of links.rows) {
-    contexts.push({ kind: 'patient', clinicId: row.clinic_id, patientId: row.patient_id });
+    contexts.push({ kind: 'patient', clinicId: row.clinic_id, patientId: row.patient_id, clinicName: (await clinicName(client, row.clinic_id)) ?? undefined });
   }
   return contexts;
 }

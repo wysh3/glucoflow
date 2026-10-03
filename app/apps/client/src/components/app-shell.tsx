@@ -76,12 +76,12 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
     { to: '/patient/add-report', label: 'Add report', icon: SearchIcon },
     { to: '/patient/visit-notes', label: 'Visit notes', icon: HistoryIcon },
   ];
-  const links = isClinicView ? clinicLinks : isPatientView ? patientLinks : [];
+  const links = isClinicView ? clinicLinks : isPatientView ? patientLinks : clinicContexts.length > 0 ? clinicLinks : patientContexts.length > 0 ? patientLinks : [];
 
   return (
     <div className="min-h-screen bg-canvas">
       <div className="mx-auto flex w-full max-w-[1440px] flex-col lg:flex-row">
-        <aside className="safe-top hidden w-[216px] shrink-0 border-r border-line bg-surface px-4 py-6 lg:block">
+        <aside className="safe-top sticky top-0 hidden h-screen w-[216px] shrink-0 border-r border-line bg-surface/80 px-4 py-6 lg:block">
           <div className="mb-6 px-2">
             <p className="text-[15px] font-semibold text-ink">Sutra</p>
             <p className="mt-1 text-[12px] text-ink-soft">
@@ -141,7 +141,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
             </div>
           ) : null}
 
-          <main className="flex-1 px-4 pb-24 pt-4 lg:px-6 lg:pb-10">{children}</main>
+          <main className="flex-1 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-6">{children}</main>
         </div>
       </div>
 

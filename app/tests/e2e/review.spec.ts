@@ -17,7 +17,7 @@ test.describe('review', () => {
     }
   });
 
-  test('an approved document cannot be published again from the review screen', async ({ page }) => {
+  test('an approved document offers a reasoned correction rather than another initial review', async ({ page }) => {
     await signIn(page, 'clinic');
     await page.goto('/clinic/queue?state=all');
     // Open the first patient document list instead: the review route needs a document id.
@@ -25,7 +25,13 @@ test.describe('review', () => {
     await page.getByRole('link', { name: 'Open patient' }).first().click();
     await page.getByRole('link', { name: 'Documents' }).click();
     await expect(page.getByRole('heading', { name: 'Documents' })).toBeVisible();
-    await expect(page.getByText('Signed upload links are object-specific', { exact: false })).toBeVisible();
+    const approved = page.locator('[data-document-row]:visible').filter({hasText: 'Approved'}).first();
+    await expect(approved.getByRole('link', {name: 'Review', exact: true})).toHaveCount(0);
+    await approved.getByRole('button', {name: 'Correct entries'}).click();
+    await expect(page.getByRole('button', {name: 'Open correction review'})).toBeDisabled();
+    await page.getByLabel('Reason for correction').fill('Checked the source report');
+    await expect(page.getByRole('button', {name: 'Open correction review'})).toBeEnabled();
+    await page.getByRole('button', {name: 'Cancel', exact: true}).click();
   });
 
   test('the reviewer queue shows the retry control only for a failed run', async ({ page }) => {
@@ -42,13 +48,12 @@ test.describe('review', () => {
   });
 
   test('review screen keeps patient identity and the fixture label visible', async ({ page }) => {
-    await signIn(page, 'clinic');
-    await page.goto('/clinic/queue?state=all');
+    await uploadSyntheticReport(page);
+    await switchAccount(page, 'clinic');
+    await page.goto('/clinic/queue?state=awaiting_review');
     // Both queue layouts are in the DOM; only the visible one can be clicked.
     const reviewLinks = page.locator('a[href^="/clinic/review/"]:visible');
-    if ((await reviewLinks.count()) === 0) {
-      test.skip(true, 'No document is available for review in this environment.');
-    }
+    await expect(reviewLinks.first()).toBeVisible();
     await reviewLinks.first().click();
     await page.waitForURL(/\/clinic\/review\//);
     await expect(page.getByText('P0482', { exact: false }).first()).toBeVisible();
@@ -90,13 +95,12 @@ test.describe('review on a narrow screen', () => {
   });
 
   test('offers explicit Source and Fields tabs', async ({ page }) => {
-    await signIn(page, 'clinic');
-    await page.goto('/clinic/queue?state=all');
+    await uploadSyntheticReport(page);
+    await switchAccount(page, 'clinic');
+    await page.goto('/clinic/queue?state=awaiting_review');
     // Both layouts are in the DOM; only the visible one can be clicked at this width.
     const reviewLinks = page.locator('a[href^="/clinic/review/"]:visible');
-    if ((await reviewLinks.count()) === 0) {
-      test.skip(true, 'No document is available for review in this environment.');
-    }
+    await expect(reviewLinks.first()).toBeVisible();
     await reviewLinks.first().click();
     await page.waitForURL(/\/clinic\/review\//);
     await expect(page.getByRole('tab', { name: 'Fields' })).toBeVisible();
@@ -106,4 +110,26 @@ test.describe('review on a narrow screen', () => {
     await page.getByRole('tab', { name: 'Fields' }).click();
     await expect(page.getByText('Proposed entries').first()).toBeVisible();
   });
+});
+
+test('two uploaded photos remain separately accessible during review', async ({page}) => {
+  await signIn(page, 'patient');
+  await page.goto('/patient/add-report');
+  const upload = page.getByRole('dialog', {name: 'Upload a report'});
+  await upload.locator('input[type="file"]').setInputFiles([
+    'fixtures/synthetic/photos/2026-09-14_lab_report_photo_a.jpg',
+    'fixtures/synthetic/photos/2026-09-14_lab_report_photo_b.jpg',
+  ]);
+  await upload.getByRole('button', {name: 'Upload 2 pages', exact: true}).click();
+  await expect(upload.getByText('Upload complete', {exact: false}).first()).toBeVisible({timeout:60000});
+  await switchAccount(page, 'clinic');
+  await page.goto('/clinic/queue?state=awaiting_review');
+  const item = page.locator('tr, div[class*="lg:hidden"] > div').filter({has: page.getByText('2026-09-14_lab_report_photo_a.jpg', {exact:true})}).locator('visible=true');
+  await expect(item).toBeVisible();
+  await item.locator('a[href^="/clinic/review/"]').click();
+  if (page.viewportSize()!.width < 1024) await page.getByRole('tab', {name:'Source', exact:true}).click();
+  await expect(page.getByRole('button', {name:'Next page', exact:true}).locator('visible=true')).toBeVisible();
+  await page.getByRole('button', {name:'Next page', exact:true}).locator('visible=true').click();
+  await expect(page.getByText('2026-09-14_lab_report_photo_b.jpg', {exact:true}).locator('visible=true')).toBeVisible();
+  await expect(page.getByRole('img', {name:'Source document page'}).locator('visible=true')).toBeVisible();
 });

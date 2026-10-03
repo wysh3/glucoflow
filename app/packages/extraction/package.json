@@ -9,10 +9,11 @@
   "dependencies": {
     "@napi-rs/canvas": "1.0.10",
     "@sutra/contracts": "workspace:*",
+    "@sutra/data": "workspace:*",
     "@sutra/domain": "workspace:*",
+    "@tesseract.js-data/eng": "1.0.0",
     "pdfjs-dist": "6.3.289",
     "sharp": "0.35.5",
-    "tesseract.js": "7.0.0",
-    "@sutra/data": "workspace:*"
+    "tesseract.js": "7.0.0"
   }
 }

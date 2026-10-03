@@ -1,3 +1,4 @@
+import { LoadMore } from '../../../components/load-more';
 import * as React from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import type { PatientSummaryDto } from '@sutra/contracts';
@@ -73,6 +74,7 @@ export function HistoryPage(): React.ReactElement {
           </Table>
         </Card>
       </QueryState>
+      <LoadMore query={history} />
       <p className="text-[12px] text-ink-soft">
         Patient accounts never see this clinic-only view. {patient.displayName}&apos;s record history
         is retained with each approved revision.

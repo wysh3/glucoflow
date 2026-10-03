@@ -41,11 +41,13 @@ export type NoteCategory = z.infer<typeof noteCategorySchema>;
 export const patientContextSchema = z.object({
   kind: z.literal('patient'),
   clinicId: uuidSchema,
+  clinicName: z.string().optional(),
   patientId: uuidSchema,
 });
 export const clinicContextSchema = z.object({
   kind: z.literal('clinic'),
   clinicId: uuidSchema,
+  clinicName: z.string().optional(),
   reviewer: z.boolean(),
   clinician: z.boolean(),
 });

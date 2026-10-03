@@ -1,5 +1,6 @@
+import { LoadMore } from '../../../components/load-more';
 import * as React from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useSearchParams } from 'react-router-dom';
 import {
   Badge,
   Button,
@@ -100,7 +101,11 @@ export function ClinicQueuePage(): React.ReactElement {
   const { me } = useSession();
   const api = useApi();
   const queryClient = useQueryClient();
-  const [filter, setFilter] = React.useState<'all' | 'processing' | 'awaiting_review' | 'review_in_progress' | 'failed'>('all');
+  const [params, setParams] = useSearchParams();
+  type Filter = 'all' | 'processing' | 'awaiting_review' | 'review_in_progress' | 'failed';
+  const value = params.get('state');
+  const filter: Filter = ['all','processing','awaiting_review','review_in_progress','failed'].includes(value ?? '') ? value as Filter : 'all';
+  const setFilter = (next: Filter) => setParams({state: next}, {replace: true});
   const [retryError, setRetryError] = React.useState<string | null>(null);
   const queue = useQueue(filter);
 
@@ -242,6 +247,7 @@ export function ClinicQueuePage(): React.ReactElement {
           ))}
         </div>
       </QueryState>
+      <LoadMore query={queue} />
       <p className="text-[12px] text-ink-soft">
         {queue.data ? `${queue.data.items.length} row(s) shown · ${formatBytes(0).replace('0 B', '')}` : ''}
         Queue progress comes from committed server stages, polled while this screen is visible.

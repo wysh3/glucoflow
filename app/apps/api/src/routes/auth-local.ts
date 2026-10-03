@@ -19,7 +19,7 @@ const signInSchema = z.object({
  * (app.auth_purpose = 'signin').
  */
 export function registerLocalAuthRoutes(app: FastifyInstance, ctx: AppContext): void {
-  app.post('/api/v1/auth/local-sign-in', async (request, reply) => {
+  app.post('/api/v1/auth/local-sign-in', {config: {rateLimit: {max: 60, timeWindow: '1 minute'}}}, async (request, reply) => {
     if (ctx.config.AUTH_MODE !== 'local' || ctx.config.APP_ENV === 'production') {
       reply.code(501);
       return {

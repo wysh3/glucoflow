@@ -1,4 +1,5 @@
 import * as React from 'react';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import type { MeResponse } from '@sutra/contracts';
 import {
@@ -8,7 +9,10 @@ import {
   type ApiClient,
   type PublicConfig,
 } from '../lib/api';
-import { createSessionStorage, type SessionStorage } from '../platform/session-storage';
+import {
+  createSessionStorage,
+  type SessionStorage,
+} from '../platform/session-storage';
 
 /**
  * Session state.
@@ -20,8 +24,10 @@ import { createSessionStorage, type SessionStorage } from '../platform/session-s
  */
 
 const TOKEN_KEY = 'sutra.access-token';
+const IDENTITY_KEY = 'sutra.supabase-session';
 
-export type SessionStatus = 'loading' | 'signed-out' | 'signed-in' | 'unavailable';
+export type SessionStatus =
+  'loading' | 'signed-out' | 'signed-in' | 'unavailable';
 
 export type SessionContextValue = {
   status: SessionStatus;
@@ -40,7 +46,8 @@ const SessionContext = React.createContext<SessionContextValue | null>(null);
 
 export function useSession(): SessionContextValue {
   const context = React.useContext(SessionContext);
-  if (!context) throw new Error('useSession must be used inside SessionProvider');
+  if (!context)
+    throw new Error('useSession must be used inside SessionProvider');
   return context;
 }
 
@@ -66,8 +73,12 @@ export function SessionProvider({
   const [error, setError] = React.useState<string | null>(null);
   const storageRef = React.useRef<SessionStorage | null>(null);
   const [storageDescription, setStorageDescription] = React.useState('');
+  const supabaseRef = React.useRef<SupabaseClient | null>(null);
 
   const clearSession = React.useCallback(() => {
+    void storageRef.current?.remove(TOKEN_KEY);
+    void storageRef.current?.remove(IDENTITY_KEY);
+    supabaseRef.current?.auth.stopAutoRefresh();
     tokenRef.current = null;
     setToken(null);
     setMe(null);
@@ -81,7 +92,10 @@ export function SessionProvider({
       createApiClient({
         baseUrl: apiBaseUrl,
         getToken: () => tokenRef.current,
-        onUnauthorized: () => clearSession(),
+        onUnauthorized: () => {
+          clearSession();
+          void supabaseRef.current?.auth.signOut({ scope: 'local' });
+        },
       }),
     [apiBaseUrl, clearSession],
   );
@@ -96,6 +110,7 @@ export function SessionProvider({
 
   React.useEffect(() => {
     let cancelled = false;
+    let unsubscribe: (() => void) | undefined;
     void (async () => {
       const storage = await createSessionStorage();
       storageRef.current = storage;
@@ -105,10 +120,65 @@ export function SessionProvider({
         const publicConfig = await fetchPublicConfig(apiBaseUrl);
         if (cancelled) return;
         setConfig(publicConfig);
+        if (publicConfig.authMode === 'supabase') {
+          const { createClient } = await import('@supabase/supabase-js');
+          const projectUrl =
+            publicConfig.supabaseUrl ?? import.meta.env.VITE_SUPABASE_URL;
+          if (!projectUrl) throw new Error('Supabase project URL is missing.');
+          const identity = createClient(
+            projectUrl,
+            import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '',
+            {
+              auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: false,
+                storageKey: IDENTITY_KEY,
+                storage: {
+                  getItem: storage.get,
+                  setItem: storage.set,
+                  removeItem: storage.remove,
+                },
+              },
+            },
+          );
+          if (cancelled) {
+            identity.auth.stopAutoRefresh();
+            return;
+          }
+          supabaseRef.current = identity;
+          const { data, error: identityError } =
+            await identity.auth.getSession();
+          if (identityError) throw identityError;
+          tokenRef.current = data.session?.access_token ?? null;
+          setToken(tokenRef.current);
+          if (data.session) await loadMe();
+          else setStatus('signed-out');
+          const { data: listener } = identity.auth.onAuthStateChange(
+            (event, session) => {
+              if (cancelled) return;
+              tokenRef.current = session?.access_token ?? null;
+              setToken(tokenRef.current);
+              if (event === 'SIGNED_OUT') clearSession();
+              // Keep SDK callbacks synchronous; requests run outside its auth lock.
+              if (session && event === 'TOKEN_REFRESHED')
+                queueMicrotask(() => {
+                  void loadMe().catch(() => clearSession());
+                });
+            },
+          );
+          unsubscribe = () => {
+            listener.subscription.unsubscribe();
+            identity.auth.stopAutoRefresh();
+          };
+          return;
+        }
       } catch {
         if (cancelled) return;
         setStatus('unavailable');
-        setError('The service is not reachable. Check that the API is running.');
+        setError(
+          'The service is not reachable. Check that the API is running.',
+        );
         return;
       }
       const stored = await storage.get(TOKEN_KEY);
@@ -139,8 +209,34 @@ export function SessionProvider({
     })();
     return () => {
       cancelled = true;
+      unsubscribe?.();
     };
-  }, [apiBaseUrl]);
+  }, [apiBaseUrl, clearSession, loadMe]);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    let remove: (() => void) | undefined;
+    void (async () => {
+      const { Capacitor } = await import('@capacitor/core');
+      if (!Capacitor.isNativePlatform()) return;
+      const { App } = await import('@capacitor/app');
+      const handle = await App.addListener('appStateChange', ({ isActive }) => {
+        const identity = supabaseRef.current;
+        if (!identity) return;
+        if (isActive && tokenRef.current) identity.auth.startAutoRefresh();
+        else identity.auth.stopAutoRefresh();
+      });
+      if (cancelled) await handle.remove();
+      else
+        remove = () => {
+          void handle.remove();
+        };
+    })();
+    return () => {
+      cancelled = true;
+      remove?.();
+    };
+  }, []);
 
   const signIn = React.useCallback(
     async (email: string, password: string) => {
@@ -149,21 +245,25 @@ export function SessionProvider({
       storageRef.current = storage;
 
       if (config?.authMode === 'supabase') {
-        const supabaseUrl = config.supabaseUrl ?? import.meta.env.VITE_SUPABASE_URL;
+        const supabaseUrl =
+          config.supabaseUrl ?? import.meta.env.VITE_SUPABASE_URL;
         if (!supabaseUrl) {
           throw new Error('This build has no Supabase project URL configured.');
         }
-        const { createClient } = await import('@supabase/supabase-js');
-        const client = createClient(supabaseUrl, import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '', {
-          auth: { persistSession: false, autoRefreshToken: false },
-        });
-        const { data, error: signInError } = await client.auth.signInWithPassword({ email, password });
+        const client = supabaseRef.current;
+        if (!client)
+          throw new Error('Identity service is still loading. Try again.');
+        const { data, error: signInError } =
+          await client.auth.signInWithPassword({ email, password });
         if (signInError || !data.session) {
-          throw new Error('That email address and password combination was not accepted.');
+          throw new Error(
+            'That email address and password combination was not accepted.',
+          );
         }
+        client.auth.startAutoRefresh();
         tokenRef.current = data.session.access_token;
         setToken(data.session.access_token);
-        await storage.set(TOKEN_KEY, data.session.access_token);
+
         await loadMe();
         return;
       }
@@ -174,11 +274,12 @@ export function SessionProvider({
         body: JSON.stringify({ email, password }),
       });
       if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as
-          | { error?: { message?: string } }
-          | null;
+        const payload = (await response.json().catch(() => null)) as {
+          error?: { message?: string };
+        } | null;
         throw new Error(
-          payload?.error?.message ?? 'That email address and password combination was not accepted.',
+          payload?.error?.message ??
+            'That email address and password combination was not accepted.',
         );
       }
       const payload = (await response.json()) as { accessToken: string };
@@ -196,14 +297,7 @@ export function SessionProvider({
     if (config?.authMode === 'supabase') {
       // Sign out only this device session.
       try {
-        const supabaseUrl = config.supabaseUrl ?? import.meta.env.VITE_SUPABASE_URL;
-        if (supabaseUrl) {
-          const { createClient } = await import('@supabase/supabase-js');
-          const client = createClient(supabaseUrl, import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '', {
-            auth: { persistSession: false, autoRefreshToken: false },
-          });
-          await client.auth.signOut({ scope: 'local' });
-        }
+        await supabaseRef.current?.auth.signOut({ scope: 'local' });
       } catch {
         // Local state is cleared regardless.
       }
@@ -224,16 +318,29 @@ export function SessionProvider({
       signOut,
       refreshMe: loadMe,
     }),
-    [status, me, config, api, storageDescription, error, signIn, signOut, loadMe],
+    [
+      status,
+      me,
+      config,
+      api,
+      storageDescription,
+      error,
+      signIn,
+      signOut,
+      loadMe,
+    ],
   );
 
-  return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
+  return (
+    <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
+  );
 }
 
 export function describeApiError(error: unknown): string {
   if (error instanceof ApiRequestError) {
     if (error.isOffline) return 'You are offline. Reconnect to continue.';
-    if (error.isStale) return 'This record changed while you were reviewing it. Reload to continue.';
+    if (error.isStale)
+      return 'This record changed while you were reviewing it. Reload to continue.';
     return error.message;
   }
   if (error instanceof Error) return error.message;

@@ -43,6 +43,7 @@ const children: ChildProcess[] = [];
 for (const service of services) {
   const child = spawn(service.command, service.args, {
     env: service.env,
+    detached: process.platform !== 'win32',
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   child.stdout?.on('data', (chunk: Buffer) => {
@@ -68,7 +69,14 @@ console.log('Press Ctrl+C to stop every process.');
 console.log('');
 
 const shutdown = (): void => {
-  for (const child of children) child.kill('SIGTERM');
+  for (const child of children) {
+    try {
+      if (process.platform !== 'win32' && child.pid) process.kill(-child.pid, 'SIGTERM');
+      else child.kill('SIGTERM');
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== 'ESRCH') throw error;
+    }
+  }
   process.exit(0);
 };
 process.on('SIGINT', shutdown);

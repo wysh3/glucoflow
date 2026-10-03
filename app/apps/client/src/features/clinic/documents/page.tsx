@@ -1,14 +1,18 @@
+import { LoadMore } from '../../../components/load-more';
 import * as React from 'react';
-import { Link, useOutletContext, useParams } from 'react-router-dom';
-import type { PatientSummaryDto } from '@sutra/contracts';
+import {
+  Link,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from 'react-router-dom';
+import type { DocumentDto, PatientSummaryDto } from '@sutra/contracts';
 import {
   Alert,
   Badge,
   Button,
   Card,
   CardBody,
-  CardHeader,
-  CardTitle,
   ScreenTitle,
   Table,
   TBody,
@@ -19,12 +23,13 @@ import {
   formatBytes,
   formatDateTime,
 } from '@sutra/ui';
-import { useDocuments, useSourceUrl } from '../../../lib/queries';
+import { useDocuments } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
 import { UploadWizard } from '../../upload/upload-wizard';
 import { Dialog, DialogContent, DialogHeader } from '@sutra/ui';
-import { SourceViewer } from '../../../components/source-viewer';
-import { useSession } from '../../../auth/session';
+import { useSourcePane } from '../../../components/source-pane';
+import { Textarea } from '@sutra/ui';
+import { useSession, useApi, describeApiError } from '../../../auth/session';
 
 /** Source files, uploader, date, state and version for the active patient. */
 export function DocumentsPage(): React.ReactElement {
@@ -32,24 +37,123 @@ export function DocumentsPage(): React.ReactElement {
   const { patientId } = useParams<{ patientId: string }>();
   const { me } = useSession();
   const documents = useDocuments(patientId);
-  const sourceUrl = useSourceUrl();
-  const [uploadOpen, setUploadOpen] = React.useState(false);
-  const [openDocument, setOpenDocument] = React.useState<{
-    documentId: string;
-    versionId: string;
-    page: number;
+  const sourcePane = useSourcePane();
+  const api = useApi();
+  const navigate = useNavigate();
+  const [correction, setCorrection] = React.useState<DocumentDto | null>(null);
+  const [changeMode, setChangeMode] = React.useState<'correct' | 'amend'>(
+    'correct',
+  );
+  const [amendment, setAmendment] = React.useState<{
+    document: DocumentDto;
+    reason: string;
   } | null>(null);
+  const [completedAmendment, setCompletedAmendment] = React.useState<{
+    documentId: string;
+    sessionId: string;
+  } | null>(null);
+  const [reason, setReason] = React.useState('');
+  const [changing, setChanging] = React.useState(false);
+  const [changeError, setChangeError] = React.useState<string | null>(null);
+  const [uploadOpen, setUploadOpen] = React.useState(false);
 
+  const linkAmendment = async (completed: {
+    documentId: string;
+    sessionId: string;
+  }) => {
+    if (!amendment) return;
+    try {
+      await api.request(
+        `/api/v1/documents/${amendment.document.documentId}/amendments`,
+        {
+          method: 'POST',
+          body: {
+            completedUploadSessionId: completed.sessionId,
+            expectedDocumentVersionId:
+              amendment.document.currentVersion!.documentVersionId,
+            reason: amendment.reason,
+          },
+        },
+      );
+      setUploadOpen(false);
+      setAmendment(null);
+      setCompletedAmendment(null);
+      navigate(`/clinic/review/${completed.documentId}`);
+    } catch (caught) {
+      setChangeError(describeApiError(caught));
+      setCompletedAmendment(completed);
+    }
+  };
   const canUpload = me?.capabilities.canReview ?? false;
+
+  const documentActions = (document: DocumentDto) => (
+    <div className="flex flex-wrap gap-2">
+      {document.currentVersion ? (
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={() =>
+            void sourcePane.openSource({
+              documentId: document.documentId,
+              versionId: document.currentVersion!.documentVersionId,
+              page: 1,
+            })
+          }
+        >
+          Open source
+        </Button>
+      ) : null}
+      {canUpload && document.state === 'approved' ? (
+        <Button
+          size="sm"
+          onClick={() => {
+            setCorrection(document);
+            setChangeMode('correct');
+            setReason('');
+            setChangeError(null);
+          }}
+        >
+          Correct entries
+        </Button>
+      ) : null}
+      {canUpload && document.state === 'approved' && document.currentVersion ? (
+        <Button
+          size="sm"
+          variant="quiet"
+          onClick={() => {
+            setCorrection(document);
+            setChangeMode('amend');
+            setReason('');
+            setChangeError(null);
+          }}
+        >
+          Add amended report
+        </Button>
+      ) : null}
+      {canUpload &&
+      (document.state === 'awaiting_review' ||
+        document.state === 'review_in_progress') ? (
+        <Button asChild size="sm" variant="primary">
+          <Link to={`/clinic/review/${document.documentId}`}>Review</Link>
+        </Button>
+      ) : null}
+    </div>
+  );
 
   return (
     <div className="space-y-4">
       <ScreenTitle
         title="Documents"
-        meta={`${documents.data?.items.length ?? 0} source file(s) for ${patient.displayName}`}
+        meta={`${documents.data?.items.length ?? 0} reports loaded`}
         actions={
           canUpload ? (
-            <Button variant="primary" onClick={() => setUploadOpen(true)}>
+            <Button
+              variant="primary"
+              onClick={() => {
+                setAmendment(null);
+                setUploadOpen(true);
+              }}
+            >
               Upload report
             </Button>
           ) : null
@@ -64,35 +168,79 @@ export function DocumentsPage(): React.ReactElement {
         emptyDescription="Upload a PDF, a photo or a JPEG/PNG image. The reviewer confirms the patient before an upload session begins."
         onRetry={() => void documents.refetch()}
       >
-        <Card>
+        <div className="space-y-3 sm:hidden">
+          {documents.data?.items.map((document) => (
+            <Card key={document.documentId} data-document-row>
+              <CardBody className="space-y-3 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <span className="min-w-0 break-all text-sm font-medium">
+                    {document.filename}
+                  </span>
+                  <Badge
+                    tone={
+                      document.state === 'approved'
+                        ? 'success'
+                        : document.state === 'failed'
+                          ? 'error'
+                          : 'review'
+                    }
+                  >
+                    {document.stateLabel}
+                  </Badge>
+                </div>
+                <p className="text-xs text-ink-soft">
+                  {formatDateTime(document.uploadedAt)} ·{' '}
+                  {formatBytes(document.bytes)}
+                  {document.pageCount ? ` · ${document.pageCount} ${document.pageCount === 1 ? 'page' : 'pages'}` : ''}
+                </p>
+                {document.coverageNote ? (
+                  <p className="text-xs text-review">{document.coverageNote}</p>
+                ) : null}
+                {documentActions(document)}
+              </CardBody>
+            </Card>
+          ))}
+        </div>
+        <Card className="hidden sm:block">
           <Table>
             <THead>
               <TR>
                 <TH>File</TH>
-                <TH>Uploaded</TH>
-                <TH>State</TH>
-                <TH>Version</TH>
+                <TH className="hidden lg:table-cell">Uploaded</TH>
+                <TH className="hidden sm:table-cell">State</TH>
+                <TH className="hidden lg:table-cell">Version</TH>
                 <TH />
               </TR>
             </THead>
             <TBody>
               {documents.data?.items.map((document) => (
-                <TR key={document.documentId}>
+                <TR key={document.documentId} data-document-row>
                   <TD>
-                    <span className="text-ink">{document.filename}</span>
+                    <span className="break-all text-ink">
+                      {document.filename}
+                    </span>
+                    <div className="mt-1 text-xs text-ink-soft sm:hidden">
+                      {document.stateLabel}
+                    </div>
                     <div className="text-[12px] text-ink-soft">
                       {formatBytes(document.bytes)}
-                      {document.pageCount ? ` · ${document.pageCount} page(s)` : ''}
+                      {document.pageCount
+                        ? ` · ${document.pageCount} page(s)`
+                        : ''}
                     </div>
                     {document.coverageNote ? (
-                      <div className="mt-1 text-[12px] text-review">{document.coverageNote}</div>
+                      <div className="mt-1 text-[12px] text-review">
+                        {document.coverageNote}
+                      </div>
                     ) : null}
                   </TD>
-                  <TD className="whitespace-nowrap text-ink-soft">
+                  <TD className="hidden whitespace-nowrap text-ink-soft lg:table-cell">
                     {formatDateTime(document.uploadedAt)}
-                    <div className="text-[12px]">by {document.uploaderName}</div>
+                    <div className="text-[12px]">
+                      by {document.uploaderName}
+                    </div>
                   </TD>
-                  <TD>
+                  <TD className="hidden sm:table-cell">
                     <Badge
                       tone={
                         document.state === 'approved'
@@ -113,9 +261,10 @@ export function DocumentsPage(): React.ReactElement {
                       </div>
                     ) : null}
                   </TD>
-                  <TD>
+                  <TD className="hidden lg:table-cell">
                     <span className="text-ink-soft">
-                      v{document.currentVersion?.versionNumber ?? 1} of {document.versions.length}
+                      v{document.currentVersion?.versionNumber ?? 1} of{' '}
+                      {document.versions.length}
                     </span>
                     <div className="text-[12px] text-ink-soft">
                       {document.versions
@@ -123,61 +272,23 @@ export function DocumentsPage(): React.ReactElement {
                         .join(', ')}
                     </div>
                   </TD>
-                  <TD>
-                    <div className="flex flex-wrap gap-2">
-                      {document.currentVersion ? (
-                        <Button
-                          size="sm"
-                          variant="secondary"
-                          onClick={async () => {
-                            const response = await sourceUrl.mutateAsync({
-                              documentId: document.documentId,
-                              versionId: document.currentVersion!.documentVersionId,
-                              page: 1,
-                            });
-                            void response;
-                            setOpenDocument({
-                              documentId: document.documentId,
-                              versionId: document.currentVersion!.documentVersionId,
-                              page: 1,
-                            });
-                          }}
-                        >
-                          Open source
-                        </Button>
-                      ) : null}
-                      {canUpload &&
-                      (document.state === 'awaiting_review' ||
-                        document.state === 'review_in_progress') ? (
-                        <Button asChild size="sm" variant="primary">
-                          <Link to={`/clinic/review/${document.documentId}`}>Review</Link>
-                        </Button>
-                      ) : null}
-                    </div>
-                  </TD>
+                  <TD>{documentActions(document)}</TD>
                 </TR>
               ))}
             </TBody>
           </Table>
         </Card>
       </QueryState>
+      <LoadMore query={documents} />
 
-      {documents.data?.items.some((document) => document.duplicateOfDocumentId) ? (
+      {documents.data?.items.some(
+        (document) => document.duplicateOfDocumentId,
+      ) ? (
         <Alert tone="neutral" title="A repeat upload was detected">
-          An exact copy of an earlier file creates an upload receipt and no second chart point.
+          An exact copy of an earlier file creates an upload receipt and no
+          second chart point.
         </Alert>
       ) : null}
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Upload behaviour</CardTitle>
-        </CardHeader>
-        <CardBody className="space-y-1 text-[13px] text-ink-soft">
-          <p>Signed upload links are object-specific and valid for two hours at the provider.</p>
-          <p>The application completion window is 15 minutes; after that the upload is expired.</p>
-          <p>Overwrite is disabled: an existing object is never replaced.</p>
-        </CardBody>
-      </Card>
 
       {canUpload ? (
         <UploadWizard
@@ -185,40 +296,103 @@ export function DocumentsPage(): React.ReactElement {
           patientLabel={`${patient.displayName} · ${patient.clinicIdentifier}`}
           open={uploadOpen}
           onOpenChange={setUploadOpen}
-          onUploaded={() => void documents.refetch()}
+          onUploaded={(documentId, sessionId) => {
+            void documents.refetch();
+            if (amendment && sessionId)
+              void linkAmendment({ documentId, sessionId });
+          }}
         />
       ) : null}
 
-      {openDocument && sourceUrl.data ? (
-        <Dialog open onOpenChange={() => setOpenDocument(null)}>
-          <DialogContent side="right">
+      {correction ? (
+        <Dialog open onOpenChange={() => setCorrection(null)}>
+          <DialogContent>
             <DialogHeader
-              title="Source document"
-              actions={
-                <Button variant="quiet" size="sm" onClick={() => setOpenDocument(null)}>
-                  Back
-                </Button>
+              title={
+                changeMode === 'correct'
+                  ? 'Correct published entries'
+                  : 'Add an amended report'
               }
             />
-            <SourceViewer
-              documentId={openDocument.documentId}
-              versionId={openDocument.versionId}
-              page={openDocument.page}
-              url={sourceUrl.data.url}
-              expiresAt={sourceUrl.data.expiresAt}
-              documentName={sourceUrl.data.documentName}
-              pageCount={sourceUrl.data.pageCount}
-              onRequestNewUrl={async () => {
-                await sourceUrl.mutateAsync({
-                  documentId: openDocument.documentId,
-                  versionId: openDocument.versionId,
-                  page: openDocument.page,
-                });
-              }}
+            <p className="text-sm text-ink-soft">
+              {correction.filename}. The approved record remains visible while
+              you review the correction.
+            </p>
+            <label className="mt-4 block text-sm" htmlFor="correction-reason">
+              {changeMode === 'correct'
+                ? 'Reason for correction'
+                : 'Reason for amended report'}
+            </label>
+            <Textarea
+              id="correction-reason"
+              value={reason}
+              maxLength={500}
+              onChange={(event) => setReason(event.target.value)}
             />
+            {changeError ? (
+              <Alert tone="error" title="The correction could not be started">
+                {changeError}
+              </Alert>
+            ) : null}
+            <div className="mt-4 flex justify-end gap-2">
+              <Button onClick={() => setCorrection(null)}>Cancel</Button>
+              <Button
+                variant="primary"
+                disabled={reason.trim().length < 3 || changing}
+                onClick={async () => {
+                  if (changeMode === 'amend') {
+                    setAmendment({
+                      document: correction,
+                      reason: reason.trim(),
+                    });
+                    setCorrection(null);
+                    setUploadOpen(true);
+                    return;
+                  }
+                  setChanging(true);
+                  setChangeError(null);
+                  try {
+                    await api.request(
+                      `/api/v1/documents/${correction.documentId}/review-revisions`,
+                      {
+                        method: 'POST',
+                        body: {
+                          expectedApprovalRevision:
+                            correction.approvalRevision ?? 0,
+                          reason: reason.trim(),
+                        },
+                      },
+                    );
+                    navigate(`/clinic/review/${correction.documentId}`);
+                  } catch (caught) {
+                    setChangeError(describeApiError(caught));
+                  } finally {
+                    setChanging(false);
+                  }
+                }}
+              >
+                {changing
+                  ? 'Starting review…'
+                  : changeMode === 'amend'
+                    ? 'Choose amended report'
+                    : 'Open correction review'}
+              </Button>
+            </div>
           </DialogContent>
         </Dialog>
       ) : null}
+      {completedAmendment && changeError ? (
+        <Alert
+          tone="error"
+          title="The report uploaded, but could not be linked"
+        >
+          {changeError}
+          <Button onClick={() => void linkAmendment(completedAmendment)}>
+            Retry linking
+          </Button>
+        </Alert>
+      ) : null}
+      {sourcePane.pane}
     </div>
   );
 }

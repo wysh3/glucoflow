@@ -6,6 +6,16 @@ Keep Vite/React/TypeScript, Capacitor, Fastify and PostgreSQL; deploy with Supab
 
 For each task: reproduce the specific failure, add a meaningful regression test, implement the minimum correction, run the relevant gate and update evidence. Keep migrations additive and authorization narrow. Start version control with existing secrets/build outputs excluded before application changes; do not reset or purge the database as a shortcut.
 
+## Local pass status — 3 October 2026
+
+Tasks 1–4 have local implementations and regression evidence, including ordered photo source navigation, large-history pagination, patient export, review corrections and mobile report cards. Pending-upload recovery finishes bytes already stored on the server; reselecting missing files is still required. Amendment entry points are implemented; a complete amendment publication browser walkthrough remains a follow-up gate.
+
+Task 5 has transactional reservations, actual usage reconciliation, a whole-evaluation dollar cap and labelled stub verification. Live accuracy/cost/latency await the OpenAI key and the user's spending limit. The external-layout fixture baseline remains 0.24 complete-field accuracy.
+
+Task 6 session/CSP/rate-limit/container-script fixes are prepared locally; hosted deployment and service verification are deferred by the user. Task 7 has a fresh signed APK build and desktop/mobile browser evidence; physical-device and productivity tests remain outstanding. Extra synthetic browser/smoke records were preserved.
+
+Fresh evidence is in `../reports/local-fixes-2026-10-03.md`. Items below remain the implementation and release gates, not a blanket claim that every hosted/device gate has passed.
+
 ## 1. Correct the patient record projection
 
 Files: `packages/data/src/documents.ts`, `supabase/migrations/`, patient records UI and authorization tests. Acceptance: R01, R02, R08, R15.

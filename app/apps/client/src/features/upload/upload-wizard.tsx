@@ -24,7 +24,7 @@ export type UploadWizardProps = {
   patientLabel: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onUploaded?: (documentId: string) => void;
+  onUploaded?: (documentId: string, sessionId?: string) => void;
 };
 
 type SelectedFile = {
@@ -38,6 +38,7 @@ type Stage = 'select' | 'uploading' | 'processing' | 'done';
 
 export function UploadWizard(props: UploadWizardProps): React.ReactElement {
   const api = useApi();
+  const notified = React.useRef<string | null>(null);
   const [stage, setStage] = React.useState<Stage>('select');
   const [files, setFiles] = React.useState<SelectedFile[]>([]);
   const [error, setError] = React.useState<string | null>(null);
@@ -58,15 +59,19 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
     if (!job.data) return;
     if (job.data.state === 'succeeded') {
       setStage('done');
-      if (documentId) props.onUploaded?.(documentId);
+      if (documentId && notified.current !== documentId) {
+        notified.current = documentId;
+        props.onUploaded?.(documentId, session?.sessionId);
+      }
     }
     if (job.data.state === 'failed') {
       setError(job.data.errorMessage ?? 'Processing could not finish. A retry may be available.');
       setStage('done');
     }
-  }, [job.data, documentId, props]);
+  }, [job.data, documentId, session?.sessionId, props]);
 
   const reset = (): void => {
+    notified.current = null;
     setStage('select');
     setFiles([]);
     setError(null);

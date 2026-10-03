@@ -1,0 +1,19 @@
+$ tsx scripts/evaluate-live-rehearsal.ts --limit
+Protocol stub listening on http://127.0.0.1:8791 (not a model)
+  request: POST /v1/chat/completions · 146857 bytes · messages 2 · auth yes · page images 2 · evidence block yes
+  complete fields     0.3333 (patient+test+value+unit+date)
+  complete, no date   0.6667
+  processing          475 ms median per document, 1 provider calls, $0.00197 reserved
+  fact precision      1
+  fact recall         0.6667
+  event date exact    0.5
+  unit exact          1
+  identity state      1
+  issue flag rate     null
+  recall, machine-readable 0.6667
+  recall, 300 dpi scan     null
+  recall, low-res scan     null
+Written to /Users/wysh/coding/thon/iitb-health/app/reports/extraction-evaluation-eval-corpus-external-live.json
+
+
+These numbers come from a fixed stub answer, not from a model. They show that the live path measures complete-field accuracy, time and cost; they are not an accuracy claim.

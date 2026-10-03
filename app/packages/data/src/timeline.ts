@@ -168,13 +168,14 @@ export async function loadTimelinePage(
   query: { testCodes: string[]; from?: string; to?: string },
   limit: number,
   offset: number,
+  contextOffsets: { events?: number; notes?: number } = {},
 ): Promise<TimelinePage> {
   const codes = query.testCodes.length > 0 ? query.testCodes : null;
 
   const observations = await client.query<ObservationRow>(
     `${OBSERVATION_SELECT}
      order by f.event_date desc nulls last, f.id
-     limit $5 offset $6`,
+     limit least($5, greatest(0, 2000 - $6)) offset $6`,
     [patientId, codes, query.from ?? null, query.to ?? null, limit, offset],
   );
   const observationCount = await client.query<{ count: string }>(
@@ -195,8 +196,8 @@ export async function loadTimelinePage(
        and ($2::date is null or f.event_date is null or f.event_date >= $2::date)
        and ($3::date is null or f.event_date is null or f.event_date <= $3::date)
      order by f.event_date desc nulls last, f.id
-     limit 100 offset $4`,
-    [patientId, query.from ?? null, query.to ?? null, offset],
+     limit least($4, greatest(0, 2000 - $5)) offset $5`,
+    [patientId, query.from ?? null, query.to ?? null, limit, contextOffsets.events ?? 0],
   );
 
   const notes = await client.query<{
@@ -218,10 +219,22 @@ export async function loadTimelinePage(
      left join sutra.app_users a on a.id = n.seen_by
      where n.patient_id = $1
        and not exists (select 1 from sutra.patient_notes newer where newer.supersedes_note_id = n.id)
-     order by coalesce(n.event_date, n.submitted_at::date) desc, n.submitted_at desc
-     limit 50`,
-    [patientId],
+       and ($2::date is null or n.event_date is null or n.event_date >= $2::date)
+       and ($3::date is null or n.event_date is null or n.event_date <= $3::date)
+     order by coalesce(n.event_date, n.submitted_at::date) desc, n.submitted_at desc, n.id
+     limit least($4, greatest(0, 2000 - $5)) offset $5`,
+    [patientId, query.from ?? null, query.to ?? null, limit, contextOffsets.notes ?? 0],
   );
+
+  const contextCounts = await client.query<{ events: string; notes: string }>(`select
+    (select count(*) from sutra.approved_facts f where f.patient_id = $1 and f.kind in ('prescription', 'examination') and f.status = 'retained'
+      and ($2::date is null or f.event_date is null or f.event_date >= $2::date)
+      and ($3::date is null or f.event_date is null or f.event_date <= $3::date))::text as events,
+    (select count(*) from sutra.patient_notes n where n.patient_id = $1
+      and not exists (select 1 from sutra.patient_notes newer where newer.supersedes_note_id = n.id)
+      and ($2::date is null or n.event_date is null or n.event_date >= $2::date)
+      and ($3::date is null or n.event_date is null or n.event_date <= $3::date))::text as notes`,
+    [patientId, query.from ?? null, query.to ?? null]);
 
   const counts = await client.query<{
     latest_report_date: string | null;
@@ -235,6 +248,7 @@ export async function loadTimelinePage(
          where d.patient_id = $1
            and d.assignment_state = 'assigned'
            and d.duplicate_of_document_id is null
+           and not d.released_to_patient
            and not exists (
              select 1 from sutra.review_batches b
              where b.document_id = d.id and b.state = 'published'
@@ -261,8 +275,8 @@ export async function loadTimelinePage(
       version: row.version,
     })),
     observationTotal: Number(observationCount.rows[0]?.count ?? '0'),
-    eventTotal: events.rows.length,
-    noteTotal: notes.rows.length,
+    eventTotal: Number(contextCounts.rows[0]?.events ?? 0),
+    noteTotal: Number(contextCounts.rows[0]?.notes ?? 0),
     latestReportDate: countRow?.latest_report_date ?? null,
     awaitingReviewCount: Number(countRow?.awaiting_review_count ?? '0'),
     sourceOnlyCount: Number(countRow?.source_only_count ?? '0'),

@@ -1,0 +1,13 @@
+apps/client/src/components/source-pane.tsx 33ms
+apps/client/src/components/export-summary.tsx 6ms
+apps/client/src/features/patient/records/page.tsx 27ms
+apps/client/src/features/clinic/documents/page.tsx 25ms
+apps/client/src/features/clinic/progression/page.tsx 31ms
+apps/client/src/features/clinic/review/page.tsx 58ms
+apps/client/src/auth/session.tsx 24ms
+packages/domain/src/timeline-loading.ts 4ms
+packages/domain/src/timeline-loading.test.ts 4ms
+tests/integration/provider-budget.test.ts 5ms
+tests/integration/timeline-pagination.test.ts 4ms
+packages/extraction/src/providers/openai-compatible.ts 16ms
+Done in 352ms using pnpm v12.5.1

@@ -1,40 +1,34 @@
-# Current Sutra handoff — takeover, 3 October 2026
+# Sutra handoff — local completion pass, 3 October 2026
 
-The existing MVP is a working local foundation, with unresolved correctness and deployment gaps. It is not ready to describe as a fully completed hosted or live-AI application.
+The local application is running at http://127.0.0.1:5173. The user requested local work only; deployment is deferred. OpenAI credentials and an evaluation spending limit are still awaited. Fixture extraction is labelled as such throughout the app.
 
-## Start here
+## Current evidence
 
-- [Takeover audit](app/reports/takeover-audit-2026-10-03.md): inspected layers, actual browser observations, fresh checks and current defects.
-- [Completion plan](app/docs/COMPLETION_PLAN.md): ordered implementation tasks, regression cases and release gates.
-- [Setup](app/docs/SETUP.md), [demo script](app/docs/DEMO.md), [deployment](app/docs/DEPLOYMENT.md).
-- `docs/mvp/` remains the product and contract baseline. Older reports and archives contain historical results, not evidence of current completeness.
+Read [local completion report](app/reports/local-fixes-2026-10-03.md), [completion plan](app/docs/COMPLETION_PLAN.md), and the captured commands under `app/reports/raw/local-fixes-*`. The takeover audit records the earlier defects; older reports are historical.
 
-## Built
+## Implemented in this pass
 
-Vite/React client with patient and clinic roles; Capacitor Android shell; Fastify API; PostgreSQL tenant policies; durable worker; PDF text/OCR preparation; labelled fixture extraction and live-provider adapter; human review/publication; progression, source viewing, search, patient notes, history and summary exports. Several capabilities exist in the API without complete UI access.
+- Patient report state now agrees with publication, including approved clinic uploads. Staff review metadata remains private.
+- Every photo-batch item is processed in order. Later-page identity mismatches hold publication. Original images have correct page mapping and review-page navigation.
+- Progression loads independent observation, examination/prescription and note cursors. A changed publication revision blocks mixed history. All unit-separated panels remain visible; lists offer Load more.
+- Corrections normalize the changed test/value/unit/date again. Intentional nulls remove obsolete graph values. Published corrections and amended uploads have visible, reasoned entry points.
+- Patients can search, open their authorized sources and export summaries. Clinicians can acknowledge patient notes. Uploaded bytes can be completed after sign-in; missing files must be selected again.
+- Provider calls reserve cumulative dollars and tokens before dispatch. Actual input/output usage is stored separately; unavailable usage retains its reservation. Evaluation also respects its whole-run dollar cap.
+- Doctor progression has context alongside the chart on desktop. Mobile report cards keep filenames, states and actions together. Buttons meet the 44 px mobile target; account navigation returns to the authorized workspace.
+- English OCR language data ships as a pinned dependency, rather than downloading during jobs. Android opens external sources through the Capacitor Browser plugin.
+- Historical fact lookup now checks actor and patient-release access. Sign-in rate limits and correct 429/413 responses are enabled; signed URL query tokens are omitted from request logs.
+- Hosted session refresh/sign-out uses one managed Supabase client and existing secure native storage. Native foreground/background refresh handling and hosted PDF/image CSP settings are prepared, but are not hosted-service verification.
 
-## Verified during takeover
+## Measured limitation
 
-Typecheck passed; 104 tests across 14 files passed; 12 database policy checks passed; 25 smoke checks passed; client/API/worker build passed. The initial browser run found a numeric-format assertion error, which was corrected. The final complete browser rerun passed **44 checks, with 2 skipped and 0 failed**, recorded in `app/reports/raw/takeover-e2e-2026-10-03.txt`. These checks do not cover all defects identified in the takeover audit.
+The unfamiliar-layout synthetic regression corpus still gives complete-field accuracy **0.24**, precision **0.875**, recall **0.56**. No live model was called. These results are not a claim of clinical accuracy or time saved. The already examined corpus is regression data, not an independent holdout for the next engine iteration.
 
-The unfamiliar-layout fixture corpus gives complete-field accuracy **0.24**, precision 0.875 and recall 0.56. This is the relevant robustness warning; generated-fixture perfect scores are not generalization evidence. No live model was called.
+## Next steps
 
-## Fix in order
+1. Add the OpenAI key to `app/.env` as `EXTRACTION_API_KEY`; keep it out of chat and Git. Agree the total evaluation spend, verify current model support/pricing, configure per-document and whole-evaluation caps, then run a labelled live evaluation on synthetic documents.
+2. Review unsupported fields and identity/date errors; keep publication blocked until human review. Prepare a new independent holdout before claiming better generalization.
+3. When the user authorizes deployment, verify actual Supabase Auth/Storage, hosted tenant isolation and containers. The session implementation is currently locally compiled only.
+4. Verify the latest APK on emulator and an authorized physical device, including camera, source opening, exports and session recovery. This pass built the APK; it did not install it on a physical phone.
+5. Prepare the demo tenant for recording, measure review time with real users, and reconcile the deck/submission against that evidence. Browser and smoke runs have left extra synthetic reports and notes in the local demo tenant; it was not reset or purged.
 
-1. Patient report status/visibility and correct source access.
-2. Every photo-batch page processed and mapped to its original source.
-3. Complete timeline loading and visible pagination.
-4. Date/test correction, post-publication versions and remaining role actions.
-5. Actual cumulative dollar/token budget enforcement, then live model evaluation.
-6. Supabase session lifecycle, real hosted services and working containers/retention.
-7. Physical Android checks, screen polish, clean demo, user timing and evidence-aligned submission materials.
-
-See the completion plan for exact files, boundaries and tests. Do not add clinical inference, imputation or live ABHA claims.
-
-## Running locally
-
-Web: http://127.0.0.1:5173 ; API: http://127.0.0.1:8787 . Demo credentials remain local in `app/.local/demo-credentials.json`; do not copy them into documentation. The existing database was started without reset. Browser/smoke checks added synthetic reports/notes, so the tenant is **not** in its original clean seed state.
-
-## External dependencies
-
-The user delegated service choice. Keep the specified Supabase + Vercel + Railway architecture. Model selection still needs measured evaluation. Actual project access, provider credentials and a concrete spending ceiling are not established by choosing services. Android evidence from prior emulator runs is historical; no fresh physical-device pass occurred during this audit. Phone OTP is absent. Productivity remains unmeasured. Real team/doctor details and actual portal submission status must be supplied/verified before external claims.
+Phone OTP, live ABHA integration, productivity improvements and clinical outcomes are not implemented or measured claims. Product scope stays in `docs/mvp/`.

@@ -20,7 +20,7 @@ await build({
   target: 'node22',
   format: 'esm',
   sourcemap: true,
-  external: ['pg', 'pg-native', 'sharp', '@napi-rs/canvas', 'pdfjs-dist', 'tesseract.js', 'pdfkit'],
+  external: ['@tesseract.js-data/eng', 'pg', 'pg-native', 'sharp', '@napi-rs/canvas', 'pdfjs-dist', 'tesseract.js', 'pdfkit'],
   logLevel: 'info',
   banner: {
     js: "import { createRequire as __createRequire } from 'node:module';\nconst require = __createRequire(import.meta.url);",

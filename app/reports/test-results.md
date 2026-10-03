@@ -1,3 +1,5 @@
+> Current local pass: read [3 October completion evidence](local-fixes-2026-10-03.md) and [the current handoff](../../HANDOFF.md). The material below is the earlier implementation record; its counts and unresolved-item descriptions are historical. Current results are 120 tests, 12 policy checks, 25 smoke checks and 56 browser checks. External service/device/productivity gates remain open.
+
 # Test results
 
 Measured on the machine described in [`SETUP.md`](../docs/SETUP.md). Every number below

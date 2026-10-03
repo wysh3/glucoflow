@@ -13,8 +13,8 @@ test.describe('patient workflows', () => {
 
   test('records screen explains where uploads appear and lists review status', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'My records' })).toBeVisible();
-    await expect(page.getByText('My uploaded reports')).toBeVisible();
-    await expect(page.getByText('My visit notes')).toBeVisible();
+    await expect(page.getByRole('heading', {name: 'Reports', exact: true})).toBeVisible();
+    await expect(page.getByRole('heading', {name: 'Recent visit notes', exact: true})).toBeVisible();
   });
 
   test('a blank note is refused and a written note is sent with a submission time', async ({ page }) => {
@@ -56,4 +56,14 @@ test.describe('patient workflows', () => {
     const credentials = demoCredentials();
     expect(credentials.patientId).toBeTruthy();
   });
+});
+
+test('patient can prepare a summary and open an approved original report', async ({page}) => {
+  await signIn(page, 'patient');
+  await page.getByRole('button', {name: 'Export visit summary'}).click();
+  await expect(page.getByRole('button', {name: 'Download summary'})).toBeVisible({timeout: 60000});
+  await page.getByRole('button', {name: 'Close', exact: true}).click();
+  await page.getByRole('button', {name: 'Open source', exact: true}).first().click();
+  await expect(page.getByRole('dialog')).toContainText('Source document');
+  await expect(page.getByRole('button', {name: 'Refresh access'})).toBeVisible();
 });

@@ -26,6 +26,8 @@ export type PipelineInput = {
   bytes: Buffer;
   filename: string;
   contentType: string;
+  /** Ordered originals for a photo batch. Each original has independent evidence. */
+  sources?: { bytes: Buffer; filename: string; contentType: string }[];
   documentVersionId: string;
   patientIdentifier: string;
   patientName: string;
@@ -127,10 +129,14 @@ export async function runExtractionPipeline(
     await onStage?.('prepare_pages');
     let prepared: PreparedDocument;
     try {
-      prepared = await prepareDocument(
-        { bytes: input.bytes, filename: input.filename, contentType: input.contentType },
+      const sources = input.sources ?? [{ bytes: input.bytes, filename: input.filename, contentType: input.contentType }];
+      if (sources.length > (input.maxPages ?? 10)) throw new DocumentPreparationError('Too many source pages.', 'page_limit_exceeded');
+      prepared = { pageCount: 0, pages: [], kind: sources.length > 1 ? 'image' : 'pdf' };
+      for (const [index, source] of sources.entries()) {
+        const pageOffset = prepared.pageCount;
+        const part = await prepareDocument(source,
         {
-          workDir,
+          workDir: join(workDir, `source-${index}`),
           enableOcr: input.enableOcr ?? false,
           ...(input.ocrRenderLongEdge !== undefined
             ? { ocrRenderLongEdge: input.ocrRenderLongEdge }
@@ -142,9 +148,17 @@ export async function runExtractionPipeline(
           // passes, so uploaded scans skipped OCR entirely. It now depends on what
           // actually needs the image: OCR, or a multimodal provider.
           renderPages: input.renderPages ?? (input.enableOcr !== false || provider.mode === 'live'),
-          ...(input.onPageImage ? { onPageImage: input.onPageImage } : {}),
+          ...(input.onPageImage ? { onPageImage: (page: number, bytes: Buffer, mime: string) => input.onPageImage!(page + pageOffset, bytes, mime) } : {}),
         },
       );
+        if (part.pageCount + pageOffset > (input.maxPages ?? 10)) throw new DocumentPreparationError('Too many source pages.', 'page_limit_exceeded');
+        for (const page of part.pages) {
+          const absolutePage = page.page + pageOffset;
+          prepared.pages.push({ ...page, page: absolutePage, lines: page.lines.map(line => ({...line, page: absolutePage, temporaryId: `source-${index}-${line.temporaryId}`})) });
+        }
+        prepared.pageCount += part.pageCount;
+        if (sources.length === 1) prepared.kind = part.kind;
+      }
     } catch (error) {
       if (error instanceof DocumentPreparationError) {
         throw new ExtractionError(error.message, error.code, false);

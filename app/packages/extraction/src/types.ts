@@ -43,10 +43,10 @@ export interface ExtractionProvider {
 
 export type ProviderBudget = {
   /** Reserves the next call in the run ledger before dispatch. */
-  reserve(): Promise<{ allowed: boolean; ordinal: number | null; reason?: string }>;
+  reserve(request?: {costUsd: number; tokens: number; maxCostUsd: number; maxTokens: number}): Promise<{ allowed: boolean; ordinal: number | null; reason?: string }>;
   reconcile(
     ordinal: number,
-    usage: { costUsd: number; tokens: number; state: 'succeeded' | 'failed' },
+    usage: { costUsd: number; tokens: number; state: 'succeeded' | 'failed'; inputTokens?: number | null; outputTokens?: number | null },
   ): Promise<void>;
 };
 

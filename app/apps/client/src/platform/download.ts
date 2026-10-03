@@ -10,7 +10,8 @@ import { Capacitor } from '@capacitor/core';
 export async function openAuthorizedUrl(url: string, filename?: string): Promise<void> {
   if (Capacitor.isNativePlatform()) {
     // The platform-appropriate action on Android is the system handler for the URL.
-    window.open(url, '_system');
+    const { Browser } = await import('@capacitor/browser');
+    await Browser.open({url});
     return;
   }
   if (filename) {

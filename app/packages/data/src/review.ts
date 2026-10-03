@@ -1,6 +1,9 @@
 import {
   approvalActionLabel,
   describeBlockers,
+  matchTestAlias,
+  checkUnit,
+  parseNumeric,
 } from '@sutra/domain';
 import type {
   ApprovalDto,
@@ -287,12 +290,26 @@ export async function updateReview(
   documentId: string,
   patch: ReviewPatch,
 ): Promise<{ revision: number; state: string; identityState: string; blockers: string[] }> {
+  const current = await getReviewDto(client, documentId);
+  const updates = patch.factUpdates.map(change => {
+    if (change.action !== 'correct' || !change.correction) return change;
+    const fact = current?.facts.find(item => item.factId === change.factId);
+    if (!fact || fact.kind !== 'observation') return change;
+    const correction = {...change.correction};
+    const label = correction.rawLabel ?? fact.rawLabel;
+    const testCode = correction.testCode !== undefined ? correction.testCode : matchTestAlias(label).code;
+    const parsed = parseNumeric(correction.rawValue !== undefined ? correction.rawValue : fact.rawValue);
+    const unit = checkUnit(testCode, correction.rawUnit !== undefined ? correction.rawUnit : fact.rawUnit);
+    const date = correction.eventDate !== undefined ? correction.eventDate : fact.eventDate;
+    const precision = correction.datePrecision ?? fact.datePrecision;
+    return {...change, correction: {...correction, testCode, numericValue: parsed.value, unitCode: unit.normalizedUnit, plotEligible: Boolean(testCode && parsed.value !== null && !parsed.inequality && !parsed.ambiguous && unit.accepted && date && precision === 'day')}};
+  });
   const result = await client.query<{
     update_review: { revision: number; state: string; identityState: string; blockers: string[] };
   }>('select sutra.update_review($1, $2, $3::jsonb) as update_review', [
     documentId,
     patch.expectedRevision,
-    JSON.stringify(patch),
+    JSON.stringify({...patch, factUpdates: updates}),
   ]);
   return result.rows[0]!.update_review;
 }

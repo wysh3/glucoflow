@@ -15,6 +15,7 @@ const DOCUMENT_STATE_SQL = `
   case
     when d.assignment_state = 'quarantined' then 'quarantined'
     when d.duplicate_of_document_id is not null then 'duplicate'
+    when d.released_to_patient then 'approved'
     when exists (select 1 from sutra.approval_batches ab where ab.document_id = d.id) then 'approved'
     when exists (select 1 from sutra.review_batches b where b.document_id = d.id and b.state = 'published') then 'approved'
     when exists (
@@ -115,7 +116,7 @@ const DOCUMENT_SELECT = `
     d.patient_id,
     p.display_name as patient_name,
     p.clinic_identifier,
-    u.display_name as uploader_name,
+    coalesce(u.display_name, 'Clinic') as uploader_name,
     d.created_at as uploaded_at,
     d.assignment_state,
     d.duplicate_of_document_id,
@@ -146,7 +147,7 @@ const DOCUMENT_SELECT = `
     end as coverage_note
   from sutra.documents d
   join sutra.patients p on p.id = d.patient_id
-  join sutra.app_users u on u.id = d.uploader_id
+  left join sutra.app_users u on u.id = d.uploader_id
   left join sutra.document_versions v on v.id = d.current_version_id`;
 
 export async function listDocuments(
@@ -177,6 +178,23 @@ export async function getDocumentRow(
   const result = await client.query<DocumentRow>(`${DOCUMENT_SELECT} where d.id = $1`, [documentId]);
   const row = result.rows[0];
   return row ? mapDocument(row) : null;
+}
+
+/** RLS-authorized original for a page; PDFs use one object, photos one per page. */
+export async function getDocumentSource(client: DbClient, versionId: string, page = 1): Promise<{objectPath: string; filename: string; pageCount: number | null} | null> {
+  if (!Number.isInteger(page) || page < 1) return null;
+  const result = await client.query<{object_path: string; filename: string; page_count: number | null}>(
+    `select item ->> 'objectPath' as object_path, item ->> 'filename' as filename,
+            coalesce(v.page_count, jsonb_array_length(v.source_manifest_json -> 'items')) as page_count
+       from sutra.document_versions v
+       cross join lateral jsonb_array_elements(v.source_manifest_json -> 'items') as item
+      where v.id = $1
+        and (item ->> 'index')::int = case when v.source_kind = 'photos' then $2 - 1 else 0 end
+        and ($2 <= coalesce(v.page_count, case when v.source_kind = 'photos' then jsonb_array_length(v.source_manifest_json -> 'items') else 10 end))`,
+    [versionId, page],
+  );
+  const row = result.rows[0];
+  return row ? {objectPath: row.object_path, filename: row.filename, pageCount: row.page_count} : null;
 }
 
 /** A manual retry creates a new bounded run for the same document. */

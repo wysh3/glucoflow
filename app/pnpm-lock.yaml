@@ -265,6 +265,9 @@ importers:
       '@capacitor/app':
         specifier: 8.1.2
         version: 8.1.2(@capacitor/core@8.5.2)
+      '@capacitor/browser':
+        specifier: ^8.0.4
+        version: 8.0.4(@capacitor/core@8.5.2)
       '@capacitor/camera':
         specifier: 8.2.5
         version: 8.2.5(@capacitor/core@8.5.2)
@@ -341,6 +344,9 @@ importers:
       '@sutra/extraction':
         specifier: workspace:*
         version: link:../../packages/extraction
+      '@tesseract.js-data/eng':
+        specifier: 1.0.0
+        version: 1.0.0
       pdfkit:
         specifier: 0.20.2
         version: 0.20.2
@@ -397,6 +403,9 @@ importers:
       '@sutra/domain':
         specifier: workspace:*
         version: link:../domain
+      '@tesseract.js-data/eng':
+        specifier: 1.0.0
+        version: 1.0.0
       pdfjs-dist:
         specifier: 6.3.289
         version: 6.3.289
@@ -481,6 +490,11 @@ packages:
 
   '@capacitor/app@8.1.2':
     resolution: {integrity: sha512-uKBlsrXH0IdvUn69e/KKYbZ32A06pcrUdG8LWuZ/6y33YMXZXLEEdNSwl+jKS/SrsTWqnePs8EqSWaiQM3mUGA==}
+    peerDependencies:
+      '@capacitor/core': '>=8.0.0'
+
+  '@capacitor/browser@8.0.4':
+    resolution: {integrity: sha512-ORZ4u/y+7aMuu6yVuk6SP529fUZyqcbnuHB1q5McpA3o2SYfVoi28iB8rsQjI2ad1qlKJd29ZUuGtspXLBDlWg==}
     peerDependencies:
       '@capacitor/core': '>=8.0.0'
 
@@ -1651,6 +1665,9 @@ packages:
     resolution: {integrity: sha512-Zz70EgjahNI7aCz8BZxM3vUGU44ycxEAzMuCUjLeA7SVhhOkg3ZgPjPJPvHjs6Rmky/dtmnu1WzjGHNHmhCoZQ==}
     peerDependencies:
       react: ^18 || ^19
+
+  '@tesseract.js-data/eng@1.0.0':
+    resolution: {integrity: sha512-mbTumm6KQPUHyzTPQaF3ObXYnx0SqqfV2nabqFVQBwD6Kl7PhGSLSzOlfFTWy0P3BjghaSKA2W9GB19Jk+ZcTg==}
 
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
@@ -3139,6 +3156,10 @@ snapshots:
     dependencies:
       '@capacitor/core': 8.5.2
 
+  '@capacitor/browser@8.0.4(@capacitor/core@8.5.2)':
+    dependencies:
+      '@capacitor/core': 8.5.2
+
   '@capacitor/camera@8.2.5(@capacitor/core@8.5.2)':
     dependencies:
       '@capacitor/core': 8.5.2
@@ -4140,6 +4161,8 @@ snapshots:
     dependencies:
       '@tanstack/query-core': 5.104.1
       react: 19.3.0
+
+  '@tesseract.js-data/eng@1.0.0': {}
 
   '@types/chai@5.2.3':
     dependencies:

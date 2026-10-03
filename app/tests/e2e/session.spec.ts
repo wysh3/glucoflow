@@ -65,3 +65,14 @@ test.describe('session', () => {
     expect(credentials.demoClinicId).toBeTruthy();
   });
 });
+
+test('account retains navigation back to the authorized workspace', async ({page}) => {
+  await signIn(page, 'clinic');
+  await page.goto('/account');
+  await page.getByRole('link', {name: 'Patients', exact: true}).locator('visible=true').click();
+  await expect(page.getByRole('heading', {name: 'Patients', exact: true})).toBeVisible();
+  const action = page.getByRole('link', {name: 'Open patient'}).first();
+  const bounds = await action.boundingBox();
+  expect(bounds).not.toBeNull();
+  expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+});

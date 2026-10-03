@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Alert, Button, Card, CardBody, CardHeader, CardTitle, ScreenTitle, formatBytes } from '@sutra/ui';
 import { useSession, describeApiError } from '../../../auth/session';
+import { randomIdempotencyKey } from '../../../lib/api';
+import { useNavigate } from 'react-router-dom';
 import { useApi } from '../../../auth/session';
 import { UploadWizard } from '../../upload/upload-wizard';
 import { PROCESS_LOSS_NOTICE } from '../../../components/state-views';
@@ -14,6 +16,8 @@ import type { PendingUploadDto } from '@sutra/contracts';
 export function PatientAddReportPage(): React.ReactElement {
   const { me } = useSession();
   const api = useApi();
+  const navigate = useNavigate();
+  const [busy, setBusy] = React.useState<string | null>(null);
   const patientContext = me?.contexts.find((context) => context.kind === 'patient');
   const patientId = patientContext?.patientId;
   const [open, setOpen] = React.useState(true);
@@ -69,7 +73,7 @@ export function PatientAddReportPage(): React.ReactElement {
           ) : pending.length === 0 ? (
             <p className="text-ink-soft">
               No unfinished upload is stored on the server. Uploads that already reached the server
-              can be resumed after you sign in again.
+              can be finished after you sign in again. If the file did not reach the server, choose it again.
             </p>
           ) : (
             <ul className="space-y-2">
@@ -83,6 +87,13 @@ export function PatientAddReportPage(): React.ReactElement {
                     {formatBytes(session.declaredBytes)}
                   </span>
                   <span className="flex gap-2">
+                    <Button size="sm" disabled={busy === session.sessionId} onClick={async () => {
+                      setBusy(session.sessionId); setError(null);
+                      try {
+                        await api.request(`/api/v1/uploads/${session.sessionId}/complete`, {method: 'POST', idempotencyKey: randomIdempotencyKey()});
+                        await loadPending(); navigate('/patient/records');
+                      } catch (caught) {setError(describeApiError(caught));} finally {setBusy(null);}
+                    }}>Finish upload</Button>
                     <Button
                       size="sm"
                       variant="secondary"
@@ -109,7 +120,7 @@ export function PatientAddReportPage(): React.ReactElement {
         <CardBody className="text-sm text-ink-soft">
           <p>Your report goes to the clinic linked to your record.</p>
           <p className="mt-1">Patient identity: {me?.actor.displayName}</p>
-          <p>Clinic identifier: {me?.contexts.find((context) => context.kind === 'patient')?.clinicId}</p>
+          <p>Clinic: {patientContext?.clinicName ?? 'Linked clinic'}</p>
         </CardBody>
       </Card>
 

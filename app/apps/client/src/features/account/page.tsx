@@ -36,7 +36,7 @@ export function AccountPage(): React.ReactElement {
           <p className="text-ink-soft">{me.actor.email}</p>
           <p className="text-ink-soft">Active authorized role: {roles.join(' and ') || 'none'}</p>
           <p className="text-ink-soft">
-            Clinic: {clinicContext ? clinicContext.clinicId : 'not a clinic member'}
+            Clinic: {clinicContext?.clinicName ?? patientContext?.clinicName ?? 'No clinic linked'}
           </p>
           {!me.capabilities.canReview ? (
             <p className="text-ink-soft">

@@ -128,69 +128,37 @@ export async function createExtractionRun(
  * survives worker restarts and a retry never creates a fresh budget implicitly.
  */
 export async function reserveProviderCall(
-  client: DbClient,
-  runId: string,
-  maxCalls: number,
-  reservedCostUsd: number,
-): Promise<{ ordinal: number } | null> {
-  const run = await client.query<{ call_count: number; reserved_cost_usd: string; deadline_at: string | null }>(
-    'select call_count, reserved_cost_usd, deadline_at from sutra.extraction_runs where id = $1 for update',
-    [runId],
-  );
+  client: DbClient, runId: string, maxCalls: number, reservedCostUsd: number,
+  limits?: {tokens: number; maxTokens: number; maxCostUsd: number},
+): Promise<{ordinal: number} | null> {
+  const run = await client.query<{call_count:number;reserved_cost_usd:string;reserved_tokens:number;deadline_at:string|null}>('select call_count,reserved_cost_usd,reserved_tokens,deadline_at from sutra.extraction_runs where id=$1 for update',[runId]);
   const row = run.rows[0];
   if (!row) throw new Error('extraction run not found');
-  if (row.call_count >= maxCalls) return null;
-  if (row.deadline_at && new Date(row.deadline_at).getTime() < Date.now()) return null;
-
-  const ordinal = row.call_count + 1;
-  await client.query(
-    `insert into sutra.provider_calls (run_id, ordinal, state, reserved_cost_usd)
-     values ($1, $2, 'reserved', $3)
-     on conflict (run_id, ordinal) do nothing`,
-    [runId, ordinal, reservedCostUsd],
-  );
-  await client.query(
-    `update sutra.extraction_runs
-        set call_count = $2,
-            reserved_cost_usd = reserved_cost_usd + $3
-      where id = $1`,
-    [runId, ordinal, reservedCostUsd],
-  );
-  return { ordinal };
+  if (!Number.isFinite(reservedCostUsd) || reservedCostUsd < 0) return null;
+  if (row.call_count >= Math.min(maxCalls,12) || (row.deadline_at && new Date(row.deadline_at).getTime() <= Date.now())) return null;
+  if (limits && (!(limits.maxCostUsd > 0) || !(limits.maxTokens > 0) || !Number.isInteger(limits.tokens) || limits.tokens <= 0 || Number(row.reserved_cost_usd)+reservedCostUsd > limits.maxCostUsd+0.0000001 || row.reserved_tokens+limits.tokens > limits.maxTokens)) return null;
+  const ordinal=row.call_count+1;
+  await client.query(`insert into sutra.provider_calls (run_id,ordinal,state,reserved_cost_usd,reserved_tokens) values ($1,$2,'reserved',$3,$4)`,[runId,ordinal,reservedCostUsd,limits?.tokens ?? 0]);
+  await client.query('update sutra.extraction_runs set call_count=$2,reserved_cost_usd=reserved_cost_usd+$3,reserved_tokens=reserved_tokens+$4 where id=$1',[runId,ordinal,reservedCostUsd,limits?.tokens ?? 0]);
+  return {ordinal};
 }
 
-export async function reconcileProviderCall(
-  client: DbClient,
-  runId: string,
-  ordinal: number,
-  result: {
-    state: 'succeeded' | 'failed' | 'dispatched';
-    actualCostUsd: number;
-    tokenCount: number;
-    errorCategory: string | null;
-  },
-): Promise<void> {
-  await client.query(
-    `update sutra.provider_calls
-        set state = $3, actual_cost_usd = $4, token_count = $5, error_category = $6,
-            dispatched_at = coalesce(dispatched_at, now()),
-            completed_at = case when $3 = 'dispatched' then null else now() end
-      where run_id = $1 and ordinal = $2`,
-    [runId, ordinal, result.state, result.actualCostUsd, result.tokenCount, result.errorCategory],
-  );
-  await client.query(
-    `update sutra.extraction_runs
-        set actual_cost_usd = actual_cost_usd + $2,
-            input_tokens = input_tokens + $3,
-            output_tokens = output_tokens + $4
-      where id = $1`,
-    [
-      runId,
-      result.actualCostUsd,
-      Math.round(result.tokenCount * 0.7),
-      Math.round(result.tokenCount * 0.3),
-    ],
-  );
+export async function reconcileProviderCall(client: DbClient, runId: string, ordinal: number, result: {
+  state:'succeeded'|'failed'|'dispatched'; actualCostUsd:number;tokenCount:number;errorCategory?:string|null;inputTokens?:number|null;outputTokens?:number|null;
+}): Promise<void> {
+  // Lock in the same order as reservation; reconciliation is idempotent.
+  await client.query('select id from sutra.extraction_runs where id=$1 for update',[runId]);
+  const call = await client.query<{state:string;reserved_cost_usd:string;reserved_tokens:number}>('select state,reserved_cost_usd,reserved_tokens from sutra.provider_calls where run_id=$1 and ordinal=$2 for update',[runId,ordinal]);
+  const row=call.rows[0];
+  if (!row || row.state === 'succeeded' || row.state === 'failed') return;
+  const known = typeof result.inputTokens === 'number' && typeof result.outputTokens === 'number' && result.inputTokens >= 0 && result.outputTokens >= 0 && Number.isFinite(result.actualCostUsd) && result.actualCostUsd >= 0;
+  const costCommitment=known ? result.actualCostUsd : Number(row.reserved_cost_usd);
+  const tokenCommitment=known ? result.inputTokens!+result.outputTokens! : row.reserved_tokens;
+  await client.query(`update sutra.provider_calls set state=$3,actual_cost_usd=$4,token_count=$5,error_category=$6,usage_known=$7,input_tokens=$8,output_tokens=$9,reserved_cost_usd=$10,reserved_tokens=$11,
+    dispatched_at=coalesce(dispatched_at,now()),completed_at=case when $3='dispatched' then null else now() end where run_id=$1 and ordinal=$2`,
+    [runId,ordinal,result.state,result.actualCostUsd,result.tokenCount,result.errorCategory ?? null,known,known?result.inputTokens:null,known?result.outputTokens:null,costCommitment,tokenCommitment]);
+  await client.query(`update sutra.extraction_runs set actual_cost_usd=actual_cost_usd+$2,input_tokens=input_tokens+$3,output_tokens=output_tokens+$4,
+    reserved_cost_usd=reserved_cost_usd+$5,reserved_tokens=reserved_tokens+$6 where id=$1`,[runId,known?result.actualCostUsd:0,known?result.inputTokens:0,known?result.outputTokens:0,costCommitment-Number(row.reserved_cost_usd),tokenCommitment-row.reserved_tokens]);
 }
 
 export type SaveExtractionInput = {
