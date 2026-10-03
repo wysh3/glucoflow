@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
-import type { MeResponse } from '@sutra/contracts';
+import type { MeResponse } from '@glucoflow/contracts';
 import {
   ApiRequestError,
   createApiClient,

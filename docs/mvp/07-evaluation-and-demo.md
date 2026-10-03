@@ -41,7 +41,7 @@ Freeze source files, reference manifest, scoring rules, model ID, prompt hash an
 - Extraction p50/p95 wall time, retries, tokens and measured API cost per document and approved record.
 - Reviewer edits/exclusions and source-opening actions.
 
-Use the same source bundles across manual and Sutra workflows with separate participants assigned to each case/workflow combination, and balance task order. Avoid a participant reviewing a case manually and then recalling it in Sutra. Compare current workflow and structured manual timeline; use the better manual baseline for the primary gate. Participant recruitment is an execution dependency. Automated synthetic benchmarks alone do not establish clinician productivity.
+Use the same source bundles across manual and Glucoflow workflows with separate participants assigned to each case/workflow combination, and balance task order. Avoid a participant reviewing a case manually and then recalling it in Glucoflow. Compare current workflow and structured manual timeline; use the better manual baseline for the primary gate. Participant recruitment is an execution dependency. Automated synthetic benchmarks alone do not establish clinician productivity.
 
 Proposed primary gate: at least 30% lower median combined return-visit task time with no worse final-record precision or recall. All injected unresolved identity conflicts must block release. Every exported fact must have authorized source evidence. If gates fail, report the result and narrow the product before claiming savings.
 

@@ -185,7 +185,7 @@ async function main(): Promise<void> {
         failures.push('the request did not carry the configured bearer token');
       }
       const text = JSON.stringify(first.body.messages ?? []);
-      if (!text.includes('Sutra laboratory and clinical document extraction')) {
+      if (!text.includes('Glucoflow laboratory and clinical document extraction')) {
         failures.push('the request did not contain the extraction prompt');
       }
       if (!text.includes('EVIDENCE LINES')) {

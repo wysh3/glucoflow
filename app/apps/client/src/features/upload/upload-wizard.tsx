@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { CameraIcon } from 'lucide-react';
-import { Alert, Badge, Button, Dialog, DialogContent, DialogHeader, Progress, Spinner, formatBytes } from '@sutra/ui';
-import { UPLOAD_MAX_BYTES, UPLOAD_MAX_PHOTOS, type UploadSessionDto } from '@sutra/contracts';
+import { Alert, Badge, Button, Dialog, DialogContent, DialogHeader, Progress, Spinner, formatBytes } from '@glucoflow/ui';
+import { UPLOAD_MAX_BYTES, UPLOAD_MAX_PHOTOS, type UploadSessionDto } from '@glucoflow/contracts';
 import { randomIdempotencyKey } from '../../lib/api';
 import { useApi, describeApiError } from '../../auth/session';
 import { captureReport, type CapturedPage } from '../../platform/camera';

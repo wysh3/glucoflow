@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   Spinner,
-} from '@sutra/ui';
+} from '@glucoflow/ui';
 import { useSourceUrl } from '../lib/queries';
 import { describeApiError } from '../auth/session';
 import { SourceViewer } from './source-viewer';

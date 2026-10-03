@@ -11,8 +11,8 @@
 import { createHash } from 'node:crypto';
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { createExtractionProvider, runExtractionPipeline } from '@sutra/extraction';
-import { matchTestAlias } from '@sutra/domain';
+import { createExtractionProvider, runExtractionPipeline } from '@glucoflow/extraction';
+import { matchTestAlias } from '@glucoflow/domain';
 import {evaluationAssignment, evaluationObservations} from './lib/evaluation-input';
 import { appRoot, ensureLocalEnv, loadEnvFileIntoProcess } from './lib/env';
 import {

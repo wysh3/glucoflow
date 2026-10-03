@@ -4,7 +4,7 @@ import {
   isSupportedTestCode,
   testDefinition,
   type SupportedTestCode,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 
 /**
  * Unit handling. No conversion happens in the first MVP: an unaccepted unit is

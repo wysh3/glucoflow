@@ -7,7 +7,7 @@ import {
   type JobKind,
   type JobStage,
   type JobState,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import type { DbClient } from './pool';
 
 /**

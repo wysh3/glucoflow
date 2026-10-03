@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, CardBody, CardHeader, CardTitle, ScreenTitle } from '@sutra/ui';
+import { Button, Card, CardBody, CardHeader, CardTitle, ScreenTitle } from '@glucoflow/ui';
 import { useSession } from '../../auth/session';
 
 /**

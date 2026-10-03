@@ -30,7 +30,7 @@ FROM deps AS api
 COPY tsconfig.base.json tsconfig.node.json ./
 COPY packages ./packages
 COPY apps/api ./apps/api
-RUN pnpm --filter @sutra/api build
+RUN pnpm --filter @glucoflow/api build
 ENV NODE_ENV=production
 # The container runs as a non-root user.
 USER node

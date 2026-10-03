@@ -1,5 +1,5 @@
 {
-  "name": "@sutra/data",
+  "name": "@glucoflow/data",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,8 +11,8 @@
     "./password": "./src/password.ts"
   },
   "dependencies": {
-    "@sutra/contracts": "workspace:*",
-    "@sutra/domain": "workspace:*",
+    "@glucoflow/contracts": "workspace:*",
+    "@glucoflow/domain": "workspace:*",
     "pg": "8.23.1"
   },
   "devDependencies": {

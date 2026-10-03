@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
-import { apiEnvSchema, formatEnvError, type ApiEnv } from '@sutra/contracts';
-import { findAppRoot, loadDotEnv, resolveFromAppRoot } from '@sutra/data/runtime';
+import { apiEnvSchema, formatEnvError, type ApiEnv } from '@glucoflow/contracts';
+import { findAppRoot, loadDotEnv, resolveFromAppRoot } from '@glucoflow/data/runtime';
 
 export type ApiConfig = ApiEnv & {
   appRoot: string;

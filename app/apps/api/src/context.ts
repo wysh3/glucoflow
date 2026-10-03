@@ -1,11 +1,11 @@
 import { apiConfig, type ApiConfig } from './config';
 import { createTokenVerifier, type TokenVerifier } from './auth';
-import { createPool, withTransaction, type DbPool } from '@sutra/data/pool';
+import { createPool, withTransaction, type DbPool } from '@glucoflow/data/pool';
 import {
   LocalStorageAdapter,
   SupabaseStorageAdapter,
   type StorageAdapter,
-} from '@sutra/data/storage';
+} from '@glucoflow/data/storage';
 
 export type AppContext = {
   config: ApiConfig;

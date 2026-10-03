@@ -125,7 +125,7 @@ async function writePdf(path: string, item: Case): Promise<void> {
     document.x = document.page.margins.left;
   };
 
-  document.fontSize(14).text('Sutra Evaluation Corpus (synthetic)', document.page.margins.left, document.y, { width });
+  document.fontSize(14).text('Glucoflow Evaluation Corpus (synthetic)', document.page.margins.left, document.y, { width });
   line('SYNTHETIC EVALUATION DOCUMENT - NOT A REAL PATIENT RECORD');
   document.moveDown(0.5);
   document.fontSize(13).text('Laboratory Report', document.page.margins.left, document.y, { width });

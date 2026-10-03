@@ -5,8 +5,8 @@ import {
   type RecordSearchMatchedField,
   type RecordSearchQuery,
   type RecordSearchResult,
-} from '@sutra/contracts';
-import { expandSearchTerms } from '@sutra/domain';
+} from '@glucoflow/contracts';
+import { expandSearchTerms } from '@glucoflow/domain';
 import { encodeCursor, decodeCursor } from './identity';
 import type { DbClient } from './pool';
 

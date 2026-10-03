@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, expect, it } from 'vitest';
-import { loadTimelinePage } from '@sutra/data';
+import { loadTimelinePage } from '@glucoflow/data';
 import {
   createFixture,
   createTestContext,

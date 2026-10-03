@@ -1,7 +1,7 @@
 import { LoadMore } from '../../../components/load-more';
 import * as React from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
-import type { PatientSummaryDto } from '@sutra/contracts';
+import type { PatientSummaryDto } from '@glucoflow/contracts';
 import {
   Badge,
   Card,
@@ -13,7 +13,7 @@ import {
   THead,
   TR,
   formatDateTime,
-} from '@sutra/ui';
+} from '@glucoflow/ui';
 import { useHistory } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
 

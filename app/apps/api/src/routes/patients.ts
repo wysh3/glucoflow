@@ -7,11 +7,11 @@ import {
   recordSearchQuerySchema,
   TIMELINE_DISPLAY_BOUND,
   type TimelineResult,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import {
   buildTimeline,
   describeCoverageScope,
-} from '@sutra/domain';
+} from '@glucoflow/domain';
 import {
   acknowledgeNote,
   correctNote,
@@ -29,7 +29,7 @@ import {
   submitNote,
   documentVersions,
   getDocumentRow,
-} from '@sutra/data';
+} from '@glucoflow/data';
 import { assertPatientAccess, requireCapability } from '../auth';
 import { ApiError } from '../errors';
 import {

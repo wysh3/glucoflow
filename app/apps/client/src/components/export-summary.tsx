@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   Spinner,
-} from '@sutra/ui';
+} from '@glucoflow/ui';
 import { useCreateExport, useExportStatus } from '../lib/queries';
 import { openAuthorizedUrl } from '../platform/download';
 import { describeApiError } from '../auth/session';
@@ -67,7 +67,7 @@ export function ExportSummary({
                 onClick={() =>
                   void openAuthorizedUrl(
                     status.data!.downloadUrl!,
-                    'Sutra_visit_summary.pdf',
+                    'Glucoflow_visit_summary.pdf',
                   )
                 }
               >

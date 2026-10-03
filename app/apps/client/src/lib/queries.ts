@@ -17,9 +17,9 @@ import type {
   RecordSearchResult,
   ReviewDto,
   TimelineResult,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import { randomIdempotencyKey } from './api';
-import { collectTimelinePages } from '@sutra/domain';
+import { collectTimelinePages } from '@glucoflow/domain';
 import { useApi, useSession } from '../auth/session';
 
 /**

@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import type { DraftFactInput, ExtractionResult } from '@sutra/contracts';
+import type { DraftFactInput, ExtractionResult } from '@glucoflow/contracts';
 import {
   ProviderRequestError,
   type ExtractionInput,

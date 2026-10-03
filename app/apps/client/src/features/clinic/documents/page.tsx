@@ -6,7 +6,7 @@ import {
   useOutletContext,
   useParams,
 } from 'react-router-dom';
-import type { DocumentDto, PatientSummaryDto } from '@sutra/contracts';
+import type { DocumentDto, PatientSummaryDto } from '@glucoflow/contracts';
 import {
   Alert,
   Badge,
@@ -22,13 +22,13 @@ import {
   TR,
   formatBytes,
   formatDateTime,
-} from '@sutra/ui';
+} from '@glucoflow/ui';
 import { useDocuments } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
 import { UploadWizard } from '../../upload/upload-wizard';
-import { Dialog, DialogContent, DialogHeader } from '@sutra/ui';
+import { Dialog, DialogContent, DialogHeader } from '@glucoflow/ui';
 import { useSourcePane } from '../../../components/source-pane';
-import { Textarea } from '@sutra/ui';
+import { Textarea } from '@glucoflow/ui';
 import { useSession, useApi, describeApiError } from '../../../auth/session';
 
 /** Source files, uploader, date, state and version for the active patient. */

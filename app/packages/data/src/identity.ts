@@ -3,7 +3,7 @@ import type {
   Context,
   PatientSummaryDto,
   UUID,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import type { DbClient } from './pool';
 
 /**

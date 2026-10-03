@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { FixtureProvider, runExtractionPipeline, type PipelineResult } from '@sutra/extraction';
+import { FixtureProvider, runExtractionPipeline, type PipelineResult } from '@glucoflow/extraction';
 import { appRoot } from '../../scripts/lib/env';
 
 /**

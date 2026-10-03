@@ -4,14 +4,14 @@ import type {
   ExtractionResult,
   IdentityState,
   IssueCode,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import {
   checkUnit,
   identityStateFromInput,
   matchTestAlias,
   parseNumeric,
   type IdentityInput,
-} from '@sutra/domain';
+} from '@glucoflow/domain';
 
 /**
  * Deterministic validation of a provider proposal. Unsupported or inconsistent

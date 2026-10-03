@@ -13,7 +13,7 @@ async function main(): Promise<void> {
         storageMode: config.STORAGE_MODE,
         extractionProvider: config.EXTRACTION_PROVIDER,
       },
-      'sutra api listening',
+      'glucoflow api listening',
     );
   } catch (error) {
     app.log.error(error);

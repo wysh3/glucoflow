@@ -16,13 +16,13 @@ import {
   TR,
   formatBytes,
   formatDateTime,
-} from '@sutra/ui';
+} from '@glucoflow/ui';
 import { randomIdempotencyKey } from '../../../lib/api';
 import { useApi, useSession, describeApiError } from '../../../auth/session';
 import { useQueue } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { JOB_STAGE_LABELS, type QueueItemDto } from '@sutra/contracts';
+import { JOB_STAGE_LABELS, type QueueItemDto } from '@glucoflow/contracts';
 
 /**
  * Reviewer queue. Processing tasks stay visible with the observed stage from the

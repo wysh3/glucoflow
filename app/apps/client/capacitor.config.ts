@@ -6,8 +6,8 @@ import type { CapacitorConfig } from '@capacitor/cli';
  * configuration is present here; no privileged credential is bundled.
  */
 const config: CapacitorConfig = {
-  appId: 'in.sutra.demo',
-  appName: 'Sutra',
+  appId: 'in.glucoflow.demo',
+  appName: 'Glucoflow',
   webDir: 'dist',
   android: {
     allowMixedContent: false,

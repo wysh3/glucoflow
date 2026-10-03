@@ -1,7 +1,7 @@
 import { LoadMore } from '../../../components/load-more';
 import * as React from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { Badge, Button, Card, Input, ScreenTitle, Table, TBody, TD, TH, THead, TR, formatDateOnly } from '@sutra/ui';
+import { Badge, Button, Card, Input, ScreenTitle, Table, TBody, TD, TH, THead, TR, formatDateOnly } from '@glucoflow/ui';
 import { useSession } from '../../../auth/session';
 import { usePatients } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';

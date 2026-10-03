@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Alert, Button, Card, CardBody, CardHeader, CardTitle, ScreenTitle, formatBytes } from '@sutra/ui';
+import { Alert, Button, Card, CardBody, CardHeader, CardTitle, ScreenTitle, formatBytes } from '@glucoflow/ui';
 import { useSession, describeApiError } from '../../../auth/session';
 import { randomIdempotencyKey } from '../../../lib/api';
 import { useNavigate } from 'react-router-dom';
 import { useApi } from '../../../auth/session';
 import { UploadWizard } from '../../upload/upload-wizard';
 import { PROCESS_LOSS_NOTICE } from '../../../components/state-views';
-import type { PendingUploadDto } from '@sutra/contracts';
+import type { PendingUploadDto } from '@glucoflow/contracts';
 
 /**
  * Patient upload. Camera or file choice, page previews, confirmed patient identity

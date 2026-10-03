@@ -177,3 +177,10 @@ recorded with its consequence.
 8. Keep fixture extraction explicitly labelled; the external-layout regression remains 0.24 complete-field accuracy. A live model and fresh independent holdout are required before any improved accuracy claim.
 
 Evidence: ../reports/local-fixes-2026-10-03.md.
+
+
+## Product rename — 3 October 2026
+
+The product is now Glucoflow. Web branding, Android display name and application ID (`in.glucoflow.demo`), npm workspace scope (`@glucoflow`), export filenames, active specifications and submission materials were renamed. Previous pitch files are archived.
+
+Existing PostgreSQL schema/database/roles, source/export bucket identifiers, local authentication issuer/audience and browser session keys retain their original internal identifiers to preserve stored records and existing sessions. They are compatibility identifiers, not product branding. Historical reports, corpus fixtures, signing certificates and screenshots preserve their original evidence. The extraction prompt and engine now have different hashes; older evaluation results apply to the earlier version. The Android package ID is new, so it installs separately from the previous app.

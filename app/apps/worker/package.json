@@ -1,5 +1,5 @@
 {
-  "name": "@sutra/worker",
+  "name": "@glucoflow/worker",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -10,10 +10,10 @@
     "build": "node build.mjs"
   },
   "dependencies": {
-    "@sutra/contracts": "workspace:*",
-    "@sutra/data": "workspace:*",
-    "@sutra/domain": "workspace:*",
-    "@sutra/extraction": "workspace:*",
+    "@glucoflow/contracts": "workspace:*",
+    "@glucoflow/data": "workspace:*",
+    "@glucoflow/domain": "workspace:*",
+    "@glucoflow/extraction": "workspace:*",
     "pdfkit": "0.20.2",
     "pg": "8.23.1",
     "zod": "4.6.5",

@@ -1,4 +1,4 @@
-# Sutra MVP Implementation Plan
+# Glucoflow MVP Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox syntax for tracking. Follow the user's preserved preference for direct implementation; do not create extra agents without authorization.
 

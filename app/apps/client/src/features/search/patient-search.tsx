@@ -1,12 +1,12 @@
 import { LoadMore } from '../../components/load-more';
 import * as React from 'react';
 import { SearchIcon } from 'lucide-animated';
-import { Badge, Button, Input, Select, Spinner, useAnimatedIcon } from '@sutra/ui';
+import { Badge, Button, Input, Select, Spinner, useAnimatedIcon } from '@glucoflow/ui';
 import { useSearchRecords, useSourceUrl } from '../../lib/queries';
-import { Dialog, DialogContent, DialogHeader } from '@sutra/ui';
+import { Dialog, DialogContent, DialogHeader } from '@glucoflow/ui';
 import { SourceViewer } from '../../components/source-viewer';
 import { describeApiError } from '../../auth/session';
-import { formatDateOnly } from '@sutra/ui';
+import { formatDateOnly } from '@glucoflow/ui';
 
 /**
  * Patient-scoped record search. Retrieval only: results carry a matching snippet, a

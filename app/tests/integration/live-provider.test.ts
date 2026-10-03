@@ -7,7 +7,7 @@ import {
   ProviderRequestError,
   runExtractionPipeline,
   type ProviderBudget,
-} from '@sutra/extraction';
+} from '@glucoflow/extraction';
 import { appRoot } from '../../scripts/lib/env';
 
 /**

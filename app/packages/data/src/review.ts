@@ -4,7 +4,7 @@ import {
   matchTestAlias,
   checkUnit,
   parseNumeric,
-} from '@sutra/domain';
+} from '@glucoflow/domain';
 import type {
   ApprovalDto,
   DraftFactDto,
@@ -13,7 +13,7 @@ import type {
   ReviewDto,
   ReviewPageCoverage,
   ReviewPatch,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import type { DbClient } from './pool';
 
 /**

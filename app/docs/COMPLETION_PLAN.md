@@ -1,4 +1,4 @@
-# Sutra completion plan after takeover
+# Glucoflow completion plan after takeover
 
 Date: 3 October 2026. Authority: current user instruction to take over and complete the existing MVP. Follow the fixed scope in `../../docs/mvp/01-product.md` and contracts in `../../docs/mvp/09-fixed-contracts.md`. Implement directly; do not delegate without authorization. Audit: `../reports/takeover-audit-2026-10-03.md`.
 

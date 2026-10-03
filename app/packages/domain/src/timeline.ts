@@ -7,7 +7,7 @@ import {
   type TimelineObservation,
   type TimelineQuery,
   type TimelineResult,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import { compareDates } from './dates';
 
 /**

@@ -7,7 +7,7 @@ import {
   filterObservations,
   recordAvailabilityLabel,
 } from './timeline';
-import type { TimelineEvent, TimelineNote, TimelineObservation } from '@sutra/contracts';
+import type { TimelineEvent, TimelineNote, TimelineObservation } from '@glucoflow/contracts';
 
 /** Timeline rules: date spacing, unit separation, table equivalence, availability wording. */
 

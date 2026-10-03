@@ -1,6 +1,6 @@
-# Sutra application
+# Glucoflow application
 
-Working implementation of the Sutra MVP: patient and clinic workflows on web and Android,
+Working implementation of the Glucoflow MVP: patient and clinic workflows on web and Android,
 with the API, worker, database, extraction pipeline, review, progression, search, patient
 notes and exports.
 

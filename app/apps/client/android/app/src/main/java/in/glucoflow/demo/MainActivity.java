@@ -1,4 +1,4 @@
-package in.sutra.demo;
+package in.glucoflow.demo;
 
 import com.getcapacitor.BridgeActivity;
 

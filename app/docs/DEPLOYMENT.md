@@ -56,7 +56,7 @@ Notes that matter:
   accidentally ship the development sign-in.
 * The client's public configuration is bundled at build time: `VITE_API_BASE_URL`,
   `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_DEMO_LABEL`. Set them before
-  `pnpm --filter @sutra/client build`.
+  `pnpm --filter @glucoflow/client build`.
 * `https://localhost` must stay in `ALLOWED_ORIGINS`: that is the origin the Capacitor
   Android WebView uses for bundled assets. Without it every call from the installed app
   fails with `Failed to fetch`.

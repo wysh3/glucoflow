@@ -1,7 +1,7 @@
 import { useSourcePane } from '../../../components/source-pane';
 import { useApi, useSession, describeApiError } from '../../../auth/session';
 import { useQueryClient } from '@tanstack/react-query';
-import { NOTE_CATEGORY_LABELS } from '@sutra/contracts';
+import { NOTE_CATEGORY_LABELS } from '@glucoflow/contracts';
 import * as React from 'react';
 import { Link, useOutletContext, useParams } from 'react-router-dom';
 import type {
@@ -9,13 +9,13 @@ import type {
   TimelineEvent,
   TimelineNote,
   TimelineObservation,
-} from '@sutra/contracts';
-import { testDisplayName, TIMELINE_DISPLAY_BOUND } from '@sutra/contracts';
+} from '@glucoflow/contracts';
+import { testDisplayName, TIMELINE_DISPLAY_BOUND } from '@glucoflow/contracts';
 import {
   buildSeries,
   buildTableRows,
   recordAvailabilityLabel,
-} from '@sutra/domain';
+} from '@glucoflow/domain';
 import {
   Alert,
   Badge,
@@ -34,7 +34,7 @@ import {
   TR,
   formatDateOnly,
   numeric,
-} from '@sutra/ui';
+} from '@glucoflow/ui';
 import { ChartLegend, ProgressionPanel } from './chart';
 import {
   useDocuments,

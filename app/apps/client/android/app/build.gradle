@@ -8,10 +8,10 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "in.sutra.demo"
+    namespace = "in.glucoflow.demo"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "in.sutra.demo"
+        applicationId "in.glucoflow.demo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

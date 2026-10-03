@@ -4,7 +4,7 @@ import {
   type DateKind,
   type DraftFactInput,
   type ExtractionResult,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import {
   checkUnit,
   matchTestAlias,
@@ -12,7 +12,7 @@ import {
   normalizeUnitOcrTolerant,
   parseDate,
   parseNumeric,
-} from '@sutra/domain';
+} from '@glucoflow/domain';
 import type { EvidenceSpan, ExtractionInput, ExtractionProvider, ProviderExtraction } from '../types';
 
 /**

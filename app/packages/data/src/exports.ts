@@ -1,4 +1,4 @@
-import type { ExportJobDto, ExportSnapshotManifest } from '@sutra/contracts';
+import type { ExportJobDto, ExportSnapshotManifest } from '@glucoflow/contracts';
 import type { DbClient } from './pool';
 
 /** Export snapshot creation and reads. Rendering happens in the worker. */

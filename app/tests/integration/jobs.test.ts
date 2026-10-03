@@ -10,7 +10,7 @@ import {
   recoverExpiredLeases,
   recordStageOutput,
   reserveProviderCall,
-} from '@sutra/data';
+} from '@glucoflow/data';
 import {
   createFixture,
   createTestContext,

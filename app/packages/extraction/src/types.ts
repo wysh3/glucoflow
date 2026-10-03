@@ -1,4 +1,4 @@
-import type { ExtractionResult, EvidenceOrigin } from '@sutra/contracts';
+import type { ExtractionResult, EvidenceOrigin } from '@glucoflow/contracts';
 
 /**
  * Extraction provider boundary.

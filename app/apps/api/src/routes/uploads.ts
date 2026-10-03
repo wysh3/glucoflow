@@ -9,14 +9,14 @@ import {
   STORAGE_UPLOAD_TOKEN_SECONDS,
   createUploadSchema,
   type UploadSessionDto,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import {
   cancelUploadSession,
   completeUploadSession,
   createUploadSession,
   loadUploadSession,
   listPendingUploads,
-} from '@sutra/data';
+} from '@glucoflow/data';
 import { ApiError } from '../errors';
 import { idempotencyKey, parseBody, requireActor, withActorTx } from './helpers';
 import type { AppContext } from '../context';

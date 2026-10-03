@@ -9,7 +9,7 @@ import {
 } from 'react-router-dom';
 import { useSession } from './auth/session';
 import { AppShell } from './components/app-shell';
-import { ErrorState, Spinner } from '@sutra/ui';
+import { ErrorState, Spinner } from '@glucoflow/ui';
 import { SignInPage } from './features/sign-in/page';
 import { AccountPage } from './features/account/page';
 import { ClinicPatientsPage } from './features/clinic/patients/page';

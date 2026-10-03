@@ -67,7 +67,7 @@ The immediate physician job is to review a consolidated visit overview and find 
 
 Do not infer hidden disease, why a value changed or whether a treatment worked. A displayed absence means no matching record in the uploaded, reviewed collection. It does not establish that the test was never performed or is overdue. Do not use app participation to block medication refills or appointment access.
 
-The supplied three-minute/30-second claims are unmeasured context, not accepted latency or workload results. The physician's reported experience can inform interviews; attribute and validate it before using it as a general statistic. Product name remains Sutra.
+The supplied three-minute/30-second claims are unmeasured context, not accepted latency or workload results. The physician's reported experience can inform interviews; attribute and validate it before using it as a general statistic. Product name remains Glucoflow.
 
 ## Fixed delivery scope
 

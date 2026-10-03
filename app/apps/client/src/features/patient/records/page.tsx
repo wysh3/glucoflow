@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { testDisplayName, NOTE_CATEGORY_LABELS } from '@sutra/contracts';
+import { testDisplayName, NOTE_CATEGORY_LABELS } from '@glucoflow/contracts';
 import {
   Alert,
   Badge,
@@ -13,7 +13,7 @@ import {
   Select,
   formatDateOnly,
   numeric,
-} from '@sutra/ui';
+} from '@glucoflow/ui';
 import { useSession } from '../../../auth/session';
 import {
   useDocuments,
@@ -27,7 +27,7 @@ import { useSourcePane } from '../../../components/source-pane';
 import { ExportSummary } from '../../../components/export-summary';
 import { PatientSearch } from '../../search/patient-search';
 import { ProgressionPanel, ChartLegend } from '../../clinic/progression/chart';
-import { buildSeries } from '@sutra/domain';
+import { buildSeries } from '@glucoflow/domain';
 
 export function PatientRecordsPage(): React.ReactElement {
   const { me } = useSession();

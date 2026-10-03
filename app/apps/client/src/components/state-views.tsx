@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EmptyState, ErrorState, Skeleton, Spinner } from '@sutra/ui';
+import { EmptyState, ErrorState, Skeleton, Spinner } from '@glucoflow/ui';
 import { describeApiError } from '../auth/session';
 
 /** Shared loading, empty, failure and incomplete states. */

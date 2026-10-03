@@ -14,10 +14,10 @@ import { createHash, randomUUID } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import pg from 'pg';
-import { hashPassword, generateDemoPassword, withTransaction, type DbClient } from '@sutra/data';
-import { LocalStorageAdapter } from '@sutra/data/storage';
-import { leaseJob } from '@sutra/data';
-import { createExtractionProvider, processDocumentJob } from '@sutra/extraction';
+import { hashPassword, generateDemoPassword, withTransaction, type DbClient } from '@glucoflow/data';
+import { LocalStorageAdapter } from '@glucoflow/data/storage';
+import { leaseJob } from '@glucoflow/data';
+import { createExtractionProvider, processDocumentJob } from '@glucoflow/extraction';
 import { appRoot, ensureLocalEnv, localRoot } from './lib/env';
 
 const SOURCE_DIR = join(appRoot, 'fixtures', 'synthetic', 'sources');
@@ -301,7 +301,7 @@ async function main(): Promise<void> {
     const demoClinicId = await ownerTx((client) =>
       ensureClinic(
         client,
-        'Sutra Demo Clinic (synthetic)',
+        'Glucoflow Demo Clinic (synthetic)',
         true,
         options.clinicArg !== 'demo' && /^[0-9a-f-]{36}$/i.test(options.clinicArg)
           ? options.clinicArg
@@ -324,19 +324,19 @@ async function main(): Promise<void> {
     const otherClinicPassword = pick('other-clinic');
     const otherPatientPassword = pick('other-patient');
 
-    const patientUser = await ownerTx((client) => ensureUser(client, 'patient@sutra.demo', 'Asha Rao (synthetic)', patientPassword));
-    const clinicUser = await ownerTx((client) => ensureUser(client, 'clinic@sutra.demo', 'Dr Meera Nair (synthetic)', clinicPassword));
-    const reviewerUser = await ownerTx((client) => ensureUser(client, 'reviewer@sutra.demo', 'Reviewer Sana Iqbal (synthetic)', reviewerPassword));
-    const clinicianUser = await ownerTx((client) => ensureUser(client, 'clinician@sutra.demo', 'Clinician Arun Das (synthetic)', clinicianPassword));
-    const otherClinicUser = await ownerTx((client) => ensureUser(client, 'other-clinic@sutra.demo', 'Northside Reviewer (synthetic)', otherClinicPassword));
-    const otherPatientUser = await ownerTx((client) => ensureUser(client, 'other-patient@sutra.demo', 'Asha Rao (other clinic, synthetic)', otherPatientPassword));
+    const patientUser = await ownerTx((client) => ensureUser(client, 'patient@glucoflow.demo', 'Asha Rao (synthetic)', patientPassword));
+    const clinicUser = await ownerTx((client) => ensureUser(client, 'clinic@glucoflow.demo', 'Dr Meera Nair (synthetic)', clinicPassword));
+    const reviewerUser = await ownerTx((client) => ensureUser(client, 'reviewer@glucoflow.demo', 'Reviewer Sana Iqbal (synthetic)', reviewerPassword));
+    const clinicianUser = await ownerTx((client) => ensureUser(client, 'clinician@glucoflow.demo', 'Clinician Arun Das (synthetic)', clinicianPassword));
+    const otherClinicUser = await ownerTx((client) => ensureUser(client, 'other-clinic@glucoflow.demo', 'Northside Reviewer (synthetic)', otherClinicPassword));
+    const otherPatientUser = await ownerTx((client) => ensureUser(client, 'other-patient@glucoflow.demo', 'Asha Rao (other clinic, synthetic)', otherPatientPassword));
 
-    credentials['patient'] = { email: 'patient@sutra.demo', password: patientPassword, role: 'patient (self-linked)' };
-    credentials['clinic'] = { email: 'clinic@sutra.demo', password: clinicPassword, role: 'reviewer + clinician' };
-    credentials['reviewer'] = { email: 'reviewer@sutra.demo', password: reviewerPassword, role: 'reviewer only' };
-    credentials['clinician'] = { email: 'clinician@sutra.demo', password: clinicianPassword, role: 'clinician only' };
-    credentials['other-clinic'] = { email: 'other-clinic@sutra.demo', password: otherClinicPassword, role: 'reviewer in the isolated test clinic' };
-    credentials['other-patient'] = { email: 'other-patient@sutra.demo', password: otherPatientPassword, role: 'patient in the isolated test clinic' };
+    credentials['patient'] = { email: 'patient@glucoflow.demo', password: patientPassword, role: 'patient (self-linked)' };
+    credentials['clinic'] = { email: 'clinic@glucoflow.demo', password: clinicPassword, role: 'reviewer + clinician' };
+    credentials['reviewer'] = { email: 'reviewer@glucoflow.demo', password: reviewerPassword, role: 'reviewer only' };
+    credentials['clinician'] = { email: 'clinician@glucoflow.demo', password: clinicianPassword, role: 'clinician only' };
+    credentials['other-clinic'] = { email: 'other-clinic@glucoflow.demo', password: otherClinicPassword, role: 'reviewer in the isolated test clinic' };
+    credentials['other-patient'] = { email: 'other-patient@glucoflow.demo', password: otherPatientPassword, role: 'patient in the isolated test clinic' };
 
     await ownerTx((client) => ensureMembership(client, demoClinicId, clinicUser, { reviewer: true, clinician: true }));
     await ownerTx((client) => ensureMembership(client, demoClinicId, reviewerUser, { reviewer: true, clinician: false }));

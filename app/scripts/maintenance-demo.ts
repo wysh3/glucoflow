@@ -11,8 +11,8 @@
  */
 import pg from 'pg';
 import { join } from 'node:path';
-import { withTransaction, type DbClient } from '@sutra/data';
-import { LocalStorageAdapter } from '@sutra/data/storage';
+import { withTransaction, type DbClient } from '@glucoflow/data';
+import { LocalStorageAdapter } from '@glucoflow/data/storage';
 import { ensureLocalEnv, localRoot } from './lib/env';
 
 const ORPHAN_OBJECT_AGE_HOURS = 3;

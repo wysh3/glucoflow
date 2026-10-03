@@ -1,7 +1,7 @@
 import cors from '@fastify/cors';
 import rateLimit from '@fastify/rate-limit';
 import Fastify, { type FastifyInstance } from 'fastify';
-import { UPLOAD_MAX_BYTES } from '@sutra/contracts';
+import { UPLOAD_MAX_BYTES } from '@glucoflow/contracts';
 import { resolveActor } from './auth';
 import { createAppContext, type AppContext } from './context';
 import { ApiError, toApiError } from './errors';

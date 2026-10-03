@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {evaluationAssignment, evaluationObservations} from '../../scripts/lib/evaluation-input';
-import type {DraftFactInput} from '@sutra/contracts';
+import type {DraftFactInput} from '@glucoflow/contracts';
 
 describe('evaluation inputs', () => {
  it('keeps the assigned patient distinct from the identity printed on a foreign report', () => {

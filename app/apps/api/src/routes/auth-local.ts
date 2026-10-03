@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { verifyPassword } from '@sutra/data/password';
-import { withTransaction } from '@sutra/data/pool';
+import { verifyPassword } from '@glucoflow/data/password';
+import { withTransaction } from '@glucoflow/data/pool';
 import { signLocalToken } from '../auth';
 import type { AppContext } from '../context';
 import { ApiError } from '../errors';

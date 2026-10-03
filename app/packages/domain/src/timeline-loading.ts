@@ -1,4 +1,4 @@
-import { TIMELINE_DISPLAY_BOUND, type TimelineResult } from '@sutra/contracts';
+import { TIMELINE_DISPLAY_BOUND, type TimelineResult } from '@glucoflow/contracts';
 
 export type TimelineCursors = {
   cursor?: string;

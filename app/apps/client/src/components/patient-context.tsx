@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
-import type { PatientSummaryDto } from '@sutra/contracts';
-import { Badge, ScreenTitle, cn, formatDateOnly } from '@sutra/ui';
+import type { PatientSummaryDto } from '@glucoflow/contracts';
+import { Badge, ScreenTitle, cn, formatDateOnly } from '@glucoflow/ui';
 
 /**
  * Persistent patient identity pinned above the record tabs. Every clinic record

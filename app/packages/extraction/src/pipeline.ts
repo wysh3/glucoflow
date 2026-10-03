@@ -1,7 +1,7 @@
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import type { IssueCode } from '@sutra/contracts';
+import type { IssueCode } from '@glucoflow/contracts';
 import {
   prepareDocument,
   DocumentPreparationError,

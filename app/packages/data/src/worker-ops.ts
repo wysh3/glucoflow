@@ -4,7 +4,7 @@ import type {
   IdentityState,
   IssueCode,
   NormalizedPayload,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import type { DbClient } from './pool';
 
 /**

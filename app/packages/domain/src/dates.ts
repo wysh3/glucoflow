@@ -1,4 +1,4 @@
-import type { DateKind, DatePrecision } from '@sutra/contracts';
+import type { DateKind, DatePrecision } from '@glucoflow/contracts';
 
 /**
  * Clinical date handling. Dates are date-only strings and are never timezone

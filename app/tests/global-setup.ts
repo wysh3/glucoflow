@@ -1,5 +1,5 @@
 import pg from 'pg';
-import { QUEUE_PAUSE_LOCK_KEY } from '@sutra/data';
+import { QUEUE_PAUSE_LOCK_KEY } from '@glucoflow/data';
 import { ensureLocalEnv } from '../scripts/lib/env';
 
 /**

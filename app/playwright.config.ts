@@ -39,7 +39,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'pnpm --filter @sutra/api exec tsx src/main.ts',
+      command: 'pnpm --filter @glucoflow/api exec tsx src/main.ts',
       url: 'http://127.0.0.1:8787/health/live',
       reuseExistingServer: true,
       timeout: 120_000,
@@ -47,12 +47,12 @@ export default defineConfig({
       stderr: 'pipe',
     },
     {
-      command: 'pnpm --filter @sutra/worker exec tsx src/main.ts',
+      command: 'pnpm --filter @glucoflow/worker exec tsx src/main.ts',
       reuseExistingServer: true,
       timeout: 120_000,
     },
     {
-      command: 'pnpm --filter @sutra/client dev',
+      command: 'pnpm --filter @glucoflow/client dev',
       url: 'http://127.0.0.1:5173',
       reuseExistingServer: true,
       timeout: 120_000,

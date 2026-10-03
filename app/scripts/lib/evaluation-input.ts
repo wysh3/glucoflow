@@ -1,4 +1,4 @@
-import type { DraftFactInput } from '@sutra/contracts';
+import type { DraftFactInput } from '@glucoflow/contracts';
 import type { Observation } from './evaluation-metrics';
 
 /** The headline evaluates observations only; context needs separate text labels. */

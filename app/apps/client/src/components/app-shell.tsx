@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { CircleCheckIcon, FileTextIcon, HistoryIcon, SearchIcon, UsersIcon } from 'lucide-animated';
-import { Alert, Button, cn, useAnimatedIcon } from '@sutra/ui';
+import { Alert, Button, cn, useAnimatedIcon } from '@glucoflow/ui';
 import { useSession } from '../auth/session';
 import { installBackHandler } from '../platform/back';
 
@@ -83,7 +83,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
       <div className="mx-auto flex w-full max-w-[1440px] flex-col lg:flex-row">
         <aside className="safe-top sticky top-0 hidden h-screen w-[216px] shrink-0 border-r border-line bg-surface/80 px-4 py-6 lg:block">
           <div className="mb-6 px-2">
-            <p className="text-[15px] font-semibold text-ink">Sutra</p>
+            <p className="text-[15px] font-semibold text-ink">Glucoflow</p>
             <p className="mt-1 text-[12px] text-ink-soft">
               {isClinicView ? 'Clinic workspace' : isPatientView ? 'Patient workspace' : 'Account'}
             </p>
@@ -118,7 +118,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
           <header className="safe-top sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur">
             <div className="flex items-center justify-between gap-3 px-4 py-2.5 lg:px-6">
               <div className="flex items-center gap-2 lg:hidden">
-                <span className="text-[15px] font-semibold text-ink">Sutra</span>
+                <span className="text-[15px] font-semibold text-ink">Glucoflow</span>
               </div>
               <div className="hidden items-center gap-3 text-[12px] text-ink-soft lg:flex">
                 <span>{me?.actor.email}</span>

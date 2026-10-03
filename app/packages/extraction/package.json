@@ -1,5 +1,5 @@
 {
-  "name": "@sutra/extraction",
+  "name": "@glucoflow/extraction",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "@napi-rs/canvas": "1.0.10",
-    "@sutra/contracts": "workspace:*",
-    "@sutra/data": "workspace:*",
-    "@sutra/domain": "workspace:*",
+    "@glucoflow/contracts": "workspace:*",
+    "@glucoflow/data": "workspace:*",
+    "@glucoflow/domain": "workspace:*",
     "@tesseract.js-data/eng": "1.0.0",
     "pdfjs-dist": "6.3.289",
     "sharp": "0.35.5",

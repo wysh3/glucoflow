@@ -4,8 +4,8 @@ import type {
   DocumentDto,
   ProcessingState,
   QueueItemDto,
-} from '@sutra/contracts';
-import { PROCESSING_STATE_LABELS } from '@sutra/contracts';
+} from '@glucoflow/contracts';
+import { PROCESSING_STATE_LABELS } from '@glucoflow/contracts';
 import { decodeCursor, encodeCursor } from './identity';
 import type { DbClient } from './pool';
 

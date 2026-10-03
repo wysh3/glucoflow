@@ -26,7 +26,7 @@ test.describe('session', () => {
 
   test('invalid credentials are explained without revealing account existence', async ({ page }) => {
     await page.goto('/sign-in');
-    await page.getByLabel('Email').fill('nobody@sutra.demo');
+    await page.getByLabel('Email').fill('nobody@glucoflow.demo');
     await page.getByLabel('Password').fill('definitely-not-the-password');
     await page.getByRole('button', { name: 'Sign in' }).click();
     const alert = page.getByRole('alert');

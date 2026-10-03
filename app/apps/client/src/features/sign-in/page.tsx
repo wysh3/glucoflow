@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Card, CardBody, Input, Label, ScreenTitle } from '@sutra/ui';
+import { Button, Card, CardBody, Input, Label, ScreenTitle } from '@glucoflow/ui';
 import { useSession } from '../../auth/session';
 
 /**
@@ -42,7 +42,7 @@ export function SignInPage(): React.ReactElement {
   return (
     <div className="safe-top flex min-h-screen items-center justify-center bg-canvas px-4 py-10">
       <div className="w-full max-w-[420px] space-y-4">
-        <ScreenTitle title="Sutra" />
+        <ScreenTitle title="Glucoflow" />
         <Card>
           <CardBody className="pt-6">
             <form onSubmit={submit} className="space-y-4" noValidate>

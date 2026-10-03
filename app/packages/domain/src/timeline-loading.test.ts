@@ -5,7 +5,7 @@ import type {
   TimelineResult,
   TimelineObservation,
   TimelineNote,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 
 it('loads independent cursors and marks observations complete only after every page', async () => {
   const blank = buildTimeline(

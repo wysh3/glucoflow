@@ -2,10 +2,10 @@ import { randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import pg from 'pg';
-import { hashPassword, withTransaction, type DbClient } from '@sutra/data';
-import { LocalStorageAdapter } from '@sutra/data/storage';
-import { createExtractionProvider, processDocumentJob } from '@sutra/extraction';
-import { leaseJob } from '@sutra/data';
+import { hashPassword, withTransaction, type DbClient } from '@glucoflow/data';
+import { LocalStorageAdapter } from '@glucoflow/data/storage';
+import { createExtractionProvider, processDocumentJob } from '@glucoflow/extraction';
+import { leaseJob } from '@glucoflow/data';
 import { appRoot, ensureLocalEnv, localRoot } from '../../scripts/lib/env';
 
 /**

@@ -3,7 +3,7 @@ import {
   extractionResultSchema,
   type DraftFactInput,
   type ExtractionResult,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import {
   ProviderRequestError,
   type ExtractionInput,

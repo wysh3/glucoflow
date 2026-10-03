@@ -88,9 +88,9 @@ pnpm dev
 <http://127.0.0.1:5173>. Each service can also be started on its own:
 
 ```bash
-pnpm --filter @sutra/api exec tsx src/main.ts
-pnpm --filter @sutra/worker exec tsx src/main.ts
-pnpm --filter @sutra/client dev
+pnpm --filter @glucoflow/api exec tsx src/main.ts
+pnpm --filter @glucoflow/worker exec tsx src/main.ts
+pnpm --filter @glucoflow/client dev
 ```
 
 Health endpoints: `GET /health/live` and `GET /health/ready`.

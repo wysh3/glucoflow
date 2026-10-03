@@ -56,7 +56,7 @@ function main(): void {
         '-keypass',
         password,
         '-dname',
-        'CN=Sutra Demo Build, OU=Local Development, O=Sutra, L=Bengaluru, C=IN',
+        'CN=Glucoflow Demo Build, OU=Local Development, O=Glucoflow, L=Bengaluru, C=IN',
       ],
       { stdio: 'inherit' },
     );

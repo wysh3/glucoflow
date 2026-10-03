@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { UPLOAD_MAX_BYTES } from '@sutra/contracts';
+import { UPLOAD_MAX_BYTES } from '@glucoflow/contracts';
 import {
   createFixture,
   createTestContext,

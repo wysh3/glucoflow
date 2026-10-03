@@ -1,4 +1,4 @@
-# Sutra handoff — local completion pass, 3 October 2026
+# Glucoflow handoff — local completion pass, 3 October 2026
 
 The local application is running at http://127.0.0.1:5173. The user requested local work only; deployment is deferred. OpenAI credentials were added locally and verified. The running local worker now uses GPT-6 Luna for new uploads; historical fixture records retain their fixture provenance. Read the [latest cleanup and Luna evidence](app/reports/key-cleanup-and-luna-2026-10-03.md) first.
 

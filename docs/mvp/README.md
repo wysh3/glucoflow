@@ -1,4 +1,4 @@
-# Sutra MVP build documents
+# Glucoflow MVP build documents
 
 Prepared 2 October 2026. Status: consolidated pre-build specification. No application has been built by this documentation task. These documents are the proposed implementation baseline; the user reviews them before application work begins.
 

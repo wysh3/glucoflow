@@ -1,4 +1,4 @@
-import type { DraftFactDto, IdentityState, IssueCode, ReviewDto } from '@sutra/contracts';
+import type { DraftFactDto, IdentityState, IssueCode, ReviewDto } from '@glucoflow/contracts';
 
 /**
  * Review rules shared by the API, the worker and the tests.

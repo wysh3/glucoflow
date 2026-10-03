@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { getDocumentRow, listDocuments, updateReview, getReviewDto } from '@sutra/data';
+import { getDocumentRow, listDocuments, updateReview, getReviewDto } from '@glucoflow/data';
 import { buildSyntheticReport, smokerunDate } from '../../scripts/lib/synthetic-report';
 import {
   createFixture,

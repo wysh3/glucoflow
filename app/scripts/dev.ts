@@ -17,19 +17,19 @@ const services: Service[] = [
   {
     name: 'api',
     command: 'pnpm',
-    args: ['--filter', '@sutra/api', 'dev'],
+    args: ['--filter', '@glucoflow/api', 'dev'],
     env: { ...process.env, ...apiProcessEnv(env), API_BASE_URL: env.API_BASE_URL ?? '' },
   },
   {
     name: 'worker',
     command: 'pnpm',
-    args: ['--filter', '@sutra/worker', 'dev'],
+    args: ['--filter', '@glucoflow/worker', 'dev'],
     env: { ...process.env, ...workerProcessEnv(env) },
   },
   {
     name: 'client',
     command: 'pnpm',
-    args: ['--filter', '@sutra/client', 'dev'],
+    args: ['--filter', '@glucoflow/client', 'dev'],
     env: {
       ...process.env,
       VITE_API_BASE_URL: env.API_BASE_URL ?? 'http://127.0.0.1:8787',

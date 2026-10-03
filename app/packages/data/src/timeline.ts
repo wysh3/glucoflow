@@ -5,7 +5,7 @@ import {
   type TimelineEvent,
   type TimelineNote,
   type TimelineObservation,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import type { DbClient } from './pool';
 
 /**

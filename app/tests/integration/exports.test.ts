@@ -194,7 +194,7 @@ describe('export snapshots', () => {
 
     const { renderExportSummary } = await import('../../apps/worker/src/jobs/export-summary');
     const record = await context.asWorker((client) =>
-      import('@sutra/data').then((module) => module.getExport(client, exportId)),
+      import('@glucoflow/data').then((module) => module.getExport(client, exportId)),
     );
     expect(record?.manifest).toBeTruthy();
     const rendered = await renderExportSummary(

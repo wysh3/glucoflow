@@ -7,7 +7,7 @@ import {
   retryRequestSchema,
   reviewPatchSchema,
   reviewRevisionSchema,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import {
   createReviewRevision,
   documentVersions,
@@ -22,13 +22,13 @@ import {
   requestDocumentRetry,
   reviewActionSummary,
   updateReview,
-} from '@sutra/data';
+} from '@glucoflow/data';
 import { requireCapability } from '../auth';
 import { ApiError } from '../errors';
 import { idempotencyKey, parseBody, parseQuery, requireActor, withActorTx } from './helpers';
 import { withIdempotency } from './idempotency';
 import type { AppContext } from '../context';
-import { DOWNLOAD_URL_SECONDS } from '@sutra/contracts';
+import { DOWNLOAD_URL_SECONDS } from '@glucoflow/contracts';
 
 export function registerDocumentRoutes(app: FastifyInstance, ctx: AppContext): void {
   app.get('/api/v1/queue', async (request) => {

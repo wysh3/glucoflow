@@ -2,7 +2,7 @@ import {
   UPLOAD_COMPLETION_WINDOW_SECONDS,
   type PendingUploadDto,
   type UploadKind,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import type { DbClient } from './pool';
 
 /** Upload session operations. All writes go through SECURITY DEFINER procedures. */

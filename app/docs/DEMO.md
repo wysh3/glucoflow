@@ -20,12 +20,12 @@ to copy a password; do not paste passwords into tickets, screenshots or chat.
 
 | Account | Role |
 | --- | --- |
-| `patient@sutra.demo` | Patient (P0482) |
-| `clinic@sutra.demo` | Reviewer + clinician |
-| `reviewer@sutra.demo` | Reviewer only |
-| `clinician@sutra.demo` | Clinician only (no review queue) |
-| `other-clinic@sutra.demo` | A second clinic, for the isolation checks |
-| `other-patient@sutra.demo` | A second patient, for the isolation checks |
+| `patient@glucoflow.demo` | Patient (P0482) |
+| `clinic@glucoflow.demo` | Reviewer + clinician |
+| `reviewer@glucoflow.demo` | Reviewer only |
+| `clinician@glucoflow.demo` | Clinician only (no review queue) |
+| `other-clinic@glucoflow.demo` | A second clinic, for the isolation checks |
+| `other-patient@glucoflow.demo` | A second patient, for the isolation checks |
 
 Reset to this state at any time:
 
@@ -35,7 +35,7 @@ pnpm reset:demo -- --clinic demo --confirm-demo
 
 ## 1. Clinic: the progression view (web)
 
-1. Open <http://127.0.0.1:5173> and sign in as `clinic@sutra.demo`.
+1. Open <http://127.0.0.1:5173> and sign in as `clinic@glucoflow.demo`.
 2. `Patients` lists P0482 Asha Rao (synthetic). Open the patient.
 3. `Progression` opens with **HbA1c** selected: three approved points (8.2 % on
    12 January 2026, 7.9 % on 10 April 2026, 7.5 % on 09 July 2026) on a date-proportional
@@ -59,7 +59,7 @@ The seed publishes six documents (January, April and July lab reports, the presc
 the eye and foot examinations) and leaves nothing awaiting review, so the review sequence
 starts with a real upload. The seed command prints the same instruction.
 
-1. Sign in as `patient@sutra.demo`, open `Add report`, choose
+1. Sign in as `patient@glucoflow.demo`, open `Add report`, choose
    `fixtures/synthetic/sources/2026-09-14_lab_report.pdf` and upload it. The dialog reports
    *Upload complete* as soon as the worker has processed it.
 2. In the patient context, open `Documents`: seven documents with their states.
@@ -89,7 +89,7 @@ starts with a real upload. The seed command prints the same instruction.
 
 ## 4. Patient: upload and notes (web)
 
-1. Sign in as `patient@sutra.demo` (use a separate browser profile or sign out first).
+1. Sign in as `patient@glucoflow.demo` (use a separate browser profile or sign out first).
 2. `My records` shows only the approved results for P0482, with the same chart and the
    original documents.
 3. `Add report` opens the upload dialog: choose a PDF or a photo, confirm the patient and
@@ -105,10 +105,10 @@ starts with a real upload. The seed command prints the same instruction.
 
 ## 5. Isolation checks (web)
 
-1. Sign in as `other-clinic@sutra.demo`: the patient list is empty. Opening a P0482 URL
+1. Sign in as `other-clinic@glucoflow.demo`: the patient list is empty. Opening a P0482 URL
    from the first clinic returns *not found*, never a redacted record.
-2. Sign in as `other-patient@sutra.demo`: only that patient's own record is visible.
-3. As `clinician@sutra.demo`, opening `/clinic/queue` shows the reviewer-capability
+2. Sign in as `other-patient@glucoflow.demo`: only that patient's own record is visible.
+3. As `clinician@glucoflow.demo`, opening `/clinic/queue` shows the reviewer-capability
    refusal.
 
 ## 6. Android
@@ -120,10 +120,10 @@ adb install -r apps/client/android/app/build/outputs/apk/release/app-release.apk
 adb reverse tcp:8787 tcp:8787     # emulator: reach the host API on 127.0.0.1
 ```
 
-1. Launch **Sutra**. The sign-in screen renders from the bundled assets with no dev
+1. Launch **Glucoflow**. The sign-in screen renders from the bundled assets with no dev
    server; the network configuration permits cleartext only for the local development
    hosts.
-2. Sign in as `patient@sutra.demo`: `Records` shows the same approved progression with the
+2. Sign in as `patient@glucoflow.demo`: `Records` shows the same approved progression with the
    bottom navigation (`Records`, `Add report`, `Visit notes`, `Account`).
 3. `Add report` uses the camera or the file chooser; a denied camera permission falls back
    to the chooser.

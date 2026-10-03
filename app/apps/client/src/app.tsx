@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ToastProvider } from '@sutra/ui';
+import { ToastProvider } from '@glucoflow/ui';
 import { SessionProvider } from './auth/session';
 import { AppRoutes } from './routes';
 

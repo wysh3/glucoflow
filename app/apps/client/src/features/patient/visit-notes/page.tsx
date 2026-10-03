@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NOTE_MAX_CHARS, NOTE_CATEGORY_LABELS } from '@sutra/contracts';
+import { NOTE_MAX_CHARS, NOTE_CATEGORY_LABELS } from '@glucoflow/contracts';
 import {
   Alert,
   Badge,
@@ -14,7 +14,7 @@ import {
   Select,
   Textarea,
   formatDateOnly,
-} from '@sutra/ui';
+} from '@glucoflow/ui';
 import { useApi, useSession, describeApiError } from '../../../auth/session';
 import { useNotes } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';

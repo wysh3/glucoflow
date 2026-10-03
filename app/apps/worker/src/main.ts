@@ -1,4 +1,4 @@
-import { HEARTBEAT_SECONDS } from '@sutra/contracts';
+import { HEARTBEAT_SECONDS } from '@glucoflow/contracts';
 import {
   completeJob,
   failJob,
@@ -11,16 +11,16 @@ import {
   failExport,
   type DbClient,
   type LeasedJob,
-} from '@sutra/data';
+} from '@glucoflow/data';
 import {
   LocalStorageAdapter,
   SupabaseStorageAdapter,
   type StorageAdapter,
-} from '@sutra/data/storage';
-import { createExtractionProvider, processDocumentJob } from '@sutra/extraction';
-import type { ProviderBudget } from '@sutra/extraction';
-import { createPool, type DbPool } from '@sutra/data/pool';
-import { withTransaction } from '@sutra/data/pool';
+} from '@glucoflow/data/storage';
+import { createExtractionProvider, processDocumentJob } from '@glucoflow/extraction';
+import type { ProviderBudget } from '@glucoflow/extraction';
+import { createPool, type DbPool } from '@glucoflow/data/pool';
+import { withTransaction } from '@glucoflow/data/pool';
 import { renderExportSummary } from './jobs/export-summary';
 import { workerConfig, type WorkerConfig } from './config';
 

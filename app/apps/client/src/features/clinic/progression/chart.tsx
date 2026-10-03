@@ -8,8 +8,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { numeric } from '@sutra/ui';
-import { formatDateOnly } from '@sutra/ui';
+import { numeric } from '@glucoflow/ui';
+import { formatDateOnly } from '@glucoflow/ui';
 
 /**
  * Progression chart.

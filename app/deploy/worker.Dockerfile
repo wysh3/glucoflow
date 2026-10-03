@@ -31,7 +31,7 @@ COPY tsconfig.base.json tsconfig.node.json ./
 COPY packages ./packages
 COPY apps/worker ./apps/worker
 COPY scripts ./scripts
-RUN pnpm --filter @sutra/worker build
+RUN pnpm --filter @glucoflow/worker build
 ENV NODE_ENV=production
 ENV OCR_ENABLED=true
 ENV TMP_ROOT=/tmp/sutra-worker

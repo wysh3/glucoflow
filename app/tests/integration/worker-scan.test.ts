@@ -12,8 +12,8 @@ import { createHash } from 'node:crypto';
 import { createCanvas } from '@napi-rs/canvas';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { createExtractionProvider, processDocumentJob } from '@sutra/extraction';
-import { leaseJob, getDocumentSource } from '@sutra/data';
+import { createExtractionProvider, processDocumentJob } from '@glucoflow/extraction';
+import { leaseJob, getDocumentSource } from '@glucoflow/data';
 import { appRoot, localRoot } from '../../scripts/lib/env';
 import {
   createFixture,

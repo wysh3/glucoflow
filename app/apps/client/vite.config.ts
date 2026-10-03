@@ -25,6 +25,6 @@ export default defineConfig({
     chunkSizeWarningLimit: 1200,
   },
   define: {
-    __SUTRA_BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+    __GLUCOFLOW_BUILD_TIME__: JSON.stringify(new Date().toISOString()),
   },
 });

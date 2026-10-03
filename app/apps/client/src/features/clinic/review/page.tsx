@@ -5,12 +5,12 @@ import type {
   FactDisposition,
   IssueCode,
   ReviewDto,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import {
   ISSUE_LABELS,
   SUPPORTED_TEST_CODES,
   testDisplayName,
-} from '@sutra/contracts';
+} from '@glucoflow/contracts';
 import {
   Alert,
   Badge,
@@ -33,7 +33,7 @@ import {
   Textarea,
   cn,
   numeric,
-} from '@sutra/ui';
+} from '@glucoflow/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { randomIdempotencyKey } from '../../../lib/api';
 import { useApi, useSession, describeApiError } from '../../../auth/session';

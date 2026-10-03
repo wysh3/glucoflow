@@ -1,7 +1,7 @@
 /**
  * Worker bundle.
  *
- *   pnpm --filter @sutra/worker build  ->  apps/worker/dist/worker.mjs
+ *   pnpm --filter @glucoflow/worker build  ->  apps/worker/dist/worker.mjs
  *
  * Native and asset-loading packages stay external; the workspace packages are bundled,
  * so the image only needs production dependencies.

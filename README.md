@@ -1,4 +1,4 @@
-# Sutra
+# Glucoflow
 
 Local status, 3 October 2026: **the local completion pass is implemented under [`app/`](app/)**. Read the [current handoff](HANDOFF.md) and [local completion evidence](app/reports/local-fixes-2026-10-03.md). Deployment is deferred at the user's request. GPT-6 Luna is enabled locally and has passed bounded synthetic evaluation and the full API smoke flow. Read [latest evidence](app/reports/key-cleanup-and-luna-2026-10-03.md). Hosted services, phone OTP, independent clinical validation and the latest physical Android pass remain outstanding.
 
@@ -18,8 +18,8 @@ Start with [the MVP documents](docs/mvp/README.md), then follow [the implementat
 |---|---|
 | app/ | The implementation: API, worker, web client, Android shell, migrations, tests, reports |
 | docs/mvp/ | Authoritative scope, UI, architecture, extraction, data/API, build tasks and tests |
-| deliverables/Sutra_Pitch.pdf | Current pitch; claims must be reconciled with final takeover evidence |
-| deliverables/Sutra_Pitch.pptx | Editable version of the same deck |
+| deliverables/Glucoflow_Pitch.pdf | Current pitch; claims must be reconciled with final takeover evidence |
+| deliverables/Glucoflow_Pitch.pptx | Editable version of the same deck |
 | deliverables/Submission_Answers.md | Submission draft; final evidence and real team details still required |
 | HANDOFF.md | Current execution status and dependencies |
 | archive/ | Historical material and source assets; excluded from the build baseline |

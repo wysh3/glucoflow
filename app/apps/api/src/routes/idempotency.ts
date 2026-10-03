@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { withActor, type DbClient } from '@sutra/data/pool';
+import { withActor, type DbClient } from '@glucoflow/data/pool';
 import type { AppContext } from '../context';
 import { ApiError } from '../errors';
 import type { ResolvedActor } from '../auth';

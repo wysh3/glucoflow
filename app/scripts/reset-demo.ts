@@ -12,7 +12,7 @@
 import pg from 'pg';
 import { rm } from 'node:fs/promises';
 import { join } from 'node:path';
-import { withTransaction, type DbClient } from '@sutra/data';
+import { withTransaction, type DbClient } from '@glucoflow/data';
 import { appRoot, ensureLocalEnv, localRoot } from './lib/env';
 
 function parseArgs(argv: string[]): { clinic: string | null; confirmDemo: boolean } {

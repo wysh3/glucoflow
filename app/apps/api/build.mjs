@@ -1,7 +1,7 @@
 /**
  * API bundle.
  *
- *   pnpm --filter @sutra/api build   ->  apps/api/dist/server.mjs
+ *   pnpm --filter @glucoflow/api build   ->  apps/api/dist/server.mjs
  *
  * Third-party packages with dynamic requires or native bindings stay external; the
  * workspace packages are bundled, so the image only needs production dependencies.

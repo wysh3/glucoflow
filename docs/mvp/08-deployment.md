@@ -63,7 +63,7 @@ The build tasks must create and document these scripts:
 - `pnpm --filter client build` then `pnpm --filter client exec cap sync android`: bundle Android assets.
 - Build a signed release APK with Gradle using private keystore configuration; document the exact command after native project generation.
 
-Signing keys and passwords stay outside Git. Confirm Android package ID with the user before external store publication; internal MVP package ID proposal is `in.sutra.demo`. Store publication is outside this plan.
+Signing keys and passwords stay outside Git. Confirm Android package ID with the user before external store publication; internal MVP package ID proposal is `in.glucoflow.demo`. Store publication is outside this plan.
 
 ## Observability and retention
 

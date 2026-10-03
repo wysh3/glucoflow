@@ -1,6 +1,6 @@
 import { createServer, type Server } from 'node:http';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { SupabaseStorageAdapter } from '@sutra/data/storage';
+import { SupabaseStorageAdapter } from '@glucoflow/data/storage';
 
 /**
  * Hosted storage, verified against a local Storage API stub.

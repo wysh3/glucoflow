@@ -1,4 +1,4 @@
-import { TEST_DEFINITIONS, type SupportedTestCode } from '@sutra/contracts';
+import { TEST_DEFINITIONS, type SupportedTestCode } from '@glucoflow/contracts';
 
 /**
  * Versioned alias mapping. Only harmless spelling and spacing differences are

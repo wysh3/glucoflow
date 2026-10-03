@@ -1,8 +1,8 @@
 import { SignJWT, createRemoteJWKSet, jwtVerify, type JWTPayload } from 'jose';
-import type { ActorContext, Context } from '@sutra/contracts';
-import { capabilitiesFromContexts, loadActorContexts, loadActorProfile, type ActorProfile } from '@sutra/data';
-import type { DbPool } from '@sutra/data/pool';
-import { withTransaction } from '@sutra/data/pool';
+import type { ActorContext, Context } from '@glucoflow/contracts';
+import { capabilitiesFromContexts, loadActorContexts, loadActorProfile, type ActorProfile } from '@glucoflow/data';
+import type { DbPool } from '@glucoflow/data/pool';
+import { withTransaction } from '@glucoflow/data/pool';
 import type { ApiConfig } from './config';
 import { ApiError } from './errors';
 

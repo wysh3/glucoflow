@@ -1,7 +1,7 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { formatEnvError, workerEnvSchema, type WorkerEnv } from '@sutra/contracts';
-import { findAppRoot, loadDotEnv, resolveFromAppRoot } from '@sutra/data/runtime';
+import { formatEnvError, workerEnvSchema, type WorkerEnv } from '@glucoflow/contracts';
+import { findAppRoot, loadDotEnv, resolveFromAppRoot } from '@glucoflow/data/runtime';
 
 export type WorkerConfig = WorkerEnv & {
   appRoot: string;

@@ -1,6 +1,6 @@
 import type { FastifyInstance, FastifyRequest } from 'fastify';
 import { z } from 'zod';
-import { withActor, type DbClient } from '@sutra/data/pool';
+import { withActor, type DbClient } from '@glucoflow/data/pool';
 import type { ResolvedActor } from '../auth';
 import type { AppContext } from '../context';
 import { ApiError } from '../errors';

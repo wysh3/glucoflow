@@ -6,9 +6,9 @@ import {
   loadSnapshotContent,
   patientHeader,
   type DbClient,
-} from '@sutra/data';
-import type { StorageAdapter, LocalStorageAdapter } from '@sutra/data/storage';
-import { exportObjectPath } from '@sutra/data/storage';
+} from '@glucoflow/data';
+import type { StorageAdapter, LocalStorageAdapter } from '@glucoflow/data/storage';
+import { exportObjectPath } from '@glucoflow/data/storage';
 
 /**
  * Export rendering. The renderer reads the frozen snapshot manifest and never
@@ -82,7 +82,7 @@ export async function renderExportSummary(
   await mkdir(workDir, { recursive: true });
   const filePath = `${workDir}/summary.pdf`;
 
-  const document = new PDFDocument({ size: 'A4', margin: 48, info: { Title: 'Sutra visit summary' } });
+  const document = new PDFDocument({ size: 'A4', margin: 48, info: { Title: 'Glucoflow visit summary' } });
   const stream = createWriteStream(filePath);
   document.pipe(stream);
 

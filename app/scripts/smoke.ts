@@ -9,7 +9,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { UPLOAD_MAX_BYTES } from '@sutra/contracts';
+import { UPLOAD_MAX_BYTES } from '@glucoflow/contracts';
 import { ensureLocalEnv, localRoot } from './lib/env';
 import { buildSyntheticReport, smokerunDate } from './lib/synthetic-report';
 

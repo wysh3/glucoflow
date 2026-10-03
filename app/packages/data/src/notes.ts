@@ -1,4 +1,4 @@
-import type { CreateNoteInput, PatientNoteDto } from '@sutra/contracts';
+import type { CreateNoteInput, PatientNoteDto } from '@glucoflow/contracts';
 import type { DbClient } from './pool';
 
 /** Patient note reads and writes. Notes stay patient-reported in every response. */

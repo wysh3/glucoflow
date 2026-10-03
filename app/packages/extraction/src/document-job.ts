@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import type { IssueCode } from '@sutra/contracts';
+import type { IssueCode } from '@glucoflow/contracts';
 import {
   completeJob,
   createExtractionRun,
@@ -17,8 +17,8 @@ import {
   setVersionPageCount,
   type DbClient,
   type LeasedJob,
-} from '@sutra/data';
-import type { StorageAdapter } from '@sutra/data/storage';
+} from '@glucoflow/data';
+import type { StorageAdapter } from '@glucoflow/data/storage';
 import { runExtractionPipeline, ExtractionError } from './pipeline';
 import { scanIdentityMentions } from './providers/rules';
 import type { ExtractionProvider, ProviderBudget } from './types';

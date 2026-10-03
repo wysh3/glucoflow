@@ -9,7 +9,7 @@
  *
  * The prompt hash records this embedded text, including the current model contract.
  */
-export const EXTRACT_V1_PROMPT = `Sutra laboratory and clinical document extraction (schema v1).
+export const EXTRACT_V1_PROMPT = `Glucoflow laboratory and clinical document extraction (schema v1).
 
 You extract only what is literally present on the supplied pages.
 

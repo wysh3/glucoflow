@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, Button, Spinner, cn } from '@sutra/ui';
+import { Alert, Button, Spinner, cn } from '@glucoflow/ui';
 import { openAuthorizedUrl } from '../platform/download';
 import { Capacitor } from '@capacitor/core';
 

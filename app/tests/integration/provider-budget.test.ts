@@ -3,7 +3,7 @@ import {
   createExtractionRun,
   reserveProviderCall,
   reconcileProviderCall,
-} from '@sutra/data';
+} from '@glucoflow/data';
 import {
   createFixture,
   createTestContext,

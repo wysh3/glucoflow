@@ -1,4 +1,4 @@
-# Sutra workspace instructions
+# Glucoflow workspace instructions
 
 Read README.md, docs/mvp/README.md and the relevant specifications before changing the product. Follow docs/mvp/06-build-plan.md and map completed work to docs/mvp/10-acceptance-checklist.md.
 

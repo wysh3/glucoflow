@@ -89,8 +89,8 @@ function main(): void {
   console.log(`Android build using JDK from ${jdk.source}: ${jdk.home}`);
 
   // The web assets are always rebuilt: the bundle carries the public API base URL.
-  run('pnpm', ['--filter', '@sutra/client', 'build']);
-  run('pnpm', ['--filter', '@sutra/client', 'exec', 'cap', 'sync', 'android']);
+  run('pnpm', ['--filter', '@glucoflow/client', 'build']);
+  run('pnpm', ['--filter', '@glucoflow/client', 'exec', 'cap', 'sync', 'android']);
 
   if (command === 'sync') {
     console.log('Native project synchronised. Run "pnpm android:apk" to assemble the APK.');
@@ -100,7 +100,7 @@ function main(): void {
   const gradle = join(androidDir, 'gradlew');
   if (!existsSync(gradle)) {
     throw new Error(
-      `The Android project is missing at ${androidDir}. Run "pnpm --filter @sutra/client exec cap add android" first.`,
+      `The Android project is missing at ${androidDir}. Run "pnpm --filter @glucoflow/client exec cap add android" first.`,
     );
   }
   run(gradle, ['assembleRelease', '--no-daemon'], {

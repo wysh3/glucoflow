@@ -3,7 +3,7 @@
 /*
  * The shared component package lives outside this application's root, so Tailwind's
  * automatic source detection does not see it. Without this directive every utility
- * used only inside @sutra/ui (dialog positioning, tabs, badges) is dropped from the
+ * used only inside @glucoflow/ui (dialog positioning, tabs, badges) is dropped from the
  * generated stylesheet.
  */
 @source '../../../packages/ui/src';
