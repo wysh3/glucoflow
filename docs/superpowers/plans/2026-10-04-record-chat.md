@@ -24,5 +24,5 @@ Pre-flight: Task 1 produces ChatAnswer/cards and strict request; Task 2 consumes
 
 Task 1: complete — strict actor/RLS context, bounded shared provider budget, approved-only facts and current reported entries; latest full Vitest pass 180/180, types pass.
 Task 2: complete — expressive SVG/CSS orb and responsive record chat; full browser suite 88/88, final chat-focused suite 8/8. Reading-order refinements verified RED→GREEN.
-Task 3: publication in progress — API/web deployed, matching signed APK built and scanned, repository/release publishing follows.
+Task 3: complete — API/web deployed and healthy, public source pushed in 851a47b, release demo-2026-10-04-chat published; downloaded APK hash matches the signed/scanned build. GitHub verification run 37178502131 passed against the feature commit.
 Final review: self-review; delegation was explicitly excluded by the user/workspace. Fixed same-day ambiguity, invalid dates, source span preference, pending question visibility and reply position through regression checks. No deferred code findings; physical-device verification remains a documented external limitation.

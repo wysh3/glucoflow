@@ -12,6 +12,7 @@ The animated guide now supports patient-scoped factual conversations with GPT‑
 | Full browser regression | 88 passed across desktop 1440×900 and mobile 390×844 |
 | Final focused chat pass | 8 passed after the evidence/visibility/scroll refinements |
 | Client/API/worker production builds | Passed; frontend retains the existing large-chunk warning |
+| GitHub CI for feature commit `851a47b` | [Passed](https://github.com/wysh3/glucoflow/actions/runs/37178502131) |
 | API container health | Ready; database reachable |
 | Hosted doctor and patient conversations | Verified through the browser with synthetic records |
 | Android release | Signed APK built; v2 signature verified; privileged credential scan passed |
@@ -33,7 +34,8 @@ The synthetic patient’s mobile chat identified “Your records · P0482” and
 - API/worker migrations unchanged; the document worker was not redeployed for this chat update.
 - APK SHA-256: `5d3b85720395b8ccda5794e67889ee802d2c719bec1e238f311ff4a309e8fcf6`
 - APK package: current shared hosted client, bundled for release; v2 signature verified.
-- Release: [Expressive record companion](https://github.com/wysh3/glucoflow/releases/tag/demo-2026-10-04-chat).
+- Release: [Expressive record companion](https://github.com/wysh3/glucoflow/releases/tag/demo-2026-10-04-chat), source commit `851a47b6e64ca7868fd0c3749081da597c1e3df5`.
+- The public release APK was downloaded again; its SHA-256 matches the bundled release artifact above.
 
 The frontend and decompressed APK were scanned for the privileged database password, storage service key and model credentials; none were found. Public Supabase configuration and labelled synthetic demo accounts remain intentionally available. No provider secrets or signing keys were added to Git.
 
