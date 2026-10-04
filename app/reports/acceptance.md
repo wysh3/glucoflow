@@ -1,3 +1,5 @@
+Current verification: [4 October workspace and guide evidence](workspace-guide-2026-10-04.md): 157 unit/integration tests, 78 full browser checks, 10 final focused browser checks, 12 SQL checks, hosted GPT-6 Luna app help and current signed APK. R01/R03/R04/R05/R07/R08/R09/R10/R11/R12/R13/R14/R15/R16/R17 retain their underlying implementation evidence; this pass improves consolidated record access, accessible menus and clinical boundaries. Physical-device and clinical/productivity validation remain open. Older records below are historical.
+
 Current local provider verification: [cleanup and Luna evidence](key-cleanup-and-luna-2026-10-03.md). 126 tests, 56 fixture browser checks, 12 policies, 6 mutations and 25 live API checks pass. Earlier counts below are historical.
 
 > Current local pass: read [3 October completion evidence](local-fixes-2026-10-03.md) and [the current handoff](../../HANDOFF.md). The material below is the earlier implementation record; its counts and unresolved-item descriptions are historical. Current results are 120 tests, 12 policy checks, 25 smoke checks and 56 browser checks. External service/device/productivity gates remain open.

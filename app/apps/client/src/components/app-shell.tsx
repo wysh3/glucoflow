@@ -4,6 +4,8 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ArrowLeftIcon, CircleCheckIcon, FileTextIcon, HeartPulseIcon, FilePenLineIcon, UploadIcon, UserIcon, UsersIcon } from 'lucide-animated';
 import { Alert, Button, cn, useAnimatedIcon } from '@glucoflow/ui';
 import { useSession } from '../auth/session';
+import {usePatient} from '../lib/queries';
+import {Activity,History,NotebookPen} from 'lucide-react';
 import { installBackHandler } from '../platform/back';
 
 /**
@@ -68,9 +70,12 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
   const isClinicView = location.pathname.startsWith('/clinic');
   const isPatientView = location.pathname.startsWith('/patient');
 
+  const activePatientId = location.pathname.match(/^\/clinic\/patients\/([0-9a-f-]{36})(?:\/|$)/)?.[1];
+  const activePatient = usePatient(activePatientId);
+  const patientSections = [{path:'overview',label:'Visit overview',icon:NotebookPen},{path:'progression',label:'Progression',icon:Activity},{path:'documents',label:'Documents',icon:FileTextIcon},{path:'master',label:'Home reports',icon:HeartPulseIcon},{path:'history',label:'History',icon:History}];
   const clinicLinks = [
     { to: '/clinic/patients', label: 'Patients', icon: UsersIcon },
-    { to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon },
+    ...(me?.capabilities.canReview ? [{ to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon }] : []),
   ];
   const patientLinks = [
     { to: '/patient/master', label: 'Home readings', icon: HeartPulseIcon },
@@ -83,7 +88,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
   return (
     <div className="min-h-screen bg-canvas">
       <div className="mx-auto flex w-full max-w-[1440px] flex-col lg:flex-row">
-        <aside className="safe-top sticky top-0 hidden h-screen w-[240px] shrink-0 border-r border-line bg-surface/90 px-4 py-6 lg:block">
+        <aside className="sticky top-0 hidden h-screen w-[240px] shrink-0 overflow-y-auto border-r border-line bg-surface/90 px-4 pb-6 pt-[calc(24px+env(safe-area-inset-top))] lg:block">
           <div className="mb-6 px-2">
             <HeartPulseIcon size={28} className="mb-3 text-primary" aria-hidden />
             <p className="text-[19px] font-semibold tracking-tight text-primary">Glucoflow</p>
@@ -102,6 +107,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
               <UserIcon size={20} aria-hidden /> Account
             </NavLink>
           </nav>
+          {activePatientId ? <section className="mt-6 border-t border-line pt-4"><p className="px-3 text-[10px] font-semibold uppercase tracking-wider text-ink-soft">Current patient</p><p className="mt-2 px-3 text-sm font-medium text-ink">{activePatient.data?.displayName ?? 'Loading patient…'}</p><p className="mt-1 px-3 text-xs text-ink-soft">{activePatient.data?.clinicIdentifier}</p><nav aria-label="Patient record sections" className="mt-3 flex flex-col gap-1">{patientSections.map(section=><NavLink key={section.path} to={`/clinic/patients/${activePatientId}/${section.path}`} className={railLinkClass}><section.icon size={18} aria-hidden/>{section.label}</NavLink>)}</nav></section> : null}
           {me ? (
             <div className="mt-6 border-t border-line pt-4 text-[12px] text-ink-soft">
               <p className="font-medium text-ink">{me.actor.displayName}</p>

@@ -1,3 +1,4 @@
+import { registerGuideRoutes } from './guide/routes';
 import { registerMasterRoutes } from './routes/master';
 import cors from '@fastify/cors';
 import rateLimit from '@fastify/rate-limit';
@@ -92,6 +93,7 @@ export async function buildServer(existingContext?: AppContext): Promise<Fastify
       request.actor = await resolveActor(ctx.pool, ctx.config, token, ctx.verifyToken);
     });
 
+    registerGuideRoutes(instance, ctx);
     registerPatientRoutes(instance, ctx);
     registerMasterRoutes(instance, ctx);
     registerDocumentRoutes(instance, ctx);

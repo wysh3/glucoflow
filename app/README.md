@@ -70,4 +70,4 @@ The newer Master dashboard is covered by domain/API tests; see the revised plan 
 Local extraction defaults to a labelled deterministic fixture engine. Live extraction requires
 credentials and a positive budget and keeps output in human-reviewed drafts. No clinical
 validation, treatment decisions, live ABHA integration or real emergency dispatch is claimed.
-Physical-device checks and phone OTP remain pending. The bundled APK predates the latest dashboard.
+Physical-device checks and phone OTP remain pending. The bundled signed APK contains the current shared client. See [workspace and guide verification](reports/workspace-guide-2026-10-04.md) and [guide operations](docs/APP_GUIDE.md).

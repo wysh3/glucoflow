@@ -70,7 +70,8 @@ test.describe('progression', () => {
 test('custom dates constrain progression to the selected historical range', async ({page}) => {
   await signIn(page, 'clinic');
   await openDemoPatient(page);
-  await page.getByLabel('Range', {exact:true}).selectOption('custom');
+  await page.getByRole('combobox', {name:'Range',exact:true}).click();
+  await page.getByRole('option', {name:'Custom',exact:true}).click();
   await page.getByLabel('From', {exact:true}).fill('2026-01-01');
   await page.getByLabel('To', {exact:true}).fill('2026-07-31');
   await expect(page.getByText('3 recorded results in approved records', {exact:false})).toBeVisible();

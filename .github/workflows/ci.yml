@@ -1,4 +1,4 @@
-name: sutra-ci
+name: Glucoflow CI
 
 # Continuous integration for the application repository.
 # Database jobs use a PostgreSQL service container and the same migrations the local
@@ -12,6 +12,9 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
     services:
       postgres:
         image: postgres:16
@@ -52,6 +55,7 @@ jobs:
         with:
           node-version: '22.12'
           cache: pnpm
+          cache-dependency-path: app/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
       - name: Apply migrations
         # The CI database is owned by the login role, so the API privilege role is

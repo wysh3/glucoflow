@@ -48,25 +48,35 @@ export function SignInPage(): React.ReactElement {
     finally{setBusy(false);}
   };
   if(demoEnabled)return (
-    <div className="safe-top min-h-screen bg-canvas px-5 py-12 sm:py-20">
-      <div className="mx-auto max-w-[760px] space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-5">
-          <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-white"><HeartPulse size={24} aria-hidden /></span><h1 className="text-2xl font-semibold tracking-tight text-primary">Glucoflow</h1></div>
-          <span className="rounded-full border border-line px-3 py-1 text-xs text-ink-soft">Interactive demo</span>
+    <main className="welcome-page">
+      <section data-testid="welcome-panel" className="relative mx-auto w-full max-w-[980px] overflow-hidden rounded-[28px] border border-line bg-surface p-5 shadow-[0_16px_70px_rgba(32,59,56,0.06)] sm:p-8 lg:p-10">
+        <header className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5"><HeartPulse size={24} className="text-primary" aria-hidden/><h1 className="text-xl font-semibold tracking-tight text-primary">Glucoflow</h1></div>
+          <span className="rounded-full bg-primary/7 px-3 py-1.5 text-[11px] text-primary">Interactive demo</span>
+        </header>
+        <div className="my-6 grid items-center gap-5 sm:my-8 lg:grid-cols-[1fr_auto]">
+          <div><p className="mb-2 text-xs font-medium tracking-wide text-primary">A little clarity. A calmer visit.</p>
+            <h2 className="max-w-lg text-[28px] font-semibold leading-tight tracking-tight text-ink sm:text-[38px]">Your care records,<br className="hidden sm:block"/> beautifully together.</h2>
+            <p className="mt-3 max-w-md text-sm leading-6 text-ink-soft">Reports, reviewed facts and visit context. Choose your workspace to explore with ready-made samples.</p>
+          </div>
+          <div className="hidden h-28 w-28 items-center justify-center rounded-full bg-[#edf5ef] lg:flex" aria-hidden><span className="welcome-orb"><span/><span/></span></div>
         </div>
-        <h2 className="text-3xl font-semibold tracking-tight text-ink">Care records, in one calm place.</h2>
-        <p className="text-sm leading-6 text-ink-soft">Choose a role to explore. All patient records in this demo are synthetic.</p>
-        <div className="grid grid-cols-2 gap-3">{demoAccounts.map(account=>(
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">{demoAccounts.filter(account=>!account.key.startsWith('other-')).map(account=>(
           <button key={account.key} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)}
-            className="group relative min-h-[156px] rounded-2xl border border-line bg-surface p-4 text-left sm:p-5 shadow-[0_3px_16px_rgba(32,59,56,0.035)] transition hover:border-primary hover:bg-primary/5 disabled:opacity-50">
-            <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/8 text-primary">{account.key.includes('patient') ? <User size={21} aria-hidden /> : account.key === 'clinician' ? <Stethoscope size={21} aria-hidden /> : account.key === 'reviewer' ? <ClipboardCheck size={21} aria-hidden /> : <Users size={21} aria-hidden />}</span><ArrowUpRight size={18} className="absolute right-5 top-5 text-ink-soft transition group-hover:text-primary" aria-hidden /><span className="block text-base font-semibold text-ink">{account.label}</span>
-            <span className="mt-2 block text-xs leading-5 text-ink-soft sm:text-sm sm:leading-6">{account.description}</span>
+            className="group relative flex flex-col items-start justify-start min-h-[116px] rounded-2xl border border-line bg-canvas/65 p-3.5 text-left transition hover:border-primary/50 hover:bg-primary/5 disabled:opacity-50 sm:min-h-[160px] sm:p-4">
+            <span className="mb-2 flex h-8 w-8 items-center justify-center rounded-xl bg-surface text-primary">{account.key.includes('patient') ? <User size={18} aria-hidden/> : account.key==='clinician' ? <Stethoscope size={18} aria-hidden/> : account.key==='reviewer' ? <ClipboardCheck size={18} aria-hidden/> : <Users size={18} aria-hidden/>}</span>
+            <ArrowUpRight size={15} className="absolute right-3.5 top-4 text-ink-soft" aria-hidden/><span className="block text-sm font-semibold text-ink">{account.label}</span>
+            <span className="mt-1.5 block text-[11px] leading-4 text-ink-soft sm:text-xs sm:leading-5">{account.description}</span>
           </button>
         ))}</div>
-        {busy?<p role="status" className="text-sm text-ink-soft">Opening workspace…</p>:null}
-        {error?<p role="alert" className="text-sm text-danger">{error}</p>:null}
-      </div>
-    </div>
+        <footer className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4 text-[11px] text-ink-soft">
+          <p>All demo patient records are synthetic.</p>
+          <details className="relative"><summary className="min-h-8 cursor-pointer py-2 text-primary">Test access separation</summary><div className="absolute bottom-full right-0 z-10 mb-2 w-60 rounded-xl border border-line bg-surface p-2 shadow-lg">{demoAccounts.filter(account=>account.key.startsWith('other-')).map(account=><button key={account.key} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)} className="block min-h-11 w-full rounded-lg px-3 text-left text-sm hover:bg-canvas">{account.label}<span className="sr-only"> {account.description}</span></button>)}</div></details>
+        </footer>
+        {busy?<p role="status" className="mt-2 text-xs text-primary">Opening workspace…</p>:null}
+        {error?<p role="alert" className="mt-2 text-xs text-danger">{error}</p>:null}
+      </section>
+    </main>
   );
 
   return (

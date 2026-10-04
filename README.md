@@ -4,12 +4,13 @@ A shared workspace for patients and clinic teams to turn scattered diabetes reco
 
 **[Open the hosted demo](https://glucoflow.vercel.app)** · [Setup guide](app/docs/SETUP.md) · [Demo walkthrough](app/docs/DEMO.md) · [Android APK](deliverables/Glucoflow_Android.apk)
 
-![Glucoflow built-in synthetic sample library](app/reports/evidence/polish-2026-10-04/sample-library.png)
+![Glucoflow clinic workspace](app/reports/evidence/workspace-guide-2026-10-04/doctor-desktop.png)
 
 ## What it does
 
 - **Patient workspace:** try built-in synthetic samples, upload PDFs or ordered photos, open original reports, view approved records, add patient-reported notes, and export a visit summary.
-- **Clinic workspace:** review extracted drafts beside source evidence, correct fields before publication, explore progression, search records, and retain amendment history.
+- **Gluco app guide:** a cute contextual orb with bounded GPT‑6 Luna intent classification, server-owned navigation help, and strict refusal of clinical advice.
+- **Clinic workspace:** consolidated visit overview, source-backed latest measurements, prescriptions, examinations and patient notes; review extracted drafts beside source evidence, correct fields before publication, explore progression, search records, and retain amendment history.
 - **Synthetic Master dashboard:** illustrative multi-year measurements and medication phases, home glucose/symptom entries, clinician-configured screening tracking, manual care categories, and an append-only demo SOS snapshot inbox.
 - **Shared web and Android experience:** one React client packaged with Capacitor, with separate patient and clinic permissions enforced on the server and in PostgreSQL.
 - **Two extraction modes:** a labelled deterministic fixture engine for local demos and an optional live model adapter with explicit call/token/cost limits. Model output remains a draft until human approval.
@@ -63,7 +64,7 @@ pnpm smoke
 
 The API and worker must be running for `pnpm smoke`. Playwright starts or reuses local services. Integration and browser tests create synthetic records; avoid pointing them at a real patient database.
 
-The 4 October 2026 polish check passed both TypeScript projects, **143 tests across 25 files**, **12 SQL isolation/constraint checks**, 70 desktop/mobile browser checks, and the client/API/worker production build. Desktop/mobile and live deployment results are recorded in the [polish verification report](app/reports/polish-2026-10-04.md). The build currently reports a large frontend bundle warning.
+The current 4 October 2026 pass verified both TypeScript projects, **157 tests across 27 files**, **12 SQL isolation/constraint checks**, **78 desktop/mobile browser checks**, and the client/API/worker production build. Ten focused browser checks additionally verify the final landing, menus, overview and guide boundaries. See the [workspace and guide verification report](app/reports/workspace-guide-2026-10-04.md). The build currently reports a large frontend bundle warning.
 
 The earlier [hosted deployment report](app/reports/hosted-deployment-2026-10-03.md) documents a synthetic upload → live extraction → review → approval → export flow. It is historical evidence for that deployed revision, not a clinical accuracy claim or verification of every subsequent edit.
 
@@ -87,7 +88,7 @@ deliverables/          Android APK, pitch decks and submission drafts
 
 ## Status and limitations
 
-This is a hackathon prototype using synthetic records. Hosted authentication, private source access and live processing have dated verification evidence. Physical-device camera/session/export checks, phone OTP, independent extraction validation and clinical/productivity outcomes remain pending. The included APK predates the latest Master dashboard work. Submission decks and answers are drafts; their claims require reconciliation with the dated evidence before external submission.
+This is a hackathon prototype using synthetic records. Hosted authentication, private source access and live processing have dated verification evidence. Physical-device camera/session/export checks, phone OTP, independent extraction validation and clinical/productivity outcomes remain pending. The included signed APK contains the current shared client. Physical-device behavior still needs independent verification. Submission decks and answers are drafts; their claims require reconciliation with the dated evidence before external submission.
 
 For detailed context, see the [acceptance mapping](app/reports/acceptance.md), [product specification](docs/mvp/01-product.md), [revised dashboard plan](docs/superpowers/plans/2026-10-03-pdf-demo.md), and [implementation decisions](app/docs/DECISIONS.md).
 

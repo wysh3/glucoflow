@@ -43,6 +43,11 @@ export const apiEnvSchema = z
     EXTRACTION_PROVIDER: z.enum(['fixture', 'openai-compatible']).default('fixture'),
     EXTRACTION_MODEL: z.string().default('deterministic-rules-v1'),
 
+    GUIDE_MODE: z.enum(['local', 'live']).default('local'),
+    GUIDE_API_KEY: z.string().min(8).optional(),
+    GUIDE_BASE_URL: z.string().url().default('https://api.openai.com/v1'),
+    GUIDE_MAX_CALLS_PER_HOUR: z.coerce.number().int().min(1).max(1000).default(60),
+
     DEMO_LABEL: z.string().default('Synthetic demo'),
     RATE_LIMIT_UPLOADS_PER_MINUTE: z.coerce.number().int().positive().default(10),
   })

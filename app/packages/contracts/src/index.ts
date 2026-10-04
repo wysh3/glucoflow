@@ -13,3 +13,4 @@ export * from './me';
 export * from './env';
 
 export * from "./master";
+export * from './guide';

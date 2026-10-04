@@ -38,11 +38,11 @@ export function ClinicPatientsPage(): React.ReactElement {
             <h2 className="text-lg font-semibold tracking-tight">A ready-to-explore clinic</h2>
             <p className="mt-2 text-sm leading-6 text-ink-soft">Meet Asha, our synthetic patient. Explore her records, or upload a sample and follow it from source to approved timeline.</p>
           </div>
-          <Button asChild variant="primary"><Link to={`/clinic/patients/${patients.data.items[0].patientId}/${me.capabilities.canReview ? 'documents?sample=1' : 'progression'}`}>
+          <Button asChild variant="primary"><Link to={`/clinic/patients/${patients.data.items[0].patientId}/${me.capabilities.canReview ? 'documents?sample=1' : 'overview'}`}>
             {me.capabilities.canReview ? <FlaskConical size={18} aria-hidden /> : <HeartPulse size={18} aria-hidden />}{me.capabilities.canReview ? 'Try a sample report' : 'Explore approved records'}<ArrowRight size={16} aria-hidden />
           </Link></Button>
         </div>
-        <ol className="mt-5 grid gap-2 text-xs text-ink-soft sm:grid-cols-3">{['1 · Upload a labelled sample','2 · Check each entry against its source','3 · Publish and view the timeline'].map(step=><li key={step} className="rounded-xl border border-line bg-surface/75 px-3 py-3">{step}</li>)}</ol>
+        <ol className="mt-5 grid gap-2 text-xs text-ink-soft sm:grid-cols-3">{(me.capabilities.canReview?['1 · Upload a labelled sample','2 · Check each entry against its source','3 · Publish and view the timeline']:['1 · Open the visit overview','2 · Inspect sources and dated context','3 · Export the approved visit summary']).map(step=><li key={step} className="rounded-xl border border-line bg-surface/75 px-3 py-3">{step}</li>)}</ol>
       </section> : null}
       <div className="max-w-[420px]">
         <label className="sr-only" htmlFor="patient-search">
@@ -103,7 +103,7 @@ export function ClinicPatientsPage(): React.ReactElement {
                   </TD>
                   <TD>
                     <Link
-                      to={`/clinic/patients/${patient.patientId}/master`}
+                      to={`/clinic/patients/${patient.patientId}/overview`}
                       className="inline-flex min-h-11 items-center rounded-[10px] border border-line px-4 text-sm text-ink hover:bg-canvas"
                     >
                       Open patient
@@ -117,9 +117,9 @@ export function ClinicPatientsPage(): React.ReactElement {
       </QueryState>
       <LoadMore query={patients} />
 
-      <Button variant="quiet" onClick={() => navigate('/clinic/queue')}>
+      {me?.capabilities.canReview?<Button variant="quiet" onClick={() => navigate('/clinic/queue')}>
         Open the review queue
-      </Button>
+      </Button>:null}
     </div>
   );
 }

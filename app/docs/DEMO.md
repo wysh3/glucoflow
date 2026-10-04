@@ -157,3 +157,9 @@ A physical-device pass is still outstanding.
   produced anywhere. The interface shows recorded values only.
 * Live ABHA/ABDM integration is not implemented. No such claim is made in the interface.
 * Hosted authentication and storage are implemented but unexercised in this environment.
+
+## Compact workspace and Gluco guide
+
+Choose Doctor → Open patient to start at Visit overview, where latest approved results, source links, recorded prescriptions/examinations and patient notes appear together. Desktop sections live in the patient sidebar; mobile sections remain in the patient header. Full progression opens the dated chart/table and evidence.
+
+Choose Clinic team → Try a sample report → Upload lab sample for the ordinary upload/review/publish journey. Use the orb anywhere for app-help questions or sample/navigation links. Live answers are labelled GPT-6 Luna; local help is labelled separately. Health details should not be entered, and clinical requests receive a fixed refusal. Switching demo role clears the guide conversation.

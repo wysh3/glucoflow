@@ -1,3 +1,5 @@
+import {GlucoGuide} from './features/guide/gluco-guide';
+import {VisitOverviewPage} from './features/clinic/overview/page';
 import {MasterPage} from './features/master/page';
 import * as React from 'react';
 import {
@@ -38,7 +40,8 @@ export function AppRoutes(): React.ReactElement {
           <Route path="/clinic/patients" element={<ClinicPatientsPage />} />
           <Route path="/clinic/queue" element={<ClinicQueuePage />} />
           <Route path="/clinic/patients/:patientId" element={<ClinicPatientLayout />}>
-            <Route index element={<Navigate to="progression" replace />} />
+            <Route index element={<Navigate to="overview" replace />} />
+            <Route path="overview" element={<VisitOverviewPage />} />
             <Route path="master" element={<MasterPage />} />
             <Route path="progression" element={<ProgressionPage />} />
             <Route path="documents" element={<DocumentsPage />} />
@@ -52,6 +55,7 @@ export function AppRoutes(): React.ReactElement {
         </Route>
         <Route path="*" element={<LandingRedirect />} />
       </Routes>
+      <GlucoGuide/>
     </BrowserRouter>
   );
 }

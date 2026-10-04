@@ -108,3 +108,19 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
   input, select, textarea { font-size: 16px !important; }
   main { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
 }
+
+/* Landing padding must add safe-area insets instead of replacing page spacing. */
+.welcome-page { display:flex; min-height:100svh; align-items:center; justify-content:center; padding:calc(32px + env(safe-area-inset-top)) 24px calc(32px + env(safe-area-inset-bottom)); }
+.welcome-orb { display:flex; align-items:center; justify-content:center; gap:10px; width:88px; height:88px; border-radius:50%; background:#b9ddcc; box-shadow:0 8px 24px #26796e15; }
+.welcome-orb span { width:7px; height:19px; border-radius:8px; background:#26796e; }
+@media(max-width:640px) { .welcome-page {padding-left:16px; padding-right:16px;} .welcome-page main {padding-bottom:0;} }
+
+.gluco-launcher {position:fixed;z-index:30;right:max(22px,env(safe-area-inset-right));bottom:calc(24px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:9px;border:0;background:transparent;border-radius:50%;cursor:pointer;}
+.gluco-orb {position:relative;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 30% 22%,#edfef9 0%,#a9ead7 35%,#4fac98 80%);box-shadow:inset -4px -5px 10px #347b7040,0 6px 20px #347b7030;border:1px solid #fff9;animation:gluco-breathe 5s ease-in-out infinite;}
+.gluco-eyes {display:flex;gap:10px;transition:transform .16s ease-out;}
+.gluco-eyes i {height:10px;width:5px;border-radius:50%;background:#235c51;box-shadow:0 1px 0 #ffffff80;}
+.gluco-caption {order:-1;border:1px solid #d9e8e2;background:#fffffff0;border-radius:14px;padding:8px 12px;color:#46625a;font-size:12px;box-shadow:0 3px 10px #347b7010;}
+.gluco-panel {border-radius:20px;top:auto;left:auto;bottom:calc(24px + env(safe-area-inset-bottom));right:24px;transform:none;translate:none;width:min(420px,calc(100vw - 32px));height:min(640px,calc(100dvh - 48px));max-height:calc(100dvh - 48px);}
+@keyframes gluco-breathe {0%,100%{filter:saturate(.95);box-shadow:inset -4px -5px 10px #347b7040,0 6px 20px #347b7030;}50%{filter:saturate(1.1);box-shadow:inset -4px -5px 10px #347b7040,0 6px 26px #347b7040;}}
+@media(max-width:639px){.gluco-launcher{right:16px;bottom:calc(84px + env(safe-area-inset-bottom));}.gluco-caption{display:none;}.gluco-orb{width:48px;height:48px;}.welcome-page~.gluco-launcher{bottom:20px;}.gluco-panel{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));}}
+@media(prefers-reduced-motion:reduce){.gluco-orb{animation:none;}.gluco-eyes{transition:none;}}
