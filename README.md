@@ -2,7 +2,7 @@
 
 A shared workspace for patients and clinic teams to turn scattered diabetes records into a reviewed, source-backed history. Upload a report, check the extracted draft against the original, approve it, and explore the published timeline.
 
-**[Open the hosted demo](https://glucoflow.vercel.app)** · [Setup guide](app/docs/SETUP.md) · [Demo walkthrough](app/docs/DEMO.md) · [Android APK](deliverables/Glucoflow_Android.apk)
+**[Open the hosted demo](https://glucoflow.vercel.app)** · [Setup guide](app/docs/SETUP.md) · [Demo walkthrough](app/docs/DEMO.md) · [Android APK](https://github.com/wysh3/glucoflow/releases/download/demo-2026-10-04/Glucoflow_Android.apk)
 
 ![Glucoflow clinic workspace](app/reports/evidence/workspace-guide-2026-10-04/doctor-desktop.png)
 

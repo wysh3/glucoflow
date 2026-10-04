@@ -29,6 +29,7 @@ A hosted app-help question returned the live GPT-6 Luna label; a synthetic insul
 - API: https://glucoflow-service.lemonpebble-6e1c6c4b.centralindia.azurecontainerapps.io — ready revision `glucoflow-service--0000002`, image `glucoflow-api:20261004-guide`, digest `sha256:c1bf5abc43eab7cefdbbc73b47f758eb41f01da685ca7f48527b0d72d04dcd14`.
 - Worker extraction code is unchanged; deployed `20261004-polish4` remains active. No new database migration was needed.
 - Signed APK: `deliverables/Glucoflow_Android.apk`, SHA-256 `44f46a6f4180dd5366c7e96a39d3535298852714a6e1f5cfb11749001e00756d`.
+- Downloadable APK release: https://github.com/wysh3/glucoflow/releases/tag/demo-2026-10-04
 - Public repository: https://github.com/wysh3/glucoflow — main.
 - GitHub CI moved from the inactive nested app/.github location to repository-root .github/workflows, with app working directory and lockfile cache path. README, walkthrough, env example and guide operations updated. Historical evidence and unrelated user decks preserved.
 
