@@ -19,20 +19,23 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: sutra_ci
+          POSTGRES_USER: sutra_owner
           POSTGRES_PASSWORD: sutra_ci_only
           POSTGRES_DB: sutra
-        ports: ['5432:5432']
+        ports: ['55432:5432']
         options: >-
-          --health-cmd "pg_isready -U sutra_ci"
+          --health-cmd "pg_isready -U sutra_owner"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 10
     env:
       APP_ENV: test
-      DATABASE_URL_OWNER: postgres://sutra_ci:sutra_ci_only@127.0.0.1:5432/sutra
-      DATABASE_URL_API: postgres://sutra_ci:sutra_ci_only@127.0.0.1:5432/sutra
-      DATABASE_URL_WORKER: postgres://sutra_ci:sutra_ci_only@127.0.0.1:5432/sutra
+      DATABASE_URL_OWNER: postgres://sutra_owner:sutra_ci_only@127.0.0.1:55432/sutra
+      DATABASE_URL_API: postgres://sutra_api_login:api_ci_only@127.0.0.1:55432/sutra
+      DATABASE_URL_WORKER: postgres://sutra_worker_login:worker_ci_only@127.0.0.1:55432/sutra
+      LOCAL_PG_OWNER_PASSWORD: sutra_ci_only
+      LOCAL_PG_API_PASSWORD: api_ci_only
+      LOCAL_PG_WORKER_PASSWORD: worker_ci_only
       DATABASE_ROLE_API: sutra_api
       DATABASE_ROLE_WORKER: sutra_worker
       AUTH_MODE: local
