@@ -32,7 +32,7 @@ afterAll(async () => {
   await removeClinic(ctx, f.otherClinicId);
   await ctx.close();
 });
-const send = (body: unknown, authenticated = true) =>
+const send = (body: Record<string, unknown>, authenticated = true) =>
   app.inject({
     method: 'POST',
     url: '/api/v1/guide',
