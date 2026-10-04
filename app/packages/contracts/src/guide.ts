@@ -59,3 +59,34 @@ export const guideRequestSchema = z
     message: z.string().trim().min(1).max(600),
   })
   .strict();
+
+export const guideChatRequestSchema = z
+  .object({
+    screen: z.enum(GUIDE_SCREENS),
+    patientId: z.string().uuid(),
+    message: z.string().trim().min(1).max(600),
+    history: z.array(z.string().trim().min(1).max(600)).max(6).default([]),
+  })
+  .strict();
+export type GuideChatRequest = z.infer<typeof guideChatRequestSchema>;
+export type GuideCard = {
+  id: string;
+  kind: 'approved' | 'reported';
+  title: string;
+  detail: string;
+  date: string | null;
+  dateLabel: string;
+  source?: {
+    documentId: string;
+    versionId: string;
+    page: number;
+    quote: string;
+    bbox: [number, number, number, number] | null;
+  };
+};
+export type GuideChatAnswer = GuideAnswer & {
+  patient: { patientId: string; displayName: string; clinicIdentifier: string };
+  cards: GuideCard[];
+  suggestions: string[];
+  scopeNote: string;
+};

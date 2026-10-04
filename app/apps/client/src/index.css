@@ -124,3 +124,44 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 @keyframes gluco-breathe {0%,100%{filter:saturate(.95);box-shadow:inset -4px -5px 10px #347b7040,0 6px 20px #347b7030;}50%{filter:saturate(1.1);box-shadow:inset -4px -5px 10px #347b7040,0 6px 26px #347b7040;}}
 @media(max-width:639px){.gluco-launcher{right:16px;bottom:calc(84px + env(safe-area-inset-bottom));}.gluco-caption{display:none;}.gluco-orb{width:48px;height:48px;}.welcome-page~.gluco-launcher{bottom:20px;}.gluco-panel{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));}}
 @media(prefers-reduced-motion:reduce){.gluco-orb{animation:none;}.gluco-eyes{transition:none;}}
+
+/* Gluco's original expressive face uses only lightweight SVG and CSS. */
+.gluco-orb {animation:gluco-float 5s ease-in-out infinite;isolation:isolate;}
+.gluco-orb::before {content:'';position:absolute;inset:5px 8px auto 9px;height:20%;border-radius:50%;background:#ffffff55;filter:blur(3px);}
+.gluco-face {width:100%;height:100%;transform:translateX(var(--look-x,0px));transition:transform .18s ease-out;}
+.gluco-eye-pair {transform-origin:32px 29px;animation:gluco-blink 6s infinite;}
+.gluco-orbit {position:absolute;inset:-5px;border:1px solid #9fcebd50;border-radius:50%;}
+.gluco-orb-small {width:44px;height:44px;flex-shrink:0;}
+.gluco-orb[data-mood="listening"] {animation:gluco-attend 1.8s ease-in-out infinite;}
+.gluco-orb[data-mood="thinking"] {animation:gluco-think 2s ease-in-out infinite;}
+.gluco-orb[data-mood="thinking"] .gluco-orbit {border-top:2px solid #4f9c86;animation:gluco-spin 1.7s linear infinite;}
+.gluco-orb[data-mood="replying"] {animation:gluco-hello .75s ease-in-out 2;}
+.gluco-orb[data-mood="replying"] .gluco-mouth {animation:gluco-talk .4s ease-in-out 5;transform-origin:32px 40px;}
+.gluco-orb[data-mood="error"] {animation:none;transform:rotate(-7deg);}
+.gluco-thinking-stars {position:absolute;right:-3px;top:0;display:flex;gap:2px;}
+.gluco-thinking-stars i,.gluco-typing i {display:inline-block;width:4px;height:4px;border-radius:50%;background:#5a9b87;animation:gluco-dot 1.2s ease-in-out infinite;}
+.gluco-thinking-stars i:nth-child(2),.gluco-typing i:nth-child(2) {animation-delay:.15s;}
+.gluco-thinking-stars i:nth-child(3),.gluco-typing i:nth-child(3) {animation-delay:.3s;}
+.gluco-typing {display:inline-flex;gap:4px;align-items:center;margin-right:6px;}
+.gluco-panel {width:min(480px,calc(100vw - 32px));height:min(760px,calc(100dvh - 48px));padding:20px;background:#fcfefb;box-shadow:0 24px 80px #254b3f25;}
+.gluco-panel>div:first-child>div {flex:1;min-width:0;}
+.gluco-context {display:flex;gap:9px;align-items:center;border:1px solid #dbe9e0;background:#edf5ef;border-radius:12px;padding:10px 12px;color:#355b4d;}
+.gluco-context strong {display:block;font-size:13px;}.gluco-context span {display:block;font-size:11px;margin-top:2px;color:#607769;}
+.gluco-transcript {overscroll-behavior:contain;scrollbar-width:thin;}
+.gluco-record {border:1px solid #dce7df;background:#ffffff;border-radius:12px;padding:12px;}
+.gluco-composer {width:100%;min-width:0;resize:none;min-height:68px;max-height:140px;border:1px solid #cddfd3;border-radius:14px;padding:12px;font:inherit;font-size:14px;line-height:1.5;background:#fff;outline:none;}
+.gluco-composer:focus {border-color:#5b9279;box-shadow:0 0 0 3px #5b927920;}.gluco-composer:disabled {opacity:.65;}
+.gluco-suggestions {scrollbar-width:thin;}.gluco-panel form {align-items:center;flex-shrink:0;}
+@keyframes gluco-float {0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-5px) rotate(2deg);}}
+@keyframes gluco-blink {0%,43%,47%,100%{transform:scaleY(1);}45%{transform:scaleY(.08);}}
+@keyframes gluco-attend {0%,100%{transform:scale(1) rotate(-4deg);}50%{transform:scale(1.05) rotate(2deg);}}
+@keyframes gluco-think {0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-3px) rotate(5deg);}}
+@keyframes gluco-hello {0%,100%{transform:translateY(0) scale(1);}35%{transform:translateY(-6px) scale(1.05,.98);}65%{transform:translateY(0) scale(.98,1.03);}}
+@keyframes gluco-talk {0%,100%{transform:scaleY(1);}50%{transform:scaleY(.65);}}
+@keyframes gluco-spin {to{transform:rotate(360deg);}}
+@keyframes gluco-dot {0%,70%,100%{opacity:.4;transform:translateY(0);}35%{opacity:1;transform:translateY(-3px);}}
+@media(max-width:639px){.gluco-panel{padding:16px;height:min(760px,calc(100dvh - 32px));max-height:calc(100dvh - 32px);}.gluco-composer{font-size:16px;}.gluco-orb-small{width:42px;height:42px;}}
+@media(prefers-reduced-motion:reduce){.gluco-orb,.gluco-orb *, .gluco-typing i {animation:none!important;transition:none!important;}.gluco-orb{transform:none!important;}}
+.gluco-chat-header>div {flex-wrap:nowrap;margin-bottom:0;align-items:center;gap:6px;}
+.gluco-chat-header>div>div:first-child {flex:1;min-width:0;}
+.gluco-chat-header>div>div:last-child {flex-shrink:0;gap:0;}

@@ -6,7 +6,28 @@ import {
   type GuideScreen,
 } from '@glucoflow/contracts';
 import { clinicalRequest, guideReply, localTopic } from './catalog';
+export function createGuideBudget(hourlyLimit: number, maxConcurrent: number) {
+  let hour = Math.floor(Date.now() / 3600000),
+    calls = 0,
+    active = 0;
+  return {
+    acquire(): (() => void) | null {
+      const current = Math.floor(Date.now() / 3600000);
+      if (current !== hour) {
+        hour = current;
+        calls = 0;
+      }
+      if (calls >= hourlyLimit || active >= maxConcurrent) return null;
+      calls++;
+      active++;
+      return () => {
+        active--;
+      };
+    },
+  };
+}
 export type GuideConfig = {
+  budget?: ReturnType<typeof createGuideBudget>;
   mode: 'live' | 'local';
   apiKey?: string;
   baseUrl: string;
@@ -44,6 +65,8 @@ export function createGuideService(config: GuideConfig) {
         active >= config.maxConcurrent
       )
         return local();
+      const release = config.budget?.acquire();
+      if (config.budget && !release) return local();
       calls++;
       active++;
       const controller = new AbortController();
@@ -92,6 +115,7 @@ export function createGuideService(config: GuideConfig) {
       } finally {
         clearTimeout(timeout);
         active--;
+        release?.();
       }
     },
   };

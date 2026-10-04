@@ -2,14 +2,14 @@
 
 A shared workspace for patients and clinic teams to turn scattered diabetes records into a reviewed, source-backed history. Upload a report, check the extracted draft against the original, approve it, and explore the published timeline.
 
-**[Open the hosted demo](https://glucoflow.vercel.app)** · [Setup guide](app/docs/SETUP.md) · [Demo walkthrough](app/docs/DEMO.md) · [Android APK](https://github.com/wysh3/glucoflow/releases/download/demo-2026-10-04/Glucoflow_Android.apk)
+**[Open the hosted demo](https://glucoflow.vercel.app)** · [Setup guide](app/docs/SETUP.md) · [Demo walkthrough](app/docs/DEMO.md) · [Android APK](https://github.com/wysh3/glucoflow/releases/download/demo-2026-10-04-chat/Glucoflow_Android.apk)
 
 ![Glucoflow clinic workspace](app/reports/evidence/workspace-guide-2026-10-04/doctor-desktop.png)
 
 ## What it does
 
 - **Patient workspace:** try built-in synthetic samples, upload PDFs or ordered photos, open original reports, view approved records, add patient-reported notes, and export a visit summary.
-- **Gluco app guide:** a cute contextual orb with bounded GPT‑6 Luna intent classification, server-owned navigation help, and strict refusal of clinical advice.
+- **Gluco record companion:** an expressive animated orb with bounded GPT‑6 Luna conversation planning, patient-scoped record summaries, follow-up questions and original source links. Recorded facts stay separate from patient-reported entries; clinical advice remains out of scope.
 - **Clinic workspace:** consolidated visit overview, source-backed latest measurements, prescriptions, examinations and patient notes; review extracted drafts beside source evidence, correct fields before publication, explore progression, search records, and retain amendment history.
 - **Synthetic Master dashboard:** illustrative multi-year measurements and medication phases, home glucose/symptom entries, clinician-configured screening tracking, manual care categories, and an append-only demo SOS snapshot inbox.
 - **Shared web and Android experience:** one React client packaged with Capacitor, with separate patient and clinic permissions enforced on the server and in PostgreSQL.
@@ -64,7 +64,7 @@ pnpm smoke
 
 The API and worker must be running for `pnpm smoke`. Playwright starts or reuses local services. Integration and browser tests create synthetic records; avoid pointing them at a real patient database.
 
-The current 4 October 2026 pass verified both TypeScript projects, **157 tests across 27 files**, **12 SQL isolation/constraint checks**, **78 desktop/mobile browser checks**, and the client/API/worker production build. Ten focused browser checks additionally verify the final landing, menus, overview and guide boundaries. See the [workspace and guide verification report](app/reports/workspace-guide-2026-10-04.md). The build currently reports a large frontend bundle warning.
+The 4 October 2026 record-companion pass verified both TypeScript projects, **180 tests across 29 files**, **12 SQL isolation/constraint checks**, **88 desktop/mobile browser checks**, and production builds. Eight focused chat checks additionally verify the final message visibility, readable reply scrolling, motion accessibility, patient scope, error recovery and source opening. See the [record chat verification report](app/reports/record-chat-2026-10-04.md) and [assistant capabilities and limits](app/docs/APP_GUIDE.md). The build currently reports a large frontend bundle warning.
 
 The earlier [hosted deployment report](app/reports/hosted-deployment-2026-10-03.md) documents a synthetic upload → live extraction → review → approval → export flow. It is historical evidence for that deployed revision, not a clinical accuracy claim or verification of every subsequent edit.
 

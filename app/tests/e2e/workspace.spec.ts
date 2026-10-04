@@ -108,7 +108,7 @@ test('orb guide helps navigate without providing clinical advice', async ({
     page.viewportSize()!.height,
   );
   await chat
-    .getByRole('textbox', { name: 'Ask about the app', exact: true })
+    .getByRole('textbox', { name: 'Ask Gluco', exact: true })
     .fill('Where can I upload a report?');
   await chat.getByRole('button', { name: 'Send message', exact: true }).click();
   await expect(
@@ -127,7 +127,7 @@ test('orb guide helps navigate without providing clinical advice', async ({
     .getByRole('button', { name: 'Open Gluco guide', exact: true })
     .click();
   await chat
-    .getByRole('textbox', { name: 'Ask about the app', exact: true })
+    .getByRole('textbox', { name: 'Ask Gluco', exact: true })
     .fill('What insulin dose should I take?');
   await chat.getByRole('button', { name: 'Send message', exact: true }).click();
   await expect(
