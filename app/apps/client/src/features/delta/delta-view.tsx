@@ -20,6 +20,7 @@ import type {
 } from '@glucoflow/contracts';
 import { Badge, Button, cn, formatDateOnly } from '@glucoflow/ui';
 import { KIND_LABEL, STATUS_LABEL, STATUS_TONE, buildDeltaNote } from './delta-copy';
+import { AiNote } from './ai-note';
 
 type Tone = {
   text: string;
@@ -388,6 +389,7 @@ export function DeltaView({
             {summary.narrative}. Start with what changed, then the open items. Every line opens its
             source. The product never fills a gap.
           </p>
+          <AiNote summary={summary} />
         </div>
         <div className="border-t border-line bg-canvas/60 px-5 py-3 text-[12px] leading-5 text-ink-soft sm:px-7">
           <ShieldCheck size={14} className="mr-1 inline" aria-hidden />

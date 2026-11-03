@@ -2,6 +2,7 @@ import {GlucoGuide} from './features/guide/gluco-guide';
 import {VisitOverviewPage} from './features/clinic/overview/page';
 import {DeltaPage} from './features/delta/page';
 import {DeltaDemoPage} from './features/delta/demo-page';
+import {LandingPage} from './features/landing/page';
 import {MasterPage} from './features/master/page';
 import * as React from 'react';
 import {
@@ -36,6 +37,7 @@ export function AppRoutes(): React.ReactElement {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/demo/delta" element={<DeltaDemoPage />} />
         <Route element={<ProtectedShell />}>
@@ -57,7 +59,7 @@ export function AppRoutes(): React.ReactElement {
           <Route path="/patient/add-report" element={<PatientAddReportPage />} />
           <Route path="/patient/visit-notes" element={<PatientVisitNotesPage />} />
         </Route>
-        <Route path="*" element={<LandingRedirect />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <GlucoGuide/>
     </BrowserRouter>
@@ -93,23 +95,6 @@ function ProtectedShell(): React.ReactElement {
       <Outlet />
     </AppShell>
   );
-}
-
-function LandingRedirect(): React.ReactElement {
-  const { status, me } = useSession();
-  if (status === 'loading') {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-canvas">
-        <Spinner label="Loading" />
-      </div>
-    );
-  }
-  if (status !== 'signed-in' || !me) return <Navigate to="/sign-in" replace />;
-  const clinic = me.contexts.some((context) => context.kind === 'clinic');
-  const patient = me.contexts.some((context) => context.kind === 'patient');
-  if (clinic && !patient) return <Navigate to="/clinic/patients" replace />;
-  if (patient && !clinic) return <Navigate to="/patient/records" replace />;
-  return <Navigate to="/account" replace />;
 }
 
 /** Exported for tests: the role landing decision without the router. */

@@ -51,18 +51,18 @@ export function SignInPage(): React.ReactElement {
     <main className="welcome-page">
       <section data-testid="welcome-panel" className="relative mx-auto w-full max-w-[980px] overflow-hidden rounded-[28px] border border-line bg-surface p-5 shadow-[0_16px_70px_rgba(32,59,56,0.06)] sm:p-8 lg:p-10">
         <header className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5"><HeartPulse size={24} className="text-primary" aria-hidden/><h1 className="text-xl font-semibold tracking-tight text-primary">Glucoflow</h1></div>
+          <div className="flex items-center gap-2.5"><HeartPulse size={24} className="text-primary" aria-hidden/><h1 className="text-xl font-semibold tracking-tight text-primary">glucoflow</h1></div>
           <span className="rounded-full bg-primary/7 px-3 py-1.5 text-[11px] text-primary">Interactive demo</span>
         </header>
         <div className="my-6 grid items-center gap-5 sm:my-8 lg:grid-cols-[1fr_auto]">
           <div><p className="mb-2 text-xs font-medium tracking-wide text-primary">A little clarity. A calmer visit.</p>
             <h2 className="max-w-lg text-[28px] font-semibold leading-tight tracking-tight text-ink sm:text-[38px]">Your care records,<br className="hidden sm:block"/> beautifully together.</h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-ink-soft">Reports, reviewed facts and visit context. Choose your workspace to explore with ready-made samples.</p>
+            <p className="mt-3 max-w-md text-sm leading-6 text-ink-soft">Reports, reviewed facts and visit context. Choose a workspace below. It prefills the demo account and signs you in automatically.</p>
           </div>
           <div className="hidden h-28 w-28 items-center justify-center rounded-full bg-[#edf5ef] lg:flex" aria-hidden><span className="welcome-orb"><span/><span/></span></div>
         </div>
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">{demoAccounts.filter(account=>!account.key.startsWith('other-')).map(account=>(
-          <button key={account.key} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)}
+          <button key={account.key} data-testid={`demo-card-${account.key}`} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)}
             className="group relative flex flex-col items-start justify-start min-h-[116px] rounded-2xl border border-line bg-canvas/65 p-3.5 text-left transition hover:border-primary/50 hover:bg-primary/5 disabled:opacity-50 sm:min-h-[160px] sm:p-4">
             <span className="mb-2 flex h-8 w-8 items-center justify-center rounded-xl bg-surface text-primary">{account.key.includes('patient') ? <User size={18} aria-hidden/> : account.key==='clinician' ? <Stethoscope size={18} aria-hidden/> : account.key==='reviewer' ? <ClipboardCheck size={18} aria-hidden/> : <Users size={18} aria-hidden/>}</span>
             <ArrowUpRight size={15} className="absolute right-3.5 top-4 text-ink-soft" aria-hidden/><span className="block text-sm font-semibold text-ink">{account.label}</span>
@@ -71,7 +71,7 @@ export function SignInPage(): React.ReactElement {
         ))}</div>
         <footer className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4 text-[11px] text-ink-soft">
           <p>All demo patient records are synthetic.</p>
-          <details className="relative"><summary className="min-h-8 cursor-pointer py-2 text-primary">Test access separation</summary><div className="absolute bottom-full right-0 z-10 mb-2 w-60 rounded-xl border border-line bg-surface p-2 shadow-lg">{demoAccounts.filter(account=>account.key.startsWith('other-')).map(account=><button key={account.key} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)} className="block min-h-11 w-full rounded-lg px-3 text-left text-sm hover:bg-canvas">{account.label}<span className="sr-only"> {account.description}</span></button>)}</div></details>
+          <details className="relative"><summary className="min-h-8 cursor-pointer py-2 text-primary">Test access separation</summary><div className="absolute bottom-full right-0 z-10 mb-2 w-60 rounded-xl border border-line bg-surface p-2 shadow-lg">{demoAccounts.filter(account=>account.key.startsWith('other-')).map(account=><button key={account.key} data-testid={`demo-card-${account.key}`} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)} className="block min-h-11 w-full rounded-lg px-3 text-left text-sm hover:bg-canvas">{account.label}<span className="sr-only"> {account.description}</span></button>)}</div></details>
         </footer>
         {busy?<p role="status" className="mt-2 text-xs text-primary">Opening workspace…</p>:null}
         {error?<p role="alert" className="mt-2 text-xs text-danger">{error}</p>:null}
@@ -82,7 +82,7 @@ export function SignInPage(): React.ReactElement {
   return (
     <div className="safe-top flex min-h-screen items-center justify-center bg-canvas px-4 py-10">
       <div className="w-full max-w-[420px] space-y-4">
-        <ScreenTitle title="Glucoflow" />
+        <ScreenTitle title="glucoflow" />
         <Card>
           <CardBody className="pt-6">
             <form onSubmit={submit} className="space-y-4" noValidate>

@@ -29,7 +29,7 @@ const intro: GuideAnswer = {
 export function GlucoGuide(): React.ReactElement | null {
   const { me, status } = useSession();
   const location = useLocation();
-  if (location.pathname.startsWith('/demo') || location.pathname.endsWith('/delta')) return null;
+  if (location.pathname === '/' || location.pathname.startsWith('/demo')) return null;
   const clinic = me?.contexts.some((c) => c.kind === 'clinic');
   const id = clinic
     ? location.pathname.match(/\/clinic\/patients\/([^/]+)/)?.[1]
@@ -56,6 +56,12 @@ function GuideSession(): React.ReactElement {
   const [messages, setMessages] = React.useState<
     { question?: string; answer: GuideAnswer | GuideChatAnswer }[]
   >([{ answer: intro }]);
+  const onDelta = location.pathname.endsWith('/delta');
+  React.useEffect(() => {
+    const open = (): void => setOpen(true);
+    window.addEventListener('gluco:open', open);
+    return () => window.removeEventListener('gluco:open', open);
+  }, []);
   const log = React.useRef<HTMLDivElement>(null),
     abort = React.useRef<AbortController | null>(null);
   React.useEffect(
@@ -226,21 +232,25 @@ function GuideSession(): React.ReactElement {
   };
   return (
     <>
-      <button
-        aria-label="Open Gluco guide"
-        title="Gluco · your record companion"
-        aria-expanded={open}
-        onClick={() => setOpen(true)}
-        style={
-          screen === 'landing'
-            ? { bottom: 'calc(20px + env(safe-area-inset-bottom))' }
-            : undefined
-        }
-        className="gluco-launcher focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
-      >
-        <GlucoOrb mood={mood} />
-        <span className="gluco-caption">Need a hand?</span>
-      </button>
+      {!onDelta ? (
+        <button
+          aria-label="Open Gluco guide"
+          title="Gluco · your record companion"
+          aria-expanded={open}
+          onClick={() => setOpen(true)}
+          style={
+            screen === 'landing'
+              ? { bottom: 'calc(20px + env(safe-area-inset-bottom))' }
+              : undefined
+          }
+          className="gluco-launcher focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
+        >
+          <GlucoOrb mood={mood} />
+          <span className="gluco-caption">
+            {screen === 'landing' ? 'Need a hand?' : 'Gluco'}
+          </span>
+        </button>
+      ) : null}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           side="floating"
@@ -255,9 +265,11 @@ function GuideSession(): React.ReactElement {
                 <span id="guide-description" className="block text-xs">
                   {busy
                     ? 'Looking through the records…'
-                    : replying
-                      ? 'Here’s what I found.'
-                      : 'Your little record companion.'}
+                    : last?.mode === 'live'
+                      ? 'AI · GPT-6 Luna · grounded in app records'
+                      : replying
+                        ? 'Here’s what I found.'
+                        : 'Your little record companion.'}
                 </span>
               }
               actions={

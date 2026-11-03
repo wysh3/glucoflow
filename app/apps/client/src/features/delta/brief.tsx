@@ -13,6 +13,7 @@ import {
 import type { DeltaAction, DeltaBlock, DeltaItem, DeltaSummary } from '@glucoflow/contracts';
 import { Badge, Button, cn, formatDateOnly } from '@glucoflow/ui';
 import { KIND_LABEL, STATUS_LABEL, STATUS_TONE, effectiveStatus } from './delta-copy';
+import { AiNote } from './ai-note';
 import { selectBrief } from './brief-select';
 
 const DOT: Record<DeltaBlock, string> = {
@@ -218,7 +219,7 @@ export function DeltaBrief({
     : null;
 
   return (
-    <div className={cn('space-y-4', !tourActive && 'pb-24')}>
+    <div className={cn('space-y-4', !tourActive && 'pb-[150px] lg:pb-24')}>
       <header
         data-tour="brief"
         className="rounded-[20px] border border-line bg-surface px-4 py-4 shadow-[0_4px_20px_rgba(32,59,56,0.04)] sm:px-6 sm:py-5"
@@ -276,6 +277,7 @@ export function DeltaBrief({
           <CountPill block="conflict" label="conflicts" singularLabel="conflict" value={summary.counts.conflict} />
           <CountPill block="unknown" label="gaps" singularLabel="gap" value={summary.counts.unknown} />
         </div>
+        <AiNote summary={summary} compact />
       </header>
 
       <section aria-labelledby="decisions-heading" className="space-y-3">
@@ -391,7 +393,7 @@ export function DeltaBrief({
       {!tourActive ? (
         <div
           data-tour="brief-actions"
-          className="safe-bottom fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface/95 backdrop-blur"
+          className="safe-bottom fixed inset-x-0 bottom-[65px] z-40 border-t border-line bg-surface/95 backdrop-blur lg:bottom-0"
         >
           <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
             <div className="min-w-0">

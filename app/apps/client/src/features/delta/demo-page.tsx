@@ -26,7 +26,7 @@ export function DeltaDemoPage(): React.ReactElement {
 
   React.useEffect(() => {
     const previous = document.title;
-    document.title = 'The 60-second delta · Delta';
+    document.title = 'glucoflow';
     return () => {
       document.title = previous;
     };

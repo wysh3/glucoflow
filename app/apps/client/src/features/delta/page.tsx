@@ -59,7 +59,7 @@ export function DeltaPage(): React.ReactElement {
   const selection = delta.data ? selectBrief(delta.data) : null;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 pb-16 lg:pb-0">
       {error ? (
         <Alert tone="error" title="The action could not be saved">
           {error}

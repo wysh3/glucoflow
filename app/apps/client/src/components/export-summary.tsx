@@ -67,7 +67,7 @@ export function ExportSummary({
                 onClick={() =>
                   void openAuthorizedUrl(
                     status.data!.downloadUrl!,
-                    'Glucoflow_visit_summary.pdf',
+                    'glucoflow_visit_summary.pdf',
                   )
                 }
               >

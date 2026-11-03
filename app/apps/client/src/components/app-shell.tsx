@@ -91,7 +91,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
         <aside className="sticky top-0 hidden h-screen w-[240px] shrink-0 overflow-y-auto border-r border-line bg-surface/90 px-4 pb-6 pt-[calc(24px+env(safe-area-inset-top))] lg:block">
           <div className="mb-6 px-2">
             <HeartPulseIcon size={28} className="mb-3 text-primary" aria-hidden />
-            <p className="text-[19px] font-semibold tracking-tight text-primary">Glucoflow</p>
+            <p className="text-[19px] font-semibold tracking-tight text-primary">glucoflow</p>
             <p className="mt-1 text-[12px] text-ink-soft">
               {isClinicView ? 'Clinic workspace' : isPatientView ? 'Patient workspace' : 'Account'}
             </p>
@@ -127,7 +127,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
           <header className="safe-top sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur">
             <div className="flex items-center justify-between gap-3 px-4 py-2.5 lg:px-6">
               <div className="flex items-center gap-2 lg:hidden">
-                <span className="text-[19px] font-semibold tracking-tight text-primary">Glucoflow</span>
+                <span className="text-[19px] font-semibold tracking-tight text-primary">glucoflow</span>
               </div>
               <div className="hidden items-center gap-3 text-[12px] text-ink-soft lg:flex">
                 <span>{me?.actor.email}</span>
