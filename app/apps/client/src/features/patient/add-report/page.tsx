@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Alert, Button, Card, CardBody, CardHeader, CardTitle, ScreenTitle, formatBytes } from '@glucoflow/ui';
+import { Alert, Button, Card, CardBody, CardHeader, CardTitle, formatBytes } from '@glucoflow/ui';
+import { SystemPageHeader } from '../../../components/system-page-header';
 import { useSession, describeApiError } from '../../../auth/session';
 import { randomIdempotencyKey } from '../../../lib/api';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +21,7 @@ export function PatientAddReportPage(): React.ReactElement {
   const [busy, setBusy] = React.useState<string | null>(null);
   const patientContext = me?.contexts.find((context) => context.kind === 'patient');
   const patientId = patientContext?.patientId;
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [pending, setPending] = React.useState<PendingUploadDto[]>([]);
   const [error, setError] = React.useState<string | null>(null);
   const [loadingPending, setLoadingPending] = React.useState(true);
@@ -51,7 +52,9 @@ export function PatientAddReportPage(): React.ReactElement {
 
   return (
     <div className="space-y-4">
-      <ScreenTitle
+      <SystemPageHeader
+        index="03"
+        label="Patient / Add report"
         title="Add a report"
         meta="Upload a PDF, a photo or a JPEG/PNG image of your report"
         actions={

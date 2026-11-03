@@ -53,7 +53,7 @@ export function DeltaDemoPage(): React.ReactElement {
               The 60-second pre-visit brief
             </span>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <Button
               size="sm"
               variant="quiet"
@@ -63,7 +63,7 @@ export function DeltaDemoPage(): React.ReactElement {
               {view === 'brief' ? 'Full ledger' : 'Back to brief'}
             </Button>
             <a
-              href="/"
+              href="/sign-in"
               className="hidden min-h-9 rounded-[10px] px-3 py-1.5 text-[12px] font-medium text-ink-soft hover:bg-canvas hover:text-ink sm:inline-flex sm:items-center"
             >
               Clinic workspace
@@ -120,6 +120,7 @@ export function DeltaDemoPage(): React.ReactElement {
         onAction={onAction}
         onClose={() => setReviewIndex(null)}
         onIndexChange={setReviewIndex}
+        onOpenSource={setSource}
       />
       <JudgeTour
         step={tour}

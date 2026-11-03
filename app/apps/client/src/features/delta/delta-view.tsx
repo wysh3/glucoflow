@@ -80,7 +80,7 @@ function Stat({
         <span className={cn('size-1.5 rounded-full', tone.dot)} aria-hidden />
         {label}
       </span>
-      <span className="mt-1 block text-[22px] font-semibold leading-none tracking-tight text-ink">
+      <span className="mt-1 block text-[24px] font-semibold leading-none tracking-tight text-ink">
         {value}
       </span>
     </a>
@@ -205,11 +205,11 @@ function DeltaCard({
           </Badge>
         ) : null}
       </div>
-      <h3 className="mt-2 text-[15px] font-semibold leading-snug text-ink">{item.title}</h3>
-      <p className="mt-1 text-[13px] leading-6 text-ink-soft">{item.detail}</p>
-      <p className="mt-2 text-[11px] leading-5 text-ink-soft/90">{item.why}</p>
+      <h3 className="mt-2 text-[16px] font-semibold leading-snug text-ink">{item.title}</h3>
+      <p className="mt-1 text-[14px] leading-6 text-ink-soft">{item.detail}</p>
+      <p className="mt-2 text-[11px] leading-5 text-ink-soft">{item.why}</p>
       <div className="mt-auto pt-2">
-        <p className="truncate text-[10px] font-medium tracking-[0.02em] text-ink-soft/70">
+        <p className="truncate text-[11px] font-medium tracking-[0.02em] text-ink-soft">
           {item.sourceLabel}
         </p>
         <ItemActions
@@ -261,7 +261,7 @@ function Section({
             <span className={cn('grid size-8 place-items-center rounded-lg', tone.soft, tone.text)}>
               {icon}
             </span>
-            <h2 className="text-[19px] font-semibold tracking-tight text-ink">{title}</h2>
+            <h2 className="text-[20px] font-semibold tracking-tight text-ink">{title}</h2>
             <Badge tone={tone.badge}>{items.length}</Badge>
           </div>
           <p className="mt-1 max-w-[74ch] text-sm leading-6 text-ink-soft">{kicker}</p>
@@ -355,7 +355,7 @@ export function DeltaView({
               <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-primary">
                 Pre-visit delta
               </p>
-              <h1 className="mt-1 text-[26px] font-semibold leading-tight tracking-tight text-ink sm:text-[32px]">
+              <h1 className="mt-1 text-[28px] font-semibold leading-tight tracking-tight text-ink sm:text-[32px]">
                 {summary.patient.displayName}
               </h1>
               <p className="mt-1 text-sm text-ink-soft">
@@ -461,7 +461,7 @@ export function DeltaView({
             <div>
               <div className="flex items-center gap-2">
                 <MessageCircle size={17} className="text-primary" aria-hidden />
-                <h2 className="text-[19px] font-semibold tracking-tight text-ink">Draft visit note</h2>
+                <h2 className="text-[20px] font-semibold tracking-tight text-ink">Draft visit note</h2>
                 <Badge tone="neutral">Draft</Badge>
               </div>
               <p className="mt-1 text-sm text-ink-soft">
@@ -474,7 +474,7 @@ export function DeltaView({
             </Button>
           </div>
           <div className="p-4 sm:p-5">
-            <pre className="max-h-[360px] overflow-auto whitespace-pre-wrap rounded-[12px] bg-canvas p-4 font-sans text-[13px] leading-6 text-ink">
+            <pre className="max-h-[360px] overflow-auto whitespace-pre-wrap rounded-[12px] bg-canvas p-4 font-sans text-[14px] leading-6 text-ink">
               {note}
             </pre>
           </div>

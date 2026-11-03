@@ -3,7 +3,8 @@ import { demoEnabled } from '../../../auth/demo';
 import { LoadMore } from '../../../components/load-more';
 import * as React from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { Badge, Button, Card, Input, ScreenTitle, Table, TBody, TD, TH, THead, TR, formatDateOnly } from '@glucoflow/ui';
+import { Badge, Button, Card, Input, Table, TBody, TD, TH, THead, TR, formatDateOnly } from '@glucoflow/ui';
+import { SystemPageHeader } from '../../../components/system-page-header';
 import { useSession } from '../../../auth/session';
 import { usePatients } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
@@ -28,11 +29,13 @@ export function ClinicPatientsPage(): React.ReactElement {
 
   return (
     <div className="space-y-4">
-      <ScreenTitle
+      <SystemPageHeader
+        index="01"
+        label="Clinic / Patients"
         title="Patients"
-        meta={me.capabilities.canReview ? 'Review queue and records' : 'Approved records'}
+        meta={me.capabilities.canReview ? 'Review queue and approved records' : 'Approved records'}
       />
-      {demoEnabled && patients.data?.items[0] ? <section className="rounded-[20px] border border-primary/20 bg-gradient-to-br from-[#e7f3ec] to-surface p-5 sm:p-6">
+      {demoEnabled && patients.data?.items[0] ? <section className="rounded-[20px] border border-primary/20 bg-[#e7f3ec] p-5 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-lg"><div className="mb-3 flex h-10 w-10 items-center justify-center rounded-2xl bg-surface text-primary"><HeartPulse size={22} aria-hidden /></div>
             <h2 className="text-lg font-semibold tracking-tight">A ready-to-explore clinic</h2>
@@ -117,7 +120,7 @@ export function ClinicPatientsPage(): React.ReactElement {
       </QueryState>
       <LoadMore query={patients} />
 
-      {me?.capabilities.canReview?<Button variant="quiet" onClick={() => navigate('/clinic/queue')}>
+      {me?.capabilities.canReview?<Button variant="secondary" onClick={() => navigate('/clinic/queue')}>
         Open the review queue
       </Button>:null}
     </div>

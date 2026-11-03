@@ -33,6 +33,7 @@ test.describe('upload to approval', () => {
     // 1. Patient uploads the synthetic report.
     await signIn(page, 'patient');
     await page.goto('/patient/add-report');
+    await page.getByRole('button', { name: 'Choose a report' }).click();
     const dialog = page.getByRole('dialog', { name: 'Upload a report' });
     await expect(dialog).toBeVisible();
     await dialog.locator('input[type="file"]').setInputFiles(path);
@@ -61,7 +62,7 @@ test.describe('upload to approval', () => {
       .locator('visible=true');
     await uploadedQueueItem.locator('a[href^="/clinic/review/"]').click();
     await page.waitForURL(/\/clinic\/review\//);
-    await expect(page.getByText('Fixture data: rule engine')).toBeVisible();
+    await expect(page.getByText(/Fixture processing: rule engine|Live extraction:/)).toBeVisible();
 
     const reviewButtons = page.getByRole('button', { name: 'Review', exact: true });
     const entryCount = await reviewButtons.count();

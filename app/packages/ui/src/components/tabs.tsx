@@ -85,7 +85,7 @@ export function DialogHeader({
   return (
     <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
       <div>
-        <DialogPrimitive.Title className="text-[17px] font-semibold text-ink">{title}</DialogPrimitive.Title>
+        <DialogPrimitive.Title className="text-[18px] font-semibold text-ink">{title}</DialogPrimitive.Title>
         {description ? (
           <DialogPrimitive.Description className="mt-1 text-sm text-ink-soft">
             {description}

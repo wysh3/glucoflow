@@ -55,7 +55,7 @@ export function DeltaSourceDialog({
                   </Badge>
                 </div>
                 <div className="bg-white p-5">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-soft">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-ink-soft">
                     Synthetic source page
                   </p>
                   <div className="mt-3 rounded-[10px] border border-line/70 bg-canvas/40 p-4 font-mono text-[12px] leading-6 text-ink">

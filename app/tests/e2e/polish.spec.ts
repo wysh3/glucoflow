@@ -32,10 +32,11 @@ test('a correction opens an editable draft before sending a new version', async 
 test('demo samples are available without choosing a local file', async ({ page }) => {
   await signIn(page, 'patient');
   await page.goto('/patient/add-report');
+  await page.getByRole('button', { name: 'Choose a report' }).click();
   const dialog = page.getByRole('dialog', { name: 'Upload a report' });
   await expect(dialog.getByText('Try a synthetic sample', { exact: true })).toBeVisible();
   await expect(dialog.getByRole('button', { name: 'Upload lab sample', exact: true })).toBeVisible();
-  await expect(dialog.getByRole('link', { name: 'Preview lab sample', exact: true })).toHaveAttribute('href', /demo\/.*pdf/);
+  await expect(dialog.getByRole('link', { name: /Preview PDF: lab sample/ })).toHaveAttribute('href', /demo\/.*pdf/);
 });
 
 test('published reviews show success and lock further draft actions', async ({ page }) => {

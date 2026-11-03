@@ -2,6 +2,7 @@ import {GlucoGuide} from './features/guide/gluco-guide';
 import {VisitOverviewPage} from './features/clinic/overview/page';
 import {DeltaPage} from './features/delta/page';
 import {DeltaDemoPage} from './features/delta/demo-page';
+import {BodyMapPage} from './features/clinic/bodymap/page';
 import {LandingPage} from './features/landing/page';
 import {MasterPage} from './features/master/page';
 import * as React from 'react';
@@ -28,6 +29,7 @@ import { ReviewPage } from './features/clinic/review/page';
 import { PatientRecordsPage } from './features/patient/records/page';
 import { PatientAddReportPage } from './features/patient/add-report/page';
 import { PatientVisitNotesPage } from './features/patient/visit-notes/page';
+import { NotFoundPage } from './features/not-found/page';
 
 /**
  * Routes for both roles on web and Android. The active role comes from the
@@ -42,28 +44,51 @@ export function AppRoutes(): React.ReactElement {
         <Route path="/demo/delta" element={<DeltaDemoPage />} />
         <Route element={<ProtectedShell />}>
           <Route path="/account" element={<AccountPage />} />
-          <Route path="/clinic/patients" element={<ClinicPatientsPage />} />
-          <Route path="/clinic/queue" element={<ClinicQueuePage />} />
-          <Route path="/clinic/patients/:patientId" element={<ClinicPatientLayout />}>
+          <Route path="/clinic/patients" element={<ClinicGate><ClinicPatientsPage /></ClinicGate>} />
+          <Route path="/clinic/queue" element={<ClinicGate><ClinicQueuePage /></ClinicGate>} />
+          <Route path="/clinic/patients/:patientId" element={<ClinicGate><ClinicPatientLayout /></ClinicGate>}>
             <Route index element={<Navigate to="delta" replace />} />
             <Route path="delta" element={<DeltaPage />} />
+            <Route path="bodymap" element={<BodyMapPage />} />
             <Route path="overview" element={<VisitOverviewPage />} />
             <Route path="master" element={<MasterPage />} />
             <Route path="progression" element={<ProgressionPage />} />
             <Route path="documents" element={<DocumentsPage />} />
             <Route path="history" element={<HistoryPage />} />
           </Route>
-          <Route path="/clinic/review/:documentId" element={<ReviewPage />} />
-          <Route path="/patient/master" element={<MasterPage />} />
-          <Route path="/patient/records" element={<PatientRecordsPage />} />
-          <Route path="/patient/add-report" element={<PatientAddReportPage />} />
-          <Route path="/patient/visit-notes" element={<PatientVisitNotesPage />} />
+          <Route path="/clinic/review/:documentId" element={<ClinicGate><ReviewPage /></ClinicGate>} />
+          <Route path="/patient/master" element={<PatientGate><MasterPage /></PatientGate>} />
+          <Route path="/patient/records" element={<PatientGate><PatientRecordsPage /></PatientGate>} />
+          <Route path="/patient/add-report" element={<PatientGate><PatientAddReportPage /></PatientGate>} />
+          <Route path="/patient/visit-notes" element={<PatientGate><PatientVisitNotesPage /></PatientGate>} />
         </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <GlucoGuide/>
     </BrowserRouter>
   );
+}
+
+function roleFallback(contexts: { kind: string }[]): string {
+  if (contexts.some((context) => context.kind === 'clinic')) return '/clinic/patients';
+  if (contexts.some((context) => context.kind === 'patient')) return '/patient/records';
+  return '/account';
+}
+
+function ClinicGate({ children }: { children: React.ReactNode }): React.ReactElement {
+  const { me } = useSession();
+  if (!me?.contexts.some((context) => context.kind === 'clinic')) {
+    return <Navigate to={roleFallback(me?.contexts ?? [])} replace />;
+  }
+  return <>{children}</>;
+}
+
+function PatientGate({ children }: { children: React.ReactNode }): React.ReactElement {
+  const { me } = useSession();
+  if (!me?.contexts.some((context) => context.kind === 'patient')) {
+    return <Navigate to={roleFallback(me?.contexts ?? [])} replace />;
+  }
+  return <>{children}</>;
 }
 
 function ProtectedShell(): React.ReactElement {

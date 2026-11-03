@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ArrowRight, X } from 'lucide-react';
+import { ArrowRight, MousePointer2, X } from 'lucide-react';
 import { Button, cn } from '@glucoflow/ui';
 
 type TourStep = {
@@ -55,20 +55,30 @@ export function JudgeTour({
   onNext: () => void;
   onClose: () => void;
 }): React.ReactElement | null {
+  const [cursor, setCursor] = React.useState<{ x: number; y: number } | null>(null);
   React.useEffect(() => {
     document
       .querySelectorAll<HTMLElement>('[data-tour-focus]')
       .forEach((element) => element.removeAttribute('data-tour-focus'));
+    setCursor(null);
     if (!step) return;
     const target = STEPS[step - 1];
     if (!target) return;
+    let settle: number | undefined;
     const timer = window.setTimeout(() => {
       const element = document.querySelector<HTMLElement>(target.selector);
       if (!element) return;
       element.setAttribute('data-tour-focus', 'true');
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      settle = window.setTimeout(() => {
+        const box = element.getBoundingClientRect();
+        setCursor({ x: box.left + box.width / 2, y: box.top + Math.min(box.height / 2, 150) });
+      }, 420);
     }, 60);
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      if (settle) window.clearTimeout(settle);
+    };
   }, [step]);
 
   if (!step) return null;
@@ -77,6 +87,17 @@ export function JudgeTour({
   const last = step === STEPS.length;
 
   return (
+    <>
+      {cursor ? (
+        <div
+          className="pointer-events-none fixed z-[60] -translate-x-1 -translate-y-1 transition-[left,top] duration-500 ease-out motion-reduce:transition-none"
+          style={{ left: cursor.x, top: cursor.y }}
+          aria-hidden
+        >
+          <span className="absolute -left-4 -top-4 size-11 rounded-full border border-primary/30 bg-primary/5" />
+          <MousePointer2 size={30} className="relative -rotate-6 text-ink drop-shadow-[0_2px_4px_rgba(255,255,255,0.8)] [&_path]:fill-white" />
+        </div>
+      ) : null}
     <div
       className={cn(
         'fixed bottom-3 left-1/2 z-50 w-[min(720px,calc(100%-1.5rem))] -translate-x-1/2 rounded-[18px] border border-primary/30 bg-ink px-5 py-4 text-white shadow-[0_18px_50px_rgba(20,40,36,0.35)]',
@@ -89,8 +110,8 @@ export function JudgeTour({
           {step}/{STEPS.length}
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-semibold">{current.title}</p>
-          <p className="mt-1 text-[13px] leading-5 text-white/75">{current.body}</p>
+          <p className="text-[16px] font-semibold">{current.title}</p>
+          <p className="mt-1 text-[14px] leading-5 text-white/75">{current.body}</p>
         </div>
         <button
           type="button"
@@ -120,5 +141,6 @@ export function JudgeTour({
         </Button>
       </div>
     </div>
+    </>
   );
 }

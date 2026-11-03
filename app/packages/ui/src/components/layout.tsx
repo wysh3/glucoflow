@@ -16,7 +16,7 @@ export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDiv
 }
 
 export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>): React.ReactElement {
-  return <h2 className={cn('text-[15px] font-semibold text-ink', className)} {...props} />;
+  return <h2 className={cn('text-[18px] font-semibold text-ink', className)} {...props} />;
 }
 
 export function CardBody({ className, ...props }: React.HTMLAttributes<HTMLDivElement>): React.ReactElement {
@@ -155,7 +155,7 @@ export function ScreenTitle({
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="flex flex-wrap items-baseline gap-3">
-        <h1 className="text-[22px] font-semibold leading-tight text-ink sm:text-[24px]">{title}</h1>
+        <h1 className="text-[24px] font-semibold leading-tight text-ink">{title}</h1>
         {meta ? <div className="text-sm text-ink-soft">{meta}</div> : null}
       </div>
       {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}

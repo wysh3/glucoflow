@@ -106,7 +106,7 @@ function DecisionCard({
           <span className={cn('size-1.5 rounded-full', DOT[item.block])} aria-hidden />
           {BLOCK_LABEL[item.block]}
         </span>
-        <span className="text-[11px] font-semibold tabular-nums text-ink-soft/60">
+        <span className="text-[11px] font-semibold tabular-nums text-ink-soft">
           {String(index).padStart(2, '0')}
         </span>
       </div>
@@ -131,8 +131,8 @@ function DecisionCard({
       <h3 className="mt-2.5 text-[18px] font-semibold leading-tight tracking-tight text-ink sm:mt-3 sm:text-[20px]">
         {item.title}
       </h3>
-      <p className="mt-2 line-clamp-4 text-[12px] leading-5 text-ink-soft sm:text-[13px] sm:leading-6">{item.detail}</p>
-      <p className="mt-2 hidden line-clamp-2 text-[11px] leading-5 text-ink-soft/80 sm:block">{item.why}</p>
+      <p className="mt-2 line-clamp-4 text-[12px] leading-5 text-ink-soft sm:text-[14px] sm:leading-6">{item.detail}</p>
+      <p className="mt-2 hidden line-clamp-2 text-[11px] leading-5 text-ink-soft sm:block">{item.why}</p>
 
       <div className="mt-auto flex items-end justify-between gap-2 pt-3 sm:pt-4">
         {item.evidence.length > 0 ? (
@@ -219,19 +219,19 @@ export function DeltaBrief({
     : null;
 
   return (
-    <div className={cn('space-y-4', !tourActive && 'pb-[150px] lg:pb-24')}>
+    <div className={cn('space-y-4', !tourActive && 'lg:pb-24')}>
       <header
         data-tour="brief"
         className="rounded-[20px] border border-line bg-surface px-4 py-4 shadow-[0_4px_20px_rgba(32,59,56,0.04)] sm:px-6 sm:py-5"
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-primary">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-primary">
               Pre-visit delta
               {mode === 'demo' ? ' · synthetic' : ' · approved records'}
             </p>
             {compact ? (
-              <h1 className="mt-1 text-[22px] font-semibold leading-tight tracking-tight text-ink sm:text-[26px]">
+              <h1 className="mt-1 text-[24px] font-semibold leading-tight tracking-tight text-ink sm:text-[28px]">
                 {summary.lastVisitDate
                   ? `What changed since ${formatDateOnly(summary.lastVisitDate)}`
                   : 'What changed since the last record'}
@@ -249,7 +249,7 @@ export function DeltaBrief({
                     : ''}
                   {` · ${summary.readSeconds}s read`}
                 </p>
-                <p className="mt-1 hidden text-[13px] text-ink-soft sm:block">
+                <p className="mt-1 hidden text-[14px] text-ink-soft sm:block">
                   {summary.patient.clinicIdentifier}
                   {age !== null ? ` · ${age} years` : ''}
                   {summary.lastVisitDate
@@ -262,7 +262,7 @@ export function DeltaBrief({
           <div className="hidden flex-col items-start gap-2 sm:flex sm:items-end">
             <span
               data-tour="brief-proof"
-              className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-[13px] font-semibold text-primary"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-[14px] font-semibold text-primary"
             >
               <Timer size={15} aria-hidden />
               {summary.readSeconds}-second read
@@ -271,7 +271,7 @@ export function DeltaBrief({
           </div>
         </div>
 
-        <div className="mt-3 grid grid-cols-2 gap-1.5 sm:flex sm:flex-wrap sm:gap-2">
+        <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-2">
           <CountPill block="changed" label="changes" singularLabel="change" value={summary.counts.changed} />
           <CountPill block="unresolved" label="unresolved" value={summary.counts.unresolved} />
           <CountPill block="conflict" label="conflicts" singularLabel="conflict" value={summary.counts.conflict} />
@@ -343,15 +343,23 @@ export function DeltaBrief({
       >
         <div className="rounded-[16px] border border-line bg-surface px-4 py-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-[14px] font-semibold text-ink">For the note</h3>
+            <h3 className="text-[18px] font-semibold text-ink">For the note</h3>
             <Badge tone="neutral">
               {selection.contextChanged.length} context change
               {selection.contextChanged.length === 1 ? '' : 's'}
             </Badge>
           </div>
           {selection.contextChanged.length ? (
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {selection.contextChanged.map((item) => (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {Array.from(
+                selection.contextChanged.reduce((groups, item) => {
+                  const key = item.title;
+                  const existing = groups.get(key);
+                  if (existing) existing.count += 1;
+                  else groups.set(key, { item, count: 1 });
+                  return groups;
+                }, new Map<string, { item: DeltaItem; count: number }>()).values(),
+              ).map(({ item, count }) => (
                 <button
                   key={item.id}
                   type="button"
@@ -360,6 +368,7 @@ export function DeltaBrief({
                 >
                   <span className={cn('size-1.5 rounded-full', DOT[item.block])} aria-hidden />
                   {item.title}
+                  {count > 1 ? <span className="text-ink-soft">×{count}</span> : null}
                 </button>
               ))}
             </div>
@@ -376,7 +385,7 @@ export function DeltaBrief({
           <div>
             <div className="flex items-center gap-2">
               <HelpCircle size={16} className="text-ink-soft" aria-hidden />
-              <h3 className="text-[14px] font-semibold text-ink">Still open</h3>
+              <h3 className="text-[18px] font-semibold text-ink">Still open</h3>
             </div>
             <p className="mt-1 text-[12px] leading-5 text-ink-soft">
               {selection.moreOpen} more open items, conflicts or gaps sit in the ledger. They do not
@@ -393,7 +402,7 @@ export function DeltaBrief({
       {!tourActive ? (
         <div
           data-tour="brief-actions"
-          className="safe-bottom fixed inset-x-0 bottom-[65px] z-40 border-t border-line bg-surface/95 backdrop-blur lg:bottom-0"
+          className="safe-bottom fixed inset-x-0 bottom-[calc(56px+env(safe-area-inset-bottom))] z-40 border-t border-line bg-surface/95 backdrop-blur lg:bottom-0"
         >
           <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
             <div className="min-w-0">

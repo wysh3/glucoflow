@@ -30,5 +30,5 @@ export function TD({
   numeric: isNumeric,
   ...props
 }: React.TdHTMLAttributes<HTMLTableCellElement> & { numeric?: boolean }): React.ReactElement {
-  return <td className={cn('px-3 py-2 text-ink', isNumeric && numeric, className)} {...props} />;
+  return <td className={cn('px-3 py-2 text-ink', isNumeric && `text-right ${numeric}`, className)} {...props} />;
 }

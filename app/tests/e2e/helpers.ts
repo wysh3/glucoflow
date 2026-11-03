@@ -75,6 +75,7 @@ export async function uploadSyntheticReport(
 
   await signIn(page, 'patient');
   await page.goto('/patient/add-report');
+  await page.getByRole('button', { name: 'Choose a report' }).click();
   const dialog = page.getByRole('dialog', { name: 'Upload a report' });
   await expect(dialog).toBeVisible();
   await dialog.locator('input[type="file"]').setInputFiles(path);

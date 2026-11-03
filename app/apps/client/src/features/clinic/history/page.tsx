@@ -2,18 +2,8 @@ import { LoadMore } from '../../../components/load-more';
 import * as React from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import type { PatientSummaryDto } from '@glucoflow/contracts';
-import {
-  Badge,
-  Card,
-  ScreenTitle,
-  Table,
-  TBody,
-  TD,
-  TH,
-  THead,
-  TR,
-  formatDateTime,
-} from '@glucoflow/ui';
+import { Badge, Card, formatDateTime } from '@glucoflow/ui';
+import { SystemPageHeader } from '../../../components/system-page-header';
 import { useHistory } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
 
@@ -25,7 +15,9 @@ export function HistoryPage(): React.ReactElement {
 
   return (
     <div className="space-y-4">
-      <ScreenTitle
+      <SystemPageHeader
+        index="07"
+        label="Patient record / History"
         title="History"
         meta="Clinic-only record of changes, approvals and corrections"
       />
@@ -38,40 +30,41 @@ export function HistoryPage(): React.ReactElement {
         onRetry={() => void history.refetch()}
       >
         <Card>
-          <Table>
-            <THead>
-              <TR>
-                <TH>When</TH>
-                <TH>Actor</TH>
-                <TH>Action</TH>
-                <TH>Revision</TH>
-                <TH>Reason</TH>
-              </TR>
-            </THead>
-            <TBody>
-              {history.data?.items.map((event) => (
-                <TR key={event.auditEventId}>
-                  <TD className="whitespace-nowrap text-ink-soft">{formatDateTime(event.createdAt)}</TD>
-                  <TD>
-                    <span className="text-ink">{event.actorName}</span>
-                    <div className="text-[12px] text-ink-soft">{event.actorRole}</div>
-                  </TD>
-                  <TD>
-                    {event.summary}
-                    <div className="text-[12px] text-ink-soft">{event.entityType}</div>
-                  </TD>
-                  <TD numeric>{event.revision ?? '—'}</TD>
-                  <TD>
-                    {event.reason ? (
-                      <span className="text-ink-soft">{event.reason}</span>
-                    ) : (
-                      <Badge tone="neutral">No reason recorded</Badge>
-                    )}
-                  </TD>
-                </TR>
-              ))}
-            </TBody>
-          </Table>
+          <div className="divide-y divide-line">
+            {history.data?.items.map((event) => (
+              <article
+                key={event.auditEventId}
+                className="grid gap-3 px-4 py-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)_72px_minmax(0,1.1fr)] md:items-start md:gap-5"
+              >
+                <div className="min-w-0">
+                  <p className="text-[12px] text-ink-soft md:hidden">When</p>
+                  <p className="text-[14px] font-medium text-ink">{formatDateTime(event.createdAt)}</p>
+                  <p className="mt-1 text-[12px] text-ink-soft">
+                    {event.actorName} · {event.actorRole}
+                  </p>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[12px] text-ink-soft md:hidden">Action</p>
+                  <p className="text-[14px] leading-5 text-ink">{event.summary}</p>
+                  <p className="mt-1 text-[12px] text-ink-soft">{event.entityType}</p>
+                </div>
+                <div>
+                  <p className="text-[12px] text-ink-soft md:hidden">Revision</p>
+                  <p className="text-[14px] font-semibold tabular-nums text-ink">
+                    {event.revision ?? '—'}
+                  </p>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[12px] text-ink-soft md:hidden">Reason</p>
+                  {event.reason ? (
+                    <p className="text-[14px] leading-5 text-ink-soft">{event.reason}</p>
+                  ) : (
+                    <Badge tone="neutral">No reason recorded</Badge>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
         </Card>
       </QueryState>
       <LoadMore query={history} />

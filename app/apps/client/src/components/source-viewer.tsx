@@ -38,6 +38,7 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
   const [state, setState] = React.useState<RenderState>({ status: 'loading' });
   const [expired, setExpired] = React.useState(false);
   const [rotation, setRotation] = React.useState(0);
+  const [zoom, setZoom] = React.useState(1);
 
   const isPdf = /\.pdf(\?|$)/i.test(props.documentName) || props.url.includes('pdf');
 
@@ -119,7 +120,7 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
   return (
     <div className="flex h-full flex-col">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <div className="text-[13px] text-ink-soft">
+        <div className="text-[14px] text-ink-soft">
           <span className="font-medium text-ink">{props.documentName}</span>
           {state.status === 'ready' ? (
             <>
@@ -133,6 +134,12 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
           {props.onChangePage && (props.pageCount ?? 1) > 1 ? <><Button size="sm" variant="secondary" disabled={props.page <= 1} onClick={() => props.onChangePage!(props.page - 1)}>Previous page</Button><Button size="sm" variant="secondary" disabled={props.page >= (props.pageCount ?? 1)} onClick={() => props.onChangePage!(props.page + 1)}>Next page</Button></> : null}
           {isPdf ? (
             <>
+              <div className="flex items-center rounded-[10px] border border-line bg-surface">
+                <Button size="sm" variant="quiet" aria-label="Zoom out" onClick={() => setZoom((value) => Math.max(0.75, value - 0.25))}>−</Button>
+                <span className="min-w-10 text-center text-[12px] font-medium text-ink-soft">{Math.round(zoom * 100)}%</span>
+                <Button size="sm" variant="quiet" aria-label="Zoom in" onClick={() => setZoom((value) => Math.min(2.5, value + 0.25))}>+</Button>
+                <Button size="sm" variant="quiet" onClick={() => setZoom(1)}>Fit</Button>
+              </div>
               <Button size="sm" variant="quiet" onClick={() => setRotation((value) => value - 90)}>
                 Rotate left
               </Button>
@@ -150,6 +157,9 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
               Open with the device viewer
             </Button>
           ) : null}
+          <Button size="sm" variant="secondary" onClick={() => void openAuthorizedUrl(props.url)}>
+            Open in new tab
+          </Button>
           <Button size="sm" variant="secondary" onClick={props.onRequestNewUrl}>
             Refresh access
           </Button>
@@ -192,7 +202,10 @@ export function SourceViewer(props: SourceViewerProps): React.ReactElement {
         )}
       >
         {isPdf ? (
-          <div className="relative mx-auto w-fit">
+          <div
+            className="relative mx-auto w-fit transition-transform duration-150"
+            style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}
+          >
             <canvas ref={canvasRef} className="max-w-full" aria-label="Source document page" />
             {highlight && rotation === 0 ? (
               <span

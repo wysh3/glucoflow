@@ -64,7 +64,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }): Reac
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="font-medium">{toast.title}</p>
-                {toast.description ? <p className="mt-0.5 text-[13px] opacity-90">{toast.description}</p> : null}
+                {toast.description ? <p className="mt-0.5 text-[14px] opacity-90">{toast.description}</p> : null}
               </div>
               <button
                 type="button"

@@ -18,10 +18,11 @@ export function PatientContextHeader({
 }): React.ReactElement {
   const tabs = [
     { to: 'delta', label: 'Delta' },
+    { to: 'bodymap', label: 'Body map' },
     { to: 'overview', label: 'Visit overview' },
-    { to: 'master', label: 'Home reports' },
     { to: 'progression', label: 'Progression' },
     { to: 'documents', label: 'Documents' },
+    { to: 'master', label: 'Home reports' },
     { to: 'history', label: 'History' },
   ];
   return (
@@ -51,15 +52,15 @@ export function PatientContextHeader({
         />
       </div>
       <div className="min-w-0 lg:hidden">
-        <nav className="flex max-w-full items-center gap-1 overflow-x-auto pb-1" aria-label="Patient record sections">
+        <nav className="grid grid-cols-3 gap-1" aria-label="Patient record sections">
           {tabs.map((tab) => (
             <NavLink
               key={tab.to}
               to={tab.to}
               className={({ isActive }) =>
                 cn(
-                  'inline-flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-[10px] px-4 text-sm font-medium',
-                  isActive ? 'bg-primary/10 text-primary' : 'text-ink-soft hover:bg-surface',
+                  'inline-flex min-h-11 items-center justify-center rounded-[10px] px-2 text-center text-[12px] font-medium leading-4 last:col-start-2',
+                  isActive ? 'bg-primary/10 text-primary-hover' : 'text-ink-soft hover:bg-surface',
                 )
               }
             >

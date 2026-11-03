@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Card, CardBody, Input, Label, ScreenTitle } from '@glucoflow/ui';
 import { useSession } from '../../auth/session';
+import { SystemGlyph } from '../../components/system-glyph';
 
 /**
  * Sign-in. Invalid credentials are explained without revealing whether an account
@@ -51,27 +52,31 @@ export function SignInPage(): React.ReactElement {
     <main className="welcome-page">
       <section data-testid="welcome-panel" className="relative mx-auto w-full max-w-[980px] overflow-hidden rounded-[28px] border border-line bg-surface p-5 shadow-[0_16px_70px_rgba(32,59,56,0.06)] sm:p-8 lg:p-10">
         <header className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5"><HeartPulse size={24} className="text-primary" aria-hidden/><h1 className="text-xl font-semibold tracking-tight text-primary">glucoflow</h1></div>
+          <div className="flex items-center gap-2.5"><HeartPulse size={24} className="text-primary" aria-hidden/><p className="text-xl font-semibold tracking-tight text-primary">glucoflow</p></div>
           <span className="rounded-full bg-primary/7 px-3 py-1.5 text-[11px] text-primary">Interactive demo</span>
         </header>
+        <div className="rule-reveal mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-y border-line py-2.5 text-[11px] font-medium uppercase tracking-[0.12em] text-ink-soft">
+          <SystemGlyph className="mr-1 text-primary" />
+          <span>Access</span><span aria-hidden>·</span><span>Synthetic workspaces</span><span aria-hidden>·</span><span>04 roles</span><span aria-hidden>·</span><span>One click</span>
+        </div>
         <div className="my-6 grid items-center gap-5 sm:my-8 lg:grid-cols-[1fr_auto]">
-          <div><p className="mb-2 text-xs font-medium tracking-wide text-primary">A little clarity. A calmer visit.</p>
-            <h2 className="max-w-lg text-[28px] font-semibold leading-tight tracking-tight text-ink sm:text-[38px]">Your care records,<br className="hidden sm:block"/> beautifully together.</h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-ink-soft">Reports, reviewed facts and visit context. Choose a workspace below. It prefills the demo account and signs you in automatically.</p>
+          <div><p className="mb-2 text-xs font-medium tracking-wide text-primary">Demo access</p>
+            <h1 className="reveal-up reveal-up-1 max-w-lg text-[28px] font-semibold leading-tight tracking-tight text-ink sm:text-[40px]">Choose a workspace.</h1>
+            <p className="mt-3 max-w-md text-sm leading-6 text-ink-soft">Four roles. One click. Each card prefills a synthetic account and signs you in automatically. Access is enforced by the API.</p>
           </div>
           <div className="hidden h-28 w-28 items-center justify-center rounded-full bg-[#edf5ef] lg:flex" aria-hidden><span className="welcome-orb"><span/><span/></span></div>
         </div>
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">{demoAccounts.filter(account=>!account.key.startsWith('other-')).map(account=>(
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">{demoAccounts.filter(account=>!account.key.startsWith('other-')).map((account, index)=>(
           <button key={account.key} data-testid={`demo-card-${account.key}`} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)}
             className="group relative flex flex-col items-start justify-start min-h-[116px] rounded-2xl border border-line bg-canvas/65 p-3.5 text-left transition hover:border-primary/50 hover:bg-primary/5 disabled:opacity-50 sm:min-h-[160px] sm:p-4">
             <span className="mb-2 flex h-8 w-8 items-center justify-center rounded-xl bg-surface text-primary">{account.key.includes('patient') ? <User size={18} aria-hidden/> : account.key==='clinician' ? <Stethoscope size={18} aria-hidden/> : account.key==='reviewer' ? <ClipboardCheck size={18} aria-hidden/> : <Users size={18} aria-hidden/>}</span>
-            <ArrowUpRight size={15} className="absolute right-3.5 top-4 text-ink-soft" aria-hidden/><span className="block text-sm font-semibold text-ink">{account.label}</span>
+            <span aria-hidden="true" className="absolute right-3.5 top-4 flex items-center gap-1.5 text-[11px] tabular-nums text-ink-soft"><span>0{index + 1}</span><ArrowUpRight size={15} aria-hidden/></span><span className="block text-sm font-semibold text-ink">{account.label}</span>
             <span className="mt-1.5 block text-[11px] leading-4 text-ink-soft sm:text-xs sm:leading-5">{account.description}</span>
           </button>
         ))}</div>
         <footer className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4 text-[11px] text-ink-soft">
-          <p>All demo patient records are synthetic.</p>
-          <details className="relative"><summary className="min-h-8 cursor-pointer py-2 text-primary">Test access separation</summary><div className="absolute bottom-full right-0 z-10 mb-2 w-60 rounded-xl border border-line bg-surface p-2 shadow-lg">{demoAccounts.filter(account=>account.key.startsWith('other-')).map(account=><button key={account.key} data-testid={`demo-card-${account.key}`} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)} className="block min-h-11 w-full rounded-lg px-3 text-left text-sm hover:bg-canvas">{account.label}<span className="sr-only"> {account.description}</span></button>)}</div></details>
+          <p>All demo patient records are synthetic. Access is enforced by the API.</p>
+          <details className="relative"><summary className="min-h-8 cursor-pointer px-2 py-2 text-primary">Test access separation</summary><div className="absolute bottom-full left-0 z-10 mb-2 w-60 max-w-[calc(100vw-2rem)] rounded-xl border border-line bg-surface p-2 shadow-lg sm:left-auto sm:right-0">{demoAccounts.filter(account=>account.key.startsWith('other-')).map(account=><button key={account.key} data-testid={`demo-card-${account.key}`} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)} className="block min-h-11 w-full rounded-lg px-3 text-left text-sm hover:bg-canvas">{account.label}<span className="sr-only"> {account.description}</span></button>)}</div></details>
         </footer>
         {busy?<p role="status" className="mt-2 text-xs text-primary">Opening workspace…</p>:null}
         {error?<p role="alert" className="mt-2 text-xs text-danger">{error}</p>:null}

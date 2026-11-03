@@ -35,7 +35,7 @@ test.describe('patient workflows', () => {
 
   test('the add-report screen states the limits and the process-loss limitation', async ({ page }) => {
     await page.goto('/patient/add-report');
-    // The upload dialog opens on entry, so the checks target the dialog itself.
+    await page.getByRole('button', { name: 'Choose a report' }).click();
     const dialog = page.getByRole('dialog', { name: 'Upload a report' });
     await expect(dialog).toBeVisible();
     await expect(dialog.getByText('Uploading for Asha Rao', { exact: false })).toBeVisible();

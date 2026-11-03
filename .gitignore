@@ -13,3 +13,6 @@ node_modules/
 # Local private state and signing material anywhere in the repository
 .local/
 *.pem
+
+# Local brag production workspace
+brag-output/

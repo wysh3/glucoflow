@@ -120,7 +120,7 @@ export type QueueItemDto = {
 
 export const queueQuerySchema = z.object({
   state: z
-    .enum(['all', 'processing', 'awaiting_review', 'review_in_progress', 'failed'])
+    .enum(['all', 'processing', 'awaiting_review', 'review_in_progress', 'failed', 'quarantined'])
     .default('all'),
   cursor: z.string().max(512).optional(),
 });

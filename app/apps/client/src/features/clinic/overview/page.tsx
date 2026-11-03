@@ -24,10 +24,13 @@ import {
 } from '@glucoflow/ui';
 import {
   useTimeline,
+  useDelta,
   useCreateExport,
   useExportStatus,
 } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
+import { ConflictNotice } from '../../../components/conflict-notice';
+import { SystemPageHeader } from '../../../components/system-page-header';
 import { useSourcePane } from '../../../components/source-pane';
 import { describeApiError } from '../../../auth/session';
 import { openAuthorizedUrl } from '../../../platform/download';
@@ -35,6 +38,7 @@ import { openAuthorizedUrl } from '../../../platform/download';
 export function VisitOverviewPage(): React.ReactElement {
   const patient = useOutletContext<PatientSummaryDto>();
   const timeline = useTimeline(patient.patientId, { testCodes: [] });
+  const delta = useDelta(patient.patientId);
   const source = useSourcePane();
   const [error, setError] = React.useState<string | null>(null);
   const [exportId, setExportId] = React.useState<string | null>(null);
@@ -158,32 +162,27 @@ export function VisitOverviewPage(): React.ReactElement {
   );
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="mb-1 text-xs font-medium text-primary">
-            Prepared for the next conversation
-          </p>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Visit overview
-          </h1>
-          <p className="mt-2 text-sm leading-6 text-ink-soft">
-            Approved records, their sources, and the patient’s own notes in one
-            view.
-          </p>
-        </div>
-        <Button
-          disabled={!patient.approvalRevision || exportJob.isPending}
-          onClick={() => {
-            setError(null);
-            exportJob.mutate(patient.approvalRevision, {
-              onSuccess: (r) => setExportId(r.exportId),
-              onError: (e) => setError(describeApiError(e)),
-            });
-          }}
-        >
-          Export visit summary
-        </Button>
-      </div>
+      <SystemPageHeader
+        index="03"
+        label="Patient record / Overview"
+        title="Visit overview"
+        meta="Approved records, their sources and the patient’s own notes in one view."
+        actions={
+          <Button
+            disabled={!patient.approvalRevision || exportJob.isPending}
+            onClick={() => {
+              setError(null);
+              exportJob.mutate(patient.approvalRevision, {
+                onSuccess: (r) => setExportId(r.exportId),
+                onError: (e) => setError(describeApiError(e)),
+              });
+            }}
+          >
+            Export visit summary
+          </Button>
+        }
+      />
+      <ConflictNotice patientId={patient.patientId} items={delta.data?.blocks.conflict ?? []} />
       <div className="flex flex-wrap gap-2">
         <Button asChild variant="secondary">
           <Link to="../progression">
@@ -197,10 +196,10 @@ export function VisitOverviewPage(): React.ReactElement {
             Source reports
           </Link>
         </Button>
-        <Button asChild variant="quiet">
+        <Button asChild variant="secondary">
           <Link to="../master">
-            Home reports & demo scenario
-            <ArrowUpRight size={15} aria-hidden />
+            Home reports
+            <Activity size={15} aria-hidden />
           </Link>
         </Button>
       </div>
@@ -256,7 +255,7 @@ export function VisitOverviewPage(): React.ReactElement {
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <h2
                   id="latest-measurements"
-                  className="text-base font-semibold"
+                  className="text-lg font-semibold"
                 >
                   Latest approved measurements
                 </h2>
@@ -272,9 +271,9 @@ export function VisitOverviewPage(): React.ReactElement {
                       className="rounded-2xl border border-line bg-surface p-4"
                     >
                       <div className="flex items-start justify-between gap-3">
-                        <h3 className="text-sm font-medium text-ink-soft">
+                        <p className="text-sm font-medium text-ink-soft">
                           {entry.displayName}
-                        </h3>
+                        </p>
                         <Badge tone="success">Approved</Badge>
                       </div>
                       <p className="mt-3 text-2xl font-semibold tracking-tight tabular-nums">

@@ -10,7 +10,7 @@ test('Gluco has expressive accessible states, factual follow-ups and clear chat'
     .click();
   await page.getByRole('link', { name: 'Visit overview', exact: true }).first().click();
   await page
-    .getByRole('button', { name: 'Open Gluco guide', exact: true })
+    .getByRole('button', { name: 'Ask Gluco', exact: true })
     .click();
   const chat = page.getByRole('dialog', { name: 'Gluco guide', exact: true });
   await expect(chat.getByTestId('guide-patient')).toContainText('Asha');
@@ -61,7 +61,7 @@ test('patient chat opens only their own context and reduced motion stops the orb
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await signIn(page, 'patient');
   await page
-    .getByRole('button', { name: 'Open Gluco guide', exact: true })
+    .getByRole('button', { name: 'Ask Gluco', exact: true })
     .click();
   const chat = page.getByRole('dialog', { name: 'Gluco guide', exact: true });
   await expect(chat.getByTestId('guide-patient')).toContainText('Your records');
@@ -90,7 +90,7 @@ test('changing patient scope clears conversation and draft', async ({
     .click();
   await page.getByRole('link', { name: 'Visit overview', exact: true }).first().click();
   await page
-    .getByRole('button', { name: 'Open Gluco guide', exact: true })
+    .getByRole('button', { name: 'Ask Gluco', exact: true })
     .click();
   const chat = page.getByRole('dialog', { name: 'Gluco guide', exact: true });
   await chat
@@ -102,7 +102,7 @@ test('changing patient scope clears conversation and draft', async ({
     .first()
     .click();
   await page
-    .getByRole('button', { name: 'Open Gluco guide', exact: true })
+    .getByRole('button', { name: 'Ask Gluco', exact: true })
     .click();
   await expect(chat.getByRole('textbox', { name: 'Ask Gluco' })).toHaveValue(
     '',
@@ -120,7 +120,7 @@ test('Gluco recovers from a failed request and opens original evidence', async (
     .click();
   await page.getByRole('link', { name: 'Visit overview', exact: true }).first().click();
   await page
-    .getByRole('button', { name: 'Open Gluco guide', exact: true })
+    .getByRole('button', { name: 'Ask Gluco', exact: true })
     .click();
   const chat = page.getByRole('dialog', { name: 'Gluco guide', exact: true });
   let release: () => void = () => {};

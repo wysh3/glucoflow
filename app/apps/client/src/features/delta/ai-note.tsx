@@ -47,14 +47,14 @@ export function AiNote({
         </span>
         <div className="min-w-0">
           <p className="text-[11px] font-semibold text-primary">
-            AI extraction{live && model ? ` · ${model}` : ''}
+            AI-assisted extraction{live && model ? ` · ${model}` : ''}
           </p>
           <p className="text-[11px] leading-5 text-ink-soft">
             {sources > 0
               ? `Read ${sources} source${sources === 1 ? '' : 's'}.`
               : 'Read the source record.'}{' '}
-            Recorded items are source-bound. Patient-reported items are labelled.
-            No diagnosis. No decision made for you.
+            Each item is source-bound. Patient-reported items are labelled. Demo
+            fixtures are marked on the review screen. No diagnosis. No decision made for you.
           </p>
         </div>
       </div>

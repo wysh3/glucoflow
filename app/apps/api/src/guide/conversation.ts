@@ -270,6 +270,18 @@ export function renderConversation(
     r.timeline.noteTotal > r.timeline.notes.length ||
     r.homeTotal > r.home.length;
   const scopeNote = `${bounded ? `Date filter: ${plan.from ?? 'any'} to ${plan.to ?? 'any'}. Missing/partial event dates are excluded; counts describe the filtered collection. ` : ''}Approved retained records and current patient-reported entries only. ${clipped ? 'This is a limited collection: up to 2,000 entries per record type and 100 home entries; older records may be missing.' : 'No illustrative dashboard scenario data or extraction drafts are included.'} Showing at most 8 matching entries per answer.`;
+  const sameDate = new Map<string, string>();
+  for (const observation of t.observations) {
+    if (!observation.date || observation.datePrecision !== 'day') continue;
+    const key = `${observation.testCode}|${observation.date}`;
+    sameDate.set(key, (sameDate.get(key) ?? '') || observation.displayName);
+  }
+  const duplicateTests = [...new Set([...sameDate.entries()].filter(([, name]) =>
+    t.observations.filter((o) => o.displayName === name && o.date && o.datePrecision === 'day').length > 1,
+  ).map(([, name]) => name))];
+  const conflictCaveat = duplicateTests.length
+    ? ` Two recorded ${duplicateTests.slice(0, 2).join(' and ')} values share a date. Both are kept; the Delta shows the disagreement rather than choosing one.`
+    : '';
   let actions: GuideChatAnswer['actions'] = [];
   if (
     (plan.from && !calendarDate.safeParse(plan.from).success) ||

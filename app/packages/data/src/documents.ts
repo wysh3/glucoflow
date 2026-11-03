@@ -245,7 +245,7 @@ export async function documentVersions(
   }));
 }
 
-export type QueueFilter = 'all' | 'processing' | 'awaiting_review' | 'review_in_progress' | 'failed';
+export type QueueFilter = 'all' | 'processing' | 'awaiting_review' | 'review_in_progress' | 'failed' | 'quarantined';
 
 export async function listQueue(
   client: DbClient,

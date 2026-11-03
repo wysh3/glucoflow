@@ -57,6 +57,7 @@ function GuideSession(): React.ReactElement {
     { question?: string; answer: GuideAnswer | GuideChatAnswer }[]
   >([{ answer: intro }]);
   const onDelta = location.pathname.endsWith('/delta');
+  const onBodyMap = location.pathname.endsWith('/bodymap');
   React.useEffect(() => {
     const open = (): void => setOpen(true);
     window.addEventListener('gluco:open', open);
@@ -232,9 +233,10 @@ function GuideSession(): React.ReactElement {
   };
   return (
     <>
-      {!onDelta ? (
+      {!me ? (
         <button
-          aria-label="Open Gluco guide"
+          data-desktop-hidden={screen === 'landing' ? undefined : 'true'}
+          aria-label={screen === 'landing' ? 'Need a hand? Open the Gluco guide' : 'Gluco guide'}
           title="Gluco · your record companion"
           aria-expanded={open}
           onClick={() => setOpen(true)}
@@ -243,7 +245,11 @@ function GuideSession(): React.ReactElement {
               ? { bottom: 'calc(20px + env(safe-area-inset-bottom))' }
               : undefined
           }
-          className="gluco-launcher focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30"
+          className={
+            screen === 'landing'
+              ? 'gluco-launcher focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30'
+              : 'gluco-launcher focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30'
+          }
         >
           <GlucoOrb mood={mood} />
           <span className="gluco-caption">
@@ -343,7 +349,7 @@ function GuideSession(): React.ReactElement {
                         <div key={c.id} className="gluco-record">
                           <div className="flex items-start justify-between gap-2">
                             <strong className="text-sm">{c.title}</strong>
-                            <span className="text-[10px] shrink-0 text-ink-soft">
+                            <span className="text-[11px] shrink-0 text-ink-soft">
                               {c.kind === 'approved'
                                 ? 'Approved'
                                 : 'Patient-reported'}
@@ -373,7 +379,7 @@ function GuideSession(): React.ReactElement {
                     <p className="mt-2 text-[11px] text-ink-soft">
                       {m.answer.mode === 'live'
                         ? 'GPT‑6 Luna · grounded in app records'
-                        : 'Local help · model unavailable or not needed'}
+                        : 'Record companion · no model call for this answer'}
                     </p>
                   ) : null}
                   {'scopeNote' in m.answer ? (
@@ -419,13 +425,13 @@ function GuideSession(): React.ReactElement {
               </p>
             ) : null}
           </div>
-          <div className="gluco-suggestions shrink-0 flex gap-2 overflow-x-auto pb-2 pt-3">
+          <div className="gluco-suggestions flex shrink-0 flex-wrap gap-2 pb-2 pt-3">
             {suggestions.map((q) => (
               <button
                 key={q}
                 disabled={busy}
                 onClick={() => void send(q)}
-                className="shrink-0 min-h-10 rounded-xl border border-line bg-surface px-3 py-2 text-xs text-ink-soft disabled:opacity-50"
+                className="max-w-full min-h-10 whitespace-normal rounded-xl border border-line bg-surface px-3 py-2 text-left text-xs text-ink-soft disabled:opacity-50"
               >
                 <Sparkles size={12} className="mr-1 inline" aria-hidden />
                 {q}
@@ -445,6 +451,7 @@ function GuideSession(): React.ReactElement {
             }}
           >
             <textarea
+              autoFocus
               aria-label="Ask Gluco"
               placeholder={
                 mayChat

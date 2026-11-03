@@ -95,7 +95,7 @@ test('orb guide helps navigate without providing clinical advice', async ({
 }) => {
   await signIn(page, 'patient');
   await page
-    .getByRole('button', { name: 'Open Gluco guide', exact: true })
+    .getByRole('button', { name: 'Ask Gluco', exact: true })
     .click();
   const chat = page.getByRole('dialog', { name: 'Gluco guide', exact: true });
   await expect(chat).toBeVisible({ timeout: 5000 });
@@ -125,7 +125,7 @@ test('orb guide helps navigate without providing clinical advice', async ({
     .getByRole('button', { name: 'Cancel', exact: true })
     .click();
   await page
-    .getByRole('button', { name: 'Open Gluco guide', exact: true })
+    .getByRole('button', { name: 'Ask Gluco', exact: true })
     .click();
   await chat
     .getByRole('textbox', { name: 'Ask Gluco', exact: true })

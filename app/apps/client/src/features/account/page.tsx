@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, CardBody, CardHeader, CardTitle, ScreenTitle } from '@glucoflow/ui';
+import { Button, Card, CardBody, CardHeader, CardTitle } from '@glucoflow/ui';
+import { SystemPageHeader } from '../../components/system-page-header';
 import { useSession } from '../../auth/session';
 
 /**
@@ -26,7 +27,7 @@ export function AccountPage(): React.ReactElement {
 
   return (
     <div className="max-w-[720px] space-y-4">
-      <ScreenTitle title="Account" />
+      <SystemPageHeader index="08" label="Workspace / Account" title="Account" />
       <Card>
         <CardHeader>
           <CardTitle>Signed-in identity</CardTitle>
@@ -71,7 +72,7 @@ export function AccountPage(): React.ReactElement {
           <p>{storageDescription}</p>
           <p>Session storage: {storageMode}</p>
           <p>Environment: {config?.appEnv ?? 'unknown'}</p>
-          <p>Extraction: {me.extraction.label}</p>
+          <p>Extraction pipeline: {me.extraction.label} (new uploads)</p>
           <p>Object storage: {me.storage.mode}</p>
           <div className="pt-2">
             <Button

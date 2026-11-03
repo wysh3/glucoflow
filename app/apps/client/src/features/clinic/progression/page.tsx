@@ -24,7 +24,6 @@ import {
   CardBody,
   CardHeader,
   CardTitle,
-  ScreenTitle,
   Select,
   Table,
   TBody,
@@ -41,8 +40,11 @@ import {
   useExportStatus,
   useCreateExport,
   useTimeline,
+  useDelta,
 } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
+import { SystemPageHeader } from '../../../components/system-page-header';
+import { ConflictNotice } from '../../../components/conflict-notice';
 import { openAuthorizedUrl } from '../../../platform/download';
 
 /**
@@ -62,6 +64,7 @@ export function ProgressionPage(): React.ReactElement {
   const [selected, setSelected] = React.useState<string[]>([]);
   const [view, setView] = React.useState<'plot' | 'table'>('plot');
   const sourcePane = useSourcePane();
+  const delta = useDelta(patientId);
   const [exportId, setExportId] = React.useState<string | null>(null);
 
   const rangeBounds = React.useMemo(() => {
@@ -163,7 +166,9 @@ export function ProgressionPage(): React.ReactElement {
           visit note.
         </Alert>
       ) : null}
-      <ScreenTitle
+      <SystemPageHeader
+        index="04"
+        label="Patient record / Progression"
         title="Progression"
         meta={timeline.data?.scopeNote ?? 'Approved results only'}
         actions={
@@ -347,7 +352,7 @@ export function ProgressionPage(): React.ReactElement {
                     {latest ? (
                       <>
                         <span
-                          className={`text-[15px] font-semibold text-ink ${numeric}`}
+                          className={`text-[16px] font-semibold text-ink ${numeric}`}
                         >
                           {latest.numericValue} {latest.unit ?? ''}
                         </span>
@@ -635,7 +640,7 @@ function LaneRow({
         </span>
       </div>
       {detail ? (
-        <p className="mt-1 text-[13px] text-ink-soft">{detail}</p>
+        <p className="mt-1 text-[14px] text-ink-soft">{detail}</p>
       ) : null}
       <div className="mt-1 flex flex-wrap items-center gap-2">
         <Badge tone="neutral">{kindLabel}</Badge>
@@ -671,7 +676,7 @@ function NoteRow({ note }: { note: TimelineNote }): React.ReactElement {
           · submitted {formatDateOnly(note.submittedAt)}
         </span>
       </div>
-      <p className="mt-1 text-[13px] text-ink">{note.body}</p>
+      <p className="mt-1 text-[14px] text-ink">{note.body}</p>
       <div className="mt-1 flex flex-wrap items-center gap-2">
         <Badge tone="neutral">Patient reported</Badge>
         {error ? (

@@ -57,7 +57,7 @@ test.describe('review', () => {
     await reviewLinks.first().click();
     await page.waitForURL(/\/clinic\/review\//);
     await expect(page.getByText('P0482', { exact: false }).first()).toBeVisible();
-    await expect(page.getByText('Fixture data: rule engine')).toBeVisible();
+    await expect(page.getByText(/Fixture processing: rule engine|Live extraction:/)).toBeVisible();
     await expect(page.getByRole('button', { name: /Approve \d+ reviewed/ })).toBeVisible();
   });
 });
@@ -115,6 +115,7 @@ test.describe('review on a narrow screen', () => {
 test('two uploaded photos remain separately accessible during review', async ({page}) => {
   await signIn(page, 'patient');
   await page.goto('/patient/add-report');
+  await page.getByRole('button', { name: 'Choose a report' }).click();
   const upload = page.getByRole('dialog', {name: 'Upload a report'});
   await upload.locator('input[type="file"]').setInputFiles([
     'fixtures/synthetic/photos/2026-09-14_lab_report_photo_a.jpg',

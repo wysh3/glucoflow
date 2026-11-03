@@ -5,8 +5,9 @@ import { ArrowLeftIcon, CircleCheckIcon, FileTextIcon, HeartPulseIcon, FilePenLi
 import { Alert, Button, cn, useAnimatedIcon } from '@glucoflow/ui';
 import { useSession } from '../auth/session';
 import {usePatient} from '../lib/queries';
-import {Activity,History,NotebookPen,Timer} from 'lucide-react';
+import {Activity,History,NotebookPen,ScanLine,Sparkles,Timer} from 'lucide-react';
 import { installBackHandler } from '../platform/back';
+import { SystemGlyph } from './system-glyph';
 
 /**
  * Application shell: left rail on desktop, bottom navigation on mobile.
@@ -36,7 +37,8 @@ export function DemoLabel(): React.ReactElement | null {
   const label = `${config.demoLabel}${me?.extraction.mode === 'fixture' ? ' · fixture data' : ''}`;
   return (
     <span className="inline-flex items-center rounded-full border border-line bg-canvas px-2.5 py-1 text-[11px] font-medium text-ink-soft">
-      {label}
+      <span className="hidden sm:inline">{label}</span>
+      <span className="sm:hidden">Demo</span>
     </span>
   );
 }
@@ -72,16 +74,16 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
 
   const activePatientId = location.pathname.match(/^\/clinic\/patients\/([0-9a-f-]{36})(?:\/|$)/)?.[1];
   const activePatient = usePatient(activePatientId);
-  const patientSections = [{path:'delta',label:'Delta',icon:Timer},{path:'overview',label:'Visit overview',icon:NotebookPen},{path:'progression',label:'Progression',icon:Activity},{path:'documents',label:'Documents',icon:FileTextIcon},{path:'master',label:'Home reports',icon:HeartPulseIcon},{path:'history',label:'History',icon:History}];
+  const patientSections = [{path:'delta',label:'Delta',icon:Timer,index:'01'},{path:'bodymap',label:'Body map',icon:ScanLine,index:'02'},{path:'overview',label:'Visit overview',icon:NotebookPen,index:'03'},{path:'progression',label:'Progression',icon:Activity,index:'04'},{path:'documents',label:'Documents',icon:FileTextIcon,index:'05'},{path:'master',label:'Home reports',icon:HeartPulseIcon,index:'06'},{path:'history',label:'History',icon:History,index:'07'}];
   const clinicLinks = [
-    { to: '/clinic/patients', label: 'Patients', icon: UsersIcon },
-    ...(me?.capabilities.canReview ? [{ to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon }] : []),
+    { to: '/clinic/patients', label: 'Patients', icon: UsersIcon, index: '01' },
+    ...(me?.capabilities.canReview ? [{ to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon, index: '02' }] : []),
   ];
   const patientLinks = [
-    { to: '/patient/master', label: 'Home readings', icon: HeartPulseIcon },
-    { to: '/patient/records', label: 'Records', icon: FileTextIcon },
-    { to: '/patient/add-report', label: 'Add report', icon: UploadIcon },
-    { to: '/patient/visit-notes', label: 'Visit notes', icon: FilePenLineIcon },
+    { to: '/patient/master', label: 'Home', icon: HeartPulseIcon, index: '01' },
+    { to: '/patient/records', label: 'Records', icon: FileTextIcon, index: '02' },
+    { to: '/patient/add-report', label: 'Add report', icon: UploadIcon, index: '03' },
+    { to: '/patient/visit-notes', label: 'Visit notes', icon: FilePenLineIcon, index: '04' },
   ];
   const links = isClinicView ? clinicLinks : isPatientView ? patientLinks : clinicContexts.length > 0 ? clinicLinks : patientContexts.length > 0 ? patientLinks : [];
 
@@ -91,7 +93,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
         <aside className="sticky top-0 hidden h-screen w-[240px] shrink-0 overflow-y-auto border-r border-line bg-surface/90 px-4 pb-6 pt-[calc(24px+env(safe-area-inset-top))] lg:block">
           <div className="mb-6 px-2">
             <HeartPulseIcon size={28} className="mb-3 text-primary" aria-hidden />
-            <p className="text-[19px] font-semibold tracking-tight text-primary">glucoflow</p>
+            <p className="text-[20px] font-semibold tracking-tight text-primary">glucoflow</p>
             <p className="mt-1 text-[12px] text-ink-soft">
               {isClinicView ? 'Clinic workspace' : isPatientView ? 'Patient workspace' : 'Account'}
             </p>
@@ -100,16 +102,19 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
             {links.map((link) => (
               <NavLink key={link.to} to={link.to} className={railLinkClass}>
                 <link.icon size={20} aria-hidden />
-                {link.label}
+                <span>{link.label}</span>
+                <span aria-hidden="true" className="ml-auto text-[11px] tabular-nums text-ink-soft">{link.index}</span>
               </NavLink>
             ))}
             <NavLink to="/account" className={railLinkClass}>
-              <UserIcon size={20} aria-hidden /> Account
+              <UserIcon size={20} aria-hidden />
+              <span>Account</span>
+              <span aria-hidden="true" className="ml-auto text-[11px] tabular-nums text-ink-soft">08</span>
             </NavLink>
           </nav>
-          {activePatientId ? <section className="mt-6 border-t border-line pt-4"><p className="px-3 text-[10px] font-semibold uppercase tracking-wider text-ink-soft">Current patient</p><p className="mt-2 px-3 text-sm font-medium text-ink">{activePatient.data?.displayName ?? 'Loading patient…'}</p><p className="mt-1 px-3 text-xs text-ink-soft">{activePatient.data?.clinicIdentifier}</p><nav aria-label="Patient record sections" className="mt-3 flex flex-col gap-1">{patientSections.map(section=><NavLink key={section.path} to={`/clinic/patients/${activePatientId}/${section.path}`} className={railLinkClass}><section.icon size={18} aria-hidden/>{section.label}</NavLink>)}</nav></section> : null}
+          {activePatientId ? <section className="mt-6 border-t border-dotted border-line pt-4"><p className="px-3 text-[11px] font-semibold uppercase tracking-wider text-ink-soft">Current patient</p><p className="mt-2 px-3 text-sm font-medium text-ink">{activePatient.data?.displayName ?? 'Loading patient…'}</p><p className="mt-1 px-3 text-xs text-ink-soft">{activePatient.data?.clinicIdentifier}</p><nav aria-label="Patient record sections" className="mt-3 flex flex-col gap-1">{patientSections.map(section=><NavLink key={section.path} to={`/clinic/patients/${activePatientId}/${section.path}`} className={railLinkClass}><section.icon size={18} aria-hidden/><span>{section.label}</span><span aria-hidden="true" className="ml-auto text-[11px] tabular-nums text-ink-soft">{section.index}</span></NavLink>)}</nav></section> : null}
           {me ? (
-            <div className="mt-6 border-t border-line pt-4 text-[12px] text-ink-soft">
+            <div className="mt-6 border-t border-dotted border-line pt-4 text-[12px] text-ink-soft">
               <p className="font-medium text-ink">{me.actor.displayName}</p>
               <p className="mt-0.5">{describeRoles(me)}</p>
               <button
@@ -127,7 +132,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
           <header className="safe-top sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur">
             <div className="flex items-center justify-between gap-3 px-4 py-2.5 lg:px-6">
               <div className="flex items-center gap-2 lg:hidden">
-                <span className="text-[19px] font-semibold tracking-tight text-primary">glucoflow</span>
+                <span className="text-[20px] font-semibold tracking-tight text-primary">glucoflow</span>
               </div>
               <div className="hidden items-center gap-3 text-[12px] text-ink-soft lg:flex">
                 <span>{me?.actor.email}</span>
@@ -135,7 +140,18 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
                 <span>{describeRoles(me)}</span>
               </div>
               <div className="flex items-center gap-2">
-                {demoEnabled?<Button variant="secondary" onClick={()=>void signOut()}>Switch role</Button>:null}
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="min-h-9 px-2 sm:px-3"
+                  aria-label="Ask Gluco"
+                  title="Ask Gluco"
+                  onClick={() => window.dispatchEvent(new Event('gluco:open'))}
+                >
+                  <Sparkles size={14} aria-hidden />
+                  <span className="hidden sm:inline">Ask Gluco</span>
+                </Button>
+                {demoEnabled?<Button variant="secondary" className="whitespace-nowrap px-2 text-[12px] sm:px-4 sm:text-sm" onClick={()=>void signOut()}><span className="hidden sm:inline">Switch role</span><span className="sm:hidden">Switch</span></Button>:null}
                 <DemoLabel />
                 {backReady ? null : null}
               </div>
@@ -151,7 +167,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
             </div>
           ) : null}
 
-          <main className="flex-1 px-4 pb-24 pt-4 lg:px-8 lg:pb-10 lg:pt-6">{children}</main>
+          <main className="flex-1 px-4 pb-[160px] pt-4 lg:px-8 lg:pb-10 lg:pt-6">{children}</main>
         </div>
       </div>
 
@@ -166,7 +182,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
               to={link.to}
               className={({ isActive }) =>
                 cn(
-                  'flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1.5 px-1 text-[10px] font-medium sm:text-[11px]',
+                  'flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1.5 px-1 text-[11px] font-medium sm:text-[11px]',
                   isActive ? 'bg-primary/8 text-primary' : 'text-ink-soft hover:bg-canvas',
                 )
               }
@@ -179,7 +195,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
             to="/account"
             className={({ isActive }) =>
               cn(
-                'flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1.5 px-1 text-[10px] font-medium sm:text-[11px]',
+                'flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1.5 px-1 text-[11px] font-medium sm:text-[11px]',
                 isActive ? 'bg-primary/8 text-primary' : 'text-ink-soft hover:bg-canvas',
               )
             }

@@ -9,7 +9,6 @@ import {
   CardBody,
   CardHeader,
   CardTitle,
-  ScreenTitle,
   Select,
   formatDateOnly,
   numeric,
@@ -22,6 +21,7 @@ import {
   useTimeline,
 } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
+import { SystemPageHeader } from '../../../components/system-page-header';
 import { LoadMore } from '../../../components/load-more';
 import { useSourcePane } from '../../../components/source-pane';
 import { ExportSummary } from '../../../components/export-summary';
@@ -65,7 +65,9 @@ export function PatientRecordsPage(): React.ReactElement {
     );
   return (
     <div className="space-y-5">
-      <ScreenTitle
+      <SystemPageHeader
+        index="02"
+        label="Patient / Records"
         title="My records"
         actions={
           <div className="flex flex-wrap gap-2">

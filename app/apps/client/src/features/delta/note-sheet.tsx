@@ -41,7 +41,7 @@ export function DeltaNoteSheet({
             </Button>
           }
         />
-        <pre className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap rounded-[12px] bg-canvas p-4 font-sans text-[13px] leading-6 text-ink">
+        <pre className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap rounded-[12px] bg-canvas p-4 font-sans text-[14px] leading-6 text-ink">
           {note}
         </pre>
         <div className="mt-4 flex justify-end">

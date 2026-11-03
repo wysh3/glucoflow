@@ -13,7 +13,6 @@ import {
   Button,
   Card,
   CardBody,
-  ScreenTitle,
   Table,
   TBody,
   TD,
@@ -25,6 +24,7 @@ import {
 } from '@glucoflow/ui';
 import { useDocuments } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
+import { SystemPageHeader } from '../../../components/system-page-header';
 import { UploadWizard } from '../../upload/upload-wizard';
 import { Dialog, DialogContent, DialogHeader } from '@glucoflow/ui';
 import { useSourcePane } from '../../../components/source-pane';
@@ -142,7 +142,9 @@ export function DocumentsPage(): React.ReactElement {
 
   return (
     <div className="space-y-4">
-      <ScreenTitle
+      <SystemPageHeader
+        index="05"
+        label="Patient record / Documents"
         title="Documents"
         meta={`${documents.data?.items.length ?? 0} reports loaded`}
         actions={
@@ -358,7 +360,7 @@ export function DocumentsPage(): React.ReactElement {
                         method: 'POST',
                         body: {
                           expectedApprovalRevision:
-                            correction.approvalRevision ?? 0,
+                            patient.approvalRevision ?? correction.approvalRevision ?? 0,
                           reason: reason.trim(),
                         },
                       },

@@ -97,7 +97,9 @@ export async function getReviewDto(
             supersedes_batch_id, approval_revision, published_at, extraction_run_id
        from sutra.review_batches
       where document_id = $1
-      order by created_at desc
+        and state <> 'superseded'
+      order by case when state in ('draft', 'identity_hold', 'ready') then 0 else 1 end,
+               created_at desc, revision desc
       limit 1`,
     [documentId],
   );

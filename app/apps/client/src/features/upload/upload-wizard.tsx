@@ -281,10 +281,10 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
         ) : null}
 
         {stage === 'select' ? (
-          <div className="space-y-4">
+          <div className="space-y-4 pb-20">
             {demoEnabled ? <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
-              <div className="flex items-center gap-2 text-primary"><FlaskConicalIcon size={20} aria-hidden /><h3 className="font-semibold">Try a synthetic sample</h3></div>
-              <p className="mt-2 text-xs leading-5 text-ink-soft">No documents needed. Upload a sample, check the source, then approve as Clinic team or Reviewer. Samples use the same extraction workflow as your own uploads.</p>
+              <div className="flex items-center gap-2 text-primary"><FlaskConicalIcon size={20} aria-hidden /><h3 className="text-lg font-semibold">Try a synthetic sample</h3></div>
+              <p className="mt-2 text-xs leading-5 text-ink-soft">No documents needed. Upload a sample and check the source. A clinician reviewer approves or corrects it before it enters the record. Samples use the same extraction workflow as your own uploads.</p>
               <div className="mt-3 space-y-2">
                 {[
                   {file:'synthetic-lab.pdf',name:'lab',title:'Lab report',detail:'HbA1c, kidney markers and blood pressure. Start here.'},
@@ -295,7 +295,7 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
                   <p className="mt-1 text-xs leading-5 text-ink-soft">{sample.detail}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <Button size="sm" variant="secondary" disabled={loadingSample} onClick={() => void trySample(sample.file)}><UploadIcon size={14} aria-hidden />Upload {sample.name} sample</Button>
-                    <a className="inline-flex min-h-9 items-center px-2 text-xs text-primary underline underline-offset-4" href={`/demo/${sample.file}`} target="_blank" rel="noreferrer" aria-label={`Preview ${sample.name} sample`}>Preview PDF</a>
+                    <a className="inline-flex min-h-9 items-center px-2 text-xs text-primary underline underline-offset-4" href={`/demo/${sample.file}`} target="_blank" rel="noreferrer" aria-label={`Preview PDF: ${sample.name} sample`}>Preview PDF</a>
                   </div>
                 </div>)}
               </div>
@@ -347,7 +347,7 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
 
             <p className="text-[12px] text-ink-soft">{PROCESS_LOSS_NOTICE}</p>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="sticky bottom-0 z-10 -mx-1 mt-1 flex flex-wrap gap-2 border-t border-line bg-surface px-1 pb-1 pt-3">
               <Button variant="primary" disabled={files.length === 0 || loadingSample} onClick={() => void upload()}>
                 Upload {files.length > 1 ? `${files.length} pages` : 'report'}
               </Button>

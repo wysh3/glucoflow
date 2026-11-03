@@ -10,7 +10,6 @@ import {
   CardTitle,
   Input,
   Label,
-  ScreenTitle,
   Select,
   Textarea,
   formatDateOnly,
@@ -18,6 +17,7 @@ import {
 import { useApi, useSession, describeApiError } from '../../../auth/session';
 import { useNotes } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
+import { SystemPageHeader } from '../../../components/system-page-header';
 import { useQueryClient } from '@tanstack/react-query';
 
 /**
@@ -75,7 +75,7 @@ export function PatientVisitNotesPage(): React.ReactElement {
 
   return (
     <div className="space-y-4">
-      <ScreenTitle title="Visit notes" meta="Notes you write stay patient-reported" />
+      <SystemPageHeader index="04" label="Patient / Visit notes" title="Visit notes" meta="Notes you write stay patient-reported" />
 
       <Card>
         <CardHeader>

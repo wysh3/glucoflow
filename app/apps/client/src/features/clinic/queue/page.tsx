@@ -6,7 +6,6 @@ import {
   Button,
   Card,
   CardBody,
-  ScreenTitle,
   StatusBadge,
   Table,
   TBody,
@@ -21,6 +20,7 @@ import { randomIdempotencyKey } from '../../../lib/api';
 import { useApi, useSession, describeApiError } from '../../../auth/session';
 import { useQueue } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
+import { SystemPageHeader } from '../../../components/system-page-header';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { JOB_STAGE_LABELS, type QueueItemDto } from '@glucoflow/contracts';
 
@@ -37,7 +37,7 @@ function QueueState({ item }: { item: QueueItem }): React.ReactElement {
       <StatusBadge
         label={item.stateLabel}
         tone={
-          item.state === 'failed'
+          item.state === 'failed' || item.state === 'quarantined'
             ? 'error'
             : item.state === 'awaiting_review' || item.state === 'review_in_progress'
               ? 'review'
@@ -89,10 +89,11 @@ function RowActions({
           Retry
         </Button>
       ) : null}
-      {item.state === 'duplicate' ? <Badge tone="neutral">Already uploaded</Badge> : null}
-      {item.state === 'quarantined' ? (
-        <Badge tone="error">Patient details need checking</Badge>
-      ) : null}
+      <Button asChild size="sm" variant="secondary">
+        <Link to={`/clinic/patients/${item.patientId}/documents`}>
+          {item.state === 'quarantined' ? 'Check patient details' : 'Open document'}
+        </Link>
+      </Button>
     </div>
   );
 }
@@ -102,9 +103,9 @@ export function ClinicQueuePage(): React.ReactElement {
   const api = useApi();
   const queryClient = useQueryClient();
   const [params, setParams] = useSearchParams();
-  type Filter = 'all' | 'processing' | 'awaiting_review' | 'review_in_progress' | 'failed';
+  type Filter = 'all' | 'processing' | 'awaiting_review' | 'review_in_progress' | 'failed' | 'quarantined';
   const value = params.get('state');
-  const filter: Filter = ['all','processing','awaiting_review','review_in_progress','failed'].includes(value ?? '') ? value as Filter : 'all';
+  const filter: Filter = ['all','processing','awaiting_review','review_in_progress','failed','quarantined'].includes(value ?? '') ? value as Filter : 'all';
   const setFilter = (next: Filter) => setParams({state: next}, {replace: true});
   const [retryError, setRetryError] = React.useState<string | null>(null);
   const queue = useQueue(filter);
@@ -126,7 +127,7 @@ export function ClinicQueuePage(): React.ReactElement {
   if (!me?.capabilities.canReview) {
     return (
       <div className="space-y-4">
-        <ScreenTitle title="Review queue" />
+        <SystemPageHeader index="06" label="Clinic / Review queue" title="Review queue" />
         <Card>
           <CardBody className="pt-6 text-sm text-ink-soft">
             This action needs reviewer capability. A clinician-only account sees approved records and
@@ -146,11 +147,17 @@ export function ClinicQueuePage(): React.ReactElement {
     { value: 'awaiting_review', label: 'Awaiting review' },
     { value: 'review_in_progress', label: 'In review' },
     { value: 'failed', label: 'Could not finish' },
+    { value: 'quarantined', label: 'Identity blocked' },
   ] as const;
 
   return (
     <div className="space-y-4">
-      <ScreenTitle title="Review queue" meta="Uploaded documents for this clinic" />
+      <SystemPageHeader
+        index="06"
+        label="Clinic / Review queue"
+        title="Review queue"
+        meta="Uploaded documents for this clinic"
+      />
       <div className="flex flex-wrap gap-2">
         {filters.map((item) => (
           <Button
@@ -175,7 +182,7 @@ export function ClinicQueuePage(): React.ReactElement {
         error={queue.error}
         isEmpty={queue.data?.items.length === 0}
         emptyTitle="Nothing in this filter"
-        emptyDescription="Processing tasks stay visible here until they finish. Try another filter."
+        emptyDescription={filter === 'processing' ? 'No documents are processing right now.' : filter === 'failed' ? 'No upload failed to finish in this queue.' : filter === 'quarantined' ? 'No upload needs a patient identity check.' : 'No documents are in this state. Try another filter.'}
         onRetry={() => void queue.refetch()}
       >
         <Card className="hidden lg:block">
@@ -186,7 +193,7 @@ export function ClinicQueuePage(): React.ReactElement {
                 <TH>Patient</TH>
                 <TH>Document</TH>
                 <TH>State</TH>
-                <TH />
+                <TH>Action</TH>
               </TR>
             </THead>
             <TBody>

@@ -10,7 +10,7 @@ export const Label = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <LabelPrimitive.Root
     ref={ref}
-    className={cn('text-[13px] font-medium text-ink', className)}
+    className={cn('text-[14px] font-medium text-ink', className)}
     {...props}
   />
 ));
@@ -23,7 +23,7 @@ export const Input = React.forwardRef<
   <input
     ref={ref}
     className={cn(
-      'flex min-h-11 w-full rounded-[10px] border border-line bg-surface px-3 py-2 text-base text-ink placeholder:text-ink-soft/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:opacity-50 sm:text-sm',
+      'flex min-h-11 w-full rounded-[10px] border border-line bg-surface px-3 py-2 text-base text-ink placeholder:text-ink-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:opacity-50 sm:text-sm',
       className,
     )}
     {...props}
@@ -38,7 +38,7 @@ export const Textarea = React.forwardRef<
   <textarea
     ref={ref}
     className={cn(
-      'flex min-h-[88px] w-full rounded-[10px] border border-line bg-surface px-3 py-2 text-base text-ink placeholder:text-ink-soft/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:opacity-50 sm:text-sm',
+      'flex min-h-[88px] w-full rounded-[10px] border border-line bg-surface px-3 py-2 text-base text-ink placeholder:text-ink-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:opacity-50 sm:text-sm',
       className,
     )}
     {...props}

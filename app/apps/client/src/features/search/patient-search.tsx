@@ -66,7 +66,7 @@ export function PatientSearch({ patientId }: { patientId: string }): React.React
         <Input
           id="patient-record-search"
           value={query}
-          placeholder="Search this patient's records"
+          placeholder="Search records"
           className="w-full lg:w-[280px]"
           onChange={(event) => {
             setQuery(event.target.value);
@@ -101,6 +101,26 @@ export function PatientSearch({ patientId }: { patientId: string }): React.React
                 </Button>
               }
             />
+
+            <div className="mb-3">
+              <label className="text-[12px] text-ink-soft" htmlFor="search-query">
+                Query
+              </label>
+              <div className="flex gap-2">
+                <Input
+                  id="search-query"
+                  autoFocus
+                  value={query}
+                  placeholder="Search records"
+                  onChange={(event) => setQuery(event.target.value)}
+                />
+                {query ? (
+                  <Button variant="secondary" size="sm" onClick={() => setQuery('')}>
+                    Clear
+                  </Button>
+                ) : null}
+              </div>
+            </div>
 
             <div className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
               <div>

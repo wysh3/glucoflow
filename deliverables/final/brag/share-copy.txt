@@ -1,0 +1,1 @@
+I built glucoflow: a 60-second pre-visit delta for Indian diabetes follow-up clinics. It turns the record into three decisions, keeps every line tied to its source, and adds a real 3D anatomy view that a doctor can rotate and inspect. Synthetic demo, no sign-up: https://glucoflow.vercel.app

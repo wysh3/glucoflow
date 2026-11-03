@@ -168,6 +168,13 @@ export function ReviewPage(): React.ReactElement {
 
   const reviewedCount =
     data?.facts.filter((fact) => fact.reviewState === 'reviewed').length ?? 0;
+  const missingDisposition = Boolean(
+    data?.requiresDispositions &&
+      data.priorFacts.some((prior) => {
+        const decision = dispositions[prior.factId];
+        return !decision || (decision.status === 'withdrawn' && !decision.reason?.trim());
+      }),
+  );
 
   return (
     <div className="space-y-4">
@@ -196,8 +203,8 @@ export function ReviewPage(): React.ReactElement {
                       }
                     >
                       {data.extractionMode === 'fixture'
-                        ? 'Fixture data: rule engine'
-                        : `Live extraction: ${data.extractionModel}`}
+                        ? 'Fixture processing: rule engine (this document)'
+                        : `Live extraction: ${data.extractionModel} (this document)`}
                     </Badge>
                   </span>
                 }
@@ -212,7 +219,7 @@ export function ReviewPage(): React.ReactElement {
                     </Button>
                     <Button
                       variant="primary"
-                      disabled={!data.canPublish || busy || !!data.publishedAt}
+                      disabled={!data.canPublish || busy || !!data.publishedAt || missingDisposition}
                       onClick={() => void approve()}
                     >
                       {data.publishedAt ? 'Published' : `Approve ${reviewedCount} reviewed ${reviewedCount === 1 ? 'entry' : 'entries'}`}
@@ -286,14 +293,14 @@ export function ReviewPage(): React.ReactElement {
                   <CardTitle>Earlier records affected by this change</CardTitle>
                 </CardHeader>
                 <CardBody className="space-y-3">
-                  <p className="text-[13px] text-ink-soft">
+                  <p className="text-[14px] text-ink-soft">
                     Every earlier approved entry affected by this amendment
                     needs an explicit decision: retain it, supersede it with a
-                    named replacement, or withdraw it with a reason.
+                    named replacement, or withdraw it with a reason. Approval
+                    stays disabled until every row has a decision.
                   </p>
                   {data.priorFacts.map((prior) => {
-                    const decision =
-                      dispositions[prior.factId]?.status ?? 'retained';
+                    const decision = dispositions[prior.factId]?.status;
                     return (
                       <div
                         key={prior.factId}
@@ -320,6 +327,7 @@ export function ReviewPage(): React.ReactElement {
                               }))
                             }
                           >
+                            <option value="" disabled>Choose decision</option>
                             <option value="retained">Retain</option>
                             <option value="superseded">Supersede</option>
                             <option value="withdrawn">Withdraw</option>
@@ -597,7 +605,7 @@ function FieldList({
                   key={page.page}
                   className="rounded-[10px] border border-review/30 bg-review-bg px-3 py-2"
                 >
-                  <p className="text-[13px] text-review">
+                  <p className="text-[14px] text-review">
                     {page.coverage === 'excluded'
                       ? `Page ${page.page} is excluded from the approved record.`
                       : `Page ${page.page}: ${page.reason ?? 'This page could not be read reliably.'}`}

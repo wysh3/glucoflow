@@ -47,6 +47,7 @@ export function DeltaReviewSheet({
   onAction,
   onClose,
   onIndexChange,
+  onOpenSource,
 }: {
   items: DeltaItem[];
   index: number | null;
@@ -54,6 +55,7 @@ export function DeltaReviewSheet({
   onAction: (itemId: string, action: DeltaAction) => Promise<void> | void;
   onClose: () => void;
   onIndexChange: (index: number) => void;
+  onOpenSource?: (item: DeltaItem) => void;
 }): React.ReactElement | null {
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -84,7 +86,7 @@ export function DeltaReviewSheet({
       <DialogContent side="right" className="flex max-h-dvh flex-col">
         <DialogHeader
           title={`Decision ${index + 1} of ${items.length}`}
-          description="One decision at a time. The source is shown; you decide."
+          description="One decision at a time. Open the source, then decide."
           actions={
             <Button size="sm" variant="quiet" onClick={onClose}>
               Close
@@ -112,7 +114,7 @@ export function DeltaReviewSheet({
               <span className="text-[12px] text-ink-soft">{formatDateOnly(item.date)}</span>
             ) : null}
             {item.ageDays !== null ? (
-              <span className="text-[12px] text-ink-soft">· {item.ageDays} days</span>
+              <span className="text-[12px] text-ink-soft">· {item.ageDays} {item.ageDays === 1 ? 'day' : 'days'}</span>
             ) : null}
             {status !== 'open' ? (
               <Badge tone={STATUS_TONE[status as DeltaAction]} className="ml-auto">
@@ -129,7 +131,7 @@ export function DeltaReviewSheet({
 
           {item.evidence.length ? (
             <div className="mt-5 rounded-[12px] border border-line bg-canvas/60 p-4">
-              <p className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-soft">
+              <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-ink-soft">
                 <FileText size={13} aria-hidden />
                 {item.evidence[0]!.documentName} · page {item.evidence[0]!.page}
               </p>
@@ -138,8 +140,19 @@ export function DeltaReviewSheet({
               </p>
               {item.evidence.length > 1 ? (
                 <p className="mt-2 text-[11px] text-ink-soft">
-                  {item.evidence.length} sources are attached. Both are kept.
+                  {item.evidence.length} sources are attached. All are kept.
                 </p>
+              ) : null}
+              {onOpenSource ? (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="mt-3"
+                  onClick={() => onOpenSource(item)}
+                >
+                  <FileText size={14} aria-hidden />
+                  Open {item.evidence.length > 1 ? `all ${item.evidence.length} sources` : 'source'}
+                </Button>
               ) : null}
             </div>
           ) : (
