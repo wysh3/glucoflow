@@ -26,9 +26,10 @@ const intro: GuideAnswer = {
   actions: [],
   mode: 'local',
 };
-export function GlucoGuide(): React.ReactElement {
+export function GlucoGuide(): React.ReactElement | null {
   const { me, status } = useSession();
   const location = useLocation();
+  if (location.pathname.startsWith('/demo') || location.pathname.endsWith('/delta')) return null;
   const clinic = me?.contexts.some((c) => c.kind === 'clinic');
   const id = clinic
     ? location.pathname.match(/\/clinic\/patients\/([^/]+)/)?.[1]

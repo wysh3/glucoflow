@@ -1,5 +1,6 @@
 import { registerGuideRoutes } from './guide/routes';
 import { registerMasterRoutes } from './routes/master';
+import { registerDeltaRoutes } from './routes/delta';
 import cors from '@fastify/cors';
 import rateLimit from '@fastify/rate-limit';
 import Fastify, { type FastifyInstance } from 'fastify';
@@ -96,6 +97,7 @@ export async function buildServer(existingContext?: AppContext): Promise<Fastify
     registerGuideRoutes(instance, ctx);
     registerPatientRoutes(instance, ctx);
     registerMasterRoutes(instance, ctx);
+    registerDeltaRoutes(instance, ctx);
     registerDocumentRoutes(instance, ctx);
     registerUploadRoutes(instance, ctx);
   });

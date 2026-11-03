@@ -53,6 +53,7 @@ test('doctor overview consolidates approved facts and source links', async ({
     .getByRole('link', { name: 'Open patient', exact: true })
     .first()
     .click();
+  await page.getByRole('link', { name: 'Visit overview', exact: true }).first().click();
   await expect(
     page.getByRole('heading', { name: 'Visit overview', exact: true }),
   ).toBeVisible({ timeout: 5000 });

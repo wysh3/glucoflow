@@ -8,6 +8,7 @@ test('Gluco has expressive accessible states, factual follow-ups and clear chat'
     .getByRole('link', { name: 'Open patient', exact: true })
     .first()
     .click();
+  await page.getByRole('link', { name: 'Visit overview', exact: true }).first().click();
   await page
     .getByRole('button', { name: 'Open Gluco guide', exact: true })
     .click();
@@ -87,6 +88,7 @@ test('changing patient scope clears conversation and draft', async ({
     .getByRole('link', { name: 'Open patient', exact: true })
     .first()
     .click();
+  await page.getByRole('link', { name: 'Visit overview', exact: true }).first().click();
   await page
     .getByRole('button', { name: 'Open Gluco guide', exact: true })
     .click();
@@ -116,6 +118,7 @@ test('Gluco recovers from a failed request and opens original evidence', async (
     .getByRole('link', { name: 'Open patient', exact: true })
     .first()
     .click();
+  await page.getByRole('link', { name: 'Visit overview', exact: true }).first().click();
   await page
     .getByRole('button', { name: 'Open Gluco guide', exact: true })
     .click();

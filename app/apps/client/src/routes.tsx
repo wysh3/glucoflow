@@ -1,5 +1,7 @@
 import {GlucoGuide} from './features/guide/gluco-guide';
 import {VisitOverviewPage} from './features/clinic/overview/page';
+import {DeltaPage} from './features/delta/page';
+import {DeltaDemoPage} from './features/delta/demo-page';
 import {MasterPage} from './features/master/page';
 import * as React from 'react';
 import {
@@ -35,12 +37,14 @@ export function AppRoutes(): React.ReactElement {
     <BrowserRouter>
       <Routes>
         <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/demo/delta" element={<DeltaDemoPage />} />
         <Route element={<ProtectedShell />}>
           <Route path="/account" element={<AccountPage />} />
           <Route path="/clinic/patients" element={<ClinicPatientsPage />} />
           <Route path="/clinic/queue" element={<ClinicQueuePage />} />
           <Route path="/clinic/patients/:patientId" element={<ClinicPatientLayout />}>
-            <Route index element={<Navigate to="overview" replace />} />
+            <Route index element={<Navigate to="delta" replace />} />
+            <Route path="delta" element={<DeltaPage />} />
             <Route path="overview" element={<VisitOverviewPage />} />
             <Route path="master" element={<MasterPage />} />
             <Route path="progression" element={<ProgressionPage />} />

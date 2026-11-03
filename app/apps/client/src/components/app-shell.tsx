@@ -5,7 +5,7 @@ import { ArrowLeftIcon, CircleCheckIcon, FileTextIcon, HeartPulseIcon, FilePenLi
 import { Alert, Button, cn, useAnimatedIcon } from '@glucoflow/ui';
 import { useSession } from '../auth/session';
 import {usePatient} from '../lib/queries';
-import {Activity,History,NotebookPen} from 'lucide-react';
+import {Activity,History,NotebookPen,Timer} from 'lucide-react';
 import { installBackHandler } from '../platform/back';
 
 /**
@@ -72,7 +72,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
 
   const activePatientId = location.pathname.match(/^\/clinic\/patients\/([0-9a-f-]{36})(?:\/|$)/)?.[1];
   const activePatient = usePatient(activePatientId);
-  const patientSections = [{path:'overview',label:'Visit overview',icon:NotebookPen},{path:'progression',label:'Progression',icon:Activity},{path:'documents',label:'Documents',icon:FileTextIcon},{path:'master',label:'Home reports',icon:HeartPulseIcon},{path:'history',label:'History',icon:History}];
+  const patientSections = [{path:'delta',label:'Delta',icon:Timer},{path:'overview',label:'Visit overview',icon:NotebookPen},{path:'progression',label:'Progression',icon:Activity},{path:'documents',label:'Documents',icon:FileTextIcon},{path:'master',label:'Home reports',icon:HeartPulseIcon},{path:'history',label:'History',icon:History}];
   const clinicLinks = [
     { to: '/clinic/patients', label: 'Patients', icon: UsersIcon },
     ...(me?.capabilities.canReview ? [{ to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon }] : []),
