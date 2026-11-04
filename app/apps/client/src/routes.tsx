@@ -23,6 +23,8 @@ import { AccountPage } from './features/account/page';
 import { ClinicPatientsPage } from './features/clinic/patients/page';
 import { ResultsPage } from './features/clinic/results/page';
 import { ObligationWorkspace } from './features/clinic/obligations/page';
+import { ReplayPage } from './features/clinic/replay/page';
+import { ShowcasePage } from './features/showcase/page';
 import { ClosureCertificatePage } from './features/clinic/results/certificate';
 import { PatientReceiptSlipPage } from './features/clinic/results/patient-slip';
 import { ClinicQueuePage } from './features/clinic/queue/page';
@@ -48,6 +50,7 @@ export function AppRoutes(): React.ReactElement {
         <Route path="/" element={<LandingPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/demo/delta" element={<DeltaDemoPage />} />
+        <Route path="/showcase" element={<ShowcasePage />} />
         <Route path="/verify/:code?" element={<VerifyReceiptPage />} />
         <Route path="/clinic/results/:resultId/survey-pack" element={<ClinicGate><ClosureCertificatePage /></ClinicGate>} />
         <Route path="/clinic/results/:resultId/patient-slip" element={<ClinicGate><PatientReceiptSlipPage /></ClinicGate>} />
@@ -58,6 +61,7 @@ export function AppRoutes(): React.ReactElement {
           <Route path="/clinic/calls" element={<ClinicGate><ObligationWorkspace view="calls" /></ClinicGate>} />
           <Route path="/clinic/intake" element={<ClinicGate><ObligationWorkspace view="intake" /></ClinicGate>} />
           <Route path="/clinic/register" element={<ClinicGate><ObligationWorkspace view="register" /></ClinicGate>} />
+          <Route path="/clinic/replay" element={<ClinicGate><ReplayPage /></ClinicGate>} />
           <Route path="/clinic/patients" element={<ClinicGate><ClinicPatientsPage /></ClinicGate>} />
           <Route path="/clinic/queue" element={<ClinicGate><ClinicQueuePage /></ClinicGate>} />
           <Route path="/clinic/patients/:patientId" element={<ClinicGate><ClinicPatientLayout /></ClinicGate>}>

@@ -80,9 +80,10 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
     ...(me?.capabilities.canNurse ? [{ to: '/clinic/calls', label: 'Calls', icon: CircleCheckIcon, index: '02' }] : []),
     ...(me?.capabilities.canDesk ? [{ to: '/clinic/intake', label: 'Intake', icon: UsersIcon, index: '03' }] : []),
     ...(me?.capabilities.canQuality ? [{ to: '/clinic/register', label: 'Register', icon: FileTextIcon, index: '04' }] : []),
-    { to: '/clinic/results', label: 'Ledger', icon: Inbox, index: '05' },
-    { to: '/clinic/patients', label: 'Patients', icon: UsersIcon, index: '06' },
-    ...(me?.capabilities.canReview ? [{ to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon, index: '07' }] : []),
+    { to: '/clinic/replay', label: 'Replay', icon: Activity, index: '05' },
+    { to: '/clinic/results', label: 'Ledger', icon: Inbox, index: '06' },
+    { to: '/clinic/patients', label: 'Patients', icon: UsersIcon, index: '07' },
+    ...(me?.capabilities.canReview ? [{ to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon, index: '08' }] : []),
   ];
   const patientLinks = [
     { to: '/patient/master', label: 'Home', icon: HeartPulseIcon, index: '01' },

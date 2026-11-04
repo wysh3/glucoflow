@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-11-04T12:47:30.979Z",
+  "source": "synthetic",
+  "cohort": 300,
+  "windowDays": 30,
+  "baseline": {
+    "unacknowledgedShare": 0.327,
+    "uninformedShare": 0.6,
+    "medianHandoffMinutes": 68,
+    "outpatientUnacknowledgedShare": 0.418,
+    "criticalUnacknowledgedShare": 0.438,
+    "closedWithinSlaShare": 0.377
+  },
+  "intervention": {
+    "closedWithinSlaShare": 0.867,
+    "medianHandoffMinutes": 10,
+    "informedShare": 0.867,
+    "exceptionShare": 0.133
+  },
+  "assumptions": [
+    "Baseline is the recorded acknowledgement and communication on the cohort.",
+    "Intervention is a deterministic queue simulation, not a controlled trial.",
+    "Desk accepts custody in 4 minutes; clinician review adds 6 minutes.",
+    "One nurse, 4 minutes per call, 86% reachability, two attempts before an exception.",
+    "Critical SLA is 60 minutes; abnormal SLA is 24 hours."
+  ]
+}
