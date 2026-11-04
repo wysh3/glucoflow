@@ -4,7 +4,13 @@ import type { ObligationRow } from '@glucoflow/contracts';
 import { useObligationActions, useObligations } from '../../../lib/obligations';
 import { BreachLine, FlagChip, PatientLine, ValueLine } from './shared';
 
-export function ObligationLine({ onOpen }: { onOpen: (id: string) => void }): React.ReactElement {
+export function ObligationLine({
+  onOpen,
+  onRecorded,
+}: {
+  onOpen: (id: string) => void;
+  onRecorded: (row: ObligationRow) => void;
+}): React.ReactElement {
   const query = useObligations('line');
   if (query.isLoading) return <Spinner label="Loading the line" />;
   if (query.error) {
@@ -27,13 +33,21 @@ export function ObligationLine({ onOpen }: { onOpen: (id: string) => void }): Re
   return (
     <div className="space-y-3">
       {rows.map((row) => (
-        <LineCard key={row.id} row={row} onOpen={onOpen} />
+        <LineCard key={row.id} row={row} onOpen={onOpen} onRecorded={onRecorded} />
       ))}
     </div>
   );
 }
 
-function LineCard({ row, onOpen }: { row: ObligationRow; onOpen: (id: string) => void }): React.ReactElement {
+function LineCard({
+  row,
+  onOpen,
+  onRecorded,
+}: {
+  row: ObligationRow;
+  onOpen: (id: string) => void;
+  onRecorded: (row: ObligationRow) => void;
+}): React.ReactElement {
   const actions = useObligationActions();
   const [correcting, setCorrecting] = React.useState(false);
   const [value, setValue] = React.useState(row.valueText);
@@ -45,8 +59,9 @@ function LineCard({ row, onOpen }: { row: ObligationRow; onOpen: (id: string) =>
     setError(null);
     setRecorded(false);
     try {
-      await actions.see.mutateAsync({ id: row.id, body });
+      const updated = await actions.see.mutateAsync({ id: row.id, body });
       setRecorded(true);
+      onRecorded(updated);
       setCorrecting(false);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : 'The review was not recorded.');

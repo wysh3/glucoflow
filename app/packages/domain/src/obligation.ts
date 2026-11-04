@@ -250,10 +250,10 @@ export function applyAction(
       if (phase.kind !== 'attempted') {
         return fail('wrong_phase', 'An exception close follows at least two recorded attempts.');
       }
-      if (attemptDayCount(phase.attempts) < 2) {
+      if (attemptSpanHours(phase.attempts) < UNREACHABLE_MIN_SPAN_HOURS) {
         return fail(
           'attempts_insufficient',
-          'Two attempts on different days are required before closing as unreachable.',
+          'Two attempts at least 20 hours apart are required before closing as unreachable.',
         );
       }
       return ok({
@@ -281,6 +281,9 @@ export function applyAction(
       }
       if (phase.clinicianId === action.clinicianId) {
         return ok(phase, false);
+      }
+      if (phase.kind === 'seen' || phase.kind === 'attempted') {
+        return ok({ ...phase, clinicianId: action.clinicianId });
       }
       return ok({ kind: 'assigned', clinicianId: action.clinicianId });
     }
@@ -310,9 +313,13 @@ export function deriveStatus(phase: ObligationPhase, patientMatched: boolean): R
   }
 }
 
-/** Distinct calendar days (UTC) on which an attempt was recorded. */
-export function attemptDayCount(attempts: readonly ObligationAttempt[]): number {
-  return new Set(attempts.map((attempt) => attempt.at.slice(0, 10))).size;
+/** Hours between the first and the last recorded attempt. */
+export const UNREACHABLE_MIN_SPAN_HOURS = 20;
+
+export function attemptSpanHours(attempts: readonly ObligationAttempt[]): number {
+  if (attempts.length < 2) return 0;
+  const times = attempts.map((attempt) => Date.parse(attempt.at));
+  return (Math.max(...times) - Math.min(...times)) / 3_600_000;
 }
 
 function normalizeValue(raw: string): string {

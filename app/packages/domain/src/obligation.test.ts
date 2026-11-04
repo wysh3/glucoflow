@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   applyAction,
-  attemptDayCount,
+  attemptSpanHours,
   breachAt,
   deriveStatus,
   EMPTY_CLOCKS,
@@ -305,6 +305,12 @@ describe('obligation phase machine', () => {
       applyAction(moved.phase, { type: 'reassign', actor: desk, clinicianId: otherClinician.id }, abnormal),
     );
     expect(same.changed).toBe(false);
+
+    const seenPhase = seen();
+    const kept = expectOk(
+      applyAction(seenPhase, { type: 'reassign', actor: desk, clinicianId: otherClinician.id }, abnormal),
+    );
+    expect(kept.phase.kind).toBe('seen');
   });
 });
 
@@ -335,20 +341,20 @@ describe('value echo', () => {
   });
 });
 
-describe('attempt days', () => {
-  it('counts distinct UTC dates, not attempts', () => {
+describe('attempt span', () => {
+  it('requires 20 hours between the first and last attempt', () => {
     expect(
-      attemptDayCount([
+      attemptSpanHours([
         { outcome: 'unreachable', at: '2026-11-04T10:00:00.000Z' },
         { outcome: 'unreachable', at: '2026-11-04T16:00:00.000Z' },
       ]),
-    ).toBe(1);
+    ).toBe(6);
     expect(
-      attemptDayCount([
+      attemptSpanHours([
         { outcome: 'unreachable', at: '2026-11-04T10:00:00.000Z' },
         { outcome: 'unreachable', at: '2026-11-05T10:00:00.000Z' },
       ]),
-    ).toBe(2);
+    ).toBe(24);
   });
 });
 

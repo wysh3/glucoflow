@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Badge,
   Button,
@@ -104,6 +105,9 @@ export function ObligationDetail({
                   <p className="font-medium text-ink">{proof.data.valid ? 'Chain intact' : 'Chain not verified'}</p>
                   <p className="mt-1">{proof.data.eventCount} events · head {proof.data.head?.slice(0, 16) ?? 'none'}</p>
                   <p className="mt-1">Receipt code {row.receiptCode}</p>
+                  <Link className="mt-2 inline-block text-[12px] font-medium text-primary underline" to={`/verify/${row.receiptCode}`}>
+                    Open the public receipt
+                  </Link>
                   <p className="mt-2 text-[11px]">
                     The chain proves the events were written in this order and have not changed since. It is not an opinion about the result.
                   </p>

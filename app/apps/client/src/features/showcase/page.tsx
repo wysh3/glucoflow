@@ -30,7 +30,7 @@ const STEPS = [
     title: 'The receipt',
     to: '/clinic/line',
     action: 'Open a source',
-    line: 'The timeline and the chain head. Visible to a surveyor, a lab or a court.',
+    line: 'The timeline and the chain head. Readable by a surveyor or a lab. The chain proves order, not truth.',
   },
   {
     index: '05',
@@ -42,8 +42,8 @@ const STEPS = [
   {
     index: '06',
     title: 'The exception',
-    to: '/clinic/calls',
-    action: 'Open the calls',
+    to: '/clinic/register?tab=exceptions',
+    action: 'Open the exceptions',
     line: 'Not informed. Two attempts. A named owner. Never a false closure.',
   },
   {

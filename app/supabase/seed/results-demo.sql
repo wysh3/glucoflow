@@ -3,6 +3,7 @@ do $$
 declare
   v_clinic uuid;
   v_owner uuid;
+  v_doctor uuid;
 begin
   select id into v_clinic from sutra.clinics where is_demo order by created_at limit 1;
   select m.user_id into v_owner
@@ -13,6 +14,16 @@ begin
   if v_clinic is null or v_owner is null then
     raise exception 'seed the demo clinic first';
   end if;
+
+  select m.user_id into v_doctor
+    from sutra.memberships m
+    where m.clinic_id = v_clinic and m.active and m.clinician and not m.reviewer
+    order by m.created_at limit 1;
+  v_doctor := coalesce(v_doctor, v_owner);
+
+  delete from sutra.results
+   where clinic_id = v_clinic
+     and (external_ref like 'demo-res-%' or external_ref like 'demo-line-%');
 
   insert into sutra.patients (clinic_id, clinic_identifier, display_name)
   values
@@ -266,6 +277,33 @@ begin
              then now() + sutra.obligation_sla('communication', lab_flag)
            else communication_due_at end
    where clinic_id = v_clinic and external_ref like 'demo-res-%';
+
+  insert into sutra.results (
+    clinic_id, patient_id, external_ref, source_channel, lab_name, report_received_at, lab_released_at,
+    patient_name_raw, patient_identifier_raw, test_name, value_text, unit, lab_flag,
+    result_kind, status, owner_id, due_at, custody_state, review_state, communication_state,
+    review_due_at, custody_actor_id, created_by, created_at, contact_consent
+  )
+  select v_clinic, p.id, d.ref, 'whatsapp', 'SRL Diagnostics',
+         now() - (d.hours || ' hours')::interval,
+         now() - (d.hours || ' hours')::interval + interval '10 minutes',
+         p.display_name, p.clinic_identifier, d.test, d.value, d.unit, d.flag,
+         'unscheduled', 'owned',
+         case when d.owner = 'clinic' then v_owner else v_doctor end,
+         now() + interval '60 minutes', 'assigned', 'pending', 'pending',
+         now() + interval '60 minutes', v_owner, v_owner,
+         now() - (d.hours || ' hours')::interval, false
+    from (values
+      ('demo-line-01', 'P0482', 'Sodium', '131', 'mmol/L', 'abnormal', 2, 'clinic'),
+      ('demo-line-02', 'P0511', 'eGFR', '52', 'mL/min/1.73m2', 'abnormal', 3, 'doctor'),
+      ('demo-line-03', 'P0520', 'HbA1c', '7.9', '%', 'abnormal', 4, 'clinic'),
+      ('demo-line-04', 'P0534', 'Chloride', '112', 'mmol/L', 'abnormal', 5, 'doctor'),
+      ('demo-line-05', 'P0546', 'Fasting glucose', '154', 'mg/dL', 'abnormal', 6, 'clinic'),
+      ('demo-line-06', 'P0577', 'Creatinine', '1.4', 'mg/dL', 'abnormal', 7, 'doctor'),
+      ('demo-line-07', 'P0589', 'ALT', '44', 'U/L', 'abnormal', 8, 'clinic'),
+      ('demo-line-08', 'P0594', 'HbA1c', '8.1', '%', 'abnormal', 9, 'doctor')
+    ) as d(ref, identifier, test, value, unit, flag, hours, owner)
+    join sutra.patients p on p.clinic_id = v_clinic and p.clinic_identifier = d.identifier;
 
 end
 $$;

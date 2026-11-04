@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@glucoflow/ui';
-import type { ObligationView } from '@glucoflow/contracts';
+import type { ObligationRow, ObligationView } from '@glucoflow/contracts';
 import { useSession } from '../../../auth/session';
 import { SystemPageHeader } from '../../../components/system-page-header';
 import { ObligationLine } from './line';
@@ -53,6 +53,7 @@ const NAV: { view: ObligationView; to: string; label: string; capability: 'canCl
 export function ObligationWorkspace({ view }: { view: ObligationView }): React.ReactElement {
   const { me } = useSession();
   const [openId, setOpenId] = React.useState<string | null>(null);
+  const [recorded, setRecorded] = React.useState<ObligationRow | null>(null);
   const meta = VIEW_META[view];
   const visible = NAV.filter((item) => me?.capabilities[item.capability]);
 
@@ -78,7 +79,20 @@ export function ObligationWorkspace({ view }: { view: ObligationView }): React.R
         }
       />
 
-      {view === 'line' ? <ObligationLine onOpen={setOpenId} /> : null}
+      {recorded ? (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-[10px] border border-success/30 bg-success-bg px-3 py-2 text-[13px] text-success">
+          <span>
+            Review recorded for {recorded.patientName ?? 'the patient'} at{' '}
+            {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}. Receipt {recorded.receiptCode}.
+          </span>
+          <span className="flex items-center gap-2">
+            <Link className="underline" to={`/verify/${recorded.receiptCode}`}>Verify</Link>
+            <Button variant="quiet" size="sm" onClick={() => setRecorded(null)}>Dismiss</Button>
+          </span>
+        </div>
+      ) : null}
+
+      {view === 'line' ? <ObligationLine onOpen={setOpenId} onRecorded={setRecorded} /> : null}
       {view === 'calls' ? <ObligationCalls onOpen={setOpenId} /> : null}
       {view === 'intake' ? <ObligationIntake onOpen={setOpenId} /> : null}
       {view === 'register' ? <ObligationRegister /> : null}

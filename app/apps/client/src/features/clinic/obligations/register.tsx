@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
   Badge,
   Button,
@@ -16,7 +17,7 @@ import {
   cn,
 } from '@glucoflow/ui';
 import type { ObligationRow } from '@glucoflow/contracts';
-import { useObligations } from '../../../lib/obligations';
+import { useObligationActions, useObligations } from '../../../lib/obligations';
 
 function isoDay(offsetDays: number): string {
   const date = new Date();
@@ -27,15 +28,16 @@ function isoDay(offsetDays: number): string {
 type RegisterTab = 'register' | 'exceptions';
 
 export function ObligationRegister(): React.ReactElement {
-  const [tab, setTab] = React.useState<RegisterTab>('register');
+  const [params] = useSearchParams();
+  const [tab, setTab] = React.useState<RegisterTab>(params.get('tab') === 'exceptions' ? 'exceptions' : 'register');
   const [from, setFrom] = React.useState(isoDay(-90));
   const [to, setTo] = React.useState(isoDay(1));
   const query = useObligations(tab, { from, to });
 
   const rows = query.data?.items ?? [];
   const open = rows.filter((row) => row.terminal === null).length;
+  const closed = rows.filter((row) => row.terminal === 'closed').length;
   const exceptions = rows.filter((row) => row.terminal !== null && row.terminal !== 'closed').length;
-  const informed = rows.filter((row) => row.informedAt !== null).length;
 
   return (
     <div className="space-y-4">
@@ -75,8 +77,8 @@ export function ObligationRegister(): React.ReactElement {
       <div className="no-print grid gap-2 sm:grid-cols-4">
         <Stat label="Rows" value={String(rows.length)} />
         <Stat label="Open" value={String(open)} />
-        <Stat label="Informed" value={String(informed)} />
-        <Stat label="Unreachable" value={String(exceptions)} tone={exceptions > 0 ? 'danger' : undefined} />
+        <Stat label="Closed" value={String(closed)} />
+        <Stat label="Exceptions" value={String(exceptions)} tone={exceptions > 0 ? 'danger' : undefined} />
       </div>
 
       <Card className="print-area p-0">
@@ -117,6 +119,7 @@ export function ObligationRegister(): React.ReactElement {
                 <TH>Seen</TH>
                 <TH>Informed</TH>
                 <TH>Status</TH>
+                <TH>Action</TH>
               </TR>
             </THead>
             <TBody>
@@ -132,6 +135,7 @@ export function ObligationRegister(): React.ReactElement {
 }
 
 function RegisterRow({ row }: { row: ObligationRow }): React.ReactElement {
+  const actions = useObligationActions();
   return (
     <TR>
       <TD className="whitespace-nowrap text-[12px]">{new Date(row.receivedAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</TD>
@@ -149,6 +153,18 @@ function RegisterRow({ row }: { row: ObligationRow }): React.ReactElement {
       </TD>
       <TD>
         <Badge tone={statusTone(row)}>{statusLabel(row)}</Badge>
+      </TD>
+      <TD>
+        {row.terminal === null && row.communication === 'informed' ? (
+          <Button
+            variant="secondary"
+            size="sm"
+            disabled={actions.close.isPending}
+            onClick={() => void actions.close.mutateAsync({ id: row.id, body: { disposition: 'reviewed_action' } })}
+          >
+            Close
+          </Button>
+        ) : null}
       </TD>
     </TR>
   );

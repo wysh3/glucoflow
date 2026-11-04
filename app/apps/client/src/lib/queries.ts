@@ -22,6 +22,7 @@ import type {
   ResultDto,
   ResultFilter,
   ResultListDto,
+  ResultMatchCandidateDto,
   ResultProofDto,
   ResultStatsDto,
   TimelineResult,
@@ -267,6 +268,16 @@ export function useResultStats(): UseQueryResult<ResultStatsDto> {
   });
 }
 
+export function useResultCandidates(id: string | undefined): UseQueryResult<{ items: ResultMatchCandidateDto[] }> {
+  const api = useApi();
+  const actor = useActorKey();
+  return useQuery({
+    queryKey: ['result-candidates', actor, id],
+    enabled: Boolean(id),
+    queryFn: () => api.request<{ items: ResultMatchCandidateDto[] }>(`/api/v1/results/${id}/candidates`),
+  });
+}
+
 export function useResultProof(id: string | undefined): UseQueryResult<ResultProofDto> {
   const api = useApi();
   const actor = useActorKey();
@@ -304,6 +315,14 @@ export function useResultActions() {
     acknowledge: useMutation({ mutationFn: command('acknowledge') }),
     informed: useMutation({ mutationFn: command('patient-informed') }),
     escalate: useMutation({ mutationFn: command('escalate') }),
+    nextStep: useMutation({ mutationFn: command('next-step') }),
     close: useMutation({ mutationFn: command('close') }),
+    escalateOverdue: useMutation({
+      mutationFn: async (): Promise<{ escalated: number }> => {
+        const result = await api.request<{ escalated: number }>('/api/v1/results/escalate-overdue', { method: 'POST' });
+        await invalidate();
+        return result;
+      },
+    }),
   };
 }

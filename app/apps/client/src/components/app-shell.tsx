@@ -179,7 +179,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
 
       {links.length > 0 ? (
         <nav
-          className="safe-bottom fixed bottom-0 left-0 right-0 z-30 flex border-t border-line bg-surface/95 shadow-[0_-4px_24px_rgba(24,76,68,0.05)] backdrop-blur lg:hidden"
+          className="no-print safe-bottom fixed bottom-0 left-0 right-0 z-30 flex border-t border-line bg-surface/95 shadow-[0_-4px_24px_rgba(24,76,68,0.05)] backdrop-blur lg:hidden"
           aria-label="Main"
         >
           {links.map((link) => (

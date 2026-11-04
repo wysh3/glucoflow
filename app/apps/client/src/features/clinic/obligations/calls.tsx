@@ -88,7 +88,7 @@ export function ObligationCalls({ onOpen }: { onOpen: (id: string) => void }): R
 function CallCard({ row, onOpen }: { row: ObligationRow; onOpen: (id: string) => void }): React.ReactElement {
   const actions = useObligationActions();
   const [channel, setChannel] = React.useState<InformedChannel>('call');
-  const [outcome, setOutcome] = React.useState<CommunicationOutcome>('informed_patient');
+  const [outcome, setOutcome] = React.useState<CommunicationOutcome | ''>('');
   const [readBack, setReadBack] = React.useState(false);
   const [teachBack, setTeachBack] = React.useState(false);
   const [nextStep, setNextStep] = React.useState<NextStep | ''>('');
@@ -96,12 +96,16 @@ function CallCard({ row, onOpen }: { row: ObligationRow; onOpen: (id: string) =>
   const [recorded, setRecorded] = React.useState(false);
 
   const critical = row.labFlag === 'critical';
-  const informed = isInformed(outcome);
-  const needsReadBack = critical && informed && !readBack;
+  const informed = outcome !== '' && isInformed(outcome);
+  const needsReadBack = informed && !readBack;
 
   const submit = async (): Promise<void> => {
     setError(null);
     setRecorded(false);
+    if (outcome === '') {
+      setError('Choose what happened before recording the contact.');
+      return;
+    }
     try {
       if (informed) {
         await actions.informed.mutateAsync({
@@ -160,6 +164,7 @@ function CallCard({ row, onOpen }: { row: ObligationRow; onOpen: (id: string) =>
           ))}
         </Select>
         <Select id={`outcome-${row.id}`} value={outcome} onChange={(event) => setOutcome(event.target.value as CommunicationOutcome)}>
+          <option value="">Choose an outcome</option>
           {OUTCOMES.map((item) => (
             <option key={item} value={item}>{COMMUNICATION_OUTCOME_LABELS[item]}</option>
           ))}
@@ -170,7 +175,7 @@ function CallCard({ row, onOpen }: { row: ObligationRow; onOpen: (id: string) =>
         <div className="mt-3 space-y-2 rounded-[10px] border border-line bg-canvas p-3">
           <label className="flex items-center gap-2 text-[13px] text-ink">
             <Checkbox checked={readBack} onChange={(event) => setReadBack(event.target.checked)} />
-            Value read back and confirmed{critical ? ' (required for a critical result)' : ''}
+            Value read back and confirmed (required before an informed outcome)
           </label>
           <label className="flex items-center gap-2 text-[13px] text-ink">
             <Checkbox checked={teachBack} onChange={(event) => setTeachBack(event.target.checked)} />
@@ -189,7 +194,7 @@ function CallCard({ row, onOpen }: { row: ObligationRow; onOpen: (id: string) =>
       ) : null}
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <Button variant="primary" size="sm" disabled={actions.informed.isPending || actions.attempt.isPending || needsReadBack} onClick={() => void submit()}>
+        <Button variant="primary" size="sm" disabled={actions.informed.isPending || actions.attempt.isPending || needsReadBack || outcome === ''} onClick={() => void submit()}>
           {actions.informed.isPending || actions.attempt.isPending ? 'Recording' : 'Record contact'}
         </Button>
         <Button variant="quiet" size="sm" onClick={() => onOpen(row.id)}>Source</Button>
@@ -202,7 +207,7 @@ function CallCard({ row, onOpen }: { row: ObligationRow; onOpen: (id: string) =>
       </div>
 
       {needsReadBack ? (
-        <p className="mt-2 text-[12px] text-danger">A critical result cannot be recorded as informed without the read-back.</p>
+        <p className="mt-2 text-[12px] text-danger">An informed outcome cannot be recorded without the read-back.</p>
       ) : null}
       {error ? (
         <div className="mt-3">

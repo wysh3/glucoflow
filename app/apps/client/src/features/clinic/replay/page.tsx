@@ -37,7 +37,7 @@ export function ReplayPage(): React.ReactElement {
           label="Median handoff"
           value={`${replay.intervention.medianHandoffMinutes ?? 0} min`}
           previous={`${replay.baseline.medianHandoffMinutes ?? 0} min`}
-          note="Report received to a named clinician seeing it"
+          note="Modeled: 4 min desk + 6 min review"
           tone="primary"
         />
         <Metric
@@ -56,6 +56,9 @@ export function ReplayPage(): React.ReactElement {
           <Bar label="With the loop: exception, not informed" value={replay.intervention.exceptionShare} tone="neutral" />
         </div>
         <p className="mt-4 text-[12px] leading-5 text-ink-soft">
+          The closed share tracks the 86% reachability assumption. It is not an independent measurement.
+        </p>
+        <p className="mt-2 text-[12px] leading-5 text-ink-soft">
           Cohort {replay.cohort} reports over {replay.windowDays} days. Baseline unacknowledged{' '}
           {percent(replay.baseline.unacknowledgedShare)}, uninformed {percent(replay.baseline.uninformedShare)},
           outpatient unacknowledged {percent(replay.baseline.outpatientUnacknowledgedShare)}, critical unacknowledged{' '}

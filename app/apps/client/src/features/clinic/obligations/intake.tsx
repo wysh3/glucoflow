@@ -83,7 +83,7 @@ function IntakeCard({ row, onOpen }: { row: ObligationRow; onOpen: (id: string) 
             Accept custody
           </Button>
         ) : null}
-        {row.custody === 'accepted' && me?.capabilities.canClinician ? (
+        {row.custody === 'accepted' && me?.capabilities.canDesk ? (
           <Button
             variant="primary"
             size="sm"

@@ -30,6 +30,8 @@ test.describe('role-separated obligation workspace', () => {
     const recordButtons = page.getByRole('button', { name: 'Record contact' });
     await expect(recordButtons.first()).toBeVisible();
     const before = await recordButtons.count();
+    await page.getByLabel('Outcome').first().click();
+    await page.getByRole('option', { name: 'Patient reached' }).click();
     if (await recordButtons.first().isDisabled()) {
       await page.getByLabel(/Value read back/).first().check();
     }
@@ -59,5 +61,14 @@ test.describe('role-separated obligation workspace', () => {
     await expect(
       page.getByRole('button', { name: /Accept custody|Match patient/ }).first(),
     ).toBeVisible();
+  });
+});
+
+test.describe('role boundaries', () => {
+  test('a reviewer cannot open the clinician line by URL', async ({ page }) => {
+    await signIn(page, 'reviewer');
+    await page.goto('/clinic/line');
+    await expect(page.getByText('This screen belongs to another role.')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Seen' })).toHaveCount(0);
   });
 });

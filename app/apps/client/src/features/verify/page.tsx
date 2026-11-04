@@ -2,8 +2,76 @@ import * as React from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Check, HeartPulse, Search, ShieldCheck, X } from 'lucide-react';
 import { Button, Card, Input, Spinner } from '@glucoflow/ui';
-import type { PublicReceiptProofDto } from '@glucoflow/contracts';
+import type { PublicReceiptProofDto, PublicReceiptStage } from '@glucoflow/contracts';
 import { useApi } from '../../auth/session';
+
+const STAGE_COPY: Record<PublicReceiptStage, { title: string; detail: string; tone: 'success' | 'review' | 'error' | 'neutral' }> = {
+  received: {
+    title: 'Receipt created',
+    detail: 'The clinic recorded that the report arrived. It has not recorded a clinician value echo yet.',
+    tone: 'review',
+  },
+  acknowledged: {
+    title: 'A clinician echoed the value',
+    detail: 'A named clinician entered the printed value and flag. The patient-side last mile is still open.',
+    tone: 'review',
+  },
+  patient_contacted: {
+    title: 'Patient contact recorded',
+    detail: 'The clinic recorded who was reached or attempted, the channel, and the next administrative step.',
+    tone: 'success',
+  },
+  next_step_completed: {
+    title: 'Next step completed',
+    detail: 'The clinic recorded that the next administrative step was completed.',
+    tone: 'success',
+  },
+  closed: {
+    title: 'Loop closed',
+    detail: 'The receipt is closed with an explicit disposition. This is an administrative closure, not a clinical outcome.',
+    tone: 'success',
+  },
+  closed_unreachable: {
+    title: 'Closed as unreachable',
+    detail: 'The clinic recorded attempts and closed the receipt without falsely recording that the patient was informed.',
+    tone: 'review',
+  },
+  invalid: {
+    title: 'The receipt chain does not match',
+    detail: 'The stored events and the anchored count or head disagree. Treat the receipt as unverified and contact the clinic.',
+    tone: 'error',
+  },
+  not_found: {
+    title: 'No receipt found',
+    detail: 'Check the code. A code is printed on the patient receipt slip or the hospital closure certificate.',
+    tone: 'neutral',
+  },
+  revoked: {
+    title: 'Receipt withdrawn',
+    detail: 'The clinic withdrew this receipt, for example after a lawful erasure request. It is not evidence of tampering.',
+    tone: 'neutral',
+  },
+};
+
+const PROGRESS: { stage: PublicReceiptStage; label: string }[] = [
+  { stage: 'received', label: 'Report received' },
+  { stage: 'acknowledged', label: 'Clinician value echo' },
+  { stage: 'patient_contacted', label: 'Patient contacted' },
+  { stage: 'next_step_completed', label: 'Next step completed' },
+  { stage: 'closed', label: 'Receipt closed' },
+];
+
+function progressIndex(stage: PublicReceiptStage): number {
+  switch (stage) {
+    case 'received': return 0;
+    case 'acknowledged': return 1;
+    case 'patient_contacted': return 2;
+    case 'next_step_completed': return 3;
+    case 'closed': return 4;
+    case 'closed_unreachable': return 4;
+    default: return -1;
+  }
+}
 
 export function VerifyReceiptPage(): React.ReactElement {
   const { code } = useParams<{ code?: string }>();
@@ -37,6 +105,10 @@ export function VerifyReceiptPage(): React.ReactElement {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
+  const copy = proof ? STAGE_COPY[proof.stage] : null;
+  const current = proof ? progressIndex(proof.stage) : -1;
+  const valid = proof?.valid ?? false;
+
   return (
     <main className="min-h-screen bg-canvas">
       <header className="border-b border-line bg-surface">
@@ -52,12 +124,12 @@ export function VerifyReceiptPage(): React.ReactElement {
       </header>
 
       <div className="mx-auto max-w-[760px] px-5 py-12 sm:py-16">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">Receipt verification</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">Patient receipt check</p>
         <h1 className="mt-3 text-[32px] font-semibold leading-tight tracking-tight text-ink sm:text-[40px]">
-          Check a result receipt.
+          What happened to this result?
         </h1>
-        <p className="mt-3 max-w-[58ch] text-[16px] leading-7 text-ink-soft">
-          A receipt code proves that a result audit chain exists and has not changed. The check returns no patient name, test value or clinical information.
+        <p className="mt-3 max-w-[60ch] text-[16px] leading-7 text-ink-soft">
+          A receipt code shows the recorded administrative stage and whether the clinic's event chain is intact. It does not show a patient name, test value, diagnosis or clinical decision.
         </p>
 
         <form
@@ -72,7 +144,7 @@ export function VerifyReceiptPage(): React.ReactElement {
             className="min-w-0 flex-1"
           />
           <Button type="submit" variant="primary" disabled={loading || query.trim().length < 6}>
-            {loading ? 'Checking' : 'Verify receipt'}
+            {loading ? 'Checking' : 'Check receipt'}
             <Search size={16} aria-hidden />
           </Button>
         </form>
@@ -84,35 +156,54 @@ export function VerifyReceiptPage(): React.ReactElement {
           </Card>
         ) : null}
 
-        {loading ? <div className="mt-6"><Spinner label="Recomputing the audit chain" /></div> : null}
+        {loading ? <div className="mt-6"><Spinner label="Checking the receipt record" /></div> : null}
 
-        {proof ? (
+        {proof && copy ? (
           <Card className="mt-6 overflow-hidden">
-            <div className={`flex items-center gap-3 px-5 py-4 ${proof.valid ? 'bg-success-bg text-success' : 'bg-danger-bg text-danger'}`}>
+            <div className={`flex items-center gap-3 px-5 py-4 ${copy.tone === 'success' ? 'bg-success-bg text-success' : copy.tone === 'error' ? 'bg-danger-bg text-danger' : copy.tone === 'review' ? 'bg-review-bg text-review' : 'bg-canvas text-ink'}`}>
               <span className="flex size-9 items-center justify-center rounded-full bg-surface">
-                {proof.valid ? <Check size={20} aria-hidden /> : <X size={20} aria-hidden />}
+                {copy.tone === 'error' ? <X size={20} aria-hidden /> : <Check size={20} aria-hidden />}
               </span>
               <div>
-                <p className="font-semibold">{proof.valid ? 'Receipt chain intact' : proof.found ? 'Receipt chain does not match' : 'No receipt found'}</p>
-                <p className="text-[12px]">{proof.valid ? `${proof.eventCount} audit events verified` : proof.found ? 'The stored chain is broken.' : 'Check the code and try again.'}</p>
+                <p className="font-semibold">{copy.title}</p>
+                <p className="text-[12px]">{proof.found ? `Receipt ${code?.toUpperCase() ?? ''}` : 'The code is not in the receipt register.'}</p>
               </div>
             </div>
-            {proof.found ? (
-              <div className="space-y-3 px-5 py-4 text-sm">
-                <div className="flex items-center justify-between gap-3"><span className="text-ink-soft">Receipt</span><span className="font-medium tabular-nums text-ink">{code?.toUpperCase()}</span></div>
-                <div className="flex items-center justify-between gap-3"><span className="text-ink-soft">Events</span><span className="tabular-nums text-ink">{proof.eventCount}</span></div>
-                <div className="flex items-start justify-between gap-3"><span className="text-ink-soft">Chain head</span><span className="max-w-[52%] break-all text-right font-medium tabular-nums text-ink">{proof.head ?? 'None'}</span></div>
-                <p className="flex items-start gap-2 border-t border-dotted border-line pt-3 text-[12px] leading-5 text-ink-soft">
-                  <ShieldCheck size={14} className="mt-0.5 shrink-0 text-primary" aria-hidden />
-                  This verifies the audit chain only. It does not verify a diagnosis, a treatment or a clinical decision.
-                </p>
-              </div>
-            ) : null}
+            <div className="space-y-4 px-5 py-4">
+              <p className="text-sm leading-6 text-ink">{copy.detail}</p>
+              {proof.found && proof.stage !== 'invalid' && proof.stage !== 'revoked' ? (
+                <div>
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-ink-soft">Recorded stage</p>
+                    <span className={`text-[12px] font-medium ${valid ? 'text-success' : 'text-danger'}`}>{valid ? 'Chain intact' : 'Chain not intact'}</span>
+                  </div>
+                  <ol className="mt-3 space-y-2">
+                    {PROGRESS.map((item, index) => {
+                      const done = index <= current;
+                      const isCurrent = index === current;
+                      return (
+                        <li key={item.stage} className="flex items-center gap-3 text-sm">
+                          <span className={`flex size-5 shrink-0 items-center justify-center rounded-full border text-[11px] ${done ? 'border-primary bg-primary text-canvas' : 'border-line bg-surface text-ink-soft'}`}>
+                            {done ? <Check size={11} aria-hidden /> : index + 1}
+                          </span>
+                          <span className={isCurrent ? 'font-medium text-ink' : done ? 'text-ink' : 'text-ink-soft'}>{item.label}</span>
+                          {isCurrent ? <span className="ml-auto text-[11px] font-medium uppercase tracking-[0.1em] text-primary">Current</span> : null}
+                        </li>
+                      );
+                    })}
+                  </ol>
+                </div>
+              ) : null}
+              <p className="flex items-start gap-2 border-t border-dotted border-line pt-3 text-[12px] leading-5 text-ink-soft">
+                <ShieldCheck size={14} className="mt-0.5 shrink-0 text-primary" aria-hidden />
+                The check confirms the recorded administrative stage and the clinic's event chain. It does not prove that a diagnosis or treatment was correct, and it is not a clinical outcome.
+              </p>
+            </div>
           </Card>
         ) : null}
 
         <p className="mt-8 text-[12px] leading-5 text-ink-soft">
-          The receipt code is printed on the hospital survey pack. No login, patient identifier or test result is exposed here.
+          The code is printed on the patient receipt slip and the hospital closure certificate. No login is needed. If the code is lost, ask the clinic that sent the report.
         </p>
         <Link to="/sign-in" className="mt-4 inline-flex min-h-9 items-center gap-1.5 text-sm font-medium text-primary hover:underline">
           Open the clinic workspace <ArrowRight size={15} aria-hidden />

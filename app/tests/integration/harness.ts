@@ -180,6 +180,8 @@ export async function removeClinic(context: TestContext, clinicId: string): Prom
       'delete from sutra.jobs where clinic_id = $1',
       'delete from sutra.exports where clinic_id = $1',
       'delete from sutra.idempotency_keys where clinic_id = $1',
+      'delete from sutra.results where clinic_id = $1',
+      'delete from sutra.result_tombstones where clinic_id = $1',
       'delete from sutra.patient_notes where clinic_id = $1',
       'delete from sutra.patient_accounts where clinic_id = $1',
       'update sutra.documents set current_version_id = null, duplicate_of_document_id = null, supersedes_document_id = null where clinic_id = $1',

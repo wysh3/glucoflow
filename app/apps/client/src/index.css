@@ -211,6 +211,7 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
   .no-print { display: none !important; }
   body { background: #fff; }
   .print-area { border: 0 !important; box-shadow: none !important; }
-  .print-area table { font-size: 10px; }
-  @page { size: A4; margin: 10mm; }
+  .print-area table { font-size: 9px; }
+  .print-area th, .print-area td { padding: 3px 4px; }
+  @page { size: A4 landscape; margin: 8mm; }
 }

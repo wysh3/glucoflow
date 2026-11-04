@@ -25,6 +25,7 @@ import { ResultsPage } from './features/clinic/results/page';
 import { ObligationWorkspace } from './features/clinic/obligations/page';
 import { ReplayPage } from './features/clinic/replay/page';
 import { ShowcasePage } from './features/showcase/page';
+import { RoleGate } from './components/role-gate';
 import { ClosureCertificatePage } from './features/clinic/results/certificate';
 import { PatientReceiptSlipPage } from './features/clinic/results/patient-slip';
 import { ClinicQueuePage } from './features/clinic/queue/page';
@@ -57,10 +58,10 @@ export function AppRoutes(): React.ReactElement {
         <Route element={<ProtectedShell />}>
           <Route path="/account" element={<AccountPage />} />
           <Route path="/clinic/results" element={<ClinicGate><ResultsPage /></ClinicGate>} />
-          <Route path="/clinic/line" element={<ClinicGate><ObligationWorkspace view="line" /></ClinicGate>} />
-          <Route path="/clinic/calls" element={<ClinicGate><ObligationWorkspace view="calls" /></ClinicGate>} />
-          <Route path="/clinic/intake" element={<ClinicGate><ObligationWorkspace view="intake" /></ClinicGate>} />
-          <Route path="/clinic/register" element={<ClinicGate><ObligationWorkspace view="register" /></ClinicGate>} />
+          <Route path="/clinic/line" element={<ClinicGate><RoleGate capability="canClinician"><ObligationWorkspace view="line" /></RoleGate></ClinicGate>} />
+          <Route path="/clinic/calls" element={<ClinicGate><RoleGate capability="canNurse"><ObligationWorkspace view="calls" /></RoleGate></ClinicGate>} />
+          <Route path="/clinic/intake" element={<ClinicGate><RoleGate capability="canDesk"><ObligationWorkspace view="intake" /></RoleGate></ClinicGate>} />
+          <Route path="/clinic/register" element={<ClinicGate><RoleGate capability="canQuality"><ObligationWorkspace view="register" /></RoleGate></ClinicGate>} />
           <Route path="/clinic/replay" element={<ClinicGate><ReplayPage /></ClinicGate>} />
           <Route path="/clinic/patients" element={<ClinicGate><ClinicPatientsPage /></ClinicGate>} />
           <Route path="/clinic/queue" element={<ClinicGate><ClinicQueuePage /></ClinicGate>} />
