@@ -471,6 +471,13 @@ async function main(): Promise<void> {
       return { ...counts.rows[0]!, approvalRevision: revision.rows[0]!.approval_revision };
     });
 
+    // The result ledger is part of the demo surface. Reload its synthetic receipts
+    // through the same SQL used in the hosted environment.
+    await ownerTx(async (client) => {
+      const sql = readFileSync(join(appRoot, 'supabase', 'seed', 'results-demo.sql'), 'utf8');
+      await client.query(sql);
+    });
+
     const credentialPath = join(localRoot, 'demo-credentials.json');
     mkdirSync(localRoot, { recursive: true });
     writeFileSync(

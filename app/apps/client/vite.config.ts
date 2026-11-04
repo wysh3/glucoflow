@@ -10,9 +10,9 @@ import tailwindcss from '@tailwindcss/vite';
  */
 export default defineConfig(({command}) => {
   const labels:Record<string,[string,string]>={
-    clinician:['Doctor','Explore progression, prescriptions and source reports.'],
-    clinic:['Clinic team','Upload records, review extraction and publish approved facts.'],
-    reviewer:['Reviewer','Check extracted entries against their original reports.'],
+    clinician:['Doctor','Acknowledge incoming results, watch the clock and keep every receipt.'],
+    clinic:['Clinic team','Review incoming reports, assign owners and export the register.'],
+    reviewer:['Reviewer','Check incoming reports against their source before acknowledging.'],
     patient:['Patient','Add reports, home readings, symptoms and visit notes.'],
     'other-clinic':['Second clinic','Explore a separate clinic to check access separation.'],
     'other-patient':['Second patient','Explore an independent patient account.'],

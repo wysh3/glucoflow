@@ -42,6 +42,7 @@ export async function signIn(page: Page, account: 'patient' | 'clinic' | 'review
     await role.click();
     await page.waitForURL((url) => !url.pathname.startsWith('/sign-in'), { timeout: 30_000 });
     if (account === 'patient') await page.goto('/patient/records');
+    else await page.goto('/clinic/patients');
     return;
   }
   await page.getByLabel('Email').fill(credentials.email);

@@ -8,6 +8,7 @@ export * from './uploads';
 export * from './jobs';
 export * from './notes';
 export * from './documents';
+export * from './results';
 export * from './exports';
 export * from './me';
 export * from './env';

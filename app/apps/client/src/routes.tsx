@@ -20,6 +20,7 @@ import { ErrorState, Spinner } from '@glucoflow/ui';
 import { SignInPage } from './features/sign-in/page';
 import { AccountPage } from './features/account/page';
 import { ClinicPatientsPage } from './features/clinic/patients/page';
+import { ResultsPage } from './features/clinic/results/page';
 import { ClinicQueuePage } from './features/clinic/queue/page';
 import { ClinicPatientLayout } from './features/clinic/patient-layout';
 import { ProgressionPage } from './features/clinic/progression/page';
@@ -44,6 +45,7 @@ export function AppRoutes(): React.ReactElement {
         <Route path="/demo/delta" element={<DeltaDemoPage />} />
         <Route element={<ProtectedShell />}>
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/clinic/results" element={<ClinicGate><ResultsPage /></ClinicGate>} />
           <Route path="/clinic/patients" element={<ClinicGate><ClinicPatientsPage /></ClinicGate>} />
           <Route path="/clinic/queue" element={<ClinicGate><ClinicQueuePage /></ClinicGate>} />
           <Route path="/clinic/patients/:patientId" element={<ClinicGate><ClinicPatientLayout /></ClinicGate>}>
@@ -70,7 +72,7 @@ export function AppRoutes(): React.ReactElement {
 }
 
 function roleFallback(contexts: { kind: string }[]): string {
-  if (contexts.some((context) => context.kind === 'clinic')) return '/clinic/patients';
+  if (contexts.some((context) => context.kind === 'clinic')) return '/clinic/results';
   if (contexts.some((context) => context.kind === 'patient')) return '/patient/records';
   return '/account';
 }
@@ -126,7 +128,7 @@ function ProtectedShell(): React.ReactElement {
 export function landingPathFor(contexts: { kind: string }[]): string {
   const clinic = contexts.some((context) => context.kind === 'clinic');
   const patient = contexts.some((context) => context.kind === 'patient');
-  if (clinic && !patient) return '/clinic/patients';
+  if (clinic && !patient) return '/clinic/results';
   if (patient && !clinic) return '/patient/records';
   return '/account';
 }

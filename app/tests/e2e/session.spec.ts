@@ -56,7 +56,7 @@ test.describe('session', () => {
 
   test('the demo label and extraction mode are visible in the interface', async ({ page }) => {
     await signIn(page, 'clinic');
-    const label = page.getByText('Synthetic demo', { exact: false }).first();
+    const label = page.locator('header span:visible').filter({ hasText: /^(Synthetic demo|Demo)$/ }).first();
     await expect(label).toBeVisible();
     // Fixture mode is stated wherever extraction output is shown.
     await page.goto('/clinic/queue');

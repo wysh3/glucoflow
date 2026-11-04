@@ -127,7 +127,7 @@ export function ClinicQueuePage(): React.ReactElement {
   if (!me?.capabilities.canReview) {
     return (
       <div className="space-y-4">
-        <SystemPageHeader index="06" label="Clinic / Review queue" title="Review queue" />
+        <SystemPageHeader index="03" label="Clinic / Review queue" title="Review queue" />
         <Card>
           <CardBody className="pt-6 text-sm text-ink-soft">
             This action needs reviewer capability. A clinician-only account sees approved records and
@@ -153,7 +153,7 @@ export function ClinicQueuePage(): React.ReactElement {
   return (
     <div className="space-y-4">
       <SystemPageHeader
-        index="06"
+        index="03"
         label="Clinic / Review queue"
         title="Review queue"
         meta="Uploaded documents for this clinic"

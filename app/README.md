@@ -71,3 +71,12 @@ Local extraction defaults to a labelled deterministic fixture engine. Live extra
 credentials and a positive budget and keeps output in human-reviewed drafts. No clinical
 validation, treatment decisions, live ABHA integration or real emergency dispatch is claimed.
 Physical-device checks and phone OTP remain pending. The bundled signed APK contains the current shared client. See [workspace and guide verification](reports/workspace-guide-2026-10-04.md) and [guide operations](docs/APP_GUIDE.md).
+
+
+## Result accountability ledger (current lead)
+
+The clinic's primary screen is now `/clinic/results`. It records an incoming report as an administrative receipt with a named owner, a due clock, clinician acknowledgement, patient communication, escalation and an append-only audit trail. The lab's own flag is copied as supplied. The ledger does not diagnose, risk-score or recommend treatment.
+
+The state model is in `supabase/migrations/021_result_ledger.sql` and `022_result_event_guard.sql`. The API is in `apps/api/src/routes/results.ts`; the screen is `apps/client/src/features/clinic/results/page.tsx`. Synthetic receipts are loaded by `supabase/seed/results-demo.sql` and by `pnpm seed:demo`.
+
+The pre-visit delta remains available inside a patient record as a secondary view. It is no longer the lead product. The decision memo and the unpulled validation gates are in `../docs/research/2026-11-04-decision/README.md`.

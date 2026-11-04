@@ -1,17 +1,19 @@
 import { test, expect } from '@playwright/test';
 
-test('the public home opens the synthetic delta in one click', async ({ page }) => {
+test('the public home opens the synthetic result ledger in one click', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByTestId('landing')).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'The 60-second delta.' })).toBeVisible();
-  await page.getByRole('link', { name: /Open the synthetic demo/ }).first().click();
-  await expect(page).toHaveURL(/\/demo\/delta$/);
-  await expect(page.getByText('3 need your decision')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'The result nobody owns.', level: 1 })).toBeVisible();
+  await page.getByRole('link', { name: /Open the result ledger/ }).first().click();
+  await expect(page).toHaveURL(/\/sign-in$/);
+  await page.getByTestId('demo-card-clinic').click();
+  await expect(page).toHaveURL(/\/clinic\/results$/);
+  await expect(page.getByRole('heading', { name: 'Result ledger' })).toBeVisible();
 });
 
 test('the demo role cards sign in without a password', async ({ page }) => {
   await page.goto('/sign-in');
   await page.getByTestId('demo-card-clinic').click();
-  await expect(page).toHaveURL(/\/clinic\/patients$/);
-  await expect(page.getByRole('link', { name: 'Open patient' }).first()).toBeVisible();
+  await expect(page).toHaveURL(/\/clinic\/results$/);
+  await expect(page.getByRole('heading', { name: 'Result ledger' })).toBeVisible();
 });

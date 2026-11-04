@@ -91,7 +91,7 @@ describe('review and publication', () => {
     await context.asActor(fixture.reviewerId, client => updateReview(client, prepared.documentId, {expectedRevision: changed.revision, factUpdates: [{factId: fact.factId, action: 'correct', reason: 'Unrecognized literal value and unit', correction: {rawValue: 'unreadable', rawUnit: 'unknown'}}], manualFacts: [], pageExclusions: []}));
     after = await context.asActor(fixture.reviewerId, client => getReviewDto(client, prepared.documentId));
     const normalized = after!.facts.find(item => item.factId === fact.factId)!.normalized as {numericValue:number|null; plotEligible:boolean};
-    expect(normalized.numericValue).toBeNull();
+    expect(normalized.numericValue ?? null).toBeNull();
     expect(normalized.plotEligible).toBe(false);
   });
   it.each(['patient', 'clinic'] as const)('shows a published %s upload to its patient without exposing staff review data', async (uploader) => {

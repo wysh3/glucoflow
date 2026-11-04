@@ -18,7 +18,7 @@ import { demoAccounts, demoEnabled } from '../../auth/demo';
 function rolePath(contexts: { kind: string }[]): string {
   const clinic = contexts.some((context) => context.kind === 'clinic');
   const patient = contexts.some((context) => context.kind === 'patient');
-  if (clinic && !patient) return '/clinic/patients';
+  if (clinic && !patient) return '/clinic/results';
   if (patient && !clinic) return '/patient/records';
   return '/account';
 }
@@ -27,42 +27,42 @@ const SECTIONS = [
   {
     id: 'unit',
     index: '01',
-    kicker: 'The unit',
-    title: 'Three decisions, not a timeline.',
-    body: 'The brief shows the clinic watchlist change, the oldest unresolved item and the first disagreement. Nothing to scroll before the patient sits down.',
+    kicker: 'The gap',
+    title: 'The result nobody owns.',
+    body: 'A report arrives on WhatsApp, as a PDF, or as a paper slip. The lab has finished. The clinic has not. No one has assigned a clinician, set a clock, or proved the patient was told.',
     icon: FileText,
-    points: ['Clinic watchlist change', 'Oldest unresolved item', 'First disagreement'],
-    action: { label: 'Open the synthetic brief', to: '/demo/delta' },
+    points: ['Cross-lab intake', 'Namesake and duplicate hold', 'One owner per report'],
+    action: { label: 'Open the synthetic ledger', to: '/sign-in' },
   },
   {
     id: 'source',
     index: '02',
-    kicker: 'The source',
-    title: 'Every line opens its page.',
-    body: 'Each item carries the original document, page and quoted line. Missing pages and partial dates are shown as gaps, not filled in.',
+    kicker: 'The receipt',
+    title: 'One owner. One clock. One proof.',
+    body: 'Every report gets a named clinician and a due time. The receipt records acknowledgement, the patient conversation and the close. If the clock expires, the result escalates to a human, not to another dashboard.',
     icon: ShieldCheck,
-    points: ['Document', 'Page', 'Exact quoted line'],
-    action: { label: 'See a source in the demo', to: '/demo/delta' },
+    points: ['Named clinician', 'Escalation clock', 'Patient communication receipt'],
+    action: { label: 'See a receipt in the demo', to: '/sign-in' },
   },
   {
     id: 'ai',
     index: '03',
     kicker: 'The AI',
-    title: 'AI reads. The doctor decides.',
-    body: 'Extraction is AI-assisted and evidence-bound. The companion answers from approved records, names its sources, and refuses diagnosis, interpretation and treatment advice.',
+    title: 'AI reads the envelope, not the diagnosis.',
+    body: 'Extraction reads the lab, patient identifiers and the lab flag from messy incoming documents. Matching links the report to the right record. The clinical value and the clinical decision remain human.',
     icon: Sparkles,
-    points: ['Extraction provenance', 'Grounded source cards', 'A plain refusal'],
-    action: { label: 'Open the live record companion', to: '/sign-in' },
+    points: ['Document extraction', 'Identity matching', 'No interpretation'],
+    action: { label: 'Open the working ledger', to: '/sign-in' },
   },
   {
     id: 'product',
     index: '04',
-    kicker: 'The working product',
-    title: 'A real API, a real record, a real audit trail.',
-    body: 'The public demo uses one synthetic patient. Sign in to open the clinic workspace, review the ledger, ask the record companion and export the draft note. Every decision is append-only and every line stays tied to its source.',
+    kicker: 'The edge',
+    title: 'Built for the accreditation question.',
+    body: 'NABL and NABH already ask who was told, when, and with what read-back. Most clinics keep that register on paper. The ledger turns the existing compliance obligation into the daily workflow.',
     icon: Stethoscope,
-    points: ['PDF and photo extraction', 'Human review', 'Append-only decisions'],
-    action: { label: 'Enter the doctor workspace', to: '/sign-in' },
+    points: ['Audit export', 'Private and public settings', 'Paper-first intake'],
+    action: { label: 'Enter the clinic workspace', to: '/sign-in' },
   },
 ] as const;
 
@@ -123,7 +123,7 @@ export function LandingPage(): React.ReactElement {
     setError(null);
     try {
       await signIn(account.email, account.password);
-      navigate('/clinic/patients', { replace: true });
+      navigate('/clinic/results', { replace: true });
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : 'Could not open the demo workspace.');
     } finally {
@@ -142,10 +142,10 @@ export function LandingPage(): React.ReactElement {
             </Link>
             <div className="flex items-center gap-2">
               <Link
-                to="/demo/delta"
+                to="/sign-in"
                 className="hidden min-h-9 items-center rounded-lg px-3 text-sm text-[#c8e3d8] hover:bg-white/5 sm:inline-flex"
               >
-                Public demo
+                Try the ledger
               </Link>
               <Link
                 to="/sign-in"
@@ -158,9 +158,9 @@ export function LandingPage(): React.ReactElement {
 
           <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 border-y border-white/10 py-2.5 text-[11px] uppercase tracking-[0.14em] text-[#9dc4b6]">
             <SystemGlyph className="mr-1 text-[#a7d8c8]" />
-            <span>Pre-visit delta</span>
+            <span>Result ledger</span>
             <span aria-hidden>·</span>
-            <span>Indian follow-up clinics</span>
+            <span>Indian hospitals and clinics</span>
             <span aria-hidden>·</span>
             <span>Synthetic demonstration</span>
           </div>
@@ -168,21 +168,20 @@ export function LandingPage(): React.ReactElement {
           <div className="mt-12 grid items-center gap-12 lg:mt-16 lg:grid-cols-[1.05fr_0.95fr]">
             <div>
               <p className="reveal-up reveal-up-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#a7d8c8]">
-                A pre-visit brief for Indian follow-up clinics
+                A result accountability ledger for Indian hospitals and clinics
               </p>
               <h1 className="reveal-up reveal-up-2 mt-4 max-w-[13ch] text-[48px] font-semibold leading-[1.03] tracking-[-0.03em] sm:text-[64px]">
-                The 60-second delta.
+                The result nobody owns.
               </h1>
               <p className="reveal-up reveal-up-3 mt-5 max-w-[52ch] text-[16px] leading-7 text-[#c8e3d8] sm:text-[18px]">
-                What changed. What is unresolved. What the record cannot tell you. One page
-                before the patient sits down, with every line tied to its source.
+                Every incoming report gets a named clinician, a clock and a receipt. No interpretation. No orphaned result.
               </p>
               <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">
                 <Link
-                  to="/demo/delta"
+                  to="/sign-in"
                   className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#a7d8c8] px-5 text-sm font-semibold text-[#0f2e2a] transition hover:bg-[#bde7d8]"
                 >
-                  Open the synthetic demo <ArrowRight size={16} aria-hidden />
+                  Open the result ledger <ArrowRight size={16} aria-hidden />
                 </Link>
                 {demoEnabled ? (
                   <Button
@@ -193,7 +192,7 @@ export function LandingPage(): React.ReactElement {
                     className="min-h-12 rounded-xl border-white/20 bg-white/5 px-5 text-white hover:bg-white/10"
                   >
                     <Stethoscope size={16} aria-hidden />
-                    {busy ? 'Opening workspace' : 'Enter the doctor workspace'}
+                    {busy ? 'Opening workspace' : 'Enter the clinic workspace'}
                   </Button>
                 ) : (
                   <Link
@@ -229,12 +228,12 @@ export function LandingPage(): React.ReactElement {
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#a7d8c8]">
-                      Pre-visit delta · synthetic
+                      Result ledger · synthetic
                     </p>
                     <p className="mt-1 text-[20px] font-semibold tracking-tight text-white">
                       Asha Rao, 58
                     </p>
-                    <p className="text-[11px] text-[#9dc4b6]">P0482 · diabetes follow-up · <span className="hidden sm:inline">move your cursor over the brief</span><span className="sm:hidden">tap a decision to inspect</span></p>
+                    <p className="text-[11px] text-[#9dc4b6]">P0482 · diabetes follow-up · <span className="hidden sm:inline">every report has a receipt</span><span className="sm:hidden">tap a receipt to inspect</span></p>
                   </div>
                   <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-[#a7d8c8]/20 bg-[#a7d8c8]/10 px-2.5 py-1 text-[11px] font-semibold text-[#a7d8c8]">
                     <Timer size={12} aria-hidden /> Demo case
@@ -242,10 +241,10 @@ export function LandingPage(): React.ReactElement {
                 </div>
                 <div className="mt-4 grid grid-cols-4 gap-1.5">
                   {[
-                    ['7', 'changes'],
-                    ['3', 'open'],
-                    ['2', 'conflicts'],
-                    ['3', 'gaps'],
+                    ['9', 'open'],
+                    ['3', 'unowned'],
+                    ['1', 'critical'],
+                    ['2h', 'median ack'],
                   ].map(([value, label]) => (
                     <div key={label} className="rounded-lg border border-white/10 bg-white/[0.03] px-2 py-2">
                       <p className="text-lg font-semibold leading-none text-white">{value}</p>
@@ -255,30 +254,32 @@ export function LandingPage(): React.ReactElement {
                 </div>
                 <div className="mt-4 space-y-2">
                   {[
-                    ['eGFR', 'Fell from 70 to 55', 'Open source'],
-                    ['Eye review', 'No later record', 'Not called overdue'],
-                    ['Atorvastatin', 'Patient stopped it', 'Prescription says continue'],
-                  ].map(([title, detail, meta]) => (
-                    <div
-                      key={title}
-                      onMouseEnter={() => setHovered(title ?? null)}
+                    { title: 'Sodium 128 mmol/L', detail: 'No owner · 3h overdue', meta: 'Critical' },
+                    { title: 'HbA1c 9.1 %', detail: 'Acknowledged · Dr Meera', meta: 'Due in 19h' },
+                    { title: 'TSH 7.8 mIU/L', detail: 'Patient informed · call', meta: 'Receipt open' },
+                    { title: 'eGFR 52', detail: 'Ready to assign', meta: 'No clock' },
+                  ].map((row) => (
+                    <Link
+                      to="/sign-in"
+                      key={row.title}
+                      onMouseEnter={() => setHovered(row.title)}
                       className={`relative flex items-center justify-between gap-3 rounded-xl border px-3 py-2.5 transition-colors ${
-                        hovered === title
+                        hovered === row.title
                           ? 'border-[#a7d8c8]/50 bg-white/[0.1]'
                           : 'border-white/10 bg-white/[0.04]'
                       }`}
                     >
                       <div className="min-w-0">
-                        <p className="text-[12px] font-semibold text-white">{title}</p>
-                        <p className="truncate text-[11px] text-[#9dc4b6]">{detail}</p>
+                        <p className="text-[12px] font-semibold text-white">{row.title}</p>
+                        <p className="truncate text-[11px] text-[#9dc4b6]">{row.detail}</p>
                       </div>
-                      <span className="shrink-0 text-[11px] font-medium uppercase tracking-wide text-[#a7d8c8]">{meta}</span>
-                    </div>
+                      <span className="shrink-0 text-[11px] font-medium uppercase tracking-wide text-[#a7d8c8]">{row.meta}</span>
+                    </Link>
                   ))}
                 </div>
                 <div className="mt-3 flex items-center gap-1.5 text-[11px] text-[#9dc4b6]">
-                  <Sparkles size={12} className="text-[#a7d8c8]" aria-hidden />
-                  AI-assisted extraction. Every line opens its source.
+                  <ShieldCheck size={12} className="text-[#a7d8c8]" aria-hidden />
+                  Lab flag as supplied. No interpretation.
                 </div>
               </div>
             </div>
@@ -312,7 +313,7 @@ export function LandingPage(): React.ReactElement {
               <div className="mt-8 border-t border-line pt-4">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft">Synthetic only</p>
                 <p className="mt-2 text-[12px] leading-5 text-ink-soft">
-                  No real patient data. No diagnosis. No automatic note.
+                  No real patient data. No interpretation. Human receipt.
                 </p>
               </div>
             </div>
@@ -321,18 +322,18 @@ export function LandingPage(): React.ReactElement {
           <div className="min-w-0">
             <div className="rule-reveal flex flex-wrap items-end justify-between gap-3 border-b border-line pb-4">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">The dossier</p>
-                <p className="mt-1 text-[20px] font-semibold tracking-tight text-ink">What the product does, in four sections.</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">The ledger case</p>
+                <p className="mt-1 text-[20px] font-semibold tracking-tight text-ink">Why this ledger, in four sections.</p>
               </div>
               <p className="text-[11px] uppercase tracking-[0.14em] text-ink-soft">04 sections</p>
             </div>
 
             <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
               {[
-                ['7', 'changed'],
-                ['3', 'unresolved'],
-                ['2', 'conflicts'],
-                ['3', 'gaps'],
+                ['12', 'reports'],
+                ['3', 'unowned'],
+                ['1', 'critical'],
+                ['2h', 'median ack'],
               ].map(([value, label]) => (
                 <div key={label} className="bg-surface px-4 py-3">
                   <p className="text-[20px] font-semibold leading-none text-ink">{value}</p>
@@ -375,17 +376,17 @@ export function LandingPage(): React.ReactElement {
                         </ul>
                         {section.id === 'source' ? (
                           <div className="mt-4 max-w-[560px] rounded-xl border border-line bg-surface px-4 py-3">
-                            <p className="font-medium text-[11px] text-ink-soft">2026-07-09_lab_report.pdf · page 1</p>
+                            <p className="font-medium text-[11px] text-ink-soft">Metropolis report.pdf · page 1 · received 3h ago</p>
                             <p className="mt-1 font-medium text-[12px] leading-6 text-ink">
-                              eGFR 55 mL/min/1.73m2 <span className="text-ink-soft">| previous 70</span>
+                              Sodium 128 mmol/L <span className="text-ink-soft">| lab flag critical</span>
                             </p>
                           </div>
                         ) : null}
                         {section.id === 'ai' ? (
                           <div className="mt-4 flex flex-wrap items-center gap-2">
-                            <span className="inline-flex min-h-7 items-center rounded-full border border-primary/20 bg-primary/5 px-2.5 text-[11px] font-semibold text-primary">gpt-6-luna</span>
-                            <span className="inline-flex min-h-7 items-center rounded-full border border-line px-2.5 text-[11px] text-ink-soft">source-bound</span>
-                            <span className="inline-flex min-h-7 items-center rounded-full border border-line px-2.5 text-[11px] text-ink-soft">no diagnosis</span>
+                            <span className="inline-flex min-h-7 items-center rounded-full border border-primary/20 bg-primary/5 px-2.5 text-[11px] font-semibold text-primary">extraction + matching</span>
+                            <span className="inline-flex min-h-7 items-center rounded-full border border-line px-2.5 text-[11px] text-ink-soft">human receipt</span>
+                            <span className="inline-flex min-h-7 items-center rounded-full border border-line px-2.5 text-[11px] text-ink-soft">no interpretation</span>
                           </div>
                         ) : null}
                         <Link
@@ -404,21 +405,21 @@ export function LandingPage(): React.ReactElement {
 
             <div className="mt-10 flex flex-wrap items-center justify-between gap-4 rounded-[18px] border border-line bg-surface px-5 py-4">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">Open the working product</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">Open the working ledger</p>
                 <p className="mt-1 text-[14px] leading-6 text-ink-soft">
-                  Public demo, no sign-in. Doctor workspace, one click.
+                  One-click clinic workspace. Synthetic reports only.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Link
-                  to="/demo/delta"
+                  to="/sign-in"
                   className="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-primary px-4 text-sm font-semibold text-white hover:bg-primary/90"
                 >
-                  Open demo <ArrowRight size={14} aria-hidden />
+                  Open ledger <ArrowRight size={14} aria-hidden />
                 </Link>
                 {demoEnabled ? (
                   <Button variant="secondary" onClick={() => void enterDoctor()} disabled={busy}>
-                    <User size={14} aria-hidden /> Doctor demo
+                    <User size={14} aria-hidden /> One-click clinic
                   </Button>
                 ) : (
                   <Link to="/sign-in" className="inline-flex min-h-10 items-center rounded-xl border border-line px-4 text-sm font-medium text-ink">
@@ -439,13 +440,13 @@ export function LandingPage(): React.ReactElement {
               <span className="text-lg font-semibold tracking-tight">glucoflow</span>
             </div>
             <p className="mt-3 max-w-[40ch] text-[12px] leading-5 text-ink-soft">
-              A doctor-side pre-visit brief for Indian follow-up clinics. Synthetic demonstration only.
+              A result accountability ledger for Indian hospitals and clinics. Synthetic demonstration only.
             </p>
           </div>
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft">Open</p>
             <div className="mt-3 flex flex-col items-start gap-2 text-[14px]">
-              <Link to="/demo/delta" className="text-primary hover:underline">Public demo</Link>
+              <Link to="/sign-in" className="text-primary hover:underline">Try the ledger</Link>
               <Link to="/sign-in" className="text-primary hover:underline">Sign in</Link>
               <Link to="/" className="text-primary hover:underline">Product home</Link>
             </div>

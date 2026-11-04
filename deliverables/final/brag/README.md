@@ -7,6 +7,6 @@
 - `share-copy.txt` - a postable caption.
 - `brag-plan.md` - storyboard, capture and audio notes.
 
-Built with the brag method: a 20-second authored timeline, real product screenshots, the live Three.js anatomy viewer, a brag music bed and cut SFX. All patient records are synthetic. The anatomy is a CC BY 4.0 reference body, not a patient scan.
+The cut shows the public result ledger landing, the clinic result inbox and a real receipt drawer. All records are synthetic. No clinical interpretation is shown or claimed.
 
 Music: "Happy Beats Business Moves Vol. 10" by Ende Dot App, from the brag asset pack. Source and licence notes are in the brag repository.

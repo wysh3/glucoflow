@@ -19,6 +19,10 @@ import type {
   QueueItemDto,
   RecordSearchResult,
   ReviewDto,
+  ResultDto,
+  ResultFilter,
+  ResultListDto,
+  ResultStatsDto,
   TimelineResult,
 } from '@glucoflow/contracts';
 import { randomIdempotencyKey } from './api';
@@ -229,4 +233,64 @@ export function useRecordDeltaDisposition(patientId: string | undefined) {
       void queryClient.invalidateQueries({ queryKey: ['delta', actor, patientId] });
     },
   });
+}
+
+
+export function useResults(filter: ResultFilter) {
+  const api = useApi();
+  const actor = useActorKey();
+  return useQuery({
+    queryKey: ['results', actor, filter],
+    queryFn: () => api.request<ResultListDto>('/api/v1/results', { query: { filter, limit: 100 } }),
+    refetchInterval: 30000,
+  });
+}
+
+export function useResult(id: string | undefined): UseQueryResult<ResultDto> {
+  const api = useApi();
+  const actor = useActorKey();
+  return useQuery({
+    queryKey: ['result', actor, id],
+    enabled: Boolean(id),
+    queryFn: () => api.request<ResultDto>(`/api/v1/results/${id}`),
+  });
+}
+
+export function useResultStats(): UseQueryResult<ResultStatsDto> {
+  const api = useApi();
+  const actor = useActorKey();
+  return useQuery({
+    queryKey: ['result-stats', actor],
+    queryFn: () => api.request<ResultStatsDto>('/api/v1/results/stats'),
+    refetchInterval: 30000,
+  });
+}
+
+export function useResultActions() {
+  const api = useApi();
+  const client = useQueryClient();
+  const invalidate = async () => {
+    await Promise.all([
+      client.invalidateQueries({ queryKey: ['results'] }),
+      client.invalidateQueries({ queryKey: ['result-stats'] }),
+    ]);
+  };
+  const command = (suffix: string) =>
+    async ({ id, body }: { id: string; body?: unknown }): Promise<ResultDto> => {
+      const result = await api.request<ResultDto>(`/api/v1/results/${id}/${suffix}`, {
+        method: 'POST',
+        body: body ?? {},
+      });
+      await invalidate();
+      await client.invalidateQueries({ queryKey: ['result'] });
+      return result;
+    };
+  return {
+    match: useMutation({ mutationFn: command('match') }),
+    assign: useMutation({ mutationFn: command('assign') }),
+    acknowledge: useMutation({ mutationFn: command('acknowledge') }),
+    informed: useMutation({ mutationFn: command('patient-informed') }),
+    escalate: useMutation({ mutationFn: command('escalate') }),
+    close: useMutation({ mutationFn: command('close') }),
+  };
 }

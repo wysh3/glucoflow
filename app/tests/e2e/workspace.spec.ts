@@ -117,6 +117,7 @@ test('orb guide helps navigate without providing clinical advice', async ({
   ).toBeVisible();
   await chat.getByRole('link', { name: 'Add report', exact: true }).click();
   await expect(page).toHaveURL(/\/patient\/add-report$/);
+  await page.getByRole('button', { name: 'Choose a report' }).click();
   await expect(
     page.getByRole('dialog', { name: 'Upload a report' }),
   ).toBeVisible();

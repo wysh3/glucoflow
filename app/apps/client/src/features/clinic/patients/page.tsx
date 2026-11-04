@@ -30,7 +30,7 @@ export function ClinicPatientsPage(): React.ReactElement {
   return (
     <div className="space-y-4">
       <SystemPageHeader
-        index="01"
+        index="02"
         label="Clinic / Patients"
         title="Patients"
         meta={me.capabilities.canReview ? 'Review queue and approved records' : 'Approved records'}

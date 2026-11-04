@@ -13,3 +13,5 @@ export * from './search';
 export * from './jobs';
 export * from './worker-ops';
 export * from './delta';
+
+export * from './results';

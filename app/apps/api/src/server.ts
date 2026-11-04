@@ -12,6 +12,7 @@ import { registerHealthRoutes } from './routes/health';
 import { registerLocalAuthRoutes } from './routes/auth-local';
 import { registerPatientRoutes } from './routes/patients';
 import { registerDocumentRoutes } from './routes/documents';
+import { registerResultRoutes } from './routes/results';
 import { registerStorageRoutes, registerUploadRoutes } from './routes/uploads';
 
 export async function buildServer(existingContext?: AppContext): Promise<FastifyInstance> {
@@ -99,6 +100,7 @@ export async function buildServer(existingContext?: AppContext): Promise<Fastify
     registerMasterRoutes(instance, ctx);
     registerDeltaRoutes(instance, ctx);
     registerDocumentRoutes(instance, ctx);
+    registerResultRoutes(instance, ctx);
     registerUploadRoutes(instance, ctx);
   });
 
