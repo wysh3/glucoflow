@@ -12,7 +12,7 @@ An inbox stores a report. This is a state machine with server-enforced controls:
 
 ## "Can the receipt be gamed? A doctor can click without reading."
 
-Yes, a determined clicker can still lie. We do not claim the receipt proves clinical judgement. We reduce the cheapest lie: the value echo makes a blind click fail, and the critical path records the lab notifier and read-back. The certificate is an administrative attestation. The next gate is a sampled audit against phone records; a row that says informed without a corroborating call is the failure we test for.
+Yes, a determined clicker can still lie. We do not claim the receipt proves clinical judgement. We reduce the cheapest lie: the nurse cannot record an informed outcome without the read-back, and an unmatched report cannot be assigned to a clinician. The certificate is an administrative attestation. The next gate is a sampled audit against phone records; a row that says informed without a corroborating call is the failure we test for.
 
 ## "What is the AI?"
 
@@ -28,7 +28,7 @@ The hospital quality head is the champion and the clinical lead is the user. Dir
 
 ## "Does this meet NABL 112A or NABH?"
 
-No. We do not certify compliance. The certificate is an evidence map: lab release, value echo, lab-to-clinician read-back where critical, patient contact or documented attempts, next step and the anchored chain. The assessor decides what the evidence proves. The current register is not a full NABL register: it does not yet carry a lab accreditation number, a signature image or an amended-report path. Do not claim certification.
+No. We do not certify compliance. The certificate is an evidence map: lab release, the clinician's one tap, the nurse read-back, patient contact or documented attempts, next step and the anchored chain. The assessor decides what the evidence proves. The current register is not a full NABL register: it does not yet carry a lab accreditation number, a signature image or an amended-report path. Do not claim certification.
 
 ## "What about DPDP and patient privacy?"
 
@@ -40,7 +40,7 @@ Correct. It is tamper-evident inside one administrative domain, not an external 
 
 ## "What have you actually validated?"
 
-The workflow is built and tested. Demand is not. We have no buyer interview, baseline audit, paid pilot, purchase order or LOI. We have 188 unit and integration tests, 12 of 12 result and landing browser tests, zero lint findings on the closure surfaces, a production build and a hosted API. The next gate is one lab or OPD sponsor, one clinical lead and 100 de-identified reports. If the baseline gap is under 30%, we stop.
+The workflow is built and tested. Demand is not. We have no buyer interview, baseline audit, paid pilot, purchase order or LOI. We have 212 unit and integration tests across 33 files, 19 browser checks across four specs, 12 database isolation checks, a production build and a seeded demo. The next gate is one lab or OPD sponsor, one clinical lead and 100 de-identified reports. If the baseline gap is under 30%, we stop.
 
 ## "Why diabetes?"
 
@@ -52,7 +52,7 @@ They can copy the inbox. The patient-side closure, the unreachable disposition a
 
 ## "What is the three-minute story?"
 
-Open on the 25.8%: only one in four critical values reached the treating clinician. Show the receipt: value echo, lab read-back, patient contact, two failed attempts, unreachable close, certificate and public stage. Close on the ask: one lab, one clinical lead, 100 reports, eight weeks. Do not spend the three minutes on architecture.
+Open on the 25.8%: only one in four critical values reached the treating clinician. Show the receipt: one tap, nurse read-back, patient contact or documented attempts, the register exception, the certificate and the public stage. Close on the ask: one lab, one clinical lead, 100 reports, eight weeks. Do not spend the three minutes on architecture.
 
 ## "Who is on the team?"
 

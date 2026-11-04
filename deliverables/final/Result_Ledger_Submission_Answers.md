@@ -34,13 +34,13 @@ A patient-closure ledger for diabetes clinics and hospitals, with a lab channel.
 - Import a lab feed from CSV, PDF or paper. The lab flag is copied, never calculated.
 - Match the report to a patient using the printed name and clinic ID. Ambiguity is shown as a candidate list and held for a human.
 - Assign a named clinician. The due clock starts at lab release, not when the PDF reached a WhatsApp folder.
-- Acknowledge with a value echo. A critical result also needs the lab notifier and the value read back.
+- The clinician marks the result seen with one tap. The nurse records the read-back before an informed outcome.
 - Record patient or caregiver contact, language and the next step. Log every failed attempt.
 - Escalate overdue receipts on a timer and queue a notification. The current delivery adapter is in-app; SMS and WhatsApp are the next gate.
 - Anchor the audit chain with a stored event count and head. Publish a public stage page with no patient name, test value or clinical decision.
 - Print a closure certificate with a section 63(4) draft and a patient receipt slip with a QR code.
 
-The current build includes twelve synthetic diabetes receipts across nine patients and four labs, five clinician-set monitoring protocols, CSV lab-feed import, namesake matching, value echo, unreachable close, automatic overdue escalation, the anchored chain, the public stage page and the closure certificate. It is live at https://glucoflow.vercel.app.
+The current build includes twenty synthetic diabetes receipts across ten patients and four labs, four role homes on one obligation state machine, a one-tap clinician line, a nurse read-back sheet, a desk intake hold, a quality register with exceptions and A4 print, a labelled replay and a public receipt. The code is at github.com/wysh3/glucoflow. The hosted alias serves the earlier ledger until the deployment is refreshed.
 
 The first protocol is the check a diabetes drug makes necessary: start or titrate an ACE inhibitor or ARB, then potassium and eGFR at two to four weeks. The same receipt covers SGLT2i, MRA, annual uACR/eGFR, a critical potassium or an abnormal HbA1c. The clinician sets the protocol. The lab flag sets criticality. The product never infers a screening deadline or a clinical action.
 
@@ -52,7 +52,7 @@ The first protocol is the check a diabetes drug makes necessary: start or titrat
 
 **Product and design:** [name]. Owns the closure certificate, patient slip and the three-minute demo.
 
-The team has shipped a working clinical record pipeline, human review, source binding, server authorization and a hosted deployment. The current build adds four integration tests that specifically exercise value echo refusal, unreachable close, chain anchoring and namesake matching.
+The team has shipped a working clinical record pipeline, human review, source binding, server authorization and a hosted deployment. The current build adds the obligation lifecycle tests, the assign-before-match guard, the 20-hour exception interval, the stage-clock escalation and the anchored receipt chain.
 
 ## 5. Whether any part already exists
 
@@ -71,7 +71,7 @@ The problem evidence is secondary, not a customer study:
 - 6.8% to 62% of abnormal ambulatory results were not followed up (J Gen Intern Med 2012).
 - 101 million people in India live with diabetes (ICMR-INDIAB-17, 2023).
 
-What we ran: 188 unit and integration tests across 31 files, including four new closure tests; 12 of 12 result and landing browser tests across desktop and mobile; zero lint findings on the ledger, drawer, certificate, patient slip, public verifier and landing page; a production build; and a hosted API.
+What we ran: 212 unit and integration tests across 33 files, including the obligation lifecycle; 19 browser checks across four specs; 12 database isolation checks; a production build; and a seeded demo with 20 receipts.
 
 What we have not validated: no buyer interview, baseline audit, paid pilot, purchase order or LOI; no live LIS, HL7/FHIR or WhatsApp send; no consent capture, DPA or retention runbook; no external chain anchor; no clinical validation; no NABL or NABH certification. The receipt data is synthetic. Do not claim otherwise.
 
@@ -80,7 +80,7 @@ The next gate is one lab or OPD sponsor, one practising clinical lead and 100 de
 ## 7. The demo
 
 1. Open https://glucoflow.vercel.app/sign-in and choose the clinic team.
-2. The ledger opens on the last mile: 42% closed within 7 days, 8 still open, 1 documented unreachable.
+2. On a 300-report synthetic cohort, the modelled closed-within-SLA share is 37.7% at baseline and 86.7% with the loop. The page labels the cohort synthetic, and the closed share tracks the 86% reachability assumption.
 3. Press Import lab feed. The synthetic CSV creates a critical potassium and an unmatched sodium report.
 4. Open the sodium report. The candidate list shows the printed name and clinic ID; the namesake is held for a human.
 5. Open the owned potassium report. Type 5.9, select critical, enter the lab caller and read back 5.9. A wrong value is refused by the server.

@@ -1,73 +1,69 @@
 # Three-minute live demo
 
-The demo is synthetic. Do not use a real patient record, phone number or lab report. Do not claim a live LIS or WhatsApp connection. The backup video is 47 seconds; use it only if the live path fails.
+The demo is synthetic. Do not use a real patient record, phone number or lab report. Do not claim a live LIS or WhatsApp connection. If the live path fails, use the closing line and the four screenshots. Do not improvise a claim that is not in the build.
 
 ## Before the timer
 
-- Open https://glucoflow.vercel.app/sign-in on a clean browser. Have the clinic demo card ready.
-- Open a second tab at https://glucoflow.vercel.app/verify.
-- Reseed the demo if you can. The ledger should show 12 receipts, a critical potassium and an unmatched sodium.
-- Keep the synthetic label visible.
+- Run `pnpm seed:demo -- --clinic demo --confirm-demo` from `app/`. The clinic account then holds four standing line cards, two calls and an exception.
+- Open `/sign-in` on a clean browser. Have the **Clinic team** card ready. The account holds all four roles for the demo; in production they are separate memberships.
+- Open `/showcase` in a second tab. It is the eight-step index and the fallback if a screen fails.
+- Keep the synthetic label visible. Do not open `/clinic/results` in the main path. It is the older ledger.
 
 ## 0:00 to 0:20  The gap
 
-Open on the clinic result ledger.
+Open on `/clinic/line`.
 
 **Say:** "The lab calls the doctor. Nobody calls the patient. In an Indian tertiary hospital with a written critical-call policy, only one in four critical values reached the treating clinician. Half went to nursing staff. Nine in ten never-notified values were outpatients. The lab's job ends at delivery. The clinic's patient-side last mile is unowned."
 
-Point at the hero: 42% closed within 7 days, 8 still in the last mile, 1 documented unreachable.
+Point at the critical card at the top: "Critical, lab flagged. One hour to breach."
 
-## 0:20 to 0:50  The intake and the namesake
+## 0:20 to 0:50  One line, one tap
 
-Press **Import lab feed**. The sample CSV is already loaded. Press **Import and hold unmatched**.
+Press **Seen** on the critical card.
 
-**Say:** "A lab feed creates three receipts. The sodium is a namesake: the name matches, the clinic ID does not. The system does not guess."
+**Say:** "The doctor does not fill a form. She sees one line and taps once. The clock does not run while she is in theatre."
 
-Open the Sodium row. Show the candidate list with the printed name and clinic ID. Point at the warning: "Use with review" for the weaker candidate.
+Point at the confirmation banner: "Review recorded for Asha Rao at 6:37 PM. Receipt GLF-4DC55C7480. Verify."
 
-**Say:** "The hard part is identity, not another summary. A human makes the match."
+**Say:** "The tap answers back with a time and a receipt code. That banner is the difference between a record and a promise."
 
-## 0:50 to 1:35  The value echo
+## 0:50 to 1:25  The read-back
 
-Open the owned **Potassium 5.9** receipt.
+Open `/clinic/calls`.
 
-**Say:** "The lab flagged this critical. The due clock started at lab release, not when the PDF reached a phone. The clinician cannot just tap acknowledge."
+**Say:** "The call was already happening. We record it. Read the value back. Ask the patient to say what they understood."
 
-Type **9.9**, leave the flag as critical, press **Acknowledge with value echo**.
+Choose the outcome **Patient reached**. Tick **Value read back and confirmed**. Tick **Patient said back what they understood**. Press **Record contact**.
 
-**Say:** "The server refuses the wrong value. That is the control."
+**Say:** "An informed outcome cannot be recorded without the read-back. The default is not 'patient reached'. The nurse has to say what happened."
 
-Clear it, type **5.9**, enter the lab caller **Lab technician**, role **technician**, read back **5.9**, and press **Acknowledge with value echo**.
+## 1:25 to 1:55  The exception and the register
 
-**Say:** "The printed value, the caller and the read-back are now in the chain. This is the lab-to-clinician read-back, not the patient conversation."
+Open `/clinic/register?tab=exceptions`.
 
-## 1:35 to 2:20  The honest unreachable
+**Say:** "This is the page the surveyor asks for. One row is red: not informed. Two attempts, a named owner, a documented disposition. We print the failure instead of hiding it."
 
-The patient-side panel opens.
+Press **Print A4 register**. Show the landscape sheet. Point at the Exceptions tab and the **Close** action on an informed row.
 
-Select **Not reachable after attempts**. Press **Record attempt** twice.
+**Say:** "The loop closes here. Not in a dashboard."
 
-**Say:** "Two documented attempts. The patient is not marked informed. The receipt can close as unreachable, but only with the attempts on record."
+## 1:55 to 2:20  The number
 
-Select **Closed, patient unreachable**, type a short note, press **Close documented outcome**.
+Open `/clinic/replay`.
 
-**Say:** "This is the disposition every other tool hides. A patient who cannot be reached is a real outcome, not a false conversation."
+**Say:** "On a 300-report cohort, the baseline closes 37.7 percent within the stage clock. The loop closes 86.7 percent. The page says the cohort is synthetic and the closed share tracks the 86 percent reachability assumption. It is a model, not a trial. The pilot replaces it with 300 real reports."
 
-Open the **Print closure certificate** link. Show the evidence table and the event timeline.
+Point at the badge: "Synthetic cohort, not a measurement."
 
-**Say:** "Every evidence item is present. The certificate maps the evidence. It does not issue a compliance verdict."
+## 2:20 to 2:45  The receipt
 
-## 2:20 to 2:45  The public stage
+Open a Source drawer, then **Open the public receipt**. Or enter the code at `/verify`.
 
-Scan or open the QR, or switch to the second tab and enter the receipt code.
-
-**Say:** "The patient or the quality team sees the recorded stage and chain validity. No name, no value, no diagnosis. If the patient was unreachable, the page says so. It does not accuse the clinic of tampering."
-
-Show the five-stage progress: received, clinician value echo, patient contacted, next step, closed.
+**Say:** "No login. No name, no value, no diagnosis. Chain intact, and a sentence that says what the chain does not prove. If the patient was unreachable, the page says so. It does not accuse the clinic of tampering."
 
 ## 2:45 to 3:00  The ask
 
-Return to the ledger. Point at the closure rate.
+Return to `/showcase` or the line.
 
 **Say:** "We start with one lab or diabetes OPD: 100 consecutive abnormal or critical reports, eight weeks, a baseline audit, then a paid continuation. The lab is done when it delivers. The clinic is done when the patient is reached."
 
@@ -75,4 +71,4 @@ Stop. Do not add architecture.
 
 ## If the live path fails
 
-Play `Result_Ledger_Demo.mp4` (47 seconds, captioned). Then use the same closing line. Do not improvise a claim that is not in the build.
+Open `/showcase` and walk the four screenshots in `docs/research/2026-11-04-final/evidence/`: line, calls, register, replay. Then use the same closing line.

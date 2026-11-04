@@ -155,11 +155,11 @@ def build():
     right.text = ""
 
     lp = left.paragraphs[0]
-    r = lp.add_run("A patient-closure ledger for abnormal and critical diabetes results. It records the printed value the clinician echoed, the lab notifier and read-back, the patient or caregiver contacted, the attempts that failed, the next administrative step, and a closure certificate.\n\n")
+    r = lp.add_run("A closure ledger for abnormal and critical diabetes results. It records the named owner, the stage clock, the clinician's one tap, the nurse's read-back, the patient or caregiver contacted, the attempts that failed, the next administrative step, and a public receipt.\n\n")
     r.font.name = "Inter"; r.font.size = Pt(9.2); r.font.color.rgb = INK
     r = lp.add_run("The product does not diagnose, triage or recommend treatment. The lab flag is the only source of criticality. The clinician sets the protocol and the action.\n\n")
     r.font.name = "Inter"; r.font.size = Pt(9.2); r.font.color.rgb = MUTED
-    r = lp.add_run("Twelve synthetic receipts. Nine patients. Four labs. Five clinician-set monitoring protocols. CSV lab-feed import, patient matching, value echo, automatic escalation, an anchored audit chain and a public stage page.\n")
+    r = lp.add_run("Twenty synthetic receipts. Ten patients. Four labs. Four role homes and one state machine. The clinician sees one line and taps once. The nurse records the read-back. The desk holds an unmatched report. The quality head prints the register. The receipt is public, and the verifier refuses a stale code.\n")
     r.font.name = "Inter"; r.font.size = Pt(9.2); r.font.color.rgb = INK
 
     rp = right.paragraphs[0]
@@ -183,12 +183,12 @@ def build():
         (" (J Gen Intern Med 2012). The existing lab tools stop at clinician acknowledgement. The patient-side attempt, the unreachable outcome and the next step are the unclaimed record.", MUTED, False),
     ], size=9.2, space_after=4)
 
-    section(doc, "Four controls make the closure honest.", "02")
+    section(doc, "Four surfaces make the closure honest.", "02")
     controls = [
-        ("01", "VALUE ECHO", "The clinician types the printed value and selects the printed flag. For a critical result, the lab caller and the value read back are recorded. A wrong value is refused."),
-        ("02", "PATIENT CONTACT", "Patient or caregiver, channel, language, who was spoken to. Every failed attempt is a row, not a silent assumption."),
-        ("03", "AN HONEST DISPOSITION", "Informed, declined, unreachable, invalid number, deceased, transferred. Two attempts before an unreachable close. Never a false informed."),
-        ("04", "NEXT STEP + PROOF", "Appointment, repeat test, specialist, collect report. Completion is tracked. The certificate maps evidence; it does not issue a compliance verdict."),
+        ("01", "ONE TAP", "The clinician sees one line and taps once. A wrong printed value is corrected with a reason, and the correction is in the chain."),
+        ("02", "READ-BACK", "The nurse records the value read back and what the patient understood before an informed outcome."),
+        ("03", "IDENTITY HOLD", "An unmatched report cannot be assigned. Two attempts at least 20 hours apart before an unreachable close. Never a false informed."),
+        ("04", "REGISTER + RECEIPT", "The quality head prints the register, sees the exception, and closes the loop. The public receipt proves order, not truth."),
     ]
     for num, head, body in controls:
         hp = p(doc, f"{num}   {head}", size=8.8, color=REVIEW if num in ("03", "04") else PRIMARY, bold=True, space_before=4, space_after=1)
@@ -199,9 +199,9 @@ def build():
     strip.autofit = False
     for idx, (num, head, body) in enumerate([
         ("01", "LAB RELEASE", "The clock starts at release, not at a WhatsApp folder."),
-        ("02", "VALUE ECHO", "Printed value and flag. Lab notifier and read-back."),
-        ("03", "PATIENT CONTACT", "Reached, or attempts. Unreachable is a disposition."),
-        ("04", "NEXT STEP", "Recorded and tracked to completion."),
+        ("02", "ONE TAP", "The clinician sees one line. No form."),
+        ("03", "READ-BACK", "Nurse records the value and what the patient understood."),
+        ("04", "REGISTER", "Exception visible; A4 print; the loop closes."),
     ]):
         cell = strip.rows[0].cells[idx]
         cell.width = Cm(4.47)
@@ -243,10 +243,10 @@ def build():
     r = a.paragraphs[0].add_run("WHAT WE RAN\n")
     r.font.name = "Inter"; r.font.size = Pt(7.8); r.font.bold = True; r.font.color.rgb = PRIMARY
     for value, cap in [
-        ("188", "unit and integration tests across 31 files."),
-        ("12 / 12", "result and landing browser tests on desktop and mobile."),
+        ("212", "unit and integration tests across 33 files."),
+        ("19", "browser checks across four specs, desktop and mobile."),
         ("0", "lint findings on ledger, drawer, certificate, patient slip and public verifier."),
-        ("4", "new integration tests: value echo, unreachable close, anchored chain, namesake matching."),
+        ("5", "obligation browser checks: one tap, read-back, register, intake, role boundary."),
         ("12", "synthetic diabetes receipts across 9 patients and 4 labs; 5 monitoring protocols."),
     ]:
         para = a.add_paragraph()
@@ -261,7 +261,7 @@ def build():
     r.font.name = "Inter"; r.font.size = Pt(7.8); r.font.bold = True; r.font.color.rgb = REVIEW
     for item in [
         "No buyer interview, baseline audit, paid pilot or LOI.",
-        "No live LIS, HL7/FHIR or WhatsApp send. The demo imports a CSV lab feed.",
+        "No live LIS, HL7/FHIR or WhatsApp send. The demo seed and the CSV import are the inputs.",
         "No consent capture, DPA, retention runbook or independent security review.",
         "No external anchor. The chain is tamper-evident inside one database.",
         "No clinical validation. No diagnosis, triage, risk score or treatment advice.",

@@ -139,7 +139,7 @@ def build():
     label(s, L, 0.95, "The last mile")
     title(s, L, 1.28, 6.7, "The last mile of a diabetes result.", size=40)
     text(s, L, 2.74, 6.3, 1.1, [{"text": "The lab calls the doctor. Nobody calls the patient.", "size": 22, "color": PRIMARY, "line_spacing": 1.05}])
-    text(s, L, 3.72, 6.1, 1.25, [{"text": "A patient-closure ledger for abnormal and critical diabetes results. A value echo, a documented contact, an unreachable disposition, a next step, and a receipt.", "size": 13.5, "color": MUTED, "line_spacing": 1.35}])
+    text(s, L, 3.72, 6.1, 1.25, [{"text": "A closure ledger for abnormal and critical diabetes results. A named owner, a stage clock, a read-back, an exception, and a receipt.", "size": 13.5, "color": MUTED, "line_spacing": 1.35}])
     text(s, L, 5.15, 6.0, 0.9, [{"text": "IIT Bombay Health-a-thon 2026", "size": 10, "bold": True, "color": MUTED}, {"text": "Diabetes track  ·  Build Sprint", "size": 10, "color": MUTED}])
     text(s, L, 6.25, 6.0, 0.3, [{"text": "The lab is done when it delivers. The clinic is done when the patient is reached.", "size": 9.5, "italic": True, "color": MUTED}])
 
@@ -151,9 +151,9 @@ def build():
     rule(s, 7.78, 2.3, 4.55, color=rgb("#46655F"))
     steps = [
         ("03:10", "Lab releases the report", "Critical, lab flagged"),
-        ("03:12", "Clinician echoes 5.9", "Lab notifier + read-back"),
-        ("03:40", "Patient contacted in Hindi", "Call · caregiver confirmed"),
-        ("03:55", "Next step: repeat potassium", "Teach-back recorded"),
+        ("03:12", "Clinician sees one line", "One tap, no form"),
+        ("03:40", "Nurse records the read-back", "Call · caregiver confirmed"),
+        ("03:55", "Register prints the closure", "Owner, clock, receipt"),
     ]
     y = 2.48
     for index, (time_value, head, sub) in enumerate(steps):
@@ -196,13 +196,13 @@ def build():
     s = slide(prs)
     chrome(s, 3, "02 / The receipt")
     label(s, L, 0.95, "Close the last mile, not another inbox")
-    title(s, L, 1.25, 8.6, "Four controls. One honest closure.", size=34)
-    text(s, L, 2.15, 7.5, 0.7, [{"text": "The lab already notifies the doctor. We make the patient side visible, and we do not let a click stand in for a conversation.", "size": 14, "color": MUTED, "line_spacing": 1.3}])
+    title(s, L, 1.25, 8.6, "Four surfaces. One obligation.", size=34)
+    text(s, L, 2.15, 7.5, 0.7, [{"text": "The doctor sees one line. The nurse records the read-back. The desk resolves identity. The quality head prints the register.", "size": 14, "color": MUTED, "line_spacing": 1.3}])
     items = [
-        ("01", "VALUE ECHO", "The clinician types the printed value and selects the printed flag. For a critical result, the lab caller and the value read back are recorded.", PRIMARY),
-        ("02", "PATIENT CONTACT", "Patient or caregiver, channel, language, who was spoken to. Every failed attempt is a row, not a silent assumption.", PRIMARY),
-        ("03", "AN HONEST DISPOSITION", "Informed, declined, unreachable, invalid number, deceased, transferred. Two attempts before an unreachable close. Never a false informed.", REVIEW),
-        ("04", "NEXT STEP + PROOF", "Appointment, repeat test, specialist, collect report. Completion is tracked. The certificate maps evidence, not a compliance verdict.", REVIEW),
+        ("01", "CLINICIAN LINE", "One card, one tap. Seen, corrected with a reason, or refused. No patient-side form.", PRIMARY),
+        ("02", "NURSE CALLS", "Read-back, teach-back, outcome, next step. An informed outcome needs the read-back.", PRIMARY),
+        ("03", "DESK INTAKE", "Accept custody, match a candidate with evidence, assign. An unmatched report cannot be assigned.", REVIEW),
+        ("04", "QUALITY REGISTER", "A4 print, exceptions, Close. The page the surveyor files.", REVIEW),
     ]
     y = 3.05
     for num, head, body, color in items:
@@ -220,20 +220,20 @@ def build():
     s = slide(prs)
     chrome(s, 4, "03 / What is built")
     label(s, L, 0.95, "The loop runs today")
-    title(s, L, 1.22, 7.4, "A working closure ledger.", size=32)
-    text(s, L, 1.95, 7.2, 0.55, [{"text": "Twelve synthetic diabetes receipts across nine patients and four labs. Five clinician-set monitoring protocols. The demo imports a lab feed and holds an unmatched report.", "size": 12, "color": MUTED, "line_spacing": 1.3}])
+    title(s, L, 1.22, 7.4, "A working closure workspace.", size=32)
+    text(s, L, 1.95, 7.2, 0.55, [{"text": "Twenty synthetic diabetes receipts. Four role homes. One state machine. The line is one tap; the register prints; the replay is labelled synthetic.", "size": 12, "color": MUTED, "line_spacing": 1.3}])
     # screenshot
-    shot = crop_image(SCREENS / "20_closure_ledger.png", Path("/tmp/deck-ledger.png"), (250, 60, 1440, 1020))
+    shot = crop_image(SCREENS / "30_line.png", Path("/tmp/deck-line.png"), (240, 100, 1440, 700))
     rect(s, L, 2.92, 7.25, 3.72, fill=WHITE, line=LINE, radius=True)
     add_picture(s, shot, L + 0.08, 3.0, 7.09, 3.56)
     # features
     features = [
-        ("Lab feed", "CSV import; unmatched hold"),
-        ("Identity", "name + clinic ID candidates"),
-        ("Value echo", "printed value and flag"),
-        ("Last mile", "attempts + unreachable close"),
-        ("Escalation", "timer + queued notification"),
-        ("Proof", "anchored chain + public stage"),
+        ("One-tap line", "4 standing cards"),
+        ("Read-back", "informed needs it"),
+        ("Identity hold", "match before assign"),
+        ("Register", "A4, exceptions, close"),
+        ("Replay", "modelled, labelled"),
+        ("Receipt", "chain + public verify"),
     ]
     x = 8.15
     y = 2.95
@@ -256,7 +256,7 @@ def build():
         ("01", "START OR TITRATE", "ACE inhibitor or ARB", "The prescriber sets the monitoring protocol."),
         ("02", "2 TO 4 WEEKS", "Potassium + eGFR", "The due window is a protocol, not an inference."),
         ("03", "RESULT ARRIVES", "Lab flag copied", "Critical, abnormal or normal. No interpretation."),
-        ("04", "CLOSE THE LOOP", "Value echo + contact", "Patient reached, or attempts documented."),
+        ("04", "CLOSE THE LOOP", "One tap + read-back", "Patient reached, or attempts documented."),
         ("05", "NEXT STEP", "Repeat, review, attend", "Tracked to completion; certificate ready."),
     ]
     x = L
@@ -277,11 +277,11 @@ def build():
     rect(s, L, 2.2, 5.75, 4.1, fill=WHITE, line=LINE, radius=True)
     text(s, L + 0.25, 2.42, 5.2, 0.3, [{"text": "WHAT WE RAN", "size": 9.5, "bold": True, "color": PRIMARY}])
     ran = [
-        ("188", "unit and integration tests, 31 files", PRIMARY),
-        ("12 / 12", "result and landing browser tests, desktop + mobile", PRIMARY),
+        ("212", "unit and integration tests, 33 files", PRIMARY),
+        ("19", "browser checks across four specs", PRIMARY),
         ("0", "lint findings on ledger, drawer, certificate, slip and verifier", PRIMARY),
-        ("12", "synthetic receipts, 9 patients, 4 labs", PRIMARY),
-        ("4", "new integration tests for value echo, unreachable close, chain and matching", PRIMARY),
+        ("12 / 12", "database isolation checks", PRIMARY),
+        ("20", "synthetic receipts, 10 patients, 4 labs", PRIMARY),
     ]
     y = 2.85
     for value, caption, color in ran:
@@ -319,12 +319,12 @@ def build():
     # right column
     rect(s, 6.9, 2.15, 5.75, 3.9, fill=INK, line=None, radius=True)
     text(s, 7.15, 2.38, 5.2, 0.3, [{"text": "THE METRIC", "size": 9.5, "bold": True, "color": ACCENT}])
-    text(s, 7.15, 2.72, 5.2, 0.75, [{"text": "Closure rate within 7 days.", "size": 24, "bold": True, "color": WHITE, "line_spacing": 1.0}])
+    text(s, 7.15, 2.72, 5.2, 0.75, [{"text": "Closed within the stage clock.", "size": 24, "bold": True, "color": WHITE, "line_spacing": 1.0}])
     metrics = [
         ("1", "Abnormal or critical result with a named owner"),
-        ("2", "Value echo + lab read-back where critical"),
-        ("3", "Patient contacted, or attempts documented"),
-        ("4", "Next step recorded; completion tracked"),
+        ("2", "Read-back recorded before an informed outcome"),
+        ("3", "Patient reached, or attempts documented"),
+        ("4", "Register printed; exception visible"),
     ]
     y = 3.78
     for num, cap in metrics:
@@ -343,7 +343,7 @@ def build():
     asks = [
         ("01", "ONE LAB OR OPD SPONSOR", "A quality head who will share 100 de-identified reports."),
         ("02", "ONE CLINICAL LEAD", "A practising diabetes clinician who signs the protocol and the pilot."),
-        ("03", "ONE HONEST NUMBER", "Closure rate within 7 days, unreachable documented, zero false informed."),
+        ("03", "ONE HONEST NUMBER", "Closed within SLA, exceptions documented, zero false informed."),
     ]
     y = 3.55
     for num, head, body in asks:
