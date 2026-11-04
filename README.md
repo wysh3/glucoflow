@@ -4,7 +4,7 @@ The closure ledger for abnormal lab results. Every critical or abnormal report b
 
 The repository also carries the earlier patient and clinic record workspace. The closure ledger is the current direction.
 
-**[Open the hosted demo](https://glucoflow.vercel.app)** · [Setup guide](app/docs/SETUP.md) · [Demo walkthrough](app/docs/DEMO.md) · [Android APK](https://github.com/wysh3/glucoflow/releases/download/demo-2026-10-04-chat/Glucoflow_Android.apk)
+**[Open the hosted demo](https://glucoflow.vercel.app)** · [Setup guide](app/docs/SETUP.md) · [Demo walkthrough](app/docs/DEMO.md) · [Android APK](https://github.com/wysh3/glucoflow/releases/download/demo-2026-11-04-closure/Glucoflow_Android.apk)
 
 ![Glucoflow clinic workspace](app/reports/evidence/workspace-guide-2026-10-04/doctor-desktop.png)
 
