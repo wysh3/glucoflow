@@ -21,12 +21,13 @@ const MIGRATIONS_DIR = join(appRoot, 'supabase', 'migrations');
 const IDENTIFIER_RE = /^[a-z_][a-z0-9_]*$/;
 
 function parseArgs(argv: string[]) {
-  const args = { reset: false, apiRole: 'sutra_api', ownerUrl: '' as string };
+  const args = { reset: false, apiRole: 'sutra_api', ownerUrl: '' as string, skipRoles: false };
   for (let i = 0; i < argv.length; i += 1) {
     const value = argv[i];
     if (value === '--reset') args.reset = true;
     else if (value === '--api-role') args.apiRole = argv[++i] ?? '';
     else if (value === '--database-url') args.ownerUrl = argv[++i] ?? '';
+    else if (value === '--skip-roles') args.skipRoles = true;
   }
   return args;
 }
@@ -114,7 +115,7 @@ async function main(): Promise<void> {
         : `Applied ${appliedCount} migration(s).`,
     );
 
-    if (args.apiRole === 'sutra_api') {
+    if (!args.skipRoles && args.apiRole === 'sutra_api') {
       await ensureLocalLoginRoles(client, env);
     }
   } finally {
