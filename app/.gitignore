@@ -33,3 +33,6 @@ reports/local/
 
 # Supabase CLI link state
 supabase/.temp/
+.vercel
+.env.local
+.env.*.local
