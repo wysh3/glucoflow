@@ -165,7 +165,7 @@ def build():
         y += 0.68
     rect(s, 7.78, 5.38, 4.55, 0.82, fill=rgb("#173733"), line=rgb("#46655F"), radius=True)
     text(s, 7.98, 5.52, 2.8, 0.28, [{"text": "CLOSURE CERTIFICATE", "size": 8.5, "bold": True, "color": ACCENT}])
-    text(s, 7.98, 5.76, 4.1, 0.3, [{"text": "Chain intact  ·  evidence present  ·  GLF-F656915ED9", "size": 9.5, "color": WHITE}])
+    text(s, 7.98, 5.76, 4.1, 0.3, [{"text": "Chain intact  ·  evidence present  ·  verify the live receipt", "size": 9.5, "color": WHITE}])
     text(s, 7.78, 6.34, 4.55, 0.22, [{"text": "Unreachable is a disposition, not a false informed.", "size": 8.5, "italic": True, "color": rgb("#B7CEC7")}])
 
     # 2. Problem
