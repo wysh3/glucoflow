@@ -23,10 +23,12 @@
 | `/clinic/calls` | Read-back, teach-back, outcome, next step, **Close as unreachable** after two attempts |
 | `/clinic/intake` | Accept custody, candidate matching with evidence, assign to me |
 | `/clinic/register` | Date range, Exceptions tab, A4 print, the surveyor's view |
+| `/clinic/replay` | Baseline against the loop on a labelled synthetic cohort, with the method shown |
+| `/showcase` | The eight-step judge path, with a link to each real screen |
 | `/clinic/results` | The older ledger, still shipped. It is not the new product |
 | `/verify/<receipt code>` | The public receipt. A code is on a detail drawer's Receipt block |
 
-**Static evidence.** `docs/research/2026-11-04-final/evidence/` holds four screenshots at 1440 by 900 (`line.png`, `calls.png`, `intake.png`, `register.png`).
+**Static evidence.** `docs/research/2026-11-04-final/evidence/` holds six screenshots (`line.png`, `calls.png`, `intake.png`, `register.png`, `replay.png`, `showcase.png`).
 
 ---
 
@@ -40,6 +42,8 @@
 
 **Client.** `app/apps/client/src/features/clinic/obligations/` holds the four screens and the detail drawer. Capabilities are `canDesk`, `canNurse`, `canClinician`, `canQuality`. The nav and the landing route follow the role.
 
+**Evidence.** `app/scripts/replay.ts` computes a retrospective baseline and a deterministic queue simulation, writes `replay-data.json`, and the screen states the source and the assumptions. The shipped cohort is synthetic. The same script accepts `--input cohort.csv` for a real audit.
+
 **Measured evidence.**
 - `pnpm test`: 212 passed across 33 files.
 - `pnpm db:test`: 12 of 12 isolation and constraint checks.
@@ -49,7 +53,7 @@
 **What is not built.**
 - No live WhatsApp, portal or lab-feed ingestion. The demo seed and the CSV import are the inputs.
 - No household-aware identity model. Intake shows candidates with a score and reasons, and a human decides. It does not claim calibrated abstention.
-- No 300-report replay screen yet. The audit instrument and replay are the next unit.
+- The replay runs on a synthetic cohort. The 300-report audit is not done, so the number is illustrative.
 - No ABDM, no Android parity, no server-rendered PDF (the register uses browser print).
 - No customer, no pilot, no paid contract.
 
@@ -63,6 +67,7 @@
 4. Go to register. Print preview. Does the table survive A4? Are the exceptions visible?
 5. Go to intake. Can you accept custody? Can you assign an unmatched report? (It should refuse.)
 6. Sign out and sign in as **Reviewer only**. Does the nav remove the role homes? Does `/clinic/line` still open? It should refuse or redirect.
+7. Open `/clinic/replay`. Does it say the cohort is synthetic before it shows a number? Open `/showcase`. Does each step land on a real screen?
 
 ---
 
