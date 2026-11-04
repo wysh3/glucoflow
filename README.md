@@ -1,12 +1,28 @@
 # Glucoflow
 
-A shared workspace for patients and clinic teams to turn scattered diabetes records into a reviewed, source-backed history. Upload a report, check the extracted draft against the original, approve it, and explore the published timeline.
+The closure ledger for abnormal lab results. Every critical or abnormal report becomes an obligation with a named owner, a stage clock and a tamper-evident receipt. The doctor sees one line and taps once. The nurse records the read-back. The quality head prints the register the surveyor asks for.
+
+The repository also carries the earlier patient and clinic record workspace. The closure ledger is the current direction.
 
 **[Open the hosted demo](https://glucoflow.vercel.app)** · [Setup guide](app/docs/SETUP.md) · [Demo walkthrough](app/docs/DEMO.md) · [Android APK](https://github.com/wysh3/glucoflow/releases/download/demo-2026-10-04-chat/Glucoflow_Android.apk)
 
 ![Glucoflow clinic workspace](app/reports/evidence/workspace-guide-2026-10-04/doctor-desktop.png)
 
-## What it does
+## The closure ledger
+
+| Screen | Role | What it does |
+| --- | --- | --- |
+| `/clinic/line` | Clinician | One card per pending result. One tap **Seen**. A correction path with a reason. |
+| `/clinic/calls` | Nurse | Read-back, teach-back, outcome and next step. **Close as unreachable** after two attempts. |
+| `/clinic/intake` | Desk | Accept custody, match a candidate with evidence, assign a clinician. An unmatched report cannot be assigned. |
+| `/clinic/register` | Quality | Date range, exceptions, A4 print. The page the surveyor files. |
+| `/clinic/replay` | Evidence | Baseline against the closure loop. The shipped cohort is synthetic and labelled. |
+
+The obligation is one state machine, not four queues. The ten procedures in `app/supabase/migrations/035_obligation_lifecycle.sql` are the only writers for the new phase columns, and the API role holds select only on them. The older ledger routes still write the legacy `status` column until they are retired. `036` makes the breach clock follow the active stage. `037` refuses assignment before the patient is matched.
+
+The working review packet is `docs/research/2026-11-04-final/REVIEW-PACKET-R2.md`. The screenshots are in `docs/research/2026-11-04-final/evidence/`.
+
+## The record workspace (earlier surface)
 
 - **Patient workspace:** try built-in synthetic samples, upload PDFs or ordered photos, open original reports, view approved records, add patient-reported notes, and export a visit summary.
 - **Gluco record companion:** an expressive animated orb with bounded GPT‑6 Luna conversation planning, patient-scoped record summaries, follow-up questions and original source links. Recorded facts stay separate from patient-reported entries; clinical advice remains out of scope.
@@ -46,6 +62,8 @@ pnpm dev
 ```
 
 Open **http://127.0.0.1:5173**. The API runs at **http://127.0.0.1:8787**. Local demo credentials are generated in `app/.local/demo-credentials.json`; the dev server can use these to show role-entry buttons. This file and `.env` are ignored by Git. The default local extraction mode uses labelled synthetic fixtures and requires no model key.
+
+For the closure demo, open `/showcase` for the eight-step path, or sign in with the **Clinic team** card and open `/clinic/line`. The demo account holds every clinic role, so the navigation shows every home. Regenerate the replay with `pnpm exec tsx scripts/replay.ts`, or pass `--input cohort.csv` for a real audit.
 
 Use these database and seed commands only with the local development database. They are not the hosted bootstrap procedure. See the [full setup guide](app/docs/SETUP.md) for database roles, signing and model configuration, and [hosted operations](app/docs/HOSTED.md) for deployment details.
 
