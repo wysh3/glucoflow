@@ -12,7 +12,7 @@ import { registerHealthRoutes } from './routes/health';
 import { registerLocalAuthRoutes } from './routes/auth-local';
 import { registerPatientRoutes } from './routes/patients';
 import { registerDocumentRoutes } from './routes/documents';
-import { registerResultRoutes } from './routes/results';
+import { registerPublicResultRoutes, registerResultRoutes } from './routes/results';
 import { registerStorageRoutes, registerUploadRoutes } from './routes/uploads';
 
 export async function buildServer(existingContext?: AppContext): Promise<FastifyInstance> {
@@ -81,6 +81,7 @@ export async function buildServer(existingContext?: AppContext): Promise<Fastify
   registerHealthRoutes(app, ctx);
   registerLocalAuthRoutes(app, ctx);
   registerStorageRoutes(app, ctx);
+  registerPublicResultRoutes(app, ctx);
 
   // Authenticated routes: every request resolves its actor from a verified token
   // and current database membership before any handler runs.

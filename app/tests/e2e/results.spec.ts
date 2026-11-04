@@ -23,6 +23,16 @@ test.describe('result accountability ledger', () => {
     await expect(drawer.getByText('The clinician remains responsible for the clinical decision.')).toBeVisible();
   });
 
+  test('shows a verified receipt chain and a public verification', async ({ page }) => {
+    await page.locator('[data-testid="result-row"]:visible').first().click();
+    const drawer = page.getByRole('dialog');
+    await expect(drawer.getByText('Chain verified')).toBeVisible();
+    const code = (await drawer.locator('a[href^="/verify/"]').innerText()).trim();
+    await page.goto(`/verify/${code}`);
+    await expect(page.getByText('Receipt chain intact')).toBeVisible();
+    await expect(page.getByText(/audit events verified/)).toBeVisible();
+  });
+
   test('filters to unowned results', async ({ page }) => {
     await page.getByRole('button', { name: 'Unowned' }).click();
     await expect(page.locator('[data-testid="result-row"]:visible').filter({ hasText: 'No owner' }).first()).toBeVisible();

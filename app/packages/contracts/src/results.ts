@@ -77,6 +77,7 @@ export type ResultEventDto = {
 
 export type ResultDto = {
   resultId: UUID;
+  receiptCode: string;
   clinicId: UUID;
   patientId: UUID | null;
   patientName: string | null;
@@ -187,3 +188,31 @@ export const createResultSchema = z.object({
   labFlag: resultFlagSchema,
 });
 export type CreateResultInput = z.infer<typeof createResultSchema>;
+
+
+export type ResultControlDto = {
+  code: string;
+  label: string;
+  status: 'met' | 'missing' | 'not_applicable';
+  evidenceEventIds: UUID[];
+  note: string;
+};
+
+export type ResultProofDto = {
+  resultId: UUID;
+  receiptCode: string;
+  valid: boolean;
+  eventCount: number;
+  head: string | null;
+  brokenAt: UUID | null;
+  checkedAt: ISOInstant;
+  controls: ResultControlDto[];
+};
+
+
+export type PublicReceiptProofDto = {
+  found: boolean;
+  valid: boolean;
+  eventCount: number;
+  head: string | null;
+};

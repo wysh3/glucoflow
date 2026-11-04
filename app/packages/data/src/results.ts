@@ -4,6 +4,7 @@ import type {
   CreateResultInput,
   ResultFilter,
   ResultListDto,
+  ResultProofDto,
   ResultRowDto,
   ResultStatsDto,
 } from '@glucoflow/contracts';
@@ -14,6 +15,7 @@ import type { DbClient } from './pool';
 
 type ResultRow = {
   result_id: string;
+  receipt_code: string;
   clinic_id: string;
   patient_id: string | null;
   patient_name: string | null;
@@ -59,6 +61,7 @@ type EventRow = {
 const RESULT_SELECT = `
   select
     r.id as result_id,
+    r.receipt_code,
     r.clinic_id,
     r.patient_id,
     p.display_name as patient_name,
@@ -99,6 +102,7 @@ const RESULT_SELECT = `
 function mapRow(row: ResultRow): ResultRowDto {
   return {
     resultId: row.result_id,
+    receiptCode: row.receipt_code,
     clinicId: row.clinic_id,
     patientId: row.patient_id,
     patientName: row.patient_name,
@@ -346,4 +350,91 @@ export async function createResult(
     ],
   );
   return result.rows[0]!.create_result;
+}
+
+
+export async function getResultProof(
+  client: DbClient,
+  resultId: string,
+): Promise<ResultProofDto | null> {
+  const result = await getResult(client, resultId);
+  if (!result) return null;
+  const chain = await client.query<{
+    valid: boolean;
+    count: number;
+    head: string | null;
+    brokenAt: string | null;
+  }>(`select (proof ->> 'valid')::boolean as valid, (proof ->> 'count')::int as count,
+              proof ->> 'head' as head, proof ->> 'brokenAt' as "brokenAt"
+         from (select sutra.verify_result_chain($1) as proof) q`, [resultId]);
+  const row = chain.rows[0] ?? { valid: false, count: 0, head: null, brokenAt: null };
+  const eventTypes = new Set(result.events.map((event) => event.eventType));
+  const events = result.events;
+  const ids = (types: string[]) => events.filter((event) => types.includes(event.eventType)).map((event) => event.eventId);
+  const closed = eventTypes.has('closed');
+  const controls: ResultProofDto['controls'] = [
+    {
+      code: 'NABL-112A',
+      label: 'Critical alert register evidence',
+      status:
+        eventTypes.has('assigned') && eventTypes.has('acknowledged') && eventTypes.has('patient_informed')
+          ? 'met'
+          : 'missing',
+      evidenceEventIds: ids(['received', 'assigned', 'acknowledged', 'patient_informed']),
+      note: 'Owner, clock, acknowledgement and the patient communication receipt.',
+    },
+    {
+      code: 'NABH-CRITICAL',
+      label: 'Critical communication and read-back',
+      status:
+        result.labFlag !== 'critical'
+          ? 'not_applicable'
+          : result.readBackConfirmed
+            ? 'met'
+            : 'missing',
+      evidenceEventIds: ids(['acknowledged', 'patient_informed']),
+      note: result.labFlag === 'critical' ? 'The lab flagged this result critical.' : 'The lab did not flag this result critical.',
+    },
+    {
+      code: 'OWNER-CLOCK',
+      label: 'Named owner and due clock',
+      status: result.ownerId && result.dueAt ? 'met' : 'missing',
+      evidenceEventIds: ids(['assigned']),
+      note: 'A result without an owner and a due time is not accountable.',
+    },
+    {
+      code: 'APPEND-ONLY',
+      label: 'Append-only audit chain',
+      status: row.valid ? 'met' : 'missing',
+      evidenceEventIds: ids(['received', 'matched', 'assigned', 'acknowledged', 'patient_informed', 'escalated', 'closed']),
+      note: 'SHA-256 hash chain over every audit event.',
+    },
+  ];
+  void closed;
+  return {
+    resultId: result.resultId,
+    receiptCode: result.receiptCode,
+    valid: row.valid,
+    eventCount: row.count,
+    head: row.head,
+    brokenAt: row.brokenAt,
+    checkedAt: new Date().toISOString(),
+    controls,
+  };
+}
+
+
+export async function verifyReceiptByCode(
+  client: DbClient,
+  code: string,
+): Promise<{ found: boolean; valid: boolean; eventCount: number; head: string | null }> {
+  const result = await client.query<{ found: boolean; valid: boolean; eventCount: number; head: string | null }>(
+    `select (proof ->> 'found')::boolean as found,
+            (proof ->> 'valid')::boolean as valid,
+            (proof ->> 'eventCount')::int as "eventCount",
+            proof ->> 'head' as head
+       from (select sutra.verify_receipt_code($1) as proof) q`,
+    [code],
+  );
+  return result.rows[0] ?? { found: false, valid: false, eventCount: 0, head: null };
 }

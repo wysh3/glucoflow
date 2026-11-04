@@ -10,8 +10,9 @@
 | 0.0-3.0 | The result | Three synthetic reports with no owner, no clock and no receipt | A report arrives. Nobody owns it. |
 | 3.0-7.0 | The product | Real public landing page | Every result gets an owner, a clock and a receipt. |
 | 7.0-12.0 | The ledger | Real clinic result ledger, critical alert visible | Ten open. Two critical. Who owns the result? |
-| 12.0-16.5 | The receipt | Real receipt drawer with source, flags, clock and audit trail | One owner. One clock. One proof. |
-| 16.5-20.0 | End card | glucoflow wordmark, URL, synthetic-data line | glucoflow.vercel.app |
+| 12.0-15.8 | The receipt | Real receipt drawer with source, flags, clock and audit trail | One owner. One clock. One proof. |
+| 15.8-18.0 | The proof | Public receipt verifier, chain head visible | A code anyone can verify. |
+| 18.0-20.0 | End card | glucoflow wordmark, URL, synthetic-data line | glucoflow.vercel.app |
 
 ## Production
 

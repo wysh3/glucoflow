@@ -16,13 +16,16 @@ import {
   createResult,
   escalateResult,
   getResult,
+  getResultProof,
   listResults,
   matchResult,
   recordResultInformed,
   resultExport,
   resultStats,
+  verifyReceiptByCode,
 } from '@glucoflow/data';
 import { requireCapability } from '../auth';
+import { withTransaction } from '@glucoflow/data/pool';
 import type { AppContext } from '../context';
 import { ApiError } from '../errors';
 import { parseBody, parseQuery, requireActor, withActorTx } from './helpers';
@@ -68,6 +71,16 @@ export function registerResultRoutes(app: FastifyInstance, ctx: AppContext): voi
       exportedAt: new Date().toISOString(),
       items: await resultExport(client, clinicIdFor(actor)),
     }));
+  });
+
+  app.get<{ Params: { id: string } }>('/api/v1/results/:id/proof', async (request) => {
+    const actor = requireActor(request);
+    requireCapability(actor, 'clinic');
+    return withActorTx(ctx, request, async (client) => {
+      const proof = await getResultProof(client, request.params.id);
+      if (!proof) throw ApiError.notFound('That result is not available.');
+      return proof;
+    });
   });
 
   app.get<{ Params: { id: string } }>('/api/v1/results/:id', async (request) => {
@@ -152,5 +165,21 @@ export function registerResultRoutes(app: FastifyInstance, ctx: AppContext): voi
       await closeResult(client, request.params.id, body.note);
       return getResult(client, request.params.id);
     });
+  });
+}
+
+
+/** No-auth receipt verification returns only chain integrity, never patient data. */
+export function registerPublicResultRoutes(app: FastifyInstance, ctx: AppContext): void {
+  app.get<{ Params: { code: string } }>('/api/v1/public/receipts/:code', async (request) => {
+    const code = request.params.code.trim();
+    if (code.length < 6 || code.length > 40) {
+      throw ApiError.validation('Enter a receipt code.');
+    }
+    return withTransaction(
+      ctx.pool,
+      { role: ctx.config.apiRole },
+      (client) => verifyReceiptByCode(client, code),
+    );
   });
 }

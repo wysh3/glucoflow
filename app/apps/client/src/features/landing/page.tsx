@@ -446,7 +446,7 @@ export function LandingPage(): React.ReactElement {
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft">Open</p>
             <div className="mt-3 flex flex-col items-start gap-2 text-[14px]">
-              <Link to="/sign-in" className="text-primary hover:underline">Try the ledger</Link>
+              <Link to="/verify" className="text-primary hover:underline">Verify a receipt</Link>
               <Link to="/sign-in" className="text-primary hover:underline">Sign in</Link>
               <Link to="/" className="text-primary hover:underline">Product home</Link>
             </div>

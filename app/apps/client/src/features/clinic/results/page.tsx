@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import {
   AlertTriangle,
   ArrowRight,
@@ -37,7 +38,7 @@ import { RESULT_FLAG_LABELS } from '@glucoflow/contracts';
 import { useApi } from '../../../auth/session';
 import { useSession } from '../../../auth/session';
 import { usePatient, usePatients } from '../../../lib/queries';
-import { useResult, useResultActions, useResults, useResultStats } from '../../../lib/queries';
+import { useResult, useResultActions, useResultProof, useResults, useResultStats } from '../../../lib/queries';
 import { SystemPageHeader } from '../../../components/system-page-header';
 import { cn } from '@glucoflow/ui';
 
@@ -107,6 +108,9 @@ function Stat({ label, value, note, tone }: { label: string; value: string; note
 
 export function ResultsPage(): React.ReactElement {
   const api = useApi();
+  const { config } = useSession();
+  const patients = usePatients('');
+  const [receiving, setReceiving] = React.useState(false);
   const [filter, setFilter] = React.useState<ResultFilter>('open');
   const [selected, setSelected] = React.useState<string | null>(null);
   const [exporting, setExporting] = React.useState(false);
@@ -154,6 +158,41 @@ export function ResultsPage(): React.ReactElement {
         meta="Every incoming report has a named owner, a clock and a receipt. The lab flag is the source; this ledger does not interpret it."
         actions={
           <>
+            {config?.demoLabel && patients.data?.items[0] ? (
+              <Button
+                variant="primary"
+                disabled={receiving}
+                onClick={async () => {
+                  const patient = patients.data?.items[0];
+                  if (!patient) return;
+                  setReceiving(true);
+                  try {
+                    const created = await api.request<ResultDto>('/api/v1/results', {
+                      method: 'POST',
+                      body: {
+                        patientId: patient.patientId,
+                        externalRef: `demo-inbound-${Date.now()}`,
+                        sourceChannel: 'whatsapp',
+                        labName: 'SRL Diagnostics',
+                        patientNameRaw: patient.displayName,
+                        patientIdentifierRaw: patient.clinicIdentifier,
+                        testName: 'Potassium',
+                        valueText: '6.4',
+                        unit: 'mmol/L',
+                        labFlag: 'critical',
+                      },
+                    });
+                    setFilter('open');
+                    setSelected(created.resultId);
+                    await Promise.all([results.refetch(), stats.refetch()]);
+                  } finally {
+                    setReceiving(false);
+                  }
+                }}
+              >
+                {receiving ? 'Receiving' : 'Receive sample'}
+              </Button>
+            ) : null}
             <Button variant="secondary" onClick={() => void exportRegister()} disabled={exporting}>
               <Download size={16} aria-hidden />
               {exporting ? 'Exporting' : 'Export register'}
@@ -321,6 +360,7 @@ export function ResultsPage(): React.ReactElement {
 
 function ResultDrawer({ resultId, onClose }: { resultId: string | null; onClose: () => void }): React.ReactElement {
   const detail = useResult(resultId ?? undefined);
+  const proof = useResultProof(resultId ?? undefined);
   const actions = useResultActions();
   const { me } = useSession();
   const patients = usePatients('');
@@ -334,6 +374,7 @@ function ResultDrawer({ resultId, onClose }: { resultId: string | null; onClose:
   const [message, setMessage] = React.useState<string | null>(null);
   const canReview = me?.capabilities.canReview ?? false;
   const result = detail.data;
+  const proofData = proof.data;
 
   React.useEffect(() => {
     setPatientId('');
@@ -477,6 +518,41 @@ function ResultDrawer({ resultId, onClose }: { resultId: string | null; onClose:
                 ))}
               </ol>
             </div>
+
+            <div className="rounded-[14px] border border-line p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="flex items-center gap-2 text-sm font-semibold text-ink"><ShieldCheck size={16} className="text-primary" aria-hidden /> Receipt proof</p>
+                {proofData ? <Badge tone={proofData.valid ? 'success' : 'error'}>{proofData.valid ? 'Chain verified' : 'Chain broken'}</Badge> : <span className="text-[12px] text-ink-soft">Checking chain</span>}
+              </div>
+              <Link to={`/verify/${result.receiptCode}`} className="mt-2 inline-flex min-h-8 items-center gap-1 text-[12px] font-medium tabular-nums text-primary underline underline-offset-2">{result.receiptCode} <ArrowRight size={12} aria-hidden /></Link>
+              {proofData ? (
+                <>
+                  <p className="mt-1 text-[12px] text-ink-soft">{proofData.eventCount} events · head {proofData.head ? `${proofData.head.slice(0, 16)}...` : 'none'}</p>
+                  <ul className="mt-3 space-y-1.5">
+                    {proofData.controls.map((control) => (
+                      <li key={control.code} className="flex items-start justify-between gap-2 text-[12px]">
+                        <span className={control.status === 'met' ? 'text-ink' : 'text-ink-soft'}>{control.label}</span>
+                        <span className={control.status === 'met' ? 'shrink-0 font-medium text-success' : control.status === 'missing' ? 'shrink-0 font-medium text-danger' : 'shrink-0 text-ink-soft'}>{control.status === 'met' ? 'Met' : control.status === 'missing' ? 'Missing' : 'N/A'}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button variant="secondary" size="sm" className="mt-3" onClick={() => {
+                    const pack = { receiptCode: proofData.receiptCode, verified: proofData.valid, checkedAt: proofData.checkedAt, head: proofData.head, eventCount: proofData.eventCount, controls: proofData.controls, result: { testName: result.testName, labFlag: result.labFlag, status: result.status, receivedAt: result.reportReceivedAt, owner: result.ownerName, dueAt: result.dueAt, acknowledgedAt: result.acknowledgedAt, informedAt: result.informedAt, readBackConfirmed: result.readBackConfirmed, closedAt: result.closedAt }, events: result.events };
+                    const blob = new Blob([JSON.stringify(pack, null, 2)], { type: 'application/json' });
+                    const href = URL.createObjectURL(blob);
+                    const anchor = document.createElement('a');
+                    anchor.href = href;
+                    anchor.download = `${proofData.receiptCode}-survey-pack.json`;
+                    anchor.click();
+                    URL.revokeObjectURL(href);
+                  }}>
+                    Download survey pack
+                  </Button>
+                  <p className="mt-2 text-[11px] leading-4 text-ink-soft">An evidence map for the hospital audit file, not a certification or a clinical judgement.</p>
+                </>
+              ) : proof.isError ? <p className="mt-2 text-[12px] text-danger">The proof could not be checked.</p> : null}
+            </div>
+
 
             <p className="flex items-start gap-2 text-[12px] leading-5 text-ink-soft"><Clock3 size={14} className="mt-0.5 shrink-0" aria-hidden /> This is an administrative receipt. It does not diagnose, risk-score or recommend treatment. The clinician remains responsible for the clinical decision.</p>
           </div>

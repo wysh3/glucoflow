@@ -31,6 +31,7 @@ import { PatientRecordsPage } from './features/patient/records/page';
 import { PatientAddReportPage } from './features/patient/add-report/page';
 import { PatientVisitNotesPage } from './features/patient/visit-notes/page';
 import { NotFoundPage } from './features/not-found/page';
+import { VerifyReceiptPage } from './features/verify/page';
 
 /**
  * Routes for both roles on web and Android. The active role comes from the
@@ -43,6 +44,7 @@ export function AppRoutes(): React.ReactElement {
         <Route path="/" element={<LandingPage />} />
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/demo/delta" element={<DeltaDemoPage />} />
+        <Route path="/verify/:code?" element={<VerifyReceiptPage />} />
         <Route element={<ProtectedShell />}>
           <Route path="/account" element={<AccountPage />} />
           <Route path="/clinic/results" element={<ClinicGate><ResultsPage /></ClinicGate>} />

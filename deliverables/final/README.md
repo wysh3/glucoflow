@@ -67,12 +67,14 @@ Do not point `db:reset` or `db:migrate` at production.
 - `app/supabase/migrations/021_result_ledger.sql`: tables, RLS, state-machine functions and grants.
 - `app/supabase/migrations/022_result_event_guard.sql`: revokes direct execution of the internal event writer.
 - `app/supabase/migrations/024_result_read_back.sql` and `025_result_critical_read_back.sql`: critical-result read-back fields and enforcement.
+- `app/supabase/migrations/026_result_receipt_proof.sql` to `030_result_event_delete_guard.sql`: receipt codes, hash-chained events, public verification and the append-only guard.
+- `app/apps/client/src/features/verify/page.tsx`: the public receipt verifier.
 - `app/apps/api/src/routes/results.ts`: list, stats, export, detail, match, assign, acknowledge, patient-informed, escalate and close.
 - `app/apps/client/src/features/clinic/results/page.tsx`: the inbox and receipt drawer.
 - `app/packages/data/src/results.ts`: reads and command wrappers.
 - `app/packages/contracts/src/results.ts`: DTOs, labels and input schemas.
 
-API revision: `glucoflow-service--0000010`, image `20261104-readback`.
+API revision: `glucoflow-service--0000011`, image `20261104-moat`.
 
 ## Regulatory position
 
@@ -100,13 +102,17 @@ Measured on 4 November 2026:
 - Typecheck passed.
 - Unit tests: 184 of 184.
 - Production client build passed.
-- New result-ledger browser tests: 3 of 3 passed on desktop and mobile.
-- Updated landing browser tests: 2 of 2 passed.
+- Result-ledger and landing browser tests: 12 of 12 passed across desktop and mobile.
+- New result-ledger tests cover the verified chain and the public verifier.
 - Full pivot browser suite: 79 of 82 passed in one parallel run. The three failures were the live-guide wording check (desktop and mobile) and one upload-completion wait. All three passed when rerun alone on the same build. The live guide is a model response and this check is not deterministic under parallel load; it is not counted as a green gate.
 - Lintapple: 0 findings on the landing, sign-in and result ledger at 1440 and 390 widths, including the receipt drawer.
 - Hosted result ledger: critical alert, stats, list, receipt drawer and CSV export worked with no console errors.
-- The hosted API exposes the result routes on revision `0000010`.
+- The hosted API exposes the result routes and public receipt verifier on revision `0000011`.
 - The critical read-back is enforced on the server. A critical result cannot be marked patient-informed without it.
+- The public verifier returned `Receipt chain intact` for a seeded receipt with no patient data.
+- The live demo recording is 47 seconds, 1920 by 1080, with captions and no clinical interpretation.
+- The receipt proof is SHA-256 hash-chained. The public code returns only the event count, chain head and validity.
+- The current brief is exactly two A4 pages and the current deck is exactly eight slides.
 
 ## The validation still owed
 
@@ -124,7 +130,16 @@ The test design and kill criteria are in [the decision memo](../../docs/research
 
 | File | Status |
 |---|---|
-| [brag/glucoflow-brag.mp4](brag/glucoflow-brag.mp4) | Current. 20-second result-ledger launch cut. |
+| [brag/glucoflow-brag.mp4](brag/glucoflow-brag.mp4) | Current. 20-second result-ledger launch cut, including the public verifier. |
+| [Result_Ledger_Demo.mp4](Result_Ledger_Demo.mp4) | 47-second captioned screen demo of the live receipt and proof. |
+| [Result_Ledger_Brief.pdf](Result_Ledger_Brief.pdf) | Current. Two A4 pages, result-ledger thesis. |
+| [Result_Ledger_Brief.docx](Result_Ledger_Brief.docx) | Editable source for the brief. |
+| [Result_Ledger_Deck.pdf](Result_Ledger_Deck.pdf) | Current. Eight 16:9 slides. |
+| [Result_Ledger_Deck.pptx](Result_Ledger_Deck.pptx) | Editable source for the deck. |
+| [Result_Ledger_Submission_Answers.md](Result_Ledger_Submission_Answers.md) | Current written submission answers. |
+| [Result_Ledger_Demo_Script.md](Result_Ledger_Demo_Script.md) | Three-minute live demo script. |
+| [Result_Ledger_Judge_QA.md](Result_Ledger_Judge_QA.md) | Judge Q&A and competitor replies. |
+| [Result_Ledger_Submission_Checklist.md](Result_Ledger_Submission_Checklist.md) | Deadline and demo checklist. |
 | [screens/](screens) | Product screens. Replace the pre-pivot shots with the result-ledger captures before submission. |
 | [Delta_Solution_Brief.pdf](Delta_Solution_Brief.pdf) | Historical pre-pivot brief. Do not submit as the result thesis. |
 | [Delta_Final_Presentation.pdf](Delta_Final_Presentation.pdf) | Historical pre-pivot deck. Do not submit as the result thesis. |

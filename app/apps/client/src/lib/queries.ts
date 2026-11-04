@@ -22,6 +22,7 @@ import type {
   ResultDto,
   ResultFilter,
   ResultListDto,
+  ResultProofDto,
   ResultStatsDto,
   TimelineResult,
 } from '@glucoflow/contracts';
@@ -266,6 +267,17 @@ export function useResultStats(): UseQueryResult<ResultStatsDto> {
   });
 }
 
+export function useResultProof(id: string | undefined): UseQueryResult<ResultProofDto> {
+  const api = useApi();
+  const actor = useActorKey();
+  return useQuery({
+    queryKey: ['result-proof', actor, id],
+    enabled: Boolean(id),
+    queryFn: () => api.request<ResultProofDto>(`/api/v1/results/${id}/proof`),
+    staleTime: 5000,
+  });
+}
+
 export function useResultActions() {
   const api = useApi();
   const client = useQueryClient();
@@ -273,6 +285,7 @@ export function useResultActions() {
     await Promise.all([
       client.invalidateQueries({ queryKey: ['results'] }),
       client.invalidateQueries({ queryKey: ['result-stats'] }),
+      client.invalidateQueries({ queryKey: ['result-proof'] }),
     ]);
   };
   const command = (suffix: string) =>
