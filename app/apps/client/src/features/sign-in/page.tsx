@@ -5,6 +5,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Card, CardBody, Input, Label, ScreenTitle } from '@glucoflow/ui';
 import { useSession } from '../../auth/session';
 import { SystemGlyph } from '../../components/system-glyph';
+import { clinicHome } from '../../lib/clinic-home';
 
 /**
  * Sign-in. Invalid credentials are explained without revealing whether an account
@@ -25,7 +26,7 @@ export function SignInPage(): React.ReactElement {
     if (target && !demoEnabled) return <Navigate to={target} replace />;
     const clinic = me.contexts.some((context) => context.kind === 'clinic');
     const patient = me.contexts.some((context) => context.kind === 'patient');
-    return <Navigate to={clinic && !patient ? '/clinic/results' : patient ? (demoEnabled ? '/patient/master' : '/patient/records') : '/account'} replace />;
+    return <Navigate to={clinic && !patient ? clinicHome(me.contexts) : patient ? (demoEnabled ? '/patient/master' : '/patient/records') : '/account'} replace />;
   }
 
   const submit = async (event: React.FormEvent): Promise<void> => {
@@ -44,7 +45,7 @@ export function SignInPage(): React.ReactElement {
 
   const enterDemo=async(account:DemoAccount):Promise<void>=>{
     setBusy(true);setError(null);
-    try{await signIn(account.email,account.password);navigate(account.key.includes('patient')?'/patient/master':'/clinic/results',{replace:true});}
+    try{await signIn(account.email,account.password);navigate(account.key.includes('patient')?'/patient/master':'/clinic/line',{replace:true});}
     catch(caught){setError(caught instanceof Error?caught.message:'Could not open this demo role.');}
     finally{setBusy(false);}
   };

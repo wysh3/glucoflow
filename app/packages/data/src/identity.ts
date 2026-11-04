@@ -36,8 +36,11 @@ export async function loadActorContexts(client: DbClient, userId: string): Promi
     clinic_id: string;
     reviewer: boolean;
     clinician: boolean;
+    desk: boolean;
+    nurse: boolean;
+    quality: boolean;
   }>(
-    `select clinic_id, reviewer, clinician
+    `select clinic_id, reviewer, clinician, desk, nurse, quality
        from sutra.memberships
       where user_id = $1 and active
       order by clinic_id`,
@@ -60,9 +63,12 @@ export async function loadActorContexts(client: DbClient, userId: string): Promi
       clinicName: (await clinicName(client, row.clinic_id)) ?? undefined,
       reviewer: row.reviewer,
       clinician: row.clinician,
+      desk: row.desk,
+      nurse: row.nurse,
+      quality: row.quality,
     });
-    if (!row.reviewer && !row.clinician) {
-      // A membership without a clinical capability grants no record access.
+    if (!row.reviewer && !row.clinician && !row.desk && !row.nurse && !row.quality) {
+      // A membership without any clinic role grants no record access.
       contexts.pop();
     }
   }
@@ -76,9 +82,17 @@ export function capabilitiesFromContexts(contexts: Context[]): Capabilities {
   const clinicContexts = contexts.filter((context) => context.kind === 'clinic');
   const patientContexts = contexts.filter((context) => context.kind === 'patient');
   const canReview = clinicContexts.some((context) => context.reviewer);
+  const canClinician = clinicContexts.some((context) => context.clinician);
+  const canDesk = clinicContexts.some((context) => context.desk);
+  const canNurse = clinicContexts.some((context) => context.nurse);
+  const canQuality = clinicContexts.some((context) => context.quality);
   const canViewApproved = clinicContexts.length > 0 || patientContexts.length > 0;
   return {
     canReview,
+    canClinician,
+    canDesk,
+    canNurse,
+    canQuality,
     canViewApproved,
     canUploadForPatient: canViewApproved,
     canExport: canViewApproved,

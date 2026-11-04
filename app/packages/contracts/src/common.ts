@@ -50,6 +50,9 @@ export const clinicContextSchema = z.object({
   clinicName: z.string().optional(),
   reviewer: z.boolean(),
   clinician: z.boolean(),
+  desk: z.boolean().default(false),
+  nurse: z.boolean().default(false),
+  quality: z.boolean().default(false),
 });
 export const contextSchema = z.discriminatedUnion('kind', [
   patientContextSchema,

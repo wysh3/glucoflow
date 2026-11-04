@@ -14,13 +14,10 @@ import { Button, Spinner } from '@glucoflow/ui';
 import { useSession } from '../../auth/session';
 import { SystemGlyph } from '../../components/system-glyph';
 import { demoAccounts, demoEnabled } from '../../auth/demo';
+import { roleHome } from '../../lib/clinic-home';
 
-function rolePath(contexts: { kind: string }[]): string {
-  const clinic = contexts.some((context) => context.kind === 'clinic');
-  const patient = contexts.some((context) => context.kind === 'patient');
-  if (clinic && !patient) return '/clinic/results';
-  if (patient && !clinic) return '/patient/records';
-  return '/account';
+function rolePath(contexts: { kind: string; clinician?: boolean; desk?: boolean; nurse?: boolean; quality?: boolean }[]): string {
+  return roleHome(contexts);
 }
 
 const SECTIONS = [
@@ -28,41 +25,41 @@ const SECTIONS = [
     id: 'unit',
     index: '01',
     kicker: 'The gap',
-    title: 'The result nobody owns.',
-    body: 'A report arrives on WhatsApp, as a PDF, or as a paper slip. The lab has finished. The clinic has not. No one has assigned a clinician, set a clock, or proved the patient was told.',
+    title: 'The last mile of a diabetes result.',
+    body: 'The lab calls the doctor. The lab does not call the patient. A potassium of 5.9 after a new ACE inhibitor, an eGFR that falls, an HbA1c of 9.2: the report arrives, a clinician echoes the value, and then the trail stops. Nobody can prove the patient was reached, or that the clinic tried.',
     icon: FileText,
-    points: ['Cross-lab intake', 'Namesake and duplicate hold', 'One owner per report'],
-    action: { label: 'Open the synthetic ledger', to: '/sign-in' },
+    points: ['Patient-side closure', 'Documented attempts', 'One receipt per result'],
+    action: { label: 'Open the synthetic closure ledger', to: '/sign-in' },
   },
   {
-    id: 'source',
+    id: 'receipt',
     index: '02',
     kicker: 'The receipt',
-    title: 'One owner. One clock. One proof.',
-    body: 'Every report gets a named clinician and a due time. The receipt records acknowledgement, the patient conversation and the close. If the clock expires, the result escalates to a human, not to another dashboard.',
+    title: 'A closure, not another inbox.',
+    body: 'The clinician echoes the printed value. The lab notifier and the read-back are recorded. The front desk records who was reached, the language and the next administrative step. If the patient cannot be reached, the attempts are visible and the receipt closes as unreachable, never as a false informed.',
     icon: ShieldCheck,
-    points: ['Named clinician', 'Escalation clock', 'Patient communication receipt'],
-    action: { label: 'See a receipt in the demo', to: '/sign-in' },
+    points: ['Value echo', 'Unreachable is a disposition', 'Next step tracked to completion'],
+    action: { label: 'Open a live receipt', to: '/sign-in' },
   },
   {
     id: 'ai',
     index: '03',
-    kicker: 'The AI',
-    title: 'AI reads the envelope, not the diagnosis.',
-    body: 'Extraction reads the lab, patient identifiers and the lab flag from messy incoming documents. Matching links the report to the right record. The clinical value and the clinical decision remain human.',
+    kicker: 'The matching',
+    title: 'The hard part is identity, not another summary.',
+    body: 'Reports arrive with name variants, transliterations, shared family phones and incomplete identifiers. The matching layer scores the printed name against the clinic ID and shows its reasons. Ambiguity is held for a human; the product never guesses a patient. The lab flag remains the only source of criticality.',
     icon: Sparkles,
-    points: ['Document extraction', 'Identity matching', 'No interpretation'],
-    action: { label: 'Open the working ledger', to: '/sign-in' },
+    points: ['Name and clinic ID', 'Candidates with evidence', 'Human match decision'],
+    action: { label: 'See the namesake hold', to: '/sign-in' },
   },
   {
-    id: 'product',
+    id: 'diabetes',
     index: '04',
-    kicker: 'The edge',
-    title: 'Built for the accreditation question.',
-    body: 'NABL and NABH already ask who was told, when, and with what read-back. Most clinics keep that register on paper. The ledger turns the existing compliance obligation into the daily workflow.',
+    kicker: 'The diabetes loop',
+    title: 'Built around the diabetes result that changes the next step.',
+    body: 'The first protocol is a clinician-set check after starting or titrating an ACE inhibitor or ARB: potassium and eGFR at two to four weeks. The same receipt covers an annual uACR/eGFR check, a critical potassium, or an abnormal HbA1c. The protocol sets the due window; the lab flag sets criticality; the clinician sets the action.',
     icon: Stethoscope,
-    points: ['Audit export', 'Private and public settings', 'Paper-first intake'],
-    action: { label: 'Enter the clinic workspace', to: '/sign-in' },
+    points: ['ACEi/ARB, SGLT2i, MRA', 'Clinician-set due window', 'No clinical interpretation'],
+    action: { label: 'Open the diabetes ledger', to: '/sign-in' },
   },
 ] as const;
 
@@ -123,7 +120,7 @@ export function LandingPage(): React.ReactElement {
     setError(null);
     try {
       await signIn(account.email, account.password);
-      navigate('/clinic/results', { replace: true });
+      navigate('/clinic/line', { replace: true });
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : 'Could not open the demo workspace.');
     } finally {
@@ -145,7 +142,7 @@ export function LandingPage(): React.ReactElement {
                 to="/sign-in"
                 className="hidden min-h-9 items-center rounded-lg px-3 text-sm text-[#c8e3d8] hover:bg-white/5 sm:inline-flex"
               >
-                Try the ledger
+                Try the closure
               </Link>
               <Link
                 to="/sign-in"
@@ -158,9 +155,9 @@ export function LandingPage(): React.ReactElement {
 
           <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 border-y border-white/10 py-2.5 text-[11px] uppercase tracking-[0.14em] text-[#9dc4b6]">
             <SystemGlyph className="mr-1 text-[#a7d8c8]" />
-            <span>Result ledger</span>
+            <span>Diabetes result closure</span>
             <span aria-hidden>·</span>
-            <span>Indian hospitals and clinics</span>
+            <span>Diabetes clinics and hospitals</span>
             <span aria-hidden>·</span>
             <span>Synthetic demonstration</span>
           </div>
@@ -168,20 +165,20 @@ export function LandingPage(): React.ReactElement {
           <div className="mt-12 grid items-center gap-12 lg:mt-16 lg:grid-cols-[1.05fr_0.95fr]">
             <div>
               <p className="reveal-up reveal-up-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#a7d8c8]">
-                A result accountability ledger for Indian hospitals and clinics
+                A patient-closure ledger for diabetes care
               </p>
               <h1 className="reveal-up reveal-up-2 mt-4 max-w-[13ch] text-[48px] font-semibold leading-[1.03] tracking-[-0.03em] sm:text-[64px]">
-                The result nobody owns.
+                The lab calls the doctor. Nobody calls the patient.
               </h1>
               <p className="reveal-up reveal-up-3 mt-5 max-w-[52ch] text-[16px] leading-7 text-[#c8e3d8] sm:text-[18px]">
-                Every incoming report gets a named clinician, a clock and a receipt. No interpretation. No orphaned result.
+                Every abnormal or critical diabetes result gets a value echo, a documented patient contact, a next step, and a receipt that shows whether the last mile closed.
               </p>
               <div className="mt-8 flex flex-col gap-2.5 sm:flex-row">
                 <Link
                   to="/sign-in"
                   className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#a7d8c8] px-5 text-sm font-semibold text-[#0f2e2a] transition hover:bg-[#bde7d8]"
                 >
-                  Open the result ledger <ArrowRight size={16} aria-hidden />
+                  Open the closure ledger <ArrowRight size={16} aria-hidden />
                 </Link>
                 {demoEnabled ? (
                   <Button
@@ -231,12 +228,12 @@ export function LandingPage(): React.ReactElement {
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#a7d8c8]">
-                      Result ledger · synthetic
+                      Closure ledger · synthetic
                     </p>
                     <p className="mt-1 text-[20px] font-semibold tracking-tight text-white">
                       Asha Rao, 58
                     </p>
-                    <p className="text-[11px] text-[#9dc4b6]">P0482 · diabetes follow-up · <span className="hidden sm:inline">every report has a receipt</span><span className="sm:hidden">tap a receipt to inspect</span></p>
+                    <p className="text-[11px] text-[#9dc4b6]">P0482 · type 2 diabetes · ACE inhibitor started 2 weeks ago · <span className="hidden sm:inline">every report has a receipt</span><span className="sm:hidden">tap a receipt to inspect</span></p>
                   </div>
                   <span className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-[#a7d8c8]/20 bg-[#a7d8c8]/10 px-2.5 py-1 text-[11px] font-semibold text-[#a7d8c8]">
                     <Timer size={12} aria-hidden /> Demo case
@@ -244,10 +241,10 @@ export function LandingPage(): React.ReactElement {
                 </div>
                 <div className="mt-4 grid grid-cols-4 gap-1.5">
                   {[
-                    ['9', 'open'],
-                    ['3', 'unowned'],
-                    ['1', 'critical'],
-                    ['2h', 'median ack'],
+                    ['42%', 'closed 7d'],
+                    ['3', 'in last mile'],
+                    ['1', 'unreachable'],
+                    ['23.9h', 'median contact'],
                   ].map(([value, label]) => (
                     <div key={label} className="rounded-lg border border-white/10 bg-white/[0.03] px-2 py-2">
                       <p className="text-lg font-semibold leading-none text-white">{value}</p>
@@ -257,10 +254,10 @@ export function LandingPage(): React.ReactElement {
                 </div>
                 <div className="mt-4 space-y-2">
                   {[
-                    { title: 'Sodium 128 mmol/L', detail: 'No owner · 3h overdue', meta: 'Critical' },
-                    { title: 'HbA1c 9.1 %', detail: 'Acknowledged · Dr Meera', meta: 'Due in 19h' },
-                    { title: 'TSH 7.8 mIU/L', detail: 'Patient informed · call', meta: 'Receipt open' },
-                    { title: 'eGFR 52', detail: 'Ready to assign', meta: 'No clock' },
+                    { title: 'Potassium 5.9 mmol/L', detail: 'Monitoring · ACEi start · value echo due', meta: 'Critical' },
+                    { title: 'Sodium 128 mmol/L', detail: 'Unmatched · namesake hold', meta: 'No owner' },
+                    { title: 'HbA1c 9.2 %', detail: 'Patient contacted · repeat test', meta: 'Next step' },
+                    { title: 'Potassium 6.2 mmol/L', detail: '2 attempts · closed unreachable', meta: 'Documented' },
                   ].map((row) => (
                     <Link
                       to="/sign-in"
@@ -316,7 +313,7 @@ export function LandingPage(): React.ReactElement {
               <div className="mt-8 border-t border-line pt-4">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ink-soft">Synthetic only</p>
                 <p className="mt-2 text-[12px] leading-5 text-ink-soft">
-                  No real patient data. No interpretation. Human receipt.
+                  No real patient data. No clinical interpretation. Human receipt.
                 </p>
               </div>
             </div>
@@ -325,8 +322,8 @@ export function LandingPage(): React.ReactElement {
           <div className="min-w-0">
             <div className="rule-reveal flex flex-wrap items-end justify-between gap-3 border-b border-line pb-4">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">The ledger case</p>
-                <p className="mt-1 text-[20px] font-semibold tracking-tight text-ink">Why this ledger, in four sections.</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">The diabetes case</p>
+                <p className="mt-1 text-[20px] font-semibold tracking-tight text-ink">Why this closure, in four sections.</p>
               </div>
               <p className="text-[11px] uppercase tracking-[0.14em] text-ink-soft">04 sections</p>
             </div>
@@ -334,9 +331,9 @@ export function LandingPage(): React.ReactElement {
             <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
               {[
                 ['12', 'reports'],
-                ['3', 'unowned'],
-                ['1', 'critical'],
-                ['2h', 'median ack'],
+                ['3', 'in last mile'],
+                ['1', 'unreachable'],
+                ['23.9h', 'median contact'],
               ].map(([value, label]) => (
                 <div key={label} className="bg-surface px-4 py-3">
                   <p className="text-[20px] font-semibold leading-none text-ink">{value}</p>
@@ -377,18 +374,18 @@ export function LandingPage(): React.ReactElement {
                             </li>
                           ))}
                         </ul>
-                        {section.id === 'source' ? (
+                        {section.id === 'receipt' ? (
                           <div className="mt-4 max-w-[560px] rounded-xl border border-line bg-surface px-4 py-3">
-                            <p className="font-medium text-[11px] text-ink-soft">Metropolis report.pdf · page 1 · received 3h ago</p>
+                            <p className="font-medium text-[11px] text-ink-soft">SRL report · page 1 · released 35m ago</p>
                             <p className="mt-1 font-medium text-[12px] leading-6 text-ink">
-                              Sodium 128 mmol/L <span className="text-ink-soft">| lab flag critical</span>
+                              Potassium 5.9 mmol/L <span className="text-ink-soft">| lab flag critical</span>
                             </p>
                           </div>
                         ) : null}
                         {section.id === 'ai' ? (
                           <div className="mt-4 flex flex-wrap items-center gap-2">
-                            <span className="inline-flex min-h-7 items-center rounded-full border border-primary/20 bg-primary/5 px-2.5 text-[11px] font-semibold text-primary">extraction + matching</span>
-                            <span className="inline-flex min-h-7 items-center rounded-full border border-line px-2.5 text-[11px] text-ink-soft">human receipt</span>
+                            <span className="inline-flex min-h-7 items-center rounded-full border border-primary/20 bg-primary/5 px-2.5 text-[11px] font-semibold text-primary">identity matching</span>
+                            <span className="inline-flex min-h-7 items-center rounded-full border border-line px-2.5 text-[11px] text-ink-soft">human hold</span>
                             <span className="inline-flex min-h-7 items-center rounded-full border border-line px-2.5 text-[11px] text-ink-soft">no interpretation</span>
                           </div>
                         ) : null}
@@ -408,9 +405,9 @@ export function LandingPage(): React.ReactElement {
 
             <div className="mt-10 flex flex-wrap items-center justify-between gap-4 rounded-[18px] border border-line bg-surface px-5 py-4">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">Open the working ledger</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">Open the working closure ledger</p>
                 <p className="mt-1 text-[14px] leading-6 text-ink-soft">
-                  One-click clinic workspace. Synthetic reports only.
+                  One-click diabetes workspace. Synthetic reports only.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -418,7 +415,7 @@ export function LandingPage(): React.ReactElement {
                   to="/sign-in"
                   className="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-primary px-4 text-sm font-semibold text-white hover:bg-primary/90"
                 >
-                  Open ledger <ArrowRight size={14} aria-hidden />
+                  Open closure ledger <ArrowRight size={14} aria-hidden />
                 </Link>
                 {demoEnabled ? (
                   <Button variant="secondary" onClick={() => void enterDoctor()} disabled={busy}>
@@ -443,7 +440,7 @@ export function LandingPage(): React.ReactElement {
               <span className="text-lg font-semibold tracking-tight">glucoflow</span>
             </div>
             <p className="mt-3 max-w-[40ch] text-[12px] leading-5 text-ink-soft">
-              A result accountability ledger for Indian hospitals and clinics. Synthetic demonstration only.
+              A patient-closure ledger for diabetes care. Synthetic demonstration only.
             </p>
           </div>
           <div>

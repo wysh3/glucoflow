@@ -206,3 +206,11 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 .reveal-up-3 { animation-delay: .24s; }
 @keyframes reveal-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .reveal-up { animation: none; } }
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .print-area { border: 0 !important; box-shadow: none !important; }
+  .print-area table { font-size: 10px; }
+  @page { size: A4; margin: 10mm; }
+}

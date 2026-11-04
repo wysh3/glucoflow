@@ -8,6 +8,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests/e2e',
+  globalSetup: './tests/e2e/global-setup.ts',
   timeout: 120_000,
   // The dev server transforms route modules on first request, so the first visit to
   // a screen can take longer than a production build.

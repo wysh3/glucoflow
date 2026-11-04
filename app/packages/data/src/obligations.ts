@@ -61,6 +61,7 @@ function mapRow(row: Record<string, unknown>): ObligationRow {
     terminal: (row.terminal_state as TerminalState | null) ?? null,
     ownerId: text(row.owner_id),
     ownerName: text(row.owner_name),
+    labReleasedAt: iso(row.lab_released_at),
     receivedAt: iso(row.report_received_at) ?? '',
     dueAt: iso(row.due_at),
     breachAt: iso(row.breach_at),

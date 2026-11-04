@@ -99,6 +99,7 @@ export type ObligationRow = {
   terminal: TerminalState | null;
   ownerId: string | null;
   ownerName: string | null;
+  labReleasedAt: string | null;
   receivedAt: string;
   dueAt: string | null;
   breachAt: string | null;

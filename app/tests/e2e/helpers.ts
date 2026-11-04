@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, type Page } from '@playwright/test';
@@ -17,6 +18,14 @@ export type DemoCredentials = {
 };
 
 let cached: DemoCredentials | null = null;
+
+export function seedDemo(): void {
+  execSync('pnpm seed:demo -- --clinic demo --confirm-demo', {
+    cwd: process.cwd(),
+    stdio: 'pipe',
+    env: process.env,
+  });
+}
 
 export function demoCredentials(): DemoCredentials {
   if (cached) return cached;

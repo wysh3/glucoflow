@@ -76,9 +76,13 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
   const activePatient = usePatient(activePatientId);
   const patientSections = [{path:'delta',label:'Delta',icon:Timer,index:'01'},{path:'bodymap',label:'Body map',icon:ScanLine,index:'02'},{path:'overview',label:'Visit overview',icon:NotebookPen,index:'03'},{path:'progression',label:'Progression',icon:Activity,index:'04'},{path:'documents',label:'Documents',icon:FileTextIcon,index:'05'},{path:'master',label:'Home reports',icon:HeartPulseIcon,index:'06'},{path:'history',label:'History',icon:History,index:'07'}];
   const clinicLinks = [
-    { to: '/clinic/results', label: 'Results', icon: Inbox, index: '01' },
-    { to: '/clinic/patients', label: 'Patients', icon: UsersIcon, index: '02' },
-    ...(me?.capabilities.canReview ? [{ to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon, index: '03' }] : []),
+    ...(me?.capabilities.canClinician ? [{ to: '/clinic/line', label: 'Line', icon: Inbox, index: '01' }] : []),
+    ...(me?.capabilities.canNurse ? [{ to: '/clinic/calls', label: 'Calls', icon: CircleCheckIcon, index: '02' }] : []),
+    ...(me?.capabilities.canDesk ? [{ to: '/clinic/intake', label: 'Intake', icon: UsersIcon, index: '03' }] : []),
+    ...(me?.capabilities.canQuality ? [{ to: '/clinic/register', label: 'Register', icon: FileTextIcon, index: '04' }] : []),
+    { to: '/clinic/results', label: 'Ledger', icon: Inbox, index: '05' },
+    { to: '/clinic/patients', label: 'Patients', icon: UsersIcon, index: '06' },
+    ...(me?.capabilities.canReview ? [{ to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon, index: '07' }] : []),
   ];
   const patientLinks = [
     { to: '/patient/master', label: 'Home', icon: HeartPulseIcon, index: '01' },
@@ -91,7 +95,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
   return (
     <div className="min-h-screen bg-canvas">
       <div className="mx-auto flex w-full max-w-[1440px] flex-col lg:flex-row">
-        <aside className="sticky top-0 hidden h-screen w-[240px] shrink-0 overflow-y-auto border-r border-line bg-surface/90 px-4 pb-6 pt-[calc(24px+env(safe-area-inset-top))] lg:block">
+        <aside className="no-print sticky top-0 hidden h-screen w-[240px] shrink-0 overflow-y-auto border-r border-line bg-surface/90 px-4 pb-6 pt-[calc(24px+env(safe-area-inset-top))] lg:block">
           <div className="mb-6 px-2">
             <HeartPulseIcon size={28} className="mb-3 text-primary" aria-hidden />
             <p className="text-[20px] font-semibold tracking-tight text-primary">glucoflow</p>
@@ -209,13 +213,29 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
   );
 }
 
-export function describeRoles(me: { contexts: { kind: string; reviewer?: boolean; clinician?: boolean }[] } | null): string {
+export function describeRoles(
+  me: {
+    contexts: {
+      kind: string;
+      reviewer?: boolean;
+      clinician?: boolean;
+      desk?: boolean;
+      nurse?: boolean;
+      quality?: boolean;
+    }[];
+  } | null,
+): string {
   if (!me) return '';
   const clinic = me.contexts.find((context) => context.kind === 'clinic');
   const patient = me.contexts.find((context) => context.kind === 'patient');
-  if (clinic && clinic.reviewer && clinic.clinician) return 'Reviewer and clinician';
-  if (clinic && clinic.reviewer) return 'Reviewer';
-  if (clinic && clinic.clinician) return 'Clinician';
+  const roles = [
+    clinic?.reviewer ? 'Reviewer' : null,
+    clinic?.clinician ? 'Clinician' : null,
+    clinic?.desk ? 'Desk' : null,
+    clinic?.nurse ? 'Nurse' : null,
+    clinic?.quality ? 'Quality' : null,
+  ].filter((role): role is string => role !== null);
+  if (roles.length > 0) return roles.join(', ');
   if (patient) return 'Patient';
   return 'No active role';
 }

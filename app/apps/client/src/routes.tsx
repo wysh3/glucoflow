@@ -1,4 +1,5 @@
 import {GlucoGuide} from './features/guide/gluco-guide';
+import { roleHome } from './lib/clinic-home';
 import {VisitOverviewPage} from './features/clinic/overview/page';
 import {DeltaPage} from './features/delta/page';
 import {DeltaDemoPage} from './features/delta/demo-page';
@@ -21,6 +22,9 @@ import { SignInPage } from './features/sign-in/page';
 import { AccountPage } from './features/account/page';
 import { ClinicPatientsPage } from './features/clinic/patients/page';
 import { ResultsPage } from './features/clinic/results/page';
+import { ObligationWorkspace } from './features/clinic/obligations/page';
+import { ClosureCertificatePage } from './features/clinic/results/certificate';
+import { PatientReceiptSlipPage } from './features/clinic/results/patient-slip';
 import { ClinicQueuePage } from './features/clinic/queue/page';
 import { ClinicPatientLayout } from './features/clinic/patient-layout';
 import { ProgressionPage } from './features/clinic/progression/page';
@@ -45,13 +49,19 @@ export function AppRoutes(): React.ReactElement {
         <Route path="/sign-in" element={<SignInPage />} />
         <Route path="/demo/delta" element={<DeltaDemoPage />} />
         <Route path="/verify/:code?" element={<VerifyReceiptPage />} />
+        <Route path="/clinic/results/:resultId/survey-pack" element={<ClinicGate><ClosureCertificatePage /></ClinicGate>} />
+        <Route path="/clinic/results/:resultId/patient-slip" element={<ClinicGate><PatientReceiptSlipPage /></ClinicGate>} />
         <Route element={<ProtectedShell />}>
           <Route path="/account" element={<AccountPage />} />
           <Route path="/clinic/results" element={<ClinicGate><ResultsPage /></ClinicGate>} />
+          <Route path="/clinic/line" element={<ClinicGate><ObligationWorkspace view="line" /></ClinicGate>} />
+          <Route path="/clinic/calls" element={<ClinicGate><ObligationWorkspace view="calls" /></ClinicGate>} />
+          <Route path="/clinic/intake" element={<ClinicGate><ObligationWorkspace view="intake" /></ClinicGate>} />
+          <Route path="/clinic/register" element={<ClinicGate><ObligationWorkspace view="register" /></ClinicGate>} />
           <Route path="/clinic/patients" element={<ClinicGate><ClinicPatientsPage /></ClinicGate>} />
           <Route path="/clinic/queue" element={<ClinicGate><ClinicQueuePage /></ClinicGate>} />
           <Route path="/clinic/patients/:patientId" element={<ClinicGate><ClinicPatientLayout /></ClinicGate>}>
-            <Route index element={<Navigate to="delta" replace />} />
+            <Route index element={<Navigate to="overview" replace />} />
             <Route path="delta" element={<DeltaPage />} />
             <Route path="bodymap" element={<BodyMapPage />} />
             <Route path="overview" element={<VisitOverviewPage />} />
@@ -73,16 +83,20 @@ export function AppRoutes(): React.ReactElement {
   );
 }
 
-function roleFallback(contexts: { kind: string }[]): string {
-  if (contexts.some((context) => context.kind === 'clinic')) return '/clinic/results';
-  if (contexts.some((context) => context.kind === 'patient')) return '/patient/records';
-  return '/account';
+function roleFallback(contexts: { kind: string; clinician?: boolean; desk?: boolean; nurse?: boolean; quality?: boolean }[]): string {
+  return roleHome(contexts);
 }
 
 function ClinicGate({ children }: { children: React.ReactNode }): React.ReactElement {
-  const { me } = useSession();
-  if (!me?.contexts.some((context) => context.kind === 'clinic')) {
-    return <Navigate to={roleFallback(me?.contexts ?? [])} replace />;
+  const { status, me } = useSession();
+  if (status === 'loading') {
+    return <div className="flex min-h-screen items-center justify-center bg-canvas"><Spinner label="Loading your session" /></div>;
+  }
+  if (status !== 'signed-in' || !me) {
+    return <Navigate to="/sign-in" replace />;
+  }
+  if (!me.contexts.some((context) => context.kind === 'clinic')) {
+    return <Navigate to={roleFallback(me.contexts)} replace />;
   }
   return <>{children}</>;
 }
@@ -127,10 +141,6 @@ function ProtectedShell(): React.ReactElement {
 }
 
 /** Exported for tests: the role landing decision without the router. */
-export function landingPathFor(contexts: { kind: string }[]): string {
-  const clinic = contexts.some((context) => context.kind === 'clinic');
-  const patient = contexts.some((context) => context.kind === 'patient');
-  if (clinic && !patient) return '/clinic/results';
-  if (patient && !clinic) return '/patient/records';
-  return '/account';
+export function landingPathFor(contexts: { kind: string; clinician?: boolean; desk?: boolean; nurse?: boolean; quality?: boolean }[]): string {
+  return roleHome(contexts);
 }

@@ -141,15 +141,33 @@ async function ensureMembership(
   client: DbClient,
   clinicId: string,
   userId: string,
-  roles: { reviewer: boolean; clinician: boolean; administrator?: boolean },
+  roles: {
+    reviewer: boolean;
+    clinician: boolean;
+    administrator?: boolean;
+    desk?: boolean;
+    nurse?: boolean;
+    quality?: boolean;
+  },
 ): Promise<void> {
   await client.query(
-    `insert into sutra.memberships (clinic_id, user_id, reviewer, clinician, administrator, active)
-     values ($1, $2, $3, $4, $5, true)
+    `insert into sutra.memberships
+       (clinic_id, user_id, reviewer, clinician, administrator, desk, nurse, quality, active)
+     values ($1, $2, $3, $4, $5, $6, $7, $8, true)
      on conflict (clinic_id, user_id) do update
        set reviewer = excluded.reviewer, clinician = excluded.clinician,
-           administrator = excluded.administrator, active = true`,
-    [clinicId, userId, roles.reviewer, roles.clinician, roles.administrator ?? false],
+           administrator = excluded.administrator, desk = excluded.desk,
+           nurse = excluded.nurse, quality = excluded.quality, active = true`,
+    [
+      clinicId,
+      userId,
+      roles.reviewer,
+      roles.clinician,
+      roles.administrator ?? false,
+      roles.desk ?? false,
+      roles.nurse ?? false,
+      roles.quality ?? false,
+    ],
   );
 }
 
@@ -332,13 +350,21 @@ async function main(): Promise<void> {
     const otherPatientUser = await ownerTx((client) => ensureUser(client, 'other-patient@glucoflow.demo', 'Asha Rao (other clinic, synthetic)', otherPatientPassword));
 
     credentials['patient'] = { email: 'patient@glucoflow.demo', password: patientPassword, role: 'patient (self-linked)' };
-    credentials['clinic'] = { email: 'clinic@glucoflow.demo', password: clinicPassword, role: 'reviewer + clinician' };
+    credentials['clinic'] = { email: 'clinic@glucoflow.demo', password: clinicPassword, role: 'clinic team (all roles)' };
     credentials['reviewer'] = { email: 'reviewer@glucoflow.demo', password: reviewerPassword, role: 'reviewer only' };
     credentials['clinician'] = { email: 'clinician@glucoflow.demo', password: clinicianPassword, role: 'clinician only' };
     credentials['other-clinic'] = { email: 'other-clinic@glucoflow.demo', password: otherClinicPassword, role: 'reviewer in the isolated test clinic' };
     credentials['other-patient'] = { email: 'other-patient@glucoflow.demo', password: otherPatientPassword, role: 'patient in the isolated test clinic' };
 
-    await ownerTx((client) => ensureMembership(client, demoClinicId, clinicUser, { reviewer: true, clinician: true }));
+    await ownerTx((client) =>
+      ensureMembership(client, demoClinicId, clinicUser, {
+        reviewer: true,
+        clinician: true,
+        desk: true,
+        nurse: true,
+        quality: true,
+      }),
+    );
     await ownerTx((client) => ensureMembership(client, demoClinicId, reviewerUser, { reviewer: true, clinician: false }));
     await ownerTx((client) => ensureMembership(client, demoClinicId, clinicianUser, { reviewer: false, clinician: true }));
     await ownerTx((client) => ensureMembership(client, testClinicId, otherClinicUser, { reviewer: true, clinician: true }));

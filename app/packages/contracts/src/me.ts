@@ -8,6 +8,10 @@ import { contextSchema, type ActorContext, type Context } from './common';
 
 export const capabilitiesSchema = z.object({
   canReview: z.boolean(),
+  canClinician: z.boolean(),
+  canDesk: z.boolean().default(false),
+  canNurse: z.boolean().default(false),
+  canQuality: z.boolean().default(false),
   canViewApproved: z.boolean(),
   canUploadForPatient: z.boolean(),
   canExport: z.boolean(),
