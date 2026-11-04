@@ -77,6 +77,6 @@ Physical-device checks and phone OTP remain pending. The bundled signed APK cont
 
 The clinic's primary screen is now `/clinic/results`. It records an incoming report as an administrative receipt with a named owner, a due clock, clinician acknowledgement, patient communication, escalation and an append-only audit trail. The lab's own flag is copied as supplied. The ledger does not diagnose, risk-score or recommend treatment.
 
-The state model is in `supabase/migrations/021_result_ledger.sql`, `022_result_event_guard.sql`, `024_result_read_back.sql` and `025_result_critical_read_back.sql`. The API is in `apps/api/src/routes/results.ts`; the screen is `apps/client/src/features/clinic/results/page.tsx`. Synthetic receipts are loaded by `supabase/seed/results-demo.sql` and by `pnpm seed:demo`.
+The state model is in `supabase/migrations/021_result_ledger.sql`, `022_result_event_guard.sql`, `024_result_read_back.sql` and `025_result_critical_read_back.sql`. The API is in `apps/api/src/routes/results.ts`; the screen is `apps/client/src/features/clinic/results/page.tsx`; the public verifier is `apps/client/src/features/verify/page.tsx`. Receipts are hash-chained and verify without patient data at `/verify/:code`. Synthetic receipts are loaded by `supabase/seed/results-demo.sql` and by `pnpm seed:demo`.
 
 The pre-visit delta remains available inside a patient record as a secondary view. It is no longer the lead product. The decision memo and the unpulled validation gates are in `../docs/research/2026-11-04-decision/README.md`.

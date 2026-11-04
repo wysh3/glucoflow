@@ -206,6 +206,9 @@ export function LandingPage(): React.ReactElement {
               <p className="mt-4 text-[11px] leading-5 text-[#9dc4b6]">
                 Synthetic data only. One click. No password to type for the public demo.
               </p>
+              <Link to="/verify" className="mt-2 inline-flex min-h-8 items-center gap-1.5 text-[12px] font-medium text-[#a7d8c8] underline underline-offset-2 hover:text-white">
+                <ShieldCheck size={13} aria-hidden /> Verify a receipt
+              </Link>
               {error ? (
                 <p role="alert" className="mt-2 text-xs text-[#ffb4a8]">
                   {error}
