@@ -45,6 +45,14 @@ test.describe('role-separated obligation workspace', () => {
     await expect(page.locator('tbody tr').first()).toBeVisible();
   });
 
+  test('the showcase and the replay state what they are', async ({ page }) => {
+    await page.goto('/showcase');
+    await expect(page.getByRole('heading', { name: 'The 4-minute showcase' })).toBeVisible();
+    await page.goto('/clinic/replay');
+    await expect(page.getByRole('heading', { name: 'The replay' })).toBeVisible();
+    await expect(page.getByText('Synthetic cohort, not a measurement')).toBeVisible();
+  });
+
   test('intake offers custody and identity actions', async ({ page }) => {
     await page.goto('/clinic/intake');
     await expect(page.getByRole('heading', { name: 'Intake' })).toBeVisible();
