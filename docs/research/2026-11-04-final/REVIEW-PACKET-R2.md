@@ -40,7 +40,7 @@
 
 **API.** `app/apps/api/src/routes/obligations.ts` exposes eleven routes under `/api/v1/obligations`, with zod contracts and actor-scoped transactions.
 
-**Client.** `app/apps/client/src/features/clinic/obligations/` holds the four screens and the detail drawer. Capabilities are `canDesk`, `canNurse`, `canClinician`, `canQuality`. The nav and the landing route follow the role.
+**Client.** `app/apps/client/src/features/clinic/obligations/` holds the four screens and the detail drawer. Capabilities are `canDesk`, `canNurse`, `canClinician`, `canQuality`. The nav and the landing route follow the role. A direct URL to a role home lands on a refusal, not an empty state. The register exposes Close on an informed obligation, and the one tap returns a receipt banner with the time and code.
 
 **Evidence.** `app/scripts/replay.ts` computes a retrospective baseline and a deterministic queue simulation, writes `replay-data.json`, and the screen states the source and the assumptions. The shipped cohort is synthetic. The same script accepts `--input cohort.csv` for a real audit.
 
@@ -116,7 +116,7 @@ Write the memo to `docs/research/2026-11-04-final/panel-r2/<your-name>.md` and r
 
 ## 7. What the judges may assume
 
-- The local site is the current build, committed at `f7cc839` on top of `8a6d83a`.
+- The local site is the current tree, with migrations `039` to `042` applied.
 - The synthetic cohort is labelled. The product does not claim real patient data.
 - The tests are real and were run this session. The screenshots were taken this session.
 - The strategy documents in the same folder are context, not evidence of demand.
