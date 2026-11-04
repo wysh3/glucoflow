@@ -13,7 +13,9 @@ import { registerLocalAuthRoutes } from './routes/auth-local';
 import { registerPatientRoutes } from './routes/patients';
 import { registerDocumentRoutes } from './routes/documents';
 import { registerPublicResultRoutes, registerResultRoutes } from './routes/results';
+import { registerObligationRoutes } from './routes/obligations';
 import { registerStorageRoutes, registerUploadRoutes } from './routes/uploads';
+import { withTransaction } from '@glucoflow/data/pool';
 
 export async function buildServer(existingContext?: AppContext): Promise<FastifyInstance> {
   const ctx = existingContext ?? (await createAppContext());
@@ -99,11 +101,30 @@ export async function buildServer(existingContext?: AppContext): Promise<Fastify
     registerGuideRoutes(instance, ctx);
     registerPatientRoutes(instance, ctx);
     registerMasterRoutes(instance, ctx);
-    registerDeltaRoutes(instance, ctx);
+    // The pre-visit delta is quarantined from this product. A derived comparison
+    // between two results is a different intended purpose and should not inherit
+    // the result-closure device boundary.
+    if (process.env.ENABLE_DELTA === 'true') registerDeltaRoutes(instance, ctx);
     registerDocumentRoutes(instance, ctx);
     registerResultRoutes(instance, ctx);
+    registerObligationRoutes(instance, ctx);
     registerUploadRoutes(instance, ctx);
   });
+
+  // The critical clock is not theatre: every open, overdue receipt is escalated
+  // on a timer, and a queued notification row is written. The delivery adapter is
+  // intentionally separate so the evidence never claims a message was delivered.
+  if (process.env.NODE_ENV !== 'test' && process.env.RESULT_ESCALATION_DISABLED !== 'true') {
+    const timer = setInterval(() => {
+      void withTransaction(ctx.pool, { role: ctx.config.apiRole }, (client) =>
+        client.query('select sutra.escalate_overdue_results(null)'),
+      ).catch((error: unknown) => {
+        app.log.error({ err: error instanceof Error ? error.message : 'unknown' }, 'overdue escalation failed');
+      });
+    }, 60_000);
+    timer.unref();
+    app.addHook('onClose', async () => clearInterval(timer));
+  }
 
   return app;
 }

@@ -9,6 +9,7 @@ export * from './jobs';
 export * from './notes';
 export * from './documents';
 export * from './results';
+export * from './obligation';
 export * from './exports';
 export * from './me';
 export * from './env';
