@@ -1,63 +1,63 @@
 # Judge Q&A battlecard
 
-Use short answers. Name the evidence, then stop. Do not claim a pilot, a customer or a payment that has not happened.
+Use short answers. Name the evidence, then stop. Do not claim a pilot, a customer, a payment or a live lab connection that has not happened.
 
-## "This is just an audit log."
+## "What is actually new? Labs already send alerts."
 
-An audit log stays inside one system. A receipt code is portable. A lab, a hospital quality team or a patient can verify the chain without seeing a patient name, a test value or a clinical decision. The network is the product, not the log.
+The alert is not new. The patient-side closure is. Indian lab tools stop at clinician acknowledgement: PathLab logs the call, OneCity records read-back, Crelio shipped a critical callout. None of them gives the clinic a first-class "unreachable after two attempts" disposition, a recorded next administrative step and a closure certificate the quality team can file. We are the last mile after the lab's job ends.
 
-## "The hospital HIS or LIS already has a result inbox."
+## "This is just another result inbox."
 
-A HIS inbox is single-hospital. A LIS is single-lab. Neither makes a receipt portable across labs and channels, and neither turns the critical-alert register into a survey pack. A hospital can copy an inbox. It cannot make a lab receipt neutral across hospitals by itself.
+An inbox stores a report. This is a state machine with server-enforced controls: the clinician must type the printed value; a critical result needs the lab caller and the value read back; two attempts are required before an unreachable close; every attempt is an event; the chain is anchored by a stored count and head. The demo shows the refusal, not just the happy path.
 
-## "Why would a hospital pay?"
+## "Can the receipt be gamed? A doctor can click without reading."
 
-The buyer is the quality head or medical superintendent with an accreditation file. NABL 112A and NABH already require the register. The product turns an existing obligation into a daily workflow and an export. The price is a hypothesis, ₹5,000 to ₹20,000 per facility per month, and a paid continuation is the pilot gate.
-
-## "Clinicians will not use another app."
-
-The clinician sees one action for the current state. Acknowledge, record the patient conversation, close. No diagnosis, no score, no note writing. The receipt can start from paper, PDF or WhatsApp. The hospital can run it on a shared desk phone.
-
-## "This is clinical software."
-
-No. The lab flag is copied from the report. The product does not diagnose, triage, score risk or recommend treatment. It records who owned the result, when they saw it, how the patient was told and whether a critical result was read back. That is administrative evidence.
-
-## "What about DPDP and patient privacy?"
-
-The clinic is the data fiduciary and the product is its processor. The public verifier returns only the event count, chain head and validity. No patient name, identifier, test value or clinical interpretation leaves the hospital through that page. A legal review of the consent text and processor contract is still required.
+Yes, a determined clicker can still lie. We do not claim the receipt proves clinical judgement. We reduce the cheapest lie: the value echo makes a blind click fail, and the critical path records the lab notifier and read-back. The certificate is an administrative attestation. The next gate is a sampled audit against phone records; a row that says informed without a corroborating call is the failure we test for.
 
 ## "What is the AI?"
 
-Extraction and patient matching. The lab flag is the source of criticality. The current demo uses a synthetic structured inbound receipt; the existing document pipeline is the extraction path, and the result adapter is the next engineering step. Do not claim live AI extraction in the demo.
+Identity resolution. Reports arrive with name variants, transliterations, shared family phones and incomplete identifiers. The matcher scores the printed name against the clinic ID and shows its reasons. Ambiguity is held for a human. There is no diagnosis, triage, risk score or treatment advice. The current slice uses a CSV lab feed, not a live extraction model. We do not claim otherwise.
 
-## "How big is the market?"
+## "Why would a lab pay?"
 
-Do not give a fake TAM. The beachhead is a 50 to 200 bed private hospital with NABH aspiration, a district hospital quality team or a lab channel. One 2026 directory lists 1,324 NABH-accredited CGHS-empanelled facilities, including 837 hospitals. That is a directory, not a TAM. The pilot replaces estimates with contract values.
+Report delivery is commoditised. A lab competes on turnaround, accuracy and referring-doctor loyalty. Proof that the last mile closed is a differentiator, and the lab already owns the report and the patient contact. The pilot is ₹60,000 for 90 days with one lab, one diabetes OPD and one ward. The continuation is a signed decision, not a survey answer.
 
-## "What is the moat?"
+## "Why not sell directly to hospitals?"
 
-Three layers.
+The hospital quality head is the champion and the clinical lead is the user. Direct hospital sales are slow and the quality head often has no independent budget. The lab chain is the distribution wedge: one sale, many referring clinics. A hospital group quality cell is the second channel. We will test both, starting with one lab or OPD sponsor.
 
-1. A portable receipt standard across labs and hospitals.
-2. A public verifier and an accreditation evidence pack that a single-hospital inbox does not produce.
-3. The installed audit history and workflow. Once the quality team uses the receipt for a survey, switching means losing the proof trail.
+## "Does this meet NABL 112A or NABH?"
 
-## "What if an incumbent copies it?"
+No. We do not certify compliance. The certificate is an evidence map: lab release, value echo, lab-to-clinician read-back where critical, patient contact or documented attempts, next step and the anchored chain. The assessor decides what the evidence proves. The current register is not a full NABL register: it does not yet carry a lab accreditation number, a signature image or an amended-report path. Do not claim certification.
 
-They can copy a result inbox. They cannot copy a neutral cross-lab receipt network without opening their system to competitors. The lab channel and the cross-hospital proof are the defensible part. The UI is not the moat.
+## "What about DPDP and patient privacy?"
+
+The demo is synthetic. Before real patient data, the clinic needs a notice and consent capture, a processor agreement with DPDP section 8 terms, retention and erasure, a grievance path and a breach runbook. The public stage page returns only the stage and chain validity; it never returns a name, test value, diagnosis or clinical decision. The receipt can be revoked after a lawful erasure. Legal review is a pilot gate, not a claim.
+
+## "The hash chain is not real proof. It is in your database."
+
+Correct. It is tamper-evident inside one administrative domain, not an external timestamp. The chain stores an event count and head, so tail truncation and row edits are detectable. A daily signed anchor to the quality head is the next step. We do not claim a third-party trust anchor today.
 
 ## "What have you actually validated?"
 
-The workflow is built and tested. The demand is not validated. No buyer interview, paid pilot or purchase order has been completed. The next gate is ten interviews, three de-identified audits and a paid continuation. If the first two gates fail, the thesis stops.
+The workflow is built and tested. Demand is not. We have no buyer interview, baseline audit, paid pilot, purchase order or LOI. We have 188 unit and integration tests, 12 of 12 result and landing browser tests, zero lint findings on the closure surfaces, a production build and a hosted API. The next gate is one lab or OPD sponsor, one clinical lead and 100 de-identified reports. If the baseline gap is under 30%, we stop.
 
-## "Why should we believe the numbers?"
+## "Why diabetes?"
 
-The 184 unit tests, the hosted receipt/verifier and the CSV export are measured. The 64.61% critical-value figure and the 6.8% to 62% follow-up range are secondary evidence from published studies. Pilot targets are labeled targets, not results.
+101 million people in India live with diabetes. The first protocol is the check a diabetes drug makes necessary: potassium and eGFR at two to four weeks after starting or titrating an ACE inhibitor or ARB. The same receipt covers SGLT2i, MRA, annual uACR/eGFR, a critical potassium or an abnormal HbA1c. The clinician sets the protocol; the lab flag sets criticality; the product never infers a screening deadline or a clinical action.
 
-## "Why this team?"
+## "What if an incumbent copies it?"
 
-The team has a working clinical record pipeline, human review, source binding, server authorization and a hosted deployment. The clinical lead owns the pilot and sign-off. The engineering lead owns the receipt chain and instrumentation. Design owns the receipt and the survey pack. Add the real names and doctor qualification proof before submission.
+They can copy the inbox. The patient-side closure, the unreachable disposition and the installed certificate are a workflow and a record, not a screen. The lab channel and the installed audit history are the defensibility. The network is the expansion thesis, not the current product.
 
-## "What is the one thing you want?"
+## "What is the three-minute story?"
 
-Three sites. 100 consecutive reports each. Eight weeks. A baseline audit, a concierge receipt, a founder-free week and a paid continuation.
+Open on the 25.8%: only one in four critical values reached the treating clinician. Show the receipt: value echo, lab read-back, patient contact, two failed attempts, unreachable close, certificate and public stage. Close on the ask: one lab, one clinical lead, 100 reports, eight weeks. Do not spend the three minutes on architecture.
+
+## "Who is on the team?"
+
+The clinical lead, technical lead and product lead are named in the submission form. Replace the bracketed fields before submitting. The portal requires a practising doctor or a final-year medical student as the clinical lead and a separate technical lead.
+
+## "What should we not claim?"
+
+Do not claim validated demand, a pilot, a customer, a payment, a live LIS or WhatsApp connection, ABDM integration, NABL or NABH certification, clinical validation, or an external chain anchor. Do not claim the public page proves a clinical decision. It proves an administrative stage and the integrity of the recorded chain.

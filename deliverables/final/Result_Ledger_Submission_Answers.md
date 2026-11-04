@@ -1,60 +1,96 @@
-# Result ledger submission answers
+# Glucoflow submission answers
+
+**Track:** Diabetes care
+**Product:** A patient-closure ledger for abnormal and critical diabetes results.
+**Demo:** https://glucoflow.vercel.app/sign-in
+**Public receipt check:** https://glucoflow.vercel.app/verify
+
+> Before submitting, replace the three bracketed team fields in section 4 with the real names and the practising-doctor qualification. The portal requires a clinical lead and a technical lead. The current receipt data is synthetic.
 
 ## 1. The exact problem
 
-A hospital receives lab reports from several labs and channels. The lab finishes when it delivers. The hospital is supposed to prove a named clinician saw the result, that a clock existed, that a critical result was read back and that the patient was told. In most hospitals that proof is a paper diary, a WhatsApp gallery or nothing.
+The lab is finished when it delivers the report. The clinic is not finished when a doctor clicks acknowledge. For a diabetes patient, the result that changes the next step is often an abnormal or critical potassium, eGFR, uACR or HbA1c. It arrives on WhatsApp, as a PDF or on paper. The clinic still has to prove four things: a named clinician saw the printed value, the lab caller and read-back were recorded where critical, the patient or caregiver was actually reached, and the next administrative step happened.
 
-The failure is invisible until an audit, a complaint or a missed critical value exposes it.
+In an Indian tertiary hospital with a written critical-call policy, a log book and a read-back rule, only 25.8% of 1,187 critical values reached the treating clinician; 52.9% went to nursing staff and 90% of never-notified values were outpatients (Agarwal et al., Indian J Clin Biochem 2015, PMC4310845). In an Indian secondary-care setting, 14% of positive results never returned (NMJI 2015). A systematic review found 6.8% to 62% of abnormal ambulatory results were not followed up (J Gen Intern Med 2012).
+
+The market has tools that stop at clinician acknowledgement. It does not have a patient-side closure record that says: reached, or tried twice and failed; informed, or declined; next step booked, or completed. That last mile is the problem.
 
 ## 2. What changes if it is solved
 
-Every result has one administrative receipt with a named owner, a due clock, an acknowledgement, a patient communication record, a read-back for critical results and an append-only audit chain. A quality head can export the register and verify the chain. A lab can prove delivery. A patient can verify that a receipt exists without exposing clinical data.
+Every abnormal or critical diabetes result gets one administrative receipt:
 
-The measurable change is median time to acknowledgement, the share of abnormal results with a completed receipt and the share of critical results with a documented read-back.
+- A named clinician echoes the printed value and selects the printed flag. A wrong value is refused.
+- For a critical result, the lab caller, their role and the value read back are recorded.
+- The front desk records who was reached, the channel, the language and the next administrative step.
+- A failed contact is a first-class row. After two attempts, the receipt can close as unreachable, never as a false "informed".
+- The quality team gets a closure certificate with the event timeline and evidence present. The patient gets a receipt slip and a no-PHI public stage check.
+
+The measurable change is closure rate within 7 days, median time from lab release to patient contact, the share of results with documented attempts, teach-back and next-step completion.
 
 ## 3. What we are building
 
-A result accountability ledger for hospitals and clinics.
+A patient-closure ledger for diabetes clinics and hospitals, with a lab channel.
 
-- Ingest a report from WhatsApp, PDF, paper or a portal. The lab flag is copied, never calculated.
-- Match the patient. Ambiguity stops for a human.
-- Assign a named clinician and a due clock. Critical reports get 15 minutes by default.
-- Acknowledge, record patient communication, capture the read-back and close.
-- Hash-chain every event. Publish a receipt code that verifies the chain without patient data.
-- Export a survey pack and a CSV register for the accreditation file.
+- Import a lab feed from CSV, PDF or paper. The lab flag is copied, never calculated.
+- Match the report to a patient using the printed name and clinic ID. Ambiguity is shown as a candidate list and held for a human.
+- Assign a named clinician. The due clock starts at lab release, not when the PDF reached a WhatsApp folder.
+- Acknowledge with a value echo. A critical result also needs the lab notifier and the value read back.
+- Record patient or caregiver contact, language and the next step. Log every failed attempt.
+- Escalate overdue receipts on a timer and queue a notification. The current delivery adapter is in-app; SMS and WhatsApp are the next gate.
+- Anchor the audit chain with a stored event count and head. Publish a public stage page with no patient name, test value or clinical decision.
+- Print a closure certificate with a section 63(4) draft and a patient receipt slip with a QR code.
 
-The current build includes the clinic result ledger, receipt drawer, proof panel, public verifier, CSV register and a synthetic inbound button. It is live at https://glucoflow.vercel.app.
+The current build includes twelve synthetic diabetes receipts across nine patients and four labs, five clinician-set monitoring protocols, CSV lab-feed import, namesake matching, value echo, unreachable close, automatic overdue escalation, the anchored chain, the public stage page and the closure certificate. It is live at https://glucoflow.vercel.app.
+
+The first protocol is the check a diabetes drug makes necessary: start or titrate an ACE inhibitor or ARB, then potassium and eGFR at two to four weeks. The same receipt covers SGLT2i, MRA, annual uACR/eGFR, a critical potassium or an abnormal HbA1c. The clinician sets the protocol. The lab flag sets criticality. The product never infers a screening deadline or a clinical action.
 
 ## 4. Why this team
 
-The build has a working clinical record pipeline, a doctor-facing review workflow, a server-enforced audit layer and a hosted deployment. The team roles are clinical lead, engineering lead and design product. The clinical lead owns the pilot sites and sign-off. The engineering lead owns the receipt chain, API and instrumentation. Design and product owns the receipt and the survey pack.
+**Clinical lead:** [practising doctor name], [qualification and registration or institution]. Owns the protocol, the pilot sites and clinical sign-off.
 
-No team names are printed here. Add the real names before submission.
+**Technical lead:** [name]. Owns the receipt state machine, anchored audit chain, API, matching and instrumentation.
+
+**Product and design:** [name]. Owns the closure certificate, patient slip and the three-minute demo.
+
+The team has shipped a working clinical record pipeline, human review, source binding, server authorization and a hosted deployment. The current build adds four integration tests that specifically exercise value echo refusal, unreachable close, chain anchoring and namesake matching.
 
 ## 5. Whether any part already exists
 
-The existing product already extracts lab reports, binds evidence, holds human review and publishes approved facts. The result ledger reuses the same identity, authorization, source and audit foundations. The new part is the receipt state machine, the hash chain, the public verifier and the accreditation pack.
+Yes, the clinician-side alert is commoditised in India. PathLab Software sells critical-value auto-call, WhatsApp delivery and an acknowledgement log. OneCity records clinician read-back. CrelioHealth shipped a critical callout in October 2026. Hospital HIS and LIS products bundle a result inbox. We do not claim that the alert, the read-back or the audit log is novel.
+
+The unclaimed part is the patient side after clinician acknowledgement. The existing tools generally stop at the doctor. Our receipt records who was reached, the language, the failed attempts, the unreachable disposition and the next step, and it gives the quality team a closure certificate. The network is the expansion thesis, not the current product. Today this is one lab feed and one clinic ledger.
+
+The AI is identity resolution, not diagnosis. The matching layer scores the printed name against the clinic ID and shows its reasons. It never guesses an ambiguous patient. There is no extraction model in this slice; the lab feed is a CSV adapter. We do not claim live AI extraction.
 
 ## 6. Evidence and validation status
 
 The problem evidence is secondary, not a customer study:
 
-- 64.61% of 1,187 critical values in an Indian tertiary hospital were notified 30 to 120 minutes after the sample arrived (PMC4310845).
-- 6.8% to 62% of abnormal ambulatory results were not followed up in a systematic review (J Gen Intern Med 2012).
-- NABL 112A and NABH already require a critical-alert register with read-back.
+- Only 25.8% of 1,187 critical values reached the treating clinician; 52.9% went to nursing staff; 90% of never-notified values were outpatients (PMC4310845).
+- 14% of positive results never returned in an Indian secondary-care setting (NMJI 2015).
+- 6.8% to 62% of abnormal ambulatory results were not followed up (J Gen Intern Med 2012).
+- 101 million people in India live with diabetes (ICMR-INDIAB-17, 2023).
 
-No buyer interview, paid pilot or purchase order has been completed. The next gate is 10 buyer interviews and 3 de-identified audits of 100 reports. The kill criteria are in the brief and the decision memo. Do not claim validated demand.
+What we ran: 188 unit and integration tests across 31 files, including four new closure tests; 12 of 12 result and landing browser tests across desktop and mobile; zero lint findings on the ledger, drawer, certificate, patient slip, public verifier and landing page; a production build; and a hosted API.
+
+What we have not validated: no buyer interview, baseline audit, paid pilot, purchase order or LOI; no live LIS, HL7/FHIR or WhatsApp send; no consent capture, DPA or retention runbook; no external chain anchor; no clinical validation; no NABL or NABH certification. The receipt data is synthetic. Do not claim otherwise.
+
+The next gate is one lab or OPD sponsor, one practising clinical lead and 100 de-identified reports per site. The kill criteria are in the brief and the decision memo.
 
 ## 7. The demo
 
-1. Open https://glucoflow.vercel.app/sign-in and choose Clinic team.
-2. The result ledger opens with a critical alert, ten open results, three unowned and a median acknowledgement time.
-3. Press Receive sample. A critical potassium receipt arrives on WhatsApp.
-4. Assign it, acknowledge it, tick the read-back and record the patient conversation.
-5. Open Receipt proof. The chain is verified and all four controls are met.
-6. Open the receipt code in the public verifier. It returns the event count and chain head with no patient data.
-7. Export the CSV register and the survey pack.
+1. Open https://glucoflow.vercel.app/sign-in and choose the clinic team.
+2. The ledger opens on the last mile: 42% closed within 7 days, 8 still open, 1 documented unreachable.
+3. Press Import lab feed. The synthetic CSV creates a critical potassium and an unmatched sodium report.
+4. Open the sodium report. The candidate list shows the printed name and clinic ID; the namesake is held for a human.
+5. Open the owned potassium report. Type 5.9, select critical, enter the lab caller and read back 5.9. A wrong value is refused by the server.
+6. Record two unreachable attempts. Close the receipt as unreachable. It never becomes "informed".
+7. Open the closure certificate. The evidence is present, the timeline is complete, the QR opens the public stage page and the section 63(4) draft is ready for signature.
+
+The demo is synthetic. It is a product and validation demo, not clinical advice.
 
 ## 8. Ask
 
-Three sites. 100 consecutive reports each. Eight weeks. A baseline audit, then a concierge receipt, then a paid continuation. One signed continuation is the proof that the buyer exists.
+One lab chain or diabetes OPD sponsor. One practising clinical lead. 100 consecutive abnormal or critical diabetes reports per site for eight weeks. A baseline audit, then the closure workflow, then a paid continuation.
+
+Pilot price hypothesis: ₹60,000 for 90 days, one lab, one diabetes OPD and one ward. The continuation is a signed decision, not a survey answer. If the baseline gap is under 30%, or a false informed row appears, we stop.

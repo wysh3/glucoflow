@@ -1,71 +1,78 @@
-# Live demo script
+# Three-minute live demo
 
-**Length:** 3 minutes.
-**Data:** synthetic only. Never use a real patient record in the demo.
-**Setup:** signed in as Clinic team, result ledger open, public verifier tab open.
+The demo is synthetic. Do not use a real patient record, phone number or lab report. Do not claim a live LIS or WhatsApp connection. The backup video is 47 seconds; use it only if the live path fails.
 
-## 0:00 The opening
+## Before the timer
 
-"This is the result ledger. It is not another record. It is the proof that a lab result was owned, acknowledged and communicated."
+- Open https://glucoflow.vercel.app/sign-in on a clean browser. Have the clinic demo card ready.
+- Open a second tab at https://glucoflow.vercel.app/verify.
+- Reseed the demo if you can. The ledger should show 12 receipts, a critical potassium and an unmatched sodium.
+- Keep the synthetic label visible.
 
-Point to the critical alert.
+## 0:00 to 0:20  The gap
 
-"Two critical results are still open. Ten results are open. Three have no owner. The median acknowledgement is three hours."
+Open on the clinic result ledger.
 
-## 0:30 The inbound report
+**Say:** "The lab calls the doctor. Nobody calls the patient. In an Indian tertiary hospital with a written critical-call policy, only one in four critical values reached the treating clinician. Half went to nursing staff. Nine in ten never-notified values were outpatients. The lab's job ends at delivery. The clinic's patient-side last mile is unowned."
 
-Press **Receive sample**.
+Point at the hero: 42% closed within 7 days, 8 still in the last mile, 1 documented unreachable.
 
-"A critical potassium result just arrived on WhatsApp. The lab flag is copied from the report. The ledger does not interpret the value."
+## 0:20 to 0:50  The intake and the namesake
 
-The receipt opens.
+Press **Import lab feed**. The sample CSV is already loaded. Press **Import and hold unmatched**.
 
-"It is matched to a patient. It has no owner and no clock yet."
+**Say:** "A lab feed creates three receipts. The sodium is a namesake: the name matches, the clinic ID does not. The system does not guess."
 
-## 0:50 The owner and the clock
+Open the Sodium row. Show the candidate list with the printed name and clinic ID. Point at the warning: "Use with review" for the weaker candidate.
 
-Press **Assign to me**.
+**Say:** "The hard part is identity, not another summary. A human makes the match."
 
-"A named clinician and a due clock. Critical results get fifteen minutes by default."
+## 0:50 to 1:35  The value echo
 
-Press **Acknowledge result**.
+Open the owned **Potassium 5.9** receipt.
 
-"The clinician has now seen it. This is the first human receipt."
+**Say:** "The lab flagged this critical. The due clock started at lab release, not when the PDF reached a phone. The clinician cannot just tap acknowledge."
 
-## 1:15 The patient conversation
+Type **9.9**, leave the flag as critical, press **Acknowledge with value echo**.
 
-Select **Phone call**. Tick **Read-back confirmed**.
+**Say:** "The server refuses the wrong value. That is the control."
 
-"The patient was called. The read-back is explicit. A critical result cannot be marked informed without it."
+Clear it, type **5.9**, enter the lab caller **Lab technician**, role **technician**, read back **5.9**, and press **Acknowledge with value echo**.
 
-Press **Record patient informed**.
+**Say:** "The printed value, the caller and the read-back are now in the chain. This is the lab-to-clinician read-back, not the patient conversation."
 
-"Now the receipt can close. No silent dashboard state."
+## 1:35 to 2:20  The honest unreachable
 
-Press **Close receipt**, add a short note.
+The patient-side panel opens.
 
-## 1:45 The proof
+Select **Not reachable after attempts**. Press **Record attempt** twice.
 
-Scroll to **Receipt proof**.
+**Say:** "Two documented attempts. The patient is not marked informed. The receipt can close as unreachable, but only with the attempts on record."
 
-"Every event is hash-chained. Chain verified. Four controls met. The receipt code is public."
+Select **Closed, patient unreachable**, type a short note, press **Close documented outcome**.
 
-Press **Download survey pack**.
+**Say:** "This is the disposition every other tool hides. A patient who cannot be reached is a real outcome, not a false conversation."
 
-"This is the hospital audit file. It maps the evidence to the critical-alert register and the read-back requirement. It is an evidence map, not a certification."
+Open the **Print closure certificate** link. Show the evidence table and the event timeline.
 
-## 2:15 The public verifier
+**Say:** "Every evidence item is present. The certificate maps the evidence. It does not issue a compliance verdict."
 
-Click the receipt code.
+## 2:20 to 2:45  The public stage
 
-"This is the same code a lab or a patient can check. It returns the event count and chain head. No name, no test value, no clinical decision."
+Scan or open the QR, or switch to the second tab and enter the receipt code.
 
-## 2:35 The close
+**Say:** "The patient or the quality team sees the recorded stage and chain validity. No name, no value, no diagnosis. If the patient was unreachable, the page says so. It does not accuse the clinic of tampering."
 
-"This is the wedge. A hospital gets a survey pack. A lab gets delivery proof. A patient gets a receipt. The network is the moat, because a single-hospital inbox cannot make a lab receipt portable."
+Show the five-stage progress: received, clinician value echo, patient contacted, next step, closed.
 
-"Three sites, one hundred reports each, eight weeks. A baseline audit, then a paid continuation. The result nobody owns, until someone signs."
+## 2:45 to 3:00  The ask
 
-## If the live sample fails
+Return to the ledger. Point at the closure rate.
 
-Use the seeded Sodium receipt in the ledger. It is already acknowledged and critical. The read-back and close flow are identical. Do not claim the sample receipt was AI-extracted; it is a synthetic inbound receipt.
+**Say:** "We start with one lab or diabetes OPD: 100 consecutive abnormal or critical reports, eight weeks, a baseline audit, then a paid continuation. The lab is done when it delivers. The clinic is done when the patient is reached."
+
+Stop. Do not add architecture.
+
+## If the live path fails
+
+Play `Result_Ledger_Demo.mp4` (47 seconds, captioned). Then use the same closing line. Do not improvise a claim that is not in the build.
