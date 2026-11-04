@@ -43,8 +43,7 @@ export function ReplayPage(): React.ReactElement {
         <Metric
           label="Critical unacknowledged"
           value={percent(replay.baseline.criticalUnacknowledgedShare)}
-          previous="baseline"
-          note="No documented clinician acknowledgement in the cohort"
+          note="Baseline: no documented clinician acknowledgement"
           tone="review"
         />
       </div>
@@ -98,7 +97,7 @@ function Metric({
 }: {
   label: string;
   value: string;
-  previous: string;
+  previous?: string;
   note: string;
   tone: 'success' | 'primary' | 'review';
 }): React.ReactElement {
@@ -108,7 +107,7 @@ function Metric({
       <p className={cn('mt-1 text-[28px] font-semibold tabular-nums', tone === 'success' ? 'text-success' : tone === 'review' ? 'text-review' : 'text-primary')}>
         {value}
       </p>
-      <p className="text-[12px] text-ink-soft">Baseline {previous}</p>
+      {previous ? <p className="text-[12px] text-ink-soft">Baseline {previous}</p> : null}
       <p className="mt-1 text-[12px] text-ink-soft">{note}</p>
     </Card>
   );
