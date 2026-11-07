@@ -18,6 +18,7 @@ import { useSession } from './auth/session';
 import { AppShell } from './components/app-shell';
 import { ErrorState, Spinner } from '@glucoflow/ui';
 import { SignInPage } from './features/sign-in/page';
+import { hospitalTeamPath, useHospitals } from './features/hospital/use-hospitals';
 
 
 
@@ -43,6 +44,7 @@ import { NotFoundPage } from './features/not-found/page';
 const GlucoGuide = React.lazy(() => import('./features/guide/gluco-guide').then(module => ({ default: module.GlucoGuide })));
 const VisitOverviewPage = React.lazy(() => import('./features/clinic/overview/page').then(module => ({ default: module.VisitOverviewPage })));
 const AccountPage = React.lazy(() => import('./features/account/page').then(module => ({ default: module.AccountPage })));
+const HospitalTeamPage = React.lazy(() => import('./features/hospital/page').then(module => ({ default: module.HospitalTeamPage })));
 const ClinicPatientsPage = React.lazy(() => import('./features/clinic/patients/page').then(module => ({ default: module.ClinicPatientsPage })));
 const ShowcasePage = React.lazy(() => import('./features/showcase/page').then(module => ({ default: module.ShowcasePage })));
 const ClinicQueuePage = React.lazy(() => import('./features/clinic/queue/page').then(module => ({ default: module.ClinicQueuePage })));
@@ -96,12 +98,13 @@ export function AppRoutes(): React.ReactElement {
         <Route path="/clinic/results/:resultId/patient-slip" element={<ClinicGate><PatientReceiptSlipPage /></ClinicGate>} />
         <Route element={<ProtectedShell />}>
           <Route path="/account" element={<AccountPage />} />
+          <Route path={hospitalTeamPath} element={<HospitalTeamPage />} />
           <Route path="/clinic/care" element={
-            <ClinicGate>
+            <CareGate>
               <React.Suspense fallback={<Spinner label="Opening care workspace" />}>
                 <CarePage />
               </React.Suspense>
-            </ClinicGate>
+            </CareGate>
           } />
           <Route path="/clinic/results" element={<ClinicGate><ResultsPage /></ClinicGate>} />
           <Route path="/clinic/line" element={<ClinicGate><RoleGate capability="canClinician"><ObligationWorkspace view="line" /></RoleGate></ClinicGate>} />
@@ -147,6 +150,7 @@ const titles: Record<string, string> = {
   '/showcase': 'Walkthrough',
   '/privacy': 'Privacy and data use',
   '/account': 'Account',
+  [hospitalTeamPath]: 'Hospital team',
   [CARE_HOME]: 'Care',
   '/clinic/patients': 'Patient records',
   '/clinic/queue': 'Report review queue',
@@ -205,6 +209,16 @@ function ClinicGate({ children }: { children: React.ReactNode }): React.ReactEle
     return <Navigate to={roleFallback(me.contexts)} replace />;
   }
   return <>{children}</>;
+}
+
+function CareGate({ children }: { children: React.ReactNode }): React.ReactElement {
+  const { me } = useSession();
+  const hospitals = useHospitals();
+  if (me?.contexts.some(context => context.kind === 'clinic') ||
+      (!hospitals.error && hospitals.data?.hospitals.some(hospital => hospital.careRole))) return <>{children}</>;
+  if (hospitals.isPending) return <Spinner label="Checking care workspace access" />;
+  if (hospitals.error) return <ErrorState title="Could not check care workspace access" description="Return to Account and try again." />;
+  return <Navigate to={roleFallback(me?.contexts ?? [])} replace />;
 }
 
 function PatientGate({ children }: { children: React.ReactNode }): React.ReactElement {

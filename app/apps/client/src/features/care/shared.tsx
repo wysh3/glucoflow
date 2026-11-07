@@ -178,6 +178,7 @@ export function SourceEventDetails({ event, workspace, openEpisode }: {
           ['Order', order ? `${order.testName} · ${order.specimenId}` : 'Encounter-level event'],
           ['Occurred', <When value={event.occurredAt} />],
           ['Received by GlucoFlow', <When value={event.receivedAt} />],
+          ['Recorded in Gluco by', event.recordedBy ? `${event.recordedBy.name} · ${roleLabels[event.recordedBy.role]}${event.recordedBy.simulated ? ' · Simulated' : ''}` : 'Unknown'],
           ['Event ID', event.id],
         ].map(([label, value]) => (
           <div key={String(label)} className="grid gap-1 py-2.5 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-3">

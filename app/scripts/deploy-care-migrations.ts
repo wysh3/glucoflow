@@ -25,6 +25,11 @@ const releaseFiles = new Set([
   '060_care_continuation_capabilities.sql',
   '061_care_coordination_archive_guard.sql',
   '062_speech_unlimited_usage.sql',
+  '063_hospital_authority.sql',
+  '064_hospital_workspace_recovery.sql',
+  '065_hospital_assignment_concurrency.sql',
+  '066_care_shift_monitoring.sql',
+  '067_care_shift_archive_expiry.sql',
 ]);
 const migrationDirectory = join(appRoot, 'supabase', 'migrations');
 

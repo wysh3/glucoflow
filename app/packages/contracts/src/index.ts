@@ -22,3 +22,7 @@ export * from './care';
 export * from './speech';
 
 export * from './care-coordination';
+
+export * from './hospital';
+
+export * from './pdf-demo';

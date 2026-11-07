@@ -10,6 +10,7 @@ import { UPLOAD_MAX_BYTES } from '@glucoflow/contracts';
 import { resolveActor } from './auth';
 import { createAppContext, type AppContext } from './context';
 import { ApiError, toApiError } from './errors';
+import { registerHospitalRoutes } from './routes/hospitals';
 import { registerHealthRoutes } from './routes/health';
 import { registerLocalAuthRoutes } from './routes/auth-local';
 import { registerPatientRoutes } from './routes/patients';
@@ -103,6 +104,7 @@ export async function buildServer(existingContext?: AppContext): Promise<Fastify
     registerGuideRoutes(instance, ctx);
     registerSpeechRoutes(instance, ctx);
     registerCareRoutes(instance, ctx);
+    registerHospitalRoutes(instance, ctx);
     registerPatientRoutes(instance, ctx);
     registerMasterRoutes(instance, ctx);
     // The pre-visit delta is quarantined from this product. A derived comparison

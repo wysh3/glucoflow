@@ -18,6 +18,7 @@
     "fixtures:generate": "tsx scripts/generate-fixtures.ts",
     "fixtures:reference": "tsx scripts/build-reference-manifest.ts",
     "fixtures:corpus": "tsx scripts/generate-eval-corpus.ts",
+    "setup:hospital": "tsx scripts/setup-hospital.ts",
     "seed:demo": "tsx scripts/seed-demo.ts",
     "reset:demo": "tsx scripts/reset-demo.ts",
     "maintenance:demo": "tsx scripts/maintenance-demo.ts",

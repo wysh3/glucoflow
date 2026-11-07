@@ -1,6 +1,7 @@
+import { reconcileShiftMonitoring } from './shift-monitoring';
 import {reconcileCoordination} from './coordination';
 import type { CareEvent, CareTask, CareWorkspace } from '@glucoflow/contracts';
-import { feedIsFresh, latestAcknowledgement, latestEvent, logActivity, orderEvents } from './events';
+import { feedIsFresh, latestAcknowledgement, latestEvent, latestMatchingSpecimenReceipt, logActivity, orderEvents } from './events';
 
 const taskStatuses: Record<CareTask['status'], string> = {
   awaiting_approval: 'Awaiting approval', monitoring: 'Monitoring resumed', paused: 'Monitoring paused',
@@ -11,7 +12,7 @@ const taskStatuses: Record<CareTask['status'], string> = {
 function evidenceFor(state: CareWorkspace, task: CareTask, events: CareEvent[]): CareEvent | undefined {
   switch (task.kind) {
     case 'specimen_receipt':
-      return latestEvent(events, 'specimen_received');
+      return latestMatchingSpecimenReceipt(events);
     case 'result_acknowledgement':
       return latestAcknowledgement(events);
     case 'handover':
@@ -73,6 +74,12 @@ export function reconcileCareWorkspace(state: CareWorkspace, at: string): boolea
       changed = updateTask(state, task, at, 'source_confirmed', `${evidence.source} · ${evidence.sourceRef}`, evidence) || changed;
       continue;
     }
+    const rawReceipt = task.kind === 'specimen_receipt' ? latestEvent(events, 'specimen_received') : undefined;
+    if (!evidence && rawReceipt) {
+      changed = updateTask(state, task, at, 'awaiting_evidence',
+        `LIS receipt has no matching collection chronology · ${rawReceipt.sourceRef}`) || changed;
+      continue;
+    }
     const correction = latestEvent(events, 'result_corrected');
     const detail = correction && task.kind === 'result_acknowledgement'
       ? `Awaiting acknowledgement of the corrected result · ${correction.sourceRef}`
@@ -91,5 +98,6 @@ export function reconcileCareWorkspace(state: CareWorkspace, at: string): boolea
       changed = true;
     }
   }
-  return reconcileCoordination(state, at) || changed;
+  const shiftChanged = reconcileShiftMonitoring(state, at);
+  return reconcileCoordination(state, at) || shiftChanged || changed;
 }

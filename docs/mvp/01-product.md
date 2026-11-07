@@ -8,6 +8,10 @@
 
 Prepare a diabetes follow-up history from records the clinic and patient already possess, preserve reviewed facts between visits, and make the supporting evidence easy to open. The primary measurable outcome is combined staff and doctor task time for a return visit, with final-record accuracy checked independently.
 
+## 7 November hospital authority extension
+
+The user explicitly authorized a hospital administration interface and multiple named demo staff per role. This supersedes the earlier exclusion of an administration UI below. Follow [hospital authority plan](../superpowers/plans/2026-11-07-hospital-authority.md). Operator-provisioned verified identities may be activated, assigned a care role or revoked by hospital administrators. Administrative status and care roles do not imply patient-record reviewer/clinician access. Managed shared workspaces enforce the assigned hospital role on the server; private fictional workspaces support clearly labelled persona switching. The original patient and clinic experiences remain.
+
 ## Users and permissions
 
 There are two product experiences, patient and clinic. Within the clinic, reviewer and clinician are distinct permissions. One account may have both clinic permissions. An operator manages demo memberships and patient links through a local administrative script. Administration alone does not grant clinical-record access; no administration UI is included.

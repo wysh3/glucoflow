@@ -1,3 +1,5 @@
+import { isShiftMonitoringIntent } from './shift-monitoring-intent';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GlucoGreeting } from './greeting';
 import { isCareGreeting } from './greeting-intent';
 import './greeting.css';
@@ -23,7 +25,7 @@ import { careSummaryPresentation, compileCareReply } from './intelligent-program
 const promptsByRole: Record<CareRole, { label: string; message: string; icon: LucideIcon }[]> = {
   doctor: [
     { label: 'What needs attention?', message: 'What is pending for the assigned encounters this shift? Include source references.', icon: ClipboardList },
-    { label: 'Monitor acknowledgement', message: 'Propose monitoring for a validated result awaiting acknowledgement.', icon: Radio },
+    { label: 'Monitor this shift', message: 'Monitor validated results awaiting acknowledgement for my assigned patients until the end of this shift.', icon: Radio },
     { label: 'Draft handover', message: 'Draft a shift handover with unresolved items and their owners.', icon: FilePenLine },
   ],
   nurse: [
@@ -57,6 +59,8 @@ type AskProps = {
   openPlaybook: (proposal: CareProposal) => void;
   openView: (view: 'teams' | 'activity' | 'worklist') => void;
   openPipeline: () => void;
+  openMonitoring: () => void;
+  openCoordination: (encounterId: string) => void;
 };
 
 // React port of the published CodexUI ThreadConversation and ThreadComposer DOM.
@@ -64,8 +68,11 @@ const threadScope = { 'data-v-705e1c85': '' };
 const conversationScope = { 'data-v-98932cdc': '' };
 const composerScope = { 'data-v-755e7197': '' };
 
-export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visible, openSource, openTask, openExistingTask, openPlaybook, openView, openPipeline }: AskProps) {
+export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visible, openSource, openTask, openExistingTask, openPlaybook, openView, openPipeline, openCoordination, openMonitoring }: AskProps) {
   const { locale } = useI18n();
+  const navigate = useNavigate();
+  const [routeParams] = useSearchParams();
+  const shiftIntent = isShiftMonitoringIntent(draft);
   const input = useRef<HTMLTextAreaElement>(null);
   const messages = useRef<HTMLUListElement>(null);
   const scrollPending = useRef(true);
@@ -105,7 +112,9 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
   }, [lastMessageId, sending, visible, showingConversation]);
 
   async function submit() {
-    if (state.busy || submitting || !draft.trim() || (mode === 'hermes' && !runtimeReady)) return;
+    if (state.busy || submitting || !draft.trim()) return;
+    if (isShiftMonitoringIntent(draft)) { openMonitoring(); return; }
+    if (mode === 'hermes' && !runtimeReady) return;
     setOverview(false);
     setSubmitting(true);
     const message = draft.trim();
@@ -137,7 +146,7 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
                     openSource={openSource} openTask={openTask} openPlaybook={openPlaybook}
                     greeting={message.role === 'assistant' && workspace.messages[index - 1]?.role === 'user' && isCareGreeting(workspace.messages[index - 1]!.content) && !message.proposals?.length}
                     openExistingTask={openExistingTask} openPipeline={openPipeline} openView={openView}
-                    draftHandover={(proposal) => void state.command({ type: 'draft_handover', encounterId: proposal.encounterId })} />
+                    draftHandover={(proposal) => { const next=new URLSearchParams(routeParams);next.set('view','teams');if(proposal.encounterId)next.set('handoverEncounter',proposal.encounterId);else next.delete('handoverEncounter');navigate(`/clinic/care?${next}#shift-handover`); }} />
                 ))}
                 {sending ? <>
                   <li className="conversation-item" data-role="user" {...conversationScope}>
@@ -159,7 +168,7 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
           </>
         ) : (
           <div className="care-home-scroll">
-            <CareHome workspace={workspace} openView={openView} openSource={openSource} openTask={openExistingTask} />
+            <CareHome shared={state.team.data?.access.shared} openCoordination={openCoordination} workspace={workspace} openView={openView} openSource={openSource} openTask={openExistingTask} />
           </div>
         )}
       </section>
@@ -231,7 +240,7 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
                   aria-label="Stop reply" title="Stop reply" onClick={() => state.stopChat()}>
                   <span className="size-3 rounded-sm bg-current" aria-hidden />
                 </button> : <button key="send" type="submit" className="thread-composer-submit" {...composerScope} aria-label="Send" title="Send"
-                  disabled={!!state.busy || submitting || !draft.trim() || (mode === 'hermes' && !runtimeReady)}>
+                  disabled={!!state.busy || submitting || !draft.trim() || (!shiftIntent && mode === 'hermes' && !runtimeReady)}>
                   <ArrowUp className="thread-composer-submit-icon" {...composerScope} aria-hidden />
                 </button>}
               </div>

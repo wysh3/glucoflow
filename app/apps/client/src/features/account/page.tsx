@@ -5,6 +5,8 @@ import { SystemPageHeader } from '../../components/system-page-header';
 import { useSession } from '../../auth/session';
 import { useI18n } from '../../i18n';
 import { clinicHome } from '../../lib/clinic-home';
+import { roleLabels } from '../care/shared';
+import { hospitalTeamPath, useHospitals } from '../hospital/use-hospitals';
 
 /**
  * Account. Shows the signed-in identity, the active authorized role and the clinic,
@@ -15,10 +17,12 @@ export function AccountPage(): React.ReactElement {
   const { me, config, storageDescription, storageMode } = useSession();
   const { t } = useI18n();
   const navigate = useNavigate();
+  const hospitals = useHospitals();
   if (!me) return <p className="text-sm text-ink-soft">{t('account.loading')}</p>;
 
   const clinicContext = me.contexts.find((context) => context.kind === 'clinic');
   const patientContext = me.contexts.find((context) => context.kind === 'patient');
+  const hospitalAccess = hospitals.error ? [] : hospitals.data?.hospitals ?? [];
   const roles: string[] = [];
   if (clinicContext) {
     if (clinicContext.reviewer) roles.push(t('role.reviewer'));
@@ -41,17 +45,36 @@ export function AccountPage(): React.ReactElement {
         <CardBody className="space-y-2 text-sm">
           <p className="text-ink">{me.actor.displayName}</p>
           <p className="text-ink-soft">{me.actor.email}</p>
-          <p className="text-ink-soft">{t('account.access')} · {roles.join(', ') || t('account.noRole')}</p>
-          <p className="text-ink-soft">
+          {(roles.length > 0 || hospitalAccess.length === 0) && <p className="text-ink-soft">
+            {t('account.access')} · {roles.join(', ') || t('account.noRole')}
+          </p>}
+          {(clinicContext || patientContext || hospitalAccess.length === 0) && <p className="text-ink-soft">
             {t('upload.clinic')} · {clinicContext?.clinicName ?? patientContext?.clinicName ?? t('account.noClinic')}
-          </p>
-          {!me.capabilities.canReview ? (
+          </p>}
+          {me.capabilities.canViewApproved && !me.capabilities.canReview ? (
             <p className="text-ink-soft">
               {t('account.readAccess')}
             </p>
           ) : null}
         </CardBody>
       </Card>
+
+      {hospitalAccess.length > 0 && (
+        <Card>
+          <CardHeader><CardTitle>Hospital access</CardTitle></CardHeader>
+          <CardBody className="space-y-3" lang="en-IN" dir="ltr">
+            <ul className="space-y-1 text-sm text-ink-soft">
+              {hospitalAccess.map(hospital => <li key={hospital.clinicId}>
+                {hospital.displayName} · {[
+                  hospital.administrator && 'Hospital administrator',
+                  hospital.careRole && roleLabels[hospital.careRole],
+                ].filter(Boolean).join(' · ')}
+              </li>)}
+            </ul>
+            <Button asChild variant="secondary"><Link to={hospitalTeamPath}>Hospital team</Link></Button>
+          </CardBody>
+        </Card>
+      )}
 
       {bothContexts ? (
         <Card>

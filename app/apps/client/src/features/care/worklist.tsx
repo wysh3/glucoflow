@@ -1,3 +1,4 @@
+import { ShiftMonitoringActivity } from './shift-monitoring';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -5,11 +6,12 @@ import {
   Filter, ListChecks, Plus, Radio, Timer,
 } from 'lucide-react';
 import { Badge, Button, Card, Input, Label, Select, Textarea } from '@glucoflow/ui';
-import type { CareCommand, CareEvent, CareEventKind, CareOrder, CareRole, CareTask, CareWorkspace } from '@glucoflow/contracts';
+import type { CareCommand, CareEvent, CareEventKind, CareOrder, CareTask, CareWorkspace } from '@glucoflow/contracts';
 import {
   ageLabel, canManage, CareDialog, EmptyPanel, eventLabels, IconBox, isFeedFresh,
-  SectionHeading, SourceChip, StateBadge, taskKindLabels, taskStatusLabels, terminalStatuses, When,
+  roleLabels, SectionHeading, SourceChip, StateBadge, taskKindLabels, taskStatusLabels, terminalStatuses, When,
 } from './shared';
+import { useSession } from '../../auth/session';
 import type { TaskDraft } from './task-dialog';
 import { SkillCapture } from './skill-capture';
 import type { CareWorkspaceState } from './use-care-workspace';
@@ -192,11 +194,12 @@ export function WorklistPanel({ workspace, openSource, openDetails, openTask, bu
   );
 }
 
-export function ActivityPanel({ workspace, openSource, openDetails }: SourceActions & { openDetails: (id: string) => void }) {
+export function ActivityPanel({ workspace, openSource, openDetails, openMonitoring }: SourceActions & { openDetails: (id: string) => void; openMonitoring?: () => void }) {
   const history = [...workspace.activity].reverse();
   return (
     <>
-      <SectionHeading title="Activity" description="Changes and decisions in this workspace." />
+      <SectionHeading title="My activity" description="Monitoring groups, changes and decisions in this workspace." />
+      {openMonitoring && <ShiftMonitoringActivity workspace={workspace} openMonitor={openMonitoring} />}
       <div>
         <Card className="min-w-0 p-4 sm:p-5">
           <div className="flex items-center gap-2.5"><IconBox icon={Activity} /><h3 className="text-base font-semibold">Activity log</h3></div>
@@ -226,7 +229,6 @@ export function TaskDetails({ task, workspace, state, close, openSource }: Sourc
   const [reason, setReason] = useState('');
   const [transferOpen, setTransferOpen] = useState(false);
   const [recipient, setRecipient] = useState('');
-  const [recipientRole, setRecipientRole] = useState<CareRole>('doctor');
   const [transferReason, setTransferReason] = useState('');
   const { search } = useLocation();
   const episode = new URLSearchParams(search);
@@ -241,6 +243,28 @@ export function TaskDetails({ task, workspace, state, close, openSource }: Sourc
   const activeAction = availableActions.includes(action as TaskAction) ? action : '';
   const taskActivity = workspace.activity.filter((entry) => entry.taskId === task.id);
   const expiry = task.status === 'expired' ? 'Expired at' : 'Expires';
+  const { me } = useSession();
+  const team = state.team.data;
+  const actorId = me?.actor.userId;
+  const roster = workspace.coordination?.staff ?? [];
+  const recipients = roster.filter((person) => team?.access.shared === true
+    ? person.userId && person.userId !== actorId && team.members.some((member) =>
+      member.userId === person.userId && member.active && member.role === person.role)
+    : team?.access.shared === false && !person.userId && person.id !== workspace.demoStaffId);
+  const selectedRecipient = recipients.find((person) => person.id === recipient);
+  const personLabel = (person: (typeof recipients)[number]) => {
+    const label = `${person.name} · ${roleLabels[person.role]} · ${person.team}`;
+    const duplicate = recipients.some((peer) => peer.id !== person.id && peer.name === person.name && peer.role === person.role && peer.team === person.team);
+    if (!duplicate) return label;
+    const email = team?.members.find((member) => member.userId === person.userId)?.email;
+    return `${label} · ${email ?? person.id.slice(0, 8)}`;
+  };
+  const transfer = task.transfer;
+  const pendingRecipient = roster.find((person) => person.id === transfer?.recipientStaffId);
+  const canRespond = !!transfer && !!pendingRecipient && pendingRecipient.role === transfer.role && transfer.role === workspace.role
+    && (team?.access.shared === true
+      ? !!actorId && pendingRecipient.userId === actorId && transfer.recipientUserId === actorId
+      : team?.access.shared === false && !pendingRecipient.userId && !transfer.recipientUserId && pendingRecipient.id === workspace.demoStaffId);
 
   return (
     <CareDialog open title={task.title} description={[encounter?.patientName, order?.testName].filter(Boolean).join(' · ')}
@@ -320,26 +344,34 @@ export function TaskDetails({ task, workspace, state, close, openSource }: Sourc
         {task.transfer?.status === 'pending' ? <div className="grid gap-2 text-sm">
           <p><strong>Awaiting {task.transfer.owner}</strong> · {task.owner} remains responsible.</p>
           <p className="text-ink-soft">{task.transfer.reason}</p>
-          {workspace.role === task.transfer.role ? <div className="flex flex-wrap justify-end gap-2">
-            <Button variant="quiet" disabled={busy} onClick={() => void state.command({type:'resolve_transfer', taskId:task.id, decision:'reject'})}>Decline handover</Button>
-            <Button disabled={busy} onClick={() => void state.command({type:'resolve_transfer', taskId:task.id, decision:'accept'})}>Accept responsibility</Button>
-          </div> : <p className="text-xs text-ink-soft">Use the {task.transfer.role} simulation role to accept or decline. This demo does not contact another person.</p>}
+          {!canRespond ? <p className="text-xs text-ink-soft">{task.transfer.recipientStaffId
+            ? 'Only the named recipient can respond.'
+            : 'This earlier request has no verified recipient. Withdraw it and choose a named person.'}</p> : null}
+          {canRespond || canManage(workspace.role) ? <div className="flex flex-wrap justify-end gap-2">
+            {canManage(workspace.role) ? <Button variant="quiet" disabled={busy} onClick={() => void state.command({type:'resolve_transfer', taskId:task.id, decision:'withdraw'})}>Withdraw request</Button> : null}
+            {canRespond ? <>
+              <Button variant="quiet" disabled={busy} onClick={() => void state.command({type:'resolve_transfer', taskId:task.id, decision:'reject'})}>Decline handover</Button>
+              <Button disabled={busy} onClick={() => void state.command({type:'resolve_transfer', taskId:task.id, decision:'accept'})}>Accept responsibility</Button>
+            </> : null}
+          </div> : null}
         </div> : canManage(workspace.role) ? <>
           <Button variant="quiet" size="sm" onClick={() => setTransferOpen(!transferOpen)} aria-expanded={transferOpen}>Hand over responsibility</Button>
           {transferOpen ? <form className="mt-2 grid gap-2" onSubmit={async (event) => {
             event.preventDefault();
-            if (await state.command({type:'request_transfer',taskId:task.id,owner:recipient.trim(),role:recipientRole,reason:transferReason.trim()})) setTransferOpen(false);
+            if (selectedRecipient && await state.command({type:'request_transfer',taskId:task.id,recipientStaffId:selectedRecipient.id,reason:transferReason.trim()})) {
+              setTransferOpen(false); setRecipient(''); setTransferReason('');
+            }
           }}>
-            <Label htmlFor="transfer-owner">Receiving team</Label>
-            <Input id="transfer-owner" required maxLength={80} value={recipient} onChange={event=>setRecipient(event.target.value)} placeholder="Evening lab team" />
-            <Label htmlFor="transfer-role">Receiving simulation role</Label>
-            <Select id="transfer-role" value={recipientRole} onChange={event=>setRecipientRole(event.target.value as CareRole)}>
-              <option value="doctor">Doctor</option><option value="nurse">Nurse</option><option value="lab">Lab staff</option><option value="coordinator">Coordinator</option>
+            <Label htmlFor="transfer-recipient">Receiving person</Label>
+            <Select id="transfer-recipient" required value={selectedRecipient?.id ?? ''} onChange={event=>setRecipient(event.target.value)}>
+              <option value="">Choose a roster member</option>
+              {recipients.map((person) => <option key={person.id} value={person.id}>{personLabel(person)}</option>)}
             </Select>
+            {!recipients.length ? <p className="text-xs text-ink-soft">{team ? 'Add an eligible person in Coordinate care before requesting a handover.' : 'Workspace team access is loading.'}</p> : null}
             <Label htmlFor="transfer-reason">Handover reason</Label>
             <Input id="transfer-reason" required maxLength={400} value={transferReason} onChange={event=>setTransferReason(event.target.value)} placeholder="Shift change; lab receipt still pending" />
-            <p className="text-xs text-ink-soft">The current owner stays responsible until the receiving role accepts. No notification is sent.</p>
-            <Button className="justify-self-end" disabled={busy || !recipient.trim() || !transferReason.trim()}>Request handover</Button>
+            <p className="text-xs text-ink-soft">The current owner stays responsible until the named person accepts. No notification is sent.</p>
+            <Button className="justify-self-end" disabled={busy || !selectedRecipient || !transferReason.trim()}>Request handover</Button>
           </form> : null}
         </> : null}
       </section> : null}

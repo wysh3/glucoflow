@@ -9,17 +9,19 @@ export const teamMemberBody=z.union([
  z.strictObject({email:z.email().trim().max(254),role:teamRole,active:z.boolean().default(true)}),
 ]);
 export const teamAuditQuery=z.strictObject({before:z.coerce.number().int().positive().optional()});
-export type CareAccess={ownerId:string;role:CareRole|null;shared:boolean};
+export type CareAccess={ownerId:string;role:CareRole|null;shared:boolean;hospitalClinicId?:string};
 
 export async function resolveCareAccess(client:DbClient,id:string,actorId:string):Promise<CareAccess>{
-  const {rows}=await client.query<CareAccess>(`select w.owner_id as "ownerId",
+  const {rows}=await client.query<CareAccess & {hospitalClinicId:string|null}>(`select w.owner_id as "ownerId",
+    sutra.care_workspace_hospital(w.id) as "hospitalClinicId",
     exists(select 1 from sutra.care_workspace_team_members where workspace_id=w.id) as shared,
     case when sutra.is_care_team_member(w.id) then t.role else null end as role from sutra.care_workspaces w left join sutra.care_workspace_team_members t
     on t.workspace_id=w.id and t.user_id=$2 and t.active
     where w.id=$1 and sutra.current_actor_id()=$2`,[id,actorId]);
   const access=rows[0];
   if(!access || (access.shared&&!access.role)) throw ApiError.notFound('That care workspace is not available.');
-  return access;
+  const {hospitalClinicId,...existing}=access;
+  return hospitalClinicId ? {...existing,hospitalClinicId} : existing;
 }
 export async function configureTeamMember(client:DbClient,id:string,input:z.infer<typeof teamMemberBody>):Promise<void>{
   // Resolve an RLS-visible account only for the workspace owner; the DB mutation then enforces
@@ -36,7 +38,8 @@ export async function configureTeamMember(client:DbClient,id:string,input:z.infe
 }
 export async function listTeamMembers(client:DbClient,id:string){
   const {rows}=await client.query<{userId:string;displayName:string;email:string|null;role:CareRole;active:boolean;assignedAt:string}>(
-    `select t.user_id as "userId",u.display_name as "displayName",case when w.owner_id=sutra.current_actor_id() then u.email else null end as email,t.role,t.active,t.assigned_at::text as "assignedAt"
+    `select t.user_id as "userId",u.display_name as "displayName",case when w.owner_id=sutra.current_actor_id() then u.email else null end as email,t.role,
+       (t.active and (sutra.care_workspace_hospital(w.id) is null or sutra.care_team_role_allowed(w.id,t.user_id,t.role))) as active,t.assigned_at::text as "assignedAt"
      from sutra.care_workspace_team_members t join sutra.care_workspaces w on w.id=t.workspace_id join sutra.app_users u on u.id=t.user_id where t.workspace_id=$1 order by t.assigned_at,t.user_id`,[id]);
   return rows;
 }

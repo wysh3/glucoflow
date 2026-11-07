@@ -1,9 +1,9 @@
 import {randomUUID} from 'node:crypto';
-import type {CareWorkspace,CareCoordinationCommand,CareCoordination,CareStaff,CareCapability,CareTask} from '@glucoflow/contracts';
+import type {CareWorkspace,CareCoordinationCommand,CareCoordination,CareStaff,CareCapability,CareTask,CareActor} from '@glucoflow/contracts';
 import {ApiError} from '../errors';
 import {assertRole,assertRoom,encounterFor,logActivity} from './events';
 
-export type CoordinationActor = {shared:boolean;actorId:string};
+export type CoordinationActor = {shared:boolean;actorId:string;displayName?:string;demoStaffId?:string};
 const activeTask=(task:CareTask)=>['monitoring','awaiting_evidence','paused'].includes(task.status);
 const capabilityFor=(task:CareTask):CareCapability=>task.kind==='specimen_receipt'?'specimen_followup':task.kind==='result_acknowledgement'?'result_followup':'handover';
 export function emptyCoordination():CareCoordination{return {staff:[],assignments:[],handovers:[],records:[]};}
@@ -23,10 +23,21 @@ function eligible(state:CareWorkspace,staff:CareStaff,capability:CareCapability,
 }
 function recipient(state:CareWorkspace,staff:CareStaff,context?:CoordinationActor){
  assertRole(state,staff.role);
+ if(!context?.shared && context?.demoStaffId && staff.id!==context.demoStaffId)throw ApiError.forbidden('Only the named simulated recipient can respond.');
  if(context?.shared&&(!staff.userId||staff.userId!==context.actorId))throw ApiError.forbidden('Only the named authenticated recipient can respond.');
 }
 function future(value:string,at:string,maxHours=24){
  const ms=Date.parse(value)-Date.parse(at);if(!Number.isFinite(ms)||ms<=0||ms>maxHours*3600000)throw ApiError.validation('Choose a future time within the next 24 hours.');
+}
+
+function transcriptionActor(state:CareWorkspace,context?:CoordinationActor):CareActor {
+ const person=!context?.shared ? state.coordination?.staff.find(s=>s.id===state.demoStaffId&&s.role===state.role&&!s.userId) : undefined;
+ return context?.shared ? {id:context.actorId,name:context.displayName??'Authenticated staff',role:state.role,simulated:false}
+ : {id:person?.id??`simulation:${state.role}`,name:person?.name??`Demo ${state.role}`,role:state.role,simulated:true};
+}
+function validateObservationTime(occurredAt:string,unit:string,dimensionless:boolean|undefined,at:string){
+ if(!Number.isFinite(Date.parse(occurredAt))||Date.parse(occurredAt)>Date.parse(at))throw ApiError.validation('A source record cannot have a future observation time.');
+ if(dimensionless&&unit.trim())throw ApiError.validation('A dimensionless observation cannot also have a measurement unit.');
 }
 
 /** Domain transitions are executed inside the existing workspace row-lock transaction. */
@@ -35,10 +46,27 @@ export function executeCoordinationCommand(state:CareWorkspace,command:CareCoord
  switch(command.action){
  case 'register_staff': {
   assertRole(state,'coordinator','doctor');assertRoom(store.staff,30,'staff');future(command.shiftEnd,at);
-  if(store.staff.some(s=>s.name===command.name&&s.team===command.team))throw ApiError.conflict('This person is already on the roster.','duplicate_staff');
+  if(!command.userId&&store.staff.some(s=>!s.userId&&s.name===command.name&&s.team===command.team))throw ApiError.conflict('This person is already on the roster.','duplicate_staff');
   if(command.userId&&store.staff.some(s=>s.userId===command.userId))throw ApiError.conflict('This account already has a roster entry.','duplicate_staff');
   store.staff.push({id:randomUUID(),name:command.name,userId:command.userId,role:command.role,team:command.team,capabilities:[...new Set(command.capabilities)],shiftEnd:command.shiftEnd,capacity:null});
   logActivity(state,at,'staff_registered','Team member added',`${command.name} · Capacity is not confirmed.`);return true;
+ }
+ case 'renew_staff_shift': {
+  assertRole(state,'doctor','coordinator');
+  const staff=staffFor(state,command.staffId);
+  future(command.shiftEnd,at);
+  if (staff.shiftEnd===command.shiftEnd) return false;
+  staff.shiftEnd=command.shiftEnd;
+  staff.capacity=null;
+  for (const offer of store.assignments) {
+   if (offer.staffId!==staff.id || offer.status!=='offered' || offer.expiresAt<=at) continue;
+   offer.status='withdrawn';
+   offer.resolvedAt=at;
+   logActivity(state,at,'assignment_withdrawn','Task offer withdrawn',`${staff.name} · Staff shift changed; confirm capacity before offering again.`,offer.taskId);
+  }
+  logActivity(state,at,'staff_shift_renewed','Staff shift updated',
+    `${staff.name} · Ends ${staff.shiftEnd} · ${command.sourceRef} · Capacity needs a separate confirmation.`);
+  return true;
  }
  case 'confirm_capacity': {
   assertRole(state,'coordinator');const staff=staffFor(state,command.staffId);future(command.validUntil,at);
@@ -90,17 +118,30 @@ export function executeCoordinationCommand(state:CareWorkspace,command:CareCoord
   }
   logActivity(state,at,`episode_handover_${handover.status}`,`Episode handover ${handover.status}`,`${encounter.patientCode} · ${staff.name}. Physical location is recorded separately.`);return true;
  }
+ case 'correct_episode_record': case 'dispute_episode_record': {
+  assertRole(state,'doctor','nurse','lab');
+  const previous=store.records.find(r=>r.id===command.recordId);
+  if(!previous)throw ApiError.notFound('That source transcription is unavailable.');
+  if(store.records.some(r=>r.supersedesId===previous.id))throw ApiError.conflict('This transcription has a newer version. Refresh before revising it.','record_superseded');
+  const reason=command.reason.trim();if(!reason)throw ApiError.validation('Record why this transcription is being revised.');
+  if(command.action==='correct_episode_record')validateObservationTime(command.occurredAt,command.unit,command.dimensionless,at);
+  assertRoom(store.records,240,'episode record');
+  store.records.push({...previous,id:randomUUID(),supersedesId:previous.id,revisionReason:reason,
+   ...(command.action==='correct_episode_record'?{value:command.value,unit:command.unit,occurredAt:command.occurredAt,dimensionless:command.dimensionless??false,disposition:'transcription' as const}:{disposition:'disputed' as const}),
+   recordedAt:at,recordedBy:context?.actorId??`simulation:${state.role}`,recorder:transcriptionActor(state,context)});
+  logActivity(state,at,'episode_record_revised',command.action==='correct_episode_record'?'Transcription corrected':'Transcription disputed',`${previous.label} · ${previous.sourceRef} · ${reason}. Original retained; no clinical verification implied.`);return true;
+ }
  case 'record_observation': case 'record_followup': {
   assertRole(state,'doctor','nurse','lab');encounterFor(state,command.encounterId);
-  if(!Number.isFinite(Date.parse(command.occurredAt))||command.occurredAt>at)throw ApiError.validation('A source record cannot have a future observation time.');
+  validateObservationTime(command.occurredAt,command.unit,command.dimensionless,at);
   const kind=command.action==='record_observation'?'observation':'followup';
-  const previous=store.records.find(r=>r.sourceRef===command.sourceRef);
+  const previous=store.records.find(r=>r.encounterId===command.encounterId&&r.kind===kind&&r.sourceRef===command.sourceRef&&r.label===command.label&&r.unit===command.unit&&r.occurredAt===command.occurredAt);
   if(previous){
-   if(previous.encounterId===command.encounterId&&previous.kind===kind&&previous.label===command.label&&previous.value===command.value&&previous.unit===command.unit&&previous.occurredAt===command.occurredAt)return false;
+   if(previous.encounterId===command.encounterId&&previous.kind===kind&&previous.label===command.label&&previous.value===command.value&&previous.unit===command.unit&&previous.occurredAt===command.occurredAt&&!!previous.dimensionless===!!command.dimensionless&&!store.records.some(r=>r.supersedesId===previous.id)&&previous.disposition!=='disputed')return false;
    throw ApiError.conflict('That source reference already identifies a different record.','source_conflict');
   }
   assertRoom(store.records,240,'episode record');
-  store.records.push({id:randomUUID(),encounterId:command.encounterId,kind,label:command.label,value:command.value,unit:command.unit,occurredAt:command.occurredAt,recordedAt:at,sourceRef:command.sourceRef,recordedBy:context?.actorId??`simulation:${state.role}`});
+  store.records.push({id:randomUUID(),encounterId:command.encounterId,kind,label:command.label,value:command.value,unit:command.unit,occurredAt:command.occurredAt,recordedAt:at,sourceRef:command.sourceRef,recordedBy:context?.actorId??`simulation:${state.role}`,recorder:transcriptionActor(state,context),dimensionless:command.dimensionless??false,disposition:'transcription'});
   logActivity(state,at,`episode_${kind}`,kind==='observation'?'Source observation recorded':'Follow-up recorded',`${command.label} · ${command.sourceRef} · Staff transcription, not clinical interpretation.`);return true;
  }
  }

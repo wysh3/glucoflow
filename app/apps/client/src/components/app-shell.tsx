@@ -10,6 +10,7 @@ import { CARE_HOME } from '../lib/clinic-home';
 import { LanguageNotice, LanguagePicker, useI18n } from '../i18n';
 import { normalizePathname } from '../lib/route-path';
 import { CodexDesktopLayout, CodexSidebarRow } from '../vendor/codexapp/desktop-layout';
+import { hospitalTeamPath, useHospitals } from '../features/hospital/use-hospitals';
 
 export function useOnlineStatus(): boolean {
   const [online, setOnline] = React.useState(
@@ -41,6 +42,7 @@ export function DemoLabel(): React.ReactElement | null {
 
 export function AppShell({ children }: { children: React.ReactNode }): React.ReactElement {
   const { me, signOut } = useSession();
+  const hospitals = useHospitals();
   const { locale, t } = useI18n();
   const online = useOnlineStatus();
   const location = useLocation();
@@ -66,6 +68,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
   const isClinicView = path.startsWith('/clinic');
   const isPatientView = path.startsWith('/patient');
   const isCareView = path === CARE_HOME;
+  const isHospitalView = path === hospitalTeamPath;
   const main = React.useRef<HTMLElement>(null);
   const lastPath = React.useRef(path);
   const scrollPositions = React.useRef(new Map<string, number>());
@@ -80,7 +83,9 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
       scrollPositions.current.set(location.key, element.scrollTop);
     }
   }, [action, location.key, path]);
-  const clinicNav = isClinicView || (!isPatientView && clinicContexts.length > 0);
+  const hospitalAccess = !hospitals.error && hospitals.data?.hospitals;
+  const hasHospitalCare = hospitalAccess && hospitalAccess.some(hospital => hospital.careRole);
+  const clinicNav = !isPatientView && (clinicContexts.length > 0 || hasHospitalCare);
   const closurePages = [
     { to: '/clinic/results', label: t('nav.resultLedger') },
     ...(me?.capabilities.canClinician ? [{ to: '/clinic/line', label: t('nav.clinicianReview') }] : []),
@@ -90,12 +95,19 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
   ];
   const closureActive = path === '/clinic/replay' || closurePages.some((page) => path === page.to);
   const recordsActive = path.startsWith('/clinic/patients') || path === '/clinic/queue' || path.startsWith('/clinic/review/');
-  const account = { to: '/account', label: t('nav.account'), icon: UserIcon, active: path === '/account' };
+  const account = { to: '/account', label: t('nav.account'), icon: UserIcon, active: path === '/account' || isHospitalView };
+  const careClinic = isCareView ? new URLSearchParams(location.search).get('clinicId') : null;
+  const careLink = (view?: string) => {
+    const query = new URLSearchParams();
+    if (careClinic) query.set('clinicId', careClinic);
+    if (view) query.set('view', view);
+    return CARE_HOME + (query.size ? `?${query}` : '');
+  };
   const links = clinicNav ? [
-    { to: CARE_HOME, label: 'Home & chat', icon: Home, active: path === CARE_HOME && !new URLSearchParams(location.search).get('view') },
-    { to: CARE_HOME+'?view=worklist', label: 'Worklist', icon: ClipboardList, active: path === CARE_HOME && new URLSearchParams(location.search).get('view') === 'worklist' },
-    { to: CARE_HOME+'?view=teams', label: 'Encounters', icon: Users, active: path === CARE_HOME && new URLSearchParams(location.search).get('view') === 'teams' },
-    { to: '/clinic/patients', label: 'Records', icon: FolderOpen, active: recordsActive },
+    { to: careLink(), label: 'Home & chat', icon: Home, active: path === CARE_HOME && !new URLSearchParams(location.search).get('view') },
+    { to: careLink('worklist'), label: 'Worklist', icon: ClipboardList, active: path === CARE_HOME && new URLSearchParams(location.search).get('view') === 'worklist' },
+    { to: careLink('teams'), label: 'Encounters', icon: Users, active: path === CARE_HOME && new URLSearchParams(location.search).get('view') === 'teams' },
+    ...(clinicContexts.length ? [{ to: '/clinic/patients', label: 'Records', icon: FolderOpen, active: recordsActive }] : []),
     account,
   ] : patientContexts.length ? [
     { to: '/patient/records', label: t('nav.records'), icon: FileTextIcon, active: path === '/patient/records' || path === '/patient/add-report' },
@@ -165,7 +177,8 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
         <div className="px-2 py-1 text-xs text-ink-soft">
           <div className="sidebar-workspace-controls">{workspaceControls}</div>
           <p className="break-words font-medium text-ink">{me.actor.displayName}</p>
-          <p className="mt-0.5">{describeRoles(me)}</p>
+          <p className="mt-0.5">{clinicContexts.length === 0 && patientContexts.length === 0 && hospitalAccess && hospitalAccess.length
+            ? 'Hospital staff' : describeRoles(me)}</p>
         </div>
       ) : undefined}
       toolbar={(
@@ -227,7 +240,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
                 ))}
               </nav>
             ) : null}
-            {isClinicView || path === '/patient/master' ? (
+            {isClinicView || isHospitalView || path === '/patient/master' ? (
               <div lang="en-IN" dir="ltr">{children}</div>
             ) : <div lang={locale.tag} dir={locale.direction}>{children}</div>}
           </div>

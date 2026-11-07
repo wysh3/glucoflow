@@ -78,3 +78,33 @@ it('rejects clinical-role impersonation and preserves owner on declined episode 
  state.role='lab';expect(()=>executeCoordinationCommand(state,command,at)).toThrow();
  state.role='doctor';executeCoordinationCommand(state,command,at);expect(encounter.assignedTo).toBe(owner);
 });
+
+it('renews a shift without carrying capacity or a pending offer forward', () => {
+ const {state,staff}=setup();
+ const task=state.tasks[1]!;
+ const offer={type:'coordination',action:'offer_task',taskId:task.id,staffId:staff.id,durationMinutes:5,sourceRef:'SIM-OFFER'} as const;
+ executeCoordinationCommand(state,offer,at);
+ const renew={type:'coordination',action:'renew_staff_shift',staffId:staff.id,shiftEnd:'2026-11-07T20:00:00.000Z',sourceRef:'SIM-SHIFT'} as const;
+ state.role='lab';
+ expect(()=>executeCoordinationCommand(state,renew,at)).toThrow();
+ expect(staff.shiftEnd).toBe(end);
+ state.role='doctor';
+ expect(()=>executeCoordinationCommand(state,{...renew,shiftEnd:'2026-11-09T12:00:00.000Z'},at)).toThrow('next 24 hours');
+ executeCoordinationCommand(state,renew,at);
+ expect(staff.shiftEnd).toBe(renew.shiftEnd);
+ expect(staff.capacity).toBeNull();
+ expect(state.coordination!.assignments[0]!.status).toBe('withdrawn');
+ expect(state.activity.at(-1)).toMatchObject({kind:'staff_shift_renewed',detail:expect.stringContaining('SIM-SHIFT')});
+ expect(()=>executeCoordinationCommand(state,offer,at)).toThrow('No current confirmed capacity');
+ state.role='coordinator';
+ executeCoordinationCommand(state,{type:'coordination',action:'confirm_capacity',staffId:staff.id,slots:1,validUntil:later,sourceRef:'SIM-CAPACITY-2'},at);
+ expect(()=>executeCoordinationCommand(state,offer,at)).not.toThrow();
+});
+
+it('records a new shift for an expired roster member without re-registering their identity', () => {
+ const {state,staff}=setup();
+ const afterShift='2026-11-07T19:00:00.000Z';
+ executeCoordinationCommand(state,{type:'coordination',action:'renew_staff_shift',staffId:staff.id,
+  shiftEnd:'2026-11-08T01:00:00.000Z',sourceRef:'SIM-NEXT-SHIFT'},afterShift);
+ expect(state.coordination!.staff.at(-1)).toMatchObject({id:staff.id,shiftEnd:'2026-11-08T01:00:00.000Z',capacity:null});
+});

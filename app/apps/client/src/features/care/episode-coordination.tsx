@@ -3,6 +3,7 @@ import { Button, Input, Label } from '@glucoflow/ui';
 import type { CareCapability, CareCoordinationCommand, CareRole, CareStaff, CareWorkspace } from '@glucoflow/contracts';
 import { CareDialog, When, roleLabels, taskStatusLabels } from './shared';
 import { BedTransferPanel } from './bed-transfer';
+import { episodeRecordStatus } from './episode-measurements';
 import type { CareWorkspaceState } from './use-care-workspace';
 
 const capabilities: Record<CareCapability, string> = {
@@ -33,13 +34,17 @@ export function EpisodeCoordination({ workspace, encounterId, state, close, acto
   const manager = ['doctor', 'coordinator'].includes(workspace.role);
   const shared = state.team.data?.access.shared;
   // Unresolved access is deliberately not treated as a personal simulation.
+  const activeRosterMember = (staff: CareStaff) => shared === true
+    ? !!staff.userId && !!state.team.data?.members.some(member => member.active && member.userId === staff.userId && member.role === staff.role)
+    : shared === false && !staff.userId;
   const canRespond = (staff?: CareStaff) => !!staff && staff.role === workspace.role
-    && (shared === false || (shared === true && !!actorId && staff.userId === actorId));
+    && ((shared === false && (!workspace.demoStaffId || staff.id === workspace.demoStaffId)) || (shared === true && !!actorId && staff.userId === actorId));
   const tasks = workspace.tasks.filter(task => task.encounterId === encounterId);
   const assignments = data.assignments.filter(item => tasks.some(task => task.id === item.taskId));
   const handovers = data.handovers.filter(item => item.encounterId === encounterId);
   const pendingHandover = handovers.find(item => item.status === 'pending' && item.expiresAt > now);
   const records = data.records.filter(item => item.encounterId === encounterId);
+  const revisionRecord = form?.startsWith('correct:') || form?.startsWith('dispute:') ? records.find(item => item.id === form.slice(8)) : undefined;
   const staffFor = (id: string) => data.staff.find(item => item.id === id);
   const openForm = (value: string | null) => { setForm(value); setValidation(''); setNotice(''); state.clearError(); };
   const submit = async (command: CareCoordinationCommand) => {
@@ -61,6 +66,9 @@ export function EpisodeCoordination({ workspace, encounterId, state, close, acto
         }
         await submit({ type: 'coordination', action: 'register_staff', name: text('name'), team: text('team'),
           role: text('role') as CareRole, userId: text('userId') || null, capabilities: selected, shiftEnd: iso('shiftEnd') });
+      } else if (form?.startsWith('shift:')) {
+        await submit({ type: 'coordination', action: 'renew_staff_shift', staffId: form.slice(6),
+          shiftEnd: iso('shiftEnd'), sourceRef: text('sourceRef') });
       } else if (form?.startsWith('capacity:')) {
         await submit({ type: 'coordination', action: 'confirm_capacity', staffId: form.slice(9),
           slots: Number(text('slots')), validUntil: iso('validUntil'), sourceRef: text('sourceRef') });
@@ -79,13 +87,17 @@ export function EpisodeCoordination({ workspace, encounterId, state, close, acto
           destination: text('destination'), durationMinutes: Number(text('durationMinutes')), sourceRef: text('sourceRef') });
       } else if (form === 'record') {
         await submit({ type: 'coordination', action: text('kind') === 'followup' ? 'record_followup' : 'record_observation',
-          encounterId, label: text('label'), value: text('value'), unit: text('unit'), occurredAt: iso('occurredAt'), sourceRef: text('sourceRef') });
+          encounterId, label: text('label'), value: text('value'), unit: text('unit'), occurredAt: iso('occurredAt'), sourceRef: text('sourceRef'), dimensionless: values.get('dimensionless') === 'on' });
+      } else if (form?.startsWith('correct:')) {
+        await submit({type:'coordination',action:'correct_episode_record',recordId:form.slice(8),value:text('value'),unit:text('unit'),occurredAt:iso('occurredAt'),dimensionless:values.get('dimensionless')==='on',reason:text('reason')});
+      } else if (form?.startsWith('dispute:')) {
+        await submit({type:'coordination',action:'dispute_episode_record',recordId:form.slice(8),reason:text('reason')});
       }
     } catch { setValidation('Check the date and time before saving.'); }
   };
   const availableTasks = tasks.filter(task => ['monitoring', 'awaiting_evidence', 'paused'].includes(task.status)
     && !assignments.some(item => item.taskId === task.id && (item.status === 'accepted' || (item.status === 'offered' && item.expiresAt > now))));
-  const readyStaff = data.staff.filter(staff => staff.shiftEnd > now && staff.capacity && staff.capacity.validUntil > now
+  const readyStaff = data.staff.filter(staff => activeRosterMember(staff) && staff.shiftEnd > now && staff.capacity && staff.capacity.validUntil > now
     && staff.capacity.slots > data.assignments.filter(item => item.staffId === staff.id && (item.status === 'accepted' || (item.status === 'offered' && item.expiresAt > now))).length);
   const input = (name: string, label: string, options: { type?: string; value?: string; required?: boolean; min?: number; max?: number } = {}) =>
     <Field name={name} label={label}><Input id={`coord-${name}`} name={name} type={options.type ?? 'text'} defaultValue={options.value}
@@ -126,7 +138,10 @@ export function EpisodeCoordination({ workspace, encounterId, state, close, acto
           <div><p className="font-medium">{staff.name} <span className="font-normal text-ink-soft">· {staff.team}</span></p>
             <p className="text-xs text-ink-soft">{roleLabels[staff.role]} · {staff.shiftEnd <= now ? 'Shift ended' : staff.capacity && staff.capacity.validUntil > now ? `${staff.capacity.slots} confirmed slot(s)` : 'Capacity unconfirmed'}</p>
             {staff.capacity && <p className="text-xs text-ink-soft">{staff.capacity.sourceRef} · Valid until <When value={staff.capacity.validUntil} /></p>}</div>
-          {workspace.role === 'coordinator' && staff.shiftEnd > now && <Button size="sm" variant="quiet" onClick={() => openForm(`capacity:${staff.id}`)}>Confirm capacity</Button>}
+          {manager && activeRosterMember(staff) && <div className="flex flex-wrap gap-1">
+            <Button size="sm" variant="quiet" disabled={busy} onClick={() => openForm(`shift:${staff.id}`)}>Renew shift</Button>
+            {workspace.role === 'coordinator' && staff.shiftEnd > now && <Button size="sm" variant="quiet" disabled={busy} onClick={() => openForm(`capacity:${staff.id}`)}>Confirm capacity</Button>}
+          </div>}
         </div>)}</div>
         <p className="text-xs text-ink-soft">Only a coordinator confirms capacity. Finishing assigned work does not confirm lab receipt or result acknowledgement; those still need source evidence.</p>
       </>}
@@ -143,28 +158,46 @@ export function EpisodeCoordination({ workspace, encounterId, state, close, acto
       </>}
       {tab === 'records' && <>
         <div className="flex items-center justify-between gap-3"><h3 className="font-semibold">Recorded facts</h3>{workspace.role !== 'coordinator' && <Button size="sm" variant="quiet" onClick={() => openForm('record')}>Add source record</Button>}</div>
-        <p className="text-xs text-ink-soft">Transcribe a documented observation or follow-up. Values are shown as recorded, without clinical interpretation.</p>
+        <p className="text-xs text-ink-soft">Unverified synthetic transcriptions. Original documents are not connected. Corrections preserve previous versions; disputed values are excluded from plots.</p>
         {!records.length && <p className="text-ink-soft">No source records added for this encounter.</p>}
         <div className="divide-y divide-border">{records.slice().reverse().map(item => <article key={item.id} className="grid gap-1 py-3"><div className="flex justify-between gap-2"><strong>{item.label}</strong><span className="text-ink-soft">{item.kind === 'followup' ? 'Follow-up' : 'Observation'}</span></div>
-          <p className="whitespace-pre-wrap break-words">{item.value} {item.unit}</p><p className="text-xs text-ink-soft">Observed <When value={item.occurredAt} /> · Source: {item.sourceRef}</p></article>)}</div>
+          <p className="whitespace-pre-wrap break-words">{item.value} {item.dimensionless ? '(dimensionless)' : item.unit}</p><p className="text-xs text-ink-soft">Observed <When value={item.occurredAt} /> · Reference: {item.sourceRef}</p>
+          <p className="text-xs text-ink-soft">{episodeRecordStatus(item,records)} · Recorded by {item.recorder ? `${item.recorder.name}${item.recorder.simulated ? ' (simulated)' : ''}` : 'Unknown'}</p>
+          {item.revisionReason && <p className="text-xs text-ink-soft">Revision reason: {item.revisionReason}</p>}
+          {workspace.role !== 'coordinator' && !records.some(other=>other.supersedesId===item.id) && <div className="flex gap-2">
+            <Button size="sm" variant="quiet" disabled={busy} onClick={()=>openForm(`correct:${item.id}`)}>Correct transcription</Button>
+            {item.disposition!=='disputed' && <Button size="sm" variant="quiet" disabled={busy} onClick={()=>openForm(`dispute:${item.id}`)}>Dispute</Button>}
+          </div>}</article>)}</div>
       </>}
-      {form && <form onSubmit={handleForm} className="grid gap-3 rounded-xl border border-border bg-white p-4" aria-label="Coordination details">
-        <h3 className="font-semibold">{form === 'staff' ? 'Add synthetic team member' : form.startsWith('capacity:') ? 'Confirm available capacity' : form.startsWith('complete:') ? 'Record completed work' : form === 'offer' ? 'Offer approved work' : form === 'handover' ? 'Request receiving clinician' : 'Add documented fact'}</h3>
+      {form && <form key={form} onSubmit={handleForm} className="grid gap-3 rounded-xl border border-border bg-white p-4" aria-label="Coordination details">
+        <h3 className="font-semibold">{form === 'staff' ? 'Add synthetic team member' : form.startsWith('shift:') ? 'Renew staff shift' : form.startsWith('capacity:') ? 'Confirm available capacity' : form.startsWith('complete:') ? 'Record completed work' : form === 'offer' ? 'Offer approved work' : form === 'handover' ? 'Request receiving clinician' : form.startsWith('correct:') ? 'Correct transcription' : form.startsWith('dispute:') ? 'Dispute transcription' : 'Add documented fact'}</h3>
         {form === 'staff' && <>{input('name', 'Name')}{input('team', 'Team')}{select('role', 'Role', Object.entries(roleLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>))}
-          {shared && select('userId', 'Workspace account', state.team.data?.members.filter(member => member.active).map(member => <option key={member.userId} value={member.userId}>{member.userId} · {roleLabels[member.role]}</option>))}
-          {shared === false && <p className="text-xs text-ink-soft">Synthetic participant only. Use the workspace’s explicit role switch to simulate responses.</p>}
+          {shared && select('userId', 'Workspace account', state.team.data?.members.filter(member => member.active).map(member => <option key={member.userId} value={member.userId}>{member.displayName ?? member.userId} · {roleLabels[member.role]}</option>))}
+          {shared === false && <p className="text-xs text-ink-soft">Synthetic participant only. Use the demo person switcher to respond as this named person.</p>}
           <fieldset className="grid gap-2"><legend className="mb-2 font-medium">Work capabilities</legend>{Object.entries(capabilities).map(([value, label]) => <label key={value} className="flex items-center gap-2"><input name="capabilities" type="checkbox" value={value} />{label}</label>)}</fieldset>
           {input('shiftEnd', 'Shift ends', { type: 'datetime-local', value: localTime(new Date(Date.now() + 8 * 3600000)) })}</>}
-        {form.startsWith('capacity:') && <>{input('slots', 'Available operational slots', { type: 'number', min: 0, max: 20 })}
+        {form.startsWith('shift:') && <>
+          <p>{staffFor(form.slice(6))?.name} · Confirm capacity separately after recording the shift.</p>
+          {input('shiftEnd', 'New shift end', { type: 'datetime-local', value: localTime(new Date(Date.now() + 8 * 3600000)) })}
+        </>}
+        {form.startsWith('capacity:') && <>{input('slots', 'Available operational slots', { type: 'number', min: 0, max: 10 })}
           {input('validUntil', 'Capacity valid until', { type: 'datetime-local', value: localTime(new Date(Math.min(Date.now() + 3600000, Date.parse(staffFor(form.slice(9))?.shiftEnd ?? now)))) })}</>}
         {form === 'offer' && <>{select('taskId', 'Approved task', availableTasks.map(task => <option key={task.id} value={task.id}>{task.title} · {taskStatusLabels[task.status]}</option>))}
           {select('staffId', 'Recipient with confirmed capacity', readyStaff.map(staff => <option key={staff.id} value={staff.id}>{staff.name} · {staff.capabilities.map(item => capabilities[item]).join(', ')}</option>))}</>}
-        {form === 'handover' && <>{select('staffId', 'Receiving clinician', data.staff.filter(staff => staff.role === 'doctor' && staff.capabilities.includes('handover') && staff.shiftEnd > now).map(staff => <option key={staff.id} value={staff.id}>{staff.name} · {staff.team}</option>))}{input('destination', 'Receiving service / destination')}</>}
-        {(form === 'offer' || form === 'handover') && input('durationMinutes', 'Response window (minutes)', { type: 'number', value: '30', min: 1, max: 240 })}
+        {form === 'handover' && <>{select('staffId', 'Receiving clinician', data.staff.filter(staff => activeRosterMember(staff) && staff.role === 'doctor' && staff.capabilities.includes('handover') && staff.shiftEnd > now).map(staff => <option key={staff.id} value={staff.id}>{staff.name} · {staff.team}</option>))}{input('destination', 'Receiving service / destination')}</>}
+        {(form === 'offer' || form === 'handover') && input('durationMinutes', 'Response window (minutes)', { type: 'number', value: '30', min: 1, max: 60 })}
         {form === 'record' && <>{select('kind', 'Record type', <><option value="observation">Documented observation</option><option value="followup">Documented follow-up</option></>)}
           {input('label', 'Label')}{input('value', 'Value or documented note')}{input('unit', 'Unit (if applicable)', { required: false })}
           {input('occurredAt', 'Observed / completed at', { type: 'datetime-local', value: localTime(new Date()) })}</>}
-        {form !== 'staff' && input('sourceRef', 'Synthetic source reference')}
+        {form === 'record' && <label className="flex items-center gap-2"><input type="checkbox" name="dimensionless" />Explicitly dimensionless (for example pH); leave unit blank</label>}
+        {revisionRecord && <>
+          <p>{revisionRecord.label} · {revisionRecord.sourceRef}. Original version remains in the audit history.</p>
+          {form.startsWith('correct:') && <>{input('value','Corrected value or note',{value:revisionRecord.value})}{input('unit','Unit (if applicable)',{value:revisionRecord.unit,required:false})}
+            {input('occurredAt','Observed / completed at',{type:'datetime-local',value:localTime(new Date(revisionRecord.occurredAt))})}
+            <label className="flex items-center gap-2"><input type="checkbox" name="dimensionless" defaultChecked={revisionRecord.dimensionless} />Explicitly dimensionless; leave unit blank</label></>}
+          {input('reason','Reason for correction or dispute')}
+        </>}
+        {form !== 'staff' && !revisionRecord && input('sourceRef', 'Synthetic source reference')}
         <div className="flex justify-end gap-2"><Button type="button" variant="quiet" disabled={busy} onClick={() => openForm(null)}>Cancel</Button><Button type="submit" disabled={busy}>{busy ? 'Saving…' : 'Save'}</Button></div>
       </form>}
       {(validation || (state.errorFor === 'coordination' && state.error)) && <p role="alert" className="text-sm text-danger">{validation || state.error}</p>}

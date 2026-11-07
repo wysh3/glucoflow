@@ -13,6 +13,11 @@ import { ArchivedWorkspace } from './archived-workspace';
 import { WorkspaceHistory } from './workspace-history';
 import { WorkspaceTeamPanel } from './workspace-team';
 import { CarePipeline } from './pipeline';
+import { DemoPersonSwitcher } from './demo-person';
+import { AppointmentPreview } from './appointment-preview';
+import { SupervisorPreview } from './supervisor-preview';
+import { ShiftMonitoringPanel } from './shift-monitoring';
+import { NurseShiftPanel, LabQueuePanel } from './role-work';
 import { EpisodeDrawer } from './episode';
 import { EpisodeCoordination } from './episode-coordination';
 import { CareWorkspaceRecovery } from './workspace-recovery';
@@ -45,8 +50,9 @@ function savedMode(key: string | null): ChatMode {
 
 export function CarePage() {
   const { me } = useSession();
+  const [params] = useSearchParams();
   // Actor changes unmount all clinical context, dialogs and draft text together.
-  return me ? <CareWorkspacePage key={me.actor.userId} actorId={me.actor.userId} /> : null;
+  return me ? <CareWorkspacePage key={`${me.actor.userId}:${params.get('clinicId') ?? ''}`} actorId={me.actor.userId} /> : null;
 }
 
 function CareWorkspacePage({ actorId }: { actorId: string }) {
@@ -59,17 +65,19 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
   const [showConversation, setShowConversation] = useState(false);
   const [wide, setWide] = useState(false);
   const canvas = useRef<HTMLDivElement>(null);
-  const state = useCareWorkspace(actorId);
+  const state = useCareWorkspace(actorId, params.get('clinicId') ?? undefined);
   const draftKey = `glucoflow.care.draft.${actorId}`;
   const [chatDraft, setChatDraft] = useState(() => { try { return sessionStorage.getItem(draftKey) ?? ''; } catch { return ''; } });
   useEffect(() => { try { if (chatDraft) sessionStorage.setItem(draftKey, chatDraft); else sessionStorage.removeItem(draftKey); } catch { /* Draft remains usable in memory. */ } }, [chatDraft, draftKey]);
   const [modeChoice, setModeChoice] = useState<{ workspaceId: string; mode: ChatMode } | null>(null);
   const [resetOpen, setResetOpen] = useState(false);
   const [continueOpen, setContinueOpen] = useState(false);
-  const [savedOpen, setSavedOpen] = useState(false);
+  const [savedOpen, setSavedOpen] = useState(params.get('workspaces') === 'shared');
   const [historyOpen, setHistoryOpen] = useState(false);
   const [teamOpen, setTeamOpen] = useState(false);
   const [pipelineOpen, setPipelineOpen] = useState(false);
+  const [monitoringOpen, setMonitoringOpen] = useState(false);
+  const [preview, setPreview] = useState<'appointment' | 'unit' | null>(null);
   const [eventId, setEventId] = useState<string | null>(null);
   const [taskId, setTaskId] = useState<string | null>(null);
   const [taskDraft, setTaskDraft] = useState<TaskDraft | null>(null);
@@ -92,8 +100,8 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
   const conversationVisible = !workOpen || (wide && showConversation);
   const event = workspace?.events.find((item) => item.id === eventId) ?? null;
   const task = workspace?.tasks.find((item) => item.id === taskId);
-  const inlineError = continueOpen || resetOpen || savedOpen || taskDraft || task || playbookDraft ||
-    state.errorFor === 'chat' || state.errorFor === 'set_role' || state.errorFor === 'set_feed' ||
+  const inlineError = monitoringOpen || continueOpen || resetOpen || savedOpen || taskDraft || task || playbookDraft ||
+    state.errorFor === 'soft_acknowledge_task' || state.errorFor === 'handover_document' || state.errorFor === 'chat' || state.errorFor === 'set_role' || state.errorFor === 'set_feed' ||
     state.errorFor === 'source_event' || state.errorFor === 'apply_skill';
 
   const openView = (next: View) => {
@@ -112,12 +120,16 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
     setHistoryOpen(false);
     setTeamOpen(false);
     setPipelineOpen(false);
+    setPreview(null);
+    setMonitoringOpen(false);
     setCoordinationId(null);
     setEventId(null);
     setTaskId(null);
     setTaskDraft(null);
     setPlaybookDraft(null);
-    setParams(new URLSearchParams(), { replace: true, preventScrollReset: true });
+    const next = new URLSearchParams();
+    if (params.get('clinicId')) next.set('clinicId', params.get('clinicId')!);
+    setParams(next, { replace: true, preventScrollReset: true });
   }
 
   const openSaved = () => {
@@ -199,6 +211,7 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
           ) : null}
           <div className="content-body care-tabs" data-v-705e1c85="">
             <ClinicNavigation>
+              <DemoPersonSwitcher workspace={workspace} state={state} />
               <Button type="button" variant="quiet" size="sm" onClick={() => setPipelineOpen(true)}>Pipeline</Button>
               <Button type="button" variant="quiet" size="sm" onClick={() => setTeamOpen(true)}><Users size={16} aria-hidden /> Team</Button>
               <Button type="button" variant="quiet" size="sm" aria-label="New chat" title="New chat with a fresh simulation; this workspace stays saved" disabled={busy} onClick={() => setResetOpen(true)} className="min-h-11 shrink-0 gap-1.5 px-2">
@@ -224,6 +237,9 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
                   {wide && workOpen ? <CanvasAction label={showConversation ? 'Focus on work' : 'Show conversation'} icon={MessageCircle} disabled={false} onClick={() => setShowConversation(value => !value)} /> : null}
                   <CanvasAction label={simulatorVisible ? 'Hide demo controls' : 'Demo controls'} icon={Hospital} disabled={false} onClick={() => setSimulatorVisible(value => !value)} />
                   </> : null}
+                  <CanvasAction label="Shift monitoring" icon={Activity} disabled={busy} onClick={() => setMonitoringOpen(true)} />
+                  <CanvasAction label="Appointment preview" icon={MessageCircle} disabled={false} onClick={() => setPreview('appointment')} />
+                  <CanvasAction label="Unit workload preview" icon={Hospital} disabled={false} onClick={() => setPreview('unit')} />
                   <CanvasAction label="Export JSON" icon={Download} disabled={busy} onClick={() => void state.exportSnapshot()} />
                 </div>
               </details>
@@ -232,16 +248,16 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
               <div className="care-conversation-pane min-h-0 min-w-0">
                 <AskPanel key={workspace.id} state={state} workspace={workspace} draft={chatDraft} onDraft={setChatDraft} mode={mode} setMode={setMode}
                   visible={conversationVisible} openSource={openSource} openTask={openTask} openExistingTask={setTaskId} openPlaybook={openPlaybook}
-                  openView={openView} openPipeline={() => setPipelineOpen(true)} />
+                  openMonitoring={() => setMonitoringOpen(true)} openCoordination={setCoordinationId} openView={openView} openPipeline={() => setPipelineOpen(true)} />
               </div>
               {workOpen ? (
                 <section className="care-working-pane" aria-label="Working panel">
                   <div key={view} className="care-working-scroll">
                     {view === 'worklist' ? <>
-                      <WorklistPanel workspace={workspace} openSource={openSource} openDetails={openDetails} openTask={openTask} busy={busy} />
+                      {workspace.role === 'nurse' ? <NurseShiftPanel workspace={workspace} state={state} openSource={openSource} openDetails={openDetails} openCoordination={setCoordinationId} /> : workspace.role === 'lab' ? <LabQueuePanel workspace={workspace} openSource={openSource} /> : <WorklistPanel workspace={workspace} openSource={openSource} openDetails={openDetails} openTask={openTask} busy={busy} />}
                     </> : null}
                     {view === 'activity' ? <>
-                      <ActivityPanel workspace={workspace} openSource={openSource} openDetails={openDetails} />
+                      <ActivityPanel openMonitoring={() => setMonitoringOpen(true)} workspace={workspace} openSource={openSource} openDetails={openDetails} />
                     </> : null}
                     {view === 'teams' ? <>
                       <TeamsPanel workspace={workspace} state={state} openSource={openSource} />
@@ -283,13 +299,17 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
           <EventInspector event={event} workspace={workspace} close={() => setEventId(null)} />
         </>
       ) : null}
-      {pipelineOpen && workspace ? <CarePipeline workspace={workspace} close={() => setPipelineOpen(false)} openEpisode={setCoordinationId} /> : null}
+      {pipelineOpen && workspace ? <CarePipeline workspace={workspace} openSource={openSource} close={() => setPipelineOpen(false)} openEpisode={(id) => { setPipelineOpen(false); const next = new URLSearchParams(params); next.set('encounter', id); setParams(next, { preventScrollReset: true }); }} /> : null}
+      {monitoringOpen && workspace ? <ShiftMonitoringPanel workspace={workspace} state={state} openSource={openSource} close={() => setMonitoringOpen(false)} /> : null}
+      {preview && workspace ? <CareDialog open onOpenChange={open => { if (!open) setPreview(null); }} title={preview === 'appointment' ? 'Appointment message' : 'Unit workload preview'} description="Synthetic preview only. No external action is performed.">
+        {preview === 'appointment' ? <AppointmentPreview key={workspace.id} workspace={workspace} /> : <SupervisorPreview />}
+      </CareDialog> : null}
       {teamOpen ? <WorkspaceTeamPanel state={state} close={() => setTeamOpen(false)} /> : null}
       {historyOpen && workspaceId ? <WorkspaceHistory workspaceId={workspaceId} close={() => setHistoryOpen(false)} /> : null}
       <CareDialog title="Open a saved workspace" description="Choose a simulation from this account."
         open={savedOpen} onOpenChange={(open) => { if (!busy) { setSavedOpen(open); state.clearError(); } }}>
         {state.errorFor === 'reopen' && state.error ? <p className="mb-3 text-sm text-danger" role="alert">{state.error}</p> : null}
-        {savedOpen ? <CareWorkspaceRecovery activeId={workspaceId} disabled={busy} onReopen={async (id) => {
+        {savedOpen ? <CareWorkspaceRecovery clinicId={params.get('clinicId') ?? undefined} activeId={workspaceId} disabled={busy} onReopen={async (id) => {
           if (await state.reopen(id)) resetWorkspaceView();
         }} /> : null}
       </CareDialog>

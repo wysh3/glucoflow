@@ -1,6 +1,8 @@
+import { executeHandoverCommand, executeSoftAcknowledgement } from './handover-documents';
+import { executeShiftCommand } from './shift-monitoring';
 import { executeCoordinationCommand, type CoordinationActor } from './coordination';
 import { randomUUID } from 'node:crypto';
-import type { CareCommand, CareTask, CareWorkspace } from '@glucoflow/contracts';
+import type { CareActor, CareCommand, CareTask, CareWorkspace } from '@glucoflow/contracts';
 import { ApiError } from '../errors';
 import { assertRole, assertRoom, encounterFor, latestEvent, limits, logActivity, orderEvents, orderFor, recordSourceEvent } from './events';
 import { activePlaybook, draftHandover, proposePlaybook, reviewPlaybook, rollbackPlaybook, testPlaybook } from './playbooks';
@@ -72,12 +74,29 @@ function actOnTask(state: CareWorkspace, command: Extract<CareCommand, { type: '
 }
 
 /** Command schema checks shape, while this function enforces workspace and lifecycle rules. */
-export function executeCareCommand(state: CareWorkspace, command: Exclude<CareCommand, { type: 'apply_skill' }>, at: string, context?: CoordinationActor): boolean {
+function executeCommand(
+  state: CareWorkspace, command: Exclude<CareCommand, { type: 'apply_skill' }>,
+  at: string, context: CoordinationActor, actor: CareActor,
+): boolean {
   switch (command.type) {
+    case 'shift_monitoring': return executeShiftCommand(state, command, actor, at);
+    case 'handover_document': return executeHandoverCommand(state, command, actor, at);
+    case 'soft_acknowledge_task': return executeSoftAcknowledgement(state, command, actor, at);
     case 'coordination': return executeCoordinationCommand(state, command, at, context);
+    case 'set_demo_staff': {
+      if (context?.shared) throw ApiError.forbidden('Demo switching is unavailable in shared workspaces.');
+      const person = state.coordination?.staff.find(staff => staff.id === command.staffId && !staff.userId);
+      if (!person) throw ApiError.notFound('That simulated person is unavailable.');
+      if (state.demoStaffId === person.id && state.role === person.role) return false;
+      state.demoStaffId = person.id; state.role = person.role;
+      logActivity(state, at, 'demo_person_changed', 'Demo person changed', `${person.name} · ${person.team} · Fictional profile`);
+      return true;
+    }
     case 'set_role':
+      if (context?.shared) throw ApiError.forbidden('Demo switching is unavailable in shared workspaces.');
       if (state.role === command.role) return false;
       state.role = command.role;
+      state.demoStaffId = state.coordination?.staff.find(staff => staff.role === command.role && !staff.userId)?.id;
       logActivity(state, at, 'role_changed', 'Simulation role changed', `Active simulation role · ${command.role}`);
       return true;
     case 'add_encounter':
@@ -86,7 +105,7 @@ export function executeCareCommand(state: CareWorkspace, command: Exclude<CareCo
       state.encounters.push({
         id: randomUUID(), patientName: command.patientName, bed: command.bed,
         patientCode: `DEMO-${1001 + state.encounters.length}`, documentedContext: command.documentedContext,
-        assignedTo: 'Dr Mira Rao', admittedAt: at,
+        assignedTo: command.assignedTo?.trim() || 'Unassigned care team', admittedAt: at,
       });
       logActivity(state, at, 'encounter_added', 'Synthetic encounter added', command.patientName);
       return true;
@@ -159,10 +178,20 @@ export function executeCareCommand(state: CareWorkspace, command: Exclude<CareCo
       const task = state.tasks.find((item) => item.id === command.taskId);
       if (!task || !openStatuses.includes(task.status)) throw ApiError.conflict('Only open tasks can be handed over.', 'task_state_conflict');
       if (task.transfer?.status === 'pending') throw ApiError.conflict('This task already has a pending handover.', 'transfer_pending');
-      if (task.owner === command.owner) throw ApiError.validation('Choose a different receiving team.');
-      task.transfer = {owner: command.owner, role: command.role, reason: command.reason, requestedAt: at, status: 'pending'};
+      const recipient = state.coordination?.staff.find((person) => person.id === command.recipientStaffId);
+      if (!recipient || Boolean(recipient.userId) !== Boolean(context?.shared)) {
+        throw ApiError.validation('Choose a named person from the eligible workspace roster.');
+      }
+      if (context?.shared ? recipient.userId === context.actorId : recipient.id === context?.demoStaffId) {
+        throw ApiError.validation('Choose a different receiving person.');
+      }
+      task.transfer = {
+        owner: recipient.name, role: recipient.role, recipientStaffId: recipient.id,
+        ...(recipient.userId ? { recipientUserId: recipient.userId } : {}),
+        reason: command.reason, requestedAt: at, status: 'pending',
+      };
       logActivity(state, at, 'responsibility_requested', 'Responsibility transfer requested',
-        `${task.owner} → ${command.owner} · ${command.reason}. Current owner remains responsible until acceptance.`, task.id);
+        `${task.owner} → ${recipient.name} · ${command.reason}. Current owner remains responsible until acceptance.`, task.id);
       return true;
     }
     case 'resolve_transfer': {
@@ -170,13 +199,24 @@ export function executeCareCommand(state: CareWorkspace, command: Exclude<CareCo
       if (!task || !openStatuses.includes(task.status) || task.transfer?.status !== 'pending') {
         throw ApiError.conflict('There is no pending handover for this open task.', 'transfer_state_conflict');
       }
-      assertRole(state, task.transfer.role);
+      const transfer = task.transfer;
+      if (command.decision === 'withdraw') {
+        assertRole(state, 'doctor', 'coordinator');
+        transfer.status = 'withdrawn';
+      } else {
+        assertRole(state, transfer.role);
+        const recipient = state.coordination?.staff.find((person) => person.id === transfer.recipientStaffId);
+        const recipientMatches = recipient && recipient.role === transfer.role && (context?.shared
+          ? recipient.userId === context.actorId && transfer.recipientUserId === context.actorId
+          : !recipient.userId && !transfer.recipientUserId && recipient.id === context?.demoStaffId);
+        if (!recipientMatches) throw ApiError.forbidden('Only the named recipient can resolve this handover.');
+        transfer.status = command.decision === 'accept' ? 'accepted' : 'rejected';
+      }
       const previous = task.owner;
-      task.transfer.status = command.decision === 'accept' ? 'accepted' : 'rejected';
-      task.transfer.resolvedAt = at;
-      if (command.decision === 'accept') task.owner = task.transfer.owner;
-      logActivity(state, at, `responsibility_${task.transfer.status}`, `Responsibility ${task.transfer.status}`,
-        `${previous} → ${task.transfer.owner} · Receiving simulation role: ${state.role}. ${command.decision === 'accept' ? 'Task remains open; source evidence is still required.' : 'Original owner retains responsibility.'}`, task.id);
+      transfer.resolvedAt = at;
+      if (transfer.status === 'accepted') task.owner = transfer.owner;
+      logActivity(state, at, `responsibility_${transfer.status}`, `Responsibility ${transfer.status}`,
+        `${previous} → ${transfer.owner}. ${transfer.status === 'accepted' ? 'Task remains open; source evidence is still required.' : 'Original owner retains responsibility.'}`, task.id);
       return true;
     }
     case 'draft_handover': {
@@ -200,4 +240,25 @@ export function executeCareCommand(state: CareWorkspace, command: Exclude<CareCo
       rollbackPlaybook(state, command.playbookId, at);
       return true;
   }
+}
+
+/** Attach attribution only to newly appended records, never rewrite original source authors. */
+export function executeCareCommand(state: CareWorkspace, command: Exclude<CareCommand, { type: 'apply_skill' }>, at: string, context?: CoordinationActor): boolean {
+  const person = !context?.shared ? state.coordination?.staff.find(staff => staff.id === state.demoStaffId && !staff.userId && staff.role === state.role) : undefined;
+  const actor: CareActor = context?.shared
+    ? {id:context.actorId,name:context.displayName ?? 'Authenticated staff',role:state.role,simulated:false}
+    : {id:person?.id ?? `simulation:${state.role}`,name:person?.name ?? `Demo ${state.role}`,role:state.role,simulated:true};
+  const events = state.events.length, activity = state.activity.length, encounters = state.encounters.length;
+  const executionContext = {...context,shared:context?.shared ?? false,actorId:context?.actorId ?? actor.id,...(person ? {demoStaffId:person.id} : {})};
+  if (actor.simulated && !person && (command.type === 'shift_monitoring'
+    || command.type === 'handover_document' || command.type === 'soft_acknowledge_task')) {
+    throw ApiError.forbidden('Choose a named fictional person for this action.');
+  }
+  const changed = executeCommand(state, command, at, executionContext, actor);
+  if (changed) {
+    for (const event of state.events.slice(events)) event.recordedBy = actor;
+    for (const entry of state.activity.slice(activity)) entry.actor = actor;
+    for (const encounter of state.encounters.slice(encounters)) encounter.registeredBy = actor;
+  }
+  return changed;
 }

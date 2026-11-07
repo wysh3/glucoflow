@@ -1,0 +1,136 @@
+{
+  "run": "2026-11-07",
+  "days": 90,
+  "model": "In-process reducer, persistent synthetic workspace per scenario",
+  "limitations": [
+    "No database, API authorization, continuation transaction, capacity, network, real staff or AI model exercised.",
+    "UUIDs are random; counts and scenario schedule are deterministic.",
+    "Tier labels are scenario labels only, not empirical geographic assumptions."
+  ],
+  "results": [
+    {
+      "context": "tier1",
+      "assumptions": "One eight-hour scope and one draft per day; identical workload, no demographic inference.",
+      "counts": {
+        "roleNurse.changed": 1,
+        "soft.changed": 12,
+        "soft.rejected": 2,
+        "softDuplicate.duplicate": 1,
+        "roleDoctor.changed": 1,
+        "monitorCreate.changed": 12,
+        "monitorApprove.changed": 12,
+        "monitorDuplicateApprove.rejected": 12,
+        "monitorExpired": 12,
+        "handoverCreate.changed": 8,
+        "handoverShare.changed": 8,
+        "handoverDuplicateShare.duplicate": 8,
+        "handoverCreate.rejected": 82,
+        "monitorCreate.rejected": 78
+      },
+      "errors": {
+        "soft": "This workspace has reached its soft acknowledgement limit. Start a new simulation to continue.",
+        "monitorDuplicateApprove": "Only a prepared or paused shift monitor can be approved.",
+        "handoverCreate": "This workspace has reached its handover draft limit. Start a new simulation to continue.",
+        "monitorCreate": "This workspace has reached its shift monitor limit. Start a new simulation to continue."
+      },
+      "retained": {
+        "monitors": 12,
+        "documents": 8,
+        "softAcknowledgements": 12
+      }
+    },
+    {
+      "context": "tier2",
+      "assumptions": "One eight-hour scope and one draft per day; identical workload, no demographic inference.",
+      "counts": {
+        "roleNurse.changed": 1,
+        "soft.changed": 12,
+        "soft.rejected": 2,
+        "softDuplicate.duplicate": 1,
+        "roleDoctor.changed": 1,
+        "monitorCreate.changed": 12,
+        "monitorApprove.changed": 12,
+        "monitorDuplicateApprove.rejected": 12,
+        "monitorExpired": 12,
+        "handoverCreate.changed": 8,
+        "handoverShare.changed": 8,
+        "handoverDuplicateShare.duplicate": 8,
+        "handoverCreate.rejected": 82,
+        "monitorCreate.rejected": 78
+      },
+      "errors": {
+        "soft": "This workspace has reached its soft acknowledgement limit. Start a new simulation to continue.",
+        "monitorDuplicateApprove": "Only a prepared or paused shift monitor can be approved.",
+        "handoverCreate": "This workspace has reached its handover draft limit. Start a new simulation to continue.",
+        "monitorCreate": "This workspace has reached its shift monitor limit. Start a new simulation to continue."
+      },
+      "retained": {
+        "monitors": 12,
+        "documents": 8,
+        "softAcknowledgements": 12
+      }
+    },
+    {
+      "context": "tier3",
+      "assumptions": "One eight-hour scope and one draft per day; identical workload, no demographic inference.",
+      "counts": {
+        "roleNurse.changed": 1,
+        "soft.changed": 12,
+        "soft.rejected": 2,
+        "softDuplicate.duplicate": 1,
+        "roleDoctor.changed": 1,
+        "monitorCreate.changed": 12,
+        "monitorApprove.changed": 12,
+        "monitorDuplicateApprove.rejected": 12,
+        "monitorExpired": 12,
+        "handoverCreate.changed": 8,
+        "handoverShare.changed": 8,
+        "handoverDuplicateShare.duplicate": 8,
+        "handoverCreate.rejected": 82,
+        "monitorCreate.rejected": 78
+      },
+      "errors": {
+        "soft": "This workspace has reached its soft acknowledgement limit. Start a new simulation to continue.",
+        "monitorDuplicateApprove": "Only a prepared or paused shift monitor can be approved.",
+        "handoverCreate": "This workspace has reached its handover draft limit. Start a new simulation to continue.",
+        "monitorCreate": "This workspace has reached its shift monitor limit. Start a new simulation to continue."
+      },
+      "retained": {
+        "monitors": 12,
+        "documents": 8,
+        "softAcknowledgements": 12
+      }
+    },
+    {
+      "context": "rural",
+      "assumptions": "One eight-hour scope and one draft per day; identical workload, no demographic inference.",
+      "counts": {
+        "roleNurse.changed": 1,
+        "soft.changed": 12,
+        "soft.rejected": 2,
+        "softDuplicate.duplicate": 1,
+        "roleDoctor.changed": 1,
+        "monitorCreate.changed": 12,
+        "monitorApprove.changed": 12,
+        "monitorDuplicateApprove.rejected": 12,
+        "monitorExpired": 12,
+        "handoverCreate.changed": 8,
+        "handoverShare.changed": 8,
+        "handoverDuplicateShare.duplicate": 8,
+        "handoverCreate.rejected": 82,
+        "monitorCreate.rejected": 78
+      },
+      "errors": {
+        "soft": "This workspace has reached its soft acknowledgement limit. Start a new simulation to continue.",
+        "monitorDuplicateApprove": "Only a prepared or paused shift monitor can be approved.",
+        "handoverCreate": "This workspace has reached its handover draft limit. Start a new simulation to continue.",
+        "monitorCreate": "This workspace has reached its shift monitor limit. Start a new simulation to continue."
+      },
+      "retained": {
+        "monitors": 12,
+        "documents": 8,
+        "softAcknowledgements": 12
+      }
+    }
+  ]
+}

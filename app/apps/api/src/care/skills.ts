@@ -5,7 +5,7 @@ import type {
 import type { DbClient } from '@glucoflow/data/pool';
 import { ApiError } from '../errors';
 import { createCareTask, hasCoveredTask } from './commands';
-import { feedIsFresh, latestAcknowledgement, latestEvent, logActivity, orderEvents, recordSourceEvent } from './events';
+import { feedIsFresh, latestAcknowledgement, latestEvent, latestMatchingSpecimenReceipt, logActivity, orderEvents, recordSourceEvent } from './events';
 import { seedCareWorkspace } from './seed';
 import { createSkillArtifact, validateSkillArtifact, type SkillArtifact } from './skill-artifact';
 
@@ -130,7 +130,7 @@ export async function captureSkill(client: DbClient, state: CareWorkspace, userI
     throw ApiError.conflict('Capture requires a source-confirmed specimen receipt or result acknowledgement.', 'skill_outcome_required');
   }
   const events = orderEvents(state, task.encounterId, task.orderId);
-  const evidence = task.kind === 'specimen_receipt' ? latestEvent(events, 'specimen_received') : latestAcknowledgement(events);
+  const evidence = task.kind === 'specimen_receipt' ? latestMatchingSpecimenReceipt(events) : latestAcknowledgement(events);
   if (!evidence || evidence.id !== task.completionEventId || latestEvent(events, 'order_cancelled')) {
     throw ApiError.conflict('The task has no matching current source completion.', 'skill_outcome_required');
   }
@@ -176,7 +176,8 @@ function previewPattern(
 
   let evidence: CareEvent | undefined;
   if (pattern === 'specimen_receipt') {
-    if (latestEvent(events, 'specimen_received')) return ineligible('The LIS already recorded specimen receipt.');
+    if (latestMatchingSpecimenReceipt(events)) return ineligible('The LIS already recorded matching specimen receipt.');
+    if (latestEvent(events, 'specimen_received')) return ineligible('Review the unverified receipt chronology before applying this routine.');
     evidence = latestEvent(events, 'specimen_collected');
     if (!evidence) return ineligible('A matching HIS specimen collection is required.');
   } else {

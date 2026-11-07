@@ -16,7 +16,7 @@ type Operation = 'create' | 'reopen' | 'continue' | 'command' | 'chat' | 'export
 type ErrorLocation = Operation | CareCommand['type'];
 export type ChatMode = 'hermes' | 'offline';
 export type WorkspaceTeam = {
-  access: { ownerId: string; role: CareRole | null; shared: boolean };
+  access: { ownerId: string; role: CareRole | null; shared: boolean; hospitalClinicId?: string };
   members: { displayName?: string; email?: string | null; userId: string; role: CareRole; active: boolean; assignedAt: string }[];
 };
 
@@ -35,12 +35,12 @@ function savedWorkspace(key: string): string | null {
   }
 }
 
-export function useCareWorkspace(actorId: string) {
+export function useCareWorkspace(actorId: string, clinicId?: string) {
   const { locale } = useI18n();
   const { request } = useApi();
   const queryClient = useQueryClient();
   const toast = useToast();
-  const storageKey = `glucoflow.care.workspace.${actorId}`;
+  const storageKey = `glucoflow.care.workspace.${actorId}${clinicId ? `.${clinicId}` : ''}`;
   const [workspaceId, setWorkspaceId] = useState(() => savedWorkspace(storageKey));
   const [workspace, setWorkspace] = useState<CareWorkspace | null>(null);
   const current = useRef<CareWorkspace | null>(null);
@@ -175,7 +175,7 @@ export function useCareWorkspace(actorId: string) {
   };
 
   const create = () => run('create', async () => {
-    activate(await request<CareWorkspace>(`${base}/workspaces`, { method: 'POST' }));
+    activate(await request<CareWorkspace>(`${base}/workspaces`, { method: 'POST', body: clinicId ? { clinicId } : {} }));
     void queryClient.invalidateQueries({ queryKey: ['care-workspaces', actorId] });
   });
 

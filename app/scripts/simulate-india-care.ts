@@ -122,10 +122,11 @@ export function runIndiaSimulation(seed: number, assumptions: Stratum, days = 90
           if (rejected({ type: 'source_event', encounterId: '00000000-0000-4000-8000-000000000000', orderId: order.id, kind: 'specimen_collected', source: 'HIS', sourceRef: `WRONG-${index}` }, 'foreign encounter')) result.wrongEncounterRejected++;
           role('doctor');
           const owner = receiptTask.owner;
-          command({ type: 'request_transfer', taskId: receiptTask.id, owner: `Synthetic next shift ${index}`, role: 'lab', reason: 'Synthetic shift change' });
+          const receivingLab = state.coordination!.staff.filter(person => person.role === 'lab')[index % 2]!;
+          command({ type: 'request_transfer', taskId: receiptTask.id, recipientStaffId: receivingLab.id, reason: 'Synthetic shift change' });
           check(receiptTask.owner === owner, 'pending transfer retains current owner');
           rejected({ type: 'resolve_transfer', taskId: receiptTask.id, decision: 'accept' }, 'wrong-role transfer acceptance');
-          role('lab');
+          command({ type: 'set_demo_staff', staffId: receivingLab.id });
           command({ type: 'resolve_transfer', taskId: receiptTask.id, decision: acceptShift ? 'accept' : 'reject' });
           check(receiptTask.status !== 'source_confirmed', 'shift transfer cannot complete task');
           check(acceptShift ? receiptTask.owner !== owner : receiptTask.owner === owner, 'transfer decision controls owner');

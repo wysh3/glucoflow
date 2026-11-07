@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { specimenReceiptMatchesCollection } from '@glucoflow/contracts';
 import type { CareCommand, CareEvent, CareEventKind, CareRole, CareWorkspace } from '@glucoflow/contracts';
 import { ApiError } from '../errors';
 
@@ -67,6 +68,11 @@ export function latestEvent(events: readonly CareEvent[], ...kinds: CareEventKin
 
 export function orderEvents(state: CareWorkspace, encounterId: string, orderId: string): CareEvent[] {
   return state.events.filter((event) => event.orderId === orderId && event.encounterId === encounterId);
+}
+
+export function latestMatchingSpecimenReceipt(events: readonly CareEvent[]): CareEvent | undefined {
+  const collection = latestEvent(events, 'specimen_collected');
+  return latestEvent(events.filter((event) => specimenReceiptMatchesCollection(collection, event)), 'specimen_received');
 }
 
 export function latestAcknowledgement(events: readonly CareEvent[]): CareEvent | undefined {

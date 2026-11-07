@@ -8,9 +8,10 @@ import { careErrorText } from './use-care-workspace';
 
 const creationTime = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'medium' });
 
-export function CareWorkspaceRecovery({ onReopen, activeId, disabled = false }: {
+export function CareWorkspaceRecovery({ onReopen, activeId, clinicId, disabled = false }: {
   onReopen: (id: string) => void;
   activeId?: string;
+  clinicId?: string;
   disabled?: boolean;
 }) {
   const { api, me } = useSession();
@@ -23,7 +24,7 @@ export function CareWorkspaceRecovery({ onReopen, activeId, disabled = false }: 
     getNextPageParam: (page) => page.nextCursor ?? undefined,
     enabled: !!me,
   });
-  const workspaces = saved.data?.pages.flatMap((page) => page.workspaces) ?? [];
+  const workspaces = (saved.data?.pages.flatMap((page) => page.workspaces) ?? []).filter(item => !clinicId || item.clinicId === clinicId);
 
   return (
     <Card className="mt-3 min-w-0 p-4 sm:p-5">
@@ -39,7 +40,7 @@ export function CareWorkspaceRecovery({ onReopen, activeId, disabled = false }: 
             </Button>
           </div>
         ) : null}
-        {saved.isSuccess && !workspaces.length ? <p className="mt-3 text-sm text-ink-soft">No owned or assigned workspaces are available.</p> : null}
+        {saved.isSuccess && !workspaces.length ? <p className="mt-3 text-sm text-ink-soft">No matching workspaces in this page. Create a workspace or load older entries.</p> : null}
         {workspaces.length ? (
           <ul className="mt-2 divide-y divide-line">
             {workspaces.map((item) => (
@@ -47,7 +48,7 @@ export function CareWorkspaceRecovery({ onReopen, activeId, disabled = false }: 
                 <div className="min-w-0">
                   <p className="break-words text-sm font-semibold">{item.name}</p>
                   <p className="mt-0.5 text-xs text-ink-soft">
-                    {roleLabels[item.role]} · Updated <When value={item.updatedAt} />
+                    {item.shared ? 'Shared team' : 'Private simulation'} · {roleLabels[item.role]} · Updated <When value={item.updatedAt} />
                   </p>
                   <p className="mt-0.5 text-xs text-ink-soft">
                     Created <time dateTime={item.createdAt}>{creationTime.format(new Date(item.createdAt))}</time>

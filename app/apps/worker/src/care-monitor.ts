@@ -7,7 +7,10 @@ export async function monitorCareBatch(client: DbClient, at = new Date().toISOSt
   const {rows} = await client.query<{state: CareWorkspace}>(`
     select state from sutra.care_workspaces
     where archived_at is null and ($2::uuid is null or id=$2) and monitor_checked_at < $1::timestamptz - interval '15 seconds'
-      and state->'tasks' @? '$[*] ? (@.status == "awaiting_approval" || @.status == "monitoring" || @.status == "awaiting_evidence" || @.status == "paused")'
+      and (
+        state->'tasks' @? '$[*] ? (@.status == "awaiting_approval" || @.status == "monitoring" || @.status == "awaiting_evidence" || @.status == "paused")'
+        or state->'shiftMonitoring' @? '$[*] ? (@.status == "awaiting_approval" || @.status == "monitoring" || @.status == "paused")'
+      )
     order by monitor_checked_at, id limit 20 for update skip locked`, [at, workspaceId]);
   let changed = 0;
   for (const {state} of rows) {

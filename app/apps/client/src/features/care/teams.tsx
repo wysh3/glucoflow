@@ -1,14 +1,15 @@
-import { useId, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import {
-  Bed, ChevronDown, ClipboardList, Download, FilePenLine, FlaskConical,
+  Bed, ChevronDown, ClipboardList, FlaskConical,
   Hospital, Plus, Users,
 } from 'lucide-react';
-import { Badge, Button, Card, Input, Label, Select, Textarea } from '@glucoflow/ui';
+import { Button, Input, Label, Select, Textarea } from '@glucoflow/ui';
 import { BedTransferPanel } from './bed-transfer';
+import { ShiftHandover } from './shift-handover';
 import type { CareEncounter, CareEvent, CareWorkspace } from '@glucoflow/contracts';
 import {
-  canManage, CareDialog, EmptyPanel, IconBox, SectionHeading, SourceChip, When,
+  canManage, CareDialog, EmptyPanel, SectionHeading, SourceChip, When,
 } from './shared';
 import type { CareWorkspaceState } from './use-care-workspace';
 
@@ -38,7 +39,7 @@ export function TeamsPanel({ workspace, state, openSource }: TeamsProps) {
               addOrder={() => { state.clearError(); setForm(encounter); }} />
           )) : <EmptyPanel icon={Users} title="No encounters">Add a synthetic encounter to begin tracking hospital events.</EmptyPanel>}
         </section>
-        <div className="min-w-0 space-y-4"><Handover workspace={workspace} state={state} openSource={openSource} /></div>
+        <div className="min-w-0 space-y-4"><ShiftHandover workspace={workspace} state={state} openSource={openSource} /></div>
       </div>
       {form === 'encounter' ? <AddEncounter state={state} close={close} /> : null}
       {form && form !== 'encounter' ? <AddOrder encounter={form} state={state} close={close} /> : null}
@@ -117,51 +118,10 @@ function EncounterCard({ encounter, workspace, state, openSource, addOrder }: Te
   );
 }
 
-function Handover({ workspace, state, openSource }: TeamsProps) {
-  const [encounterId, setEncounterId] = useState('');
-  const latest = [...workspace.messages].reverse().find((message) =>
-    message.role === 'assistant' && message.engine === 'offline' && message.content.startsWith('Draft handover · Synthetic · Playbook v'));
-  const active = workspace.playbooks.find((item) => item.status === 'approved');
-  const headingId = useId();
-  return (
-    <section aria-labelledby={headingId} className="min-w-0">
-      <Card className="p-4 sm:p-5">
-        <div className="flex items-center gap-3">
-          <IconBox icon={FilePenLine} />
-          <div>
-            <h3 id={headingId} className="text-base font-semibold">Shift handover</h3>
-            <p className="mt-0.5 text-xs text-ink-soft">{active ? `Approved playbook v${active.version}` : 'Draft review'}</p>
-          </div>
-        </div>
-        <form className="mt-4 grid gap-2" onSubmit={(event) => {
-          event.preventDefault();
-          void state.command({ type: 'draft_handover', ...(encounterId ? { encounterId } : {}) });
-        }}>
-          <Label htmlFor="handover-scope">Handover scope</Label>
-          <Select id="handover-scope" value={encounterId} onChange={(event) => setEncounterId(event.target.value)}>
-            <option value="">All assigned encounters</option>
-            {workspace.encounters.map((item) => <option key={item.id} value={item.id}>{item.patientName} · {item.bed}</option>)}
-          </Select>
-          <Button type="submit" variant="primary" disabled={!!state.busy} className="justify-self-start">Draft handover</Button>
-        </form>
-        {latest ? (
-          <div className="mt-4 rounded-xl border border-line bg-canvas p-3.5" aria-live="polite">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
-              <Badge tone="review">Draft for review</Badge><When value={latest.at} />
-            </div>
-            <Button asChild variant="quiet" size="sm" className="mt-2"><Link to="/clinic/care">Read handover in chat</Link></Button>
-          </div>
-        ) : (
-          <p className="mt-3 text-sm leading-relaxed text-ink-soft">The draft groups documented context, sources and open items for the receiving team to review.</p>
-        )}
-      </Card>
-    </section>
-  );
-}
-
 function AddEncounter({ state, close }: { state: CareWorkspaceState; close: () => void }) {
   const [name, setName] = useState('');
   const [bed, setBed] = useState('');
+  const [assignedTo, setAssignedTo] = useState('');
   const [context, setContext] = useState('');
   const lines = context.split('\n').map((line) => line.trim()).filter(Boolean);
   const invalidContext = lines.length > 6 || lines.some((line) => line.length > 300);
@@ -171,7 +131,7 @@ function AddEncounter({ state, close }: { state: CareWorkspaceState; close: () =
       <form className="grid gap-3" onSubmit={async (event) => {
         event.preventDefault();
         if (!name.trim() || !bed.trim() || invalidContext) return;
-        if (await state.command({ type: 'add_encounter', patientName: name.trim(), bed: bed.trim(), documentedContext: lines })) close();
+        if (await state.command({ type: 'add_encounter', patientName: name.trim(), bed: bed.trim(), documentedContext: lines, ...(assignedTo.trim() ? {assignedTo:assignedTo.trim()} : {}) })) close();
       }}>
         <div className="grid gap-1">
           <Label htmlFor="care-scenario">Fictional scenario</Label>
@@ -192,6 +152,7 @@ function AddEncounter({ state, close }: { state: CareWorkspaceState; close: () =
         </div>
         <div className="grid gap-1"><Label htmlFor="new-care-name">Synthetic patient name</Label><Input id="new-care-name" required maxLength={80} value={name} onChange={(event) => setName(event.target.value)} /></div>
         <div className="grid gap-1"><Label htmlFor="new-care-bed">Ward or bed</Label><Input id="new-care-bed" required maxLength={40} value={bed} onChange={(event) => setBed(event.target.value)} /></div>
+        <div className="grid gap-1"><Label htmlFor="new-care-owner">Recorded responsible clinician or team</Label><Input id="new-care-owner" maxLength={80} value={assignedTo} onChange={event=>setAssignedTo(event.target.value)} placeholder="Leave empty if responsibility is unconfirmed" /><p className="text-xs text-ink-soft">Transcribe documented responsibility. Registration does not establish a clinician’s acceptance.</p></div>
         <div className="grid gap-1">
           <Label htmlFor="new-care-context">Documented context (optional)</Label>
           <Textarea id="new-care-context" maxLength={1805} value={context} onChange={(event) => setContext(event.target.value)} placeholder="One documented detail per line" />

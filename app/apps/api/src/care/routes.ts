@@ -2,8 +2,8 @@ import type { FastifyInstance, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import { ApiError } from '../errors';
 import type { CareProgressStage } from './progress';
-import { requireCapability } from '../auth';
 import type { AppContext } from '../context';
+import { listMyHospitals } from '../routes/hospitals';
 import { idempotencyKey, parseBody, parseQuery, requireActor, withActorTx } from '../routes/helpers';
 import { answerOffline, createHermesBridge } from './chat';
 import { appendChat, applyCommand, assertChatRoom, continueWorkspace, createWorkspace, listWorkspaces, readWorkspace } from './repository';
@@ -14,9 +14,14 @@ import { chatBody, commandBody, skillActionBody, skillCaptureBody, skillParams, 
 import { actOnSkill, applicableSkillsForWorkspace, captureSkill, listSkills, previewSkill } from './skills';
 
 const base = '/api/v1/care';
-function careActor(request: FastifyRequest) {
+async function careActor(ctx: AppContext, request: FastifyRequest) {
   const actor = requireActor(request);
-  requireCapability(actor, 'clinic');
+  if (actor.capabilities.clinicIds.length === 0) {
+    const hospitals = await withActorTx(ctx, request, listMyHospitals);
+    if (!hospitals.some((hospital) => hospital.careRole !== null)) {
+      throw ApiError.forbidden('This action needs an assigned staff role.');
+    }
+  }
   return actor;
 }
 
@@ -33,40 +38,50 @@ export function registerCareRoutes(app: FastifyInstance, ctx: AppContext): void 
   const hermes = createHermesBridge((timing) => app.log.info({ hermes: timing }, 'Care Hermes timings'));
 
   app.get(`${base}/runtime`, routeLimit(60), async (request) => {
-    careActor(request);
+    await careActor(ctx, request);
     return hermes.health();
   });
 
   app.post(`${base}/workspaces`, { ...routeLimit(30), bodyLimit: 1024 }, async (request, reply) => {
-    const actor = careActor(request);
-    parseBody(z.strictObject({}), request.body);
-    const state = await withActorTx(ctx, request, (client) =>
-      createWorkspace(client, actor.profile.userId, actor.capabilities.clinicIds[0]!));
+    const actor = await careActor(ctx, request);
+    const { clinicId } = parseBody(z.strictObject({ clinicId: z.uuid().optional() }), request.body);
+    const state = await withActorTx(ctx, request, async (client) => {
+      const hospitals = await listMyHospitals(client);
+      const managed = clinicId
+        ? hospitals.find((hospital) => hospital.clinicId === clinicId)
+        : hospitals.find((hospital) => hospital.careRole !== null);
+      const target = clinicId ?? managed?.clinicId ?? actor.capabilities.clinicIds[0];
+      if (!target || (managed ? !managed.careRole : !actor.capabilities.clinicIds.includes(target))) {
+        throw ApiError.forbidden('An assigned staff role is required in this clinic.');
+      }
+      const workspace = await createWorkspace(client, actor.profile.userId, target);
+      return managed ? readWorkspace(client, workspace.id, actor.profile.userId) : workspace;
+    });
     reply.code(201);
     return state;
   });
 
   app.get(`${base}/workspaces`, routeLimit(60), async (request) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { cursor } = parseQuery(workspaceListQuery, request.query);
     return withActorTx(ctx, request, (client) => listWorkspaces(client, actor.profile.userId, cursor));
   });
 
   app.post(`${base}/workspaces/:id/continue`, { ...routeLimit(10), bodyLimit: 1024 }, async (request) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { id } = parseBody(workspaceParams, request.params);
     const { expectedRevision } = parseBody(z.strictObject({ expectedRevision: z.number().int().positive().max(1_000_000) }), request.body);
     return withActorTx(ctx, request, (client) => continueWorkspace(client, id, actor.profile.userId, expectedRevision));
   });
 
   app.get(`${base}/workspaces/:id`, async (request) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { id } = parseBody(workspaceParams, request.params);
     return withActorTx(ctx, request, (client) => readWorkspace(client, id, actor.profile.userId));
   });
 
-  app.post(`${base}/workspaces/:id/commands`, { ...routeLimit(150), bodyLimit: 8192 }, async (request) => {
-    const actor = careActor(request);
+  app.post(`${base}/workspaces/:id/commands`, { ...routeLimit(150), bodyLimit: 24_576 }, async (request) => {
+    const actor = await careActor(ctx, request);
     const { id } = parseBody(workspaceParams, request.params);
     const input = parseBody(commandBody, request.body);
     const key = idempotencyKey(request, true)!;
@@ -74,14 +89,14 @@ export function registerCareRoutes(app: FastifyInstance, ctx: AppContext): void 
   });
 
   app.get(`${base}/workspaces/:id/history`, routeLimit(60), async (request) => {
-    careActor(request);
+    await careActor(ctx, request);
     const { id } = parseBody(workspaceParams, request.params);
     const { cursor } = parseQuery(z.strictObject({ cursor: z.string().regex(/^[1-9]\d{0,18}$/).optional() }), request.query);
     return withActorTx(ctx, request, (client) => listWorkspaceHistory(client, id, cursor));
   });
 
   app.get(`${base}/workspaces/:id/team`, routeLimit(60), async (request) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { id } = parseBody(workspaceParams, request.params);
     return withActorTx(ctx, request, async (client) => {
       const access = await resolveCareAccess(client, id, actor.profile.userId);
@@ -90,7 +105,7 @@ export function registerCareRoutes(app: FastifyInstance, ctx: AppContext): void 
   });
 
   app.post(`${base}/workspaces/:id/team`, { ...routeLimit(30), bodyLimit: 1024 }, async (request) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { id } = parseBody(workspaceParams, request.params);
     const input = parseBody(teamMemberBody, request.body);
     return withActorTx(ctx, request, async (client) => {
@@ -100,7 +115,7 @@ export function registerCareRoutes(app: FastifyInstance, ctx: AppContext): void 
   });
 
   app.get(`${base}/workspaces/:id/team/audit`, routeLimit(60), async (request) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { id } = parseBody(workspaceParams, request.params);
     const { before } = parseQuery(teamAuditQuery, request.query);
     return withActorTx(ctx, request, async (client) => {
@@ -110,13 +125,13 @@ export function registerCareRoutes(app: FastifyInstance, ctx: AppContext): void 
   });
 
   app.get(`${base}/workspaces/:id/history/:historyId`, routeLimit(60), async (request) => {
-    careActor(request);
+    await careActor(ctx, request);
     const { id, historyId } = parseBody(z.strictObject({ id: z.uuid(), historyId: z.string().regex(/^[1-9]\d{0,18}$/) }), request.params);
     return withActorTx(ctx, request, (client) => readWorkspaceHistory(client, id, historyId));
   });
 
   app.post(`${base}/workspaces/:id/chat`, { ...routeLimit(12), bodyLimit: 16_384 }, async (request, reply) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { id } = parseBody(workspaceParams, request.params);
     const { message, mode, languageCode } = parseBody(chatBody, request.body);
     const ownerId = actor.profile.userId;
@@ -168,7 +183,7 @@ export function registerCareRoutes(app: FastifyInstance, ctx: AppContext): void 
   });
 
   app.get(`${base}/workspaces/:id/export`, routeLimit(30), async (request, reply) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { id } = parseBody(workspaceParams, request.params);
     const state = await withActorTx(ctx, request, (client) => readWorkspace(client, id, actor.profile.userId));
     reply.header('content-disposition', `attachment; filename="glucoflow-care-${state.id}.json"`);
@@ -176,13 +191,13 @@ export function registerCareRoutes(app: FastifyInstance, ctx: AppContext): void 
   });
 
   app.get(`${base}/workspaces/:id/skills`, routeLimit(60), async (request) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { id } = parseBody(workspaceParams, request.params);
     return withActorTx(ctx, request, (client) => listSkills(client, id, actor.profile.userId));
   });
 
   app.post(`${base}/workspaces/:id/skills`, { ...routeLimit(30), bodyLimit: 1024 }, async (request, reply) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { id } = parseBody(workspaceParams, request.params);
     const { taskId } = parseBody(skillCaptureBody, request.body);
     const skill = await withActorTx(ctx, request, async (client) => {
@@ -193,14 +208,14 @@ export function registerCareRoutes(app: FastifyInstance, ctx: AppContext): void 
   });
 
   app.post(`${base}/workspaces/:id/skills/:skillId/actions`, { ...routeLimit(60), bodyLimit: 1024 }, async (request) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { id, skillId } = parseBody(skillParams, request.params);
     const { action } = parseBody(skillActionBody, request.body);
     return withActorTx(ctx, request, (client) => actOnSkill(client, id, actor.profile.userId, skillId, action));
   });
 
   app.post(`${base}/workspaces/:id/skills/:skillId/preview`, { ...routeLimit(60), bodyLimit: 1024 }, async (request) => {
-    const actor = careActor(request);
+    const actor = await careActor(ctx, request);
     const { id, skillId } = parseBody(skillParams, request.params);
     const { encounterId, orderId } = parseBody(skillTargetBody, request.body);
     return withActorTx(ctx, request, async (client) => {

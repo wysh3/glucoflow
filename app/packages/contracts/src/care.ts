@@ -1,3 +1,4 @@
+import type { CareHandoverDocument, CarePdfDemoCommand, CareShiftMonitor, CareSoftAcknowledgement } from './pdf-demo';
 import type { CareCoordination, CareCoordinationCommand } from './care-coordination';
 /** Synthetic care coordination workspace. Patient facts remain source-attributed. */
 export const CARE_LANGUAGE_CODES = [
@@ -6,24 +7,29 @@ export const CARE_LANGUAGE_CODES = [
 ] as const;
 export type CareLanguageCode = (typeof CARE_LANGUAGE_CODES)[number];
 export type CareRole = 'doctor' | 'nurse' | 'lab' | 'coordinator';
+export interface CareActor { id: string; name: string; role: CareRole; simulated: boolean; }
 export type CareEventKind = 'order_placed' | 'specimen_collected' | 'specimen_received' | 'result_validated' | 'result_acknowledged' | 'order_cancelled' | 'result_corrected' | 'handover_received';
 export type CareTaskStatus = 'awaiting_approval' | 'monitoring' | 'paused' | 'awaiting_evidence' | 'source_confirmed' | 'human_attested' | 'expired' | 'cancelled';
 export type CareTaskKind = 'specimen_receipt' | 'result_acknowledgement' | 'handover';
 export interface CareEncounter {
   id: string; patientName: string; patientCode: string; bed: string;
-  documentedContext: string[]; assignedTo: string; admittedAt: string;
+  documentedContext: string[]; assignedTo: string; admittedAt: string; registeredBy?: CareActor;
   bedTransfer?: {stage: 'requested' | 'allocated' | 'arrived'; destination: string; requestedAt: string;
     history: {stage: 'requested' | 'allocated' | 'arrived'; destination: string; sourceRef: string; at: string; role: CareRole}[]};
 }
 export interface CareOrder { id: string; encounterId: string; testName: string; specimenId: string; createdAt: string; targetMinutes: number; }
-export interface CareEvent { id: string; encounterId: string; orderId: string | null; kind: CareEventKind; source: 'HIS' | 'LIS'; sourceRef: string; label: string; occurredAt: string; receivedAt: string; }
-export interface CareTask { id: string; encounterId: string; orderId: string | null; kind: CareTaskKind; title: string; owner: string; status: CareTaskStatus; createdAt: string; expiresAt: string; lastCheckedAt: string | null; completionEventId: string | null; playbookVersion: number; skillId?: string; skillVersion?: number; skillSourceEventId?: string; transfer?: {owner: string; role: CareRole; reason: string; requestedAt: string; status: 'pending' | 'accepted' | 'rejected' | 'withdrawn'; resolvedAt?: string}; }
-export interface CareActivity { id: string; at: string; kind: string; title: string; detail: string; taskId?: string; }
+export interface CareEvent { recordedBy?: CareActor; id: string; encounterId: string; orderId: string | null; kind: CareEventKind; source: 'HIS' | 'LIS'; sourceRef: string; label: string; occurredAt: string; receivedAt: string; }
+export interface CareTask { softAcknowledgements?: CareSoftAcknowledgement[]; id: string; encounterId: string; orderId: string | null; kind: CareTaskKind; title: string; owner: string; status: CareTaskStatus; createdAt: string; expiresAt: string; lastCheckedAt: string | null; completionEventId: string | null; playbookVersion: number; skillId?: string; skillVersion?: number; skillSourceEventId?: string; transfer?: {owner: string; recipientStaffId?: string; recipientUserId?: string; role: CareRole; reason: string; requestedAt: string; status: 'pending' | 'accepted' | 'rejected' | 'withdrawn'; resolvedAt?: string}; }
+export interface CareActivity { actor?: CareActor; id: string; at: string; kind: string; title: string; detail: string; taskId?: string; }
 export interface CarePlaybook { id: string; version: number; title: string; body: string; status: 'draft' | 'approved' | 'rejected' | 'superseded'; createdAt: string; approvedAt: string | null; tests: {name: string; passed: boolean; detail: string}[]; }
 export interface CareMessage { id: string; role: 'user' | 'assistant'; content: string; at: string; engine?: 'hermes' | 'offline'; languageCode?: CareLanguageCode; sources?: string[]; proposals?: CareProposal[]; }
 export interface CareProposal { kind: 'monitor' | 'handover' | 'playbook'; title: string; encounterId?: string; orderId?: string; body?: string; skillId?: string; }
 export interface CareWorkspace {
+  shiftMonitoring?: CareShiftMonitor[];
+  handoverDocuments?: CareHandoverDocument[];
   coordination?: CareCoordination;
+  demoStaffId?: string;
+  demoProfilesVersion?: 1;
   archivedAt?: string;
   previousWorkspaceId?: string;
   id: string; revision: number; name: string; synthetic: true; role: CareRole;
@@ -32,17 +38,18 @@ export interface CareWorkspace {
   tasks: CareTask[]; activity: CareActivity[]; playbooks: CarePlaybook[]; messages: CareMessage[];
   feeds: { HIS: {connected: boolean; lastSyncAt: string}; LIS: {connected: boolean; lastSyncAt: string} };
 }
-export type CareCommand = CareCoordinationCommand
+export type CareCommand = CareCoordinationCommand | CarePdfDemoCommand
   | {type: 'set_role'; role: CareRole}
-  | {type: 'add_encounter'; patientName: string; bed: string; documentedContext: string[]}
+  | {type: 'set_demo_staff'; staffId: string}
+  | {type: 'add_encounter'; patientName: string; bed: string; documentedContext: string[]; assignedTo?: string}
   | {type: 'add_order'; encounterId: string; testName: string; targetMinutes: number}
   | {type: 'source_event'; encounterId: string; orderId: string | null; kind: CareEventKind; source: 'HIS' | 'LIS'; sourceRef: string; occurredAt?: string}
   | {type: 'set_feed'; source: 'HIS' | 'LIS'; connected: boolean}
   | {type: 'create_task'; encounterId: string; orderId: string | null; kind: CareTaskKind; title: string; durationMinutes: number}
   | {type: 'task_action'; taskId: string; action: 'approve' | 'pause' | 'resume' | 'cancel' | 'attest'; reason?: string}
   | {type: 'bed_transfer'; encounterId: string; stage: 'requested' | 'allocated' | 'arrived'; destination: string; sourceRef: string}
-  | {type: 'request_transfer'; taskId: string; owner: string; role: CareRole; reason: string}
-  | {type: 'resolve_transfer'; taskId: string; decision: 'accept' | 'reject'}
+  | {type: 'request_transfer'; taskId: string; recipientStaffId: string; reason: string}
+  | {type: 'resolve_transfer'; taskId: string; decision: 'accept' | 'reject' | 'withdraw'}
   | {type: 'draft_handover'; encounterId?: string}
   | {type: 'propose_playbook'; title: string; body: string}
   | {type: 'test_playbook'; playbookId: string}
@@ -52,7 +59,7 @@ export type CareCommand = CareCoordinationCommand
 export interface CareRuntimeStatus { available: boolean; engine: 'hermes'; version: string; model: string | null; configured: boolean; }
 export interface CareChatResult { reply: string; engine: 'hermes' | 'offline'; model?: string; languageCode?: CareLanguageCode; proposals: CareProposal[]; sources: string[]; }
 
-export type CareWorkspaceSummary = Pick<CareWorkspace, 'id' | 'name' | 'role' | 'createdAt' | 'updatedAt' | 'synthetic'>;
+export type CareWorkspaceSummary = Pick<CareWorkspace, 'id' | 'name' | 'role' | 'createdAt' | 'updatedAt' | 'synthetic'> & { shared?: boolean; clinicId?: string };
 export interface CareWorkspaceList { workspaces: CareWorkspaceSummary[]; nextCursor: string | null; }
 
 export type CareSkillPattern = 'specimen_receipt' | 'result_acknowledgement';
@@ -86,3 +93,11 @@ export type CareApplicableSkill = Pick<CareSkill, 'id' | 'pattern' | 'version' |
   encounterId: string;
   orderId: string;
 };
+
+/** Source occurrence determines sequence even when the records arrive out of order. */
+export function specimenReceiptMatchesCollection(collection?: CareEvent, receipt?: CareEvent): boolean {
+  return !!collection && !!receipt && collection.kind === 'specimen_collected' && collection.source === 'HIS'
+    && receipt.kind === 'specimen_received' && receipt.source === 'LIS'
+    && collection.orderId !== null && collection.orderId === receipt.orderId && collection.encounterId === receipt.encounterId
+    && Date.parse(receipt.occurredAt) >= Date.parse(collection.occurredAt);
+}

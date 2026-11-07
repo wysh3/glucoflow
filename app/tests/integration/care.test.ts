@@ -507,15 +507,19 @@ it('excludes human attestation and a superseded result acknowledgement from skil
   });
 });
 
-it('enforces transfer schema, receiving role and persisted ownership through authenticated commands', async () => {
+it('enforces the named demo recipient and persists ownership through authenticated commands', async () => {
   let state = await create();
   const task = state.tasks[1]!;
-  state = await apply(state, {type:'request_transfer', taskId:task.id, owner:'Evening lab team',role:'lab',reason:'Shift change'});
+  const labStaff = state.coordination!.staff.filter(person => person.role === 'lab');
+  const [recipient, other] = [labStaff[0]!, labStaff[1]!];
+  state = await apply(state, {type:'request_transfer', taskId:task.id, recipientStaffId:recipient.id, reason:'Shift change'});
   expect((await command(state,{type:'resolve_transfer',taskId:task.id,decision:'accept'})).statusCode).toBe(403);
-  expect((await command(state,{type:'request_transfer',taskId:task.id,owner:'',role:'lab',reason:'Shift change'})).statusCode).toBe(422);
-  state = await apply(state,{type:'set_role',role:'lab'});
+  expect((await command(state,{type:'request_transfer',taskId:task.id,recipientStaffId:'',reason:'Shift change'})).statusCode).toBe(422);
+  state = await apply(state,{type:'set_demo_staff',staffId:other.id});
+  expect((await command(state,{type:'resolve_transfer',taskId:task.id,decision:'accept'})).statusCode).toBe(403);
+  state = await apply(state,{type:'set_demo_staff',staffId:recipient.id});
   state = await apply(state,{type:'resolve_transfer',taskId:task.id,decision:'accept'});
-  expect(state.tasks.find(t=>t.id===task.id)?.owner).toBe('Evening lab team');
+  expect(state.tasks.find(t=>t.id===task.id)?.owner).toBe(recipient.name);
   expect(state.tasks.find(t=>t.id===task.id)?.status).toBe('monitoring');
 });
 

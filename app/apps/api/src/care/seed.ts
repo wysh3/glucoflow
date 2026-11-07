@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { CareEncounter, CareEvent, CareOrder, CareTask, CareWorkspace } from '@glucoflow/contracts';
+import type { CareEncounter, CareEvent, CareOrder, CareTask, CareWorkspace, CareStaff } from '@glucoflow/contracts';
 
 const minutes = (n: number) => n * 60_000;
 const examples = [
@@ -60,7 +60,9 @@ export function seedCareWorkspace(now: Date): CareWorkspace {
     });
   }
 
+  const staff = createDemoStaff(now);
   return {
+    demoStaffId: staff[0]!.id, demoProfilesVersion: 1,
     id: randomUUID(), revision: 1, name: 'Inpatient coordination demo', synthetic: true,
     role: 'doctor', createdAt: at, updatedAt: at, encounters, orders, events, tasks,
     activity: [{
@@ -73,13 +75,23 @@ export function seedCareWorkspace(now: Date): CareWorkspace {
       createdAt: at, approvedAt: at, tests: [],
     }],
     coordination: {
-      staff: [
-        {id:randomUUID(),name:'Lab follow-up team (synthetic)',userId:null,role:'lab',team:'Lab team',capabilities:['specimen_followup'],shiftEnd:new Date(now.getTime()+minutes(480)).toISOString(),capacity:null},
-        {id:randomUUID(),name:'Receiving clinician (synthetic)',userId:null,role:'doctor',team:'Receiving team',capabilities:['result_followup','handover'],shiftEnd:new Date(now.getTime()+minutes(480)).toISOString(),capacity:null},
-        {id:randomUUID(),name:'Ward nurse (synthetic)',userId:null,role:'nurse',team:'Ward team',capabilities:['documentation','specimen_followup'],shiftEnd:new Date(now.getTime()+minutes(480)).toISOString(),capacity:null},
-      ],assignments:[],handovers:[],records:[],
+      staff,assignments:[],handovers:[],records:[],
     },
     messages: [],
     feeds: { HIS: { connected: true, lastSyncAt: at }, LIS: { connected: true, lastSyncAt: at } },
   };
+}
+
+export function createDemoStaff(now: Date): CareStaff[] {
+  const staff: CareStaff[] = [
+    {name:'Dr Mira Rao',role:'doctor',team:'Emergency',capabilities:['result_followup','handover','documentation']},
+    {name:'Dr Anil Sen',role:'doctor',team:'Receiving clinical team',capabilities:['result_followup','handover','documentation']},
+    {name:'Anita Joseph',role:'nurse',team:'Emergency nursing',capabilities:['specimen_followup','documentation']},
+    {name:'Ravi Kumar',role:'nurse',team:'Ward nursing',capabilities:['specimen_followup','documentation']},
+    {name:'Priya Shah',role:'lab',team:'Laboratory',capabilities:['specimen_followup','documentation']},
+    {name:'Imran Ali',role:'lab',team:'Laboratory',capabilities:['specimen_followup','documentation']},
+    {name:'Neha Patel',role:'coordinator',team:'Admission and placement',capabilities:['documentation']},
+    {name:'Arun Menon',role:'coordinator',team:'Admission and placement',capabilities:['documentation']},
+  ].map(item => ({...item, id:randomUUID(), userId:null, shiftEnd:new Date(now.getTime()+minutes(480)).toISOString(),capacity:null})) as CareStaff[];
+  return staff;
 }

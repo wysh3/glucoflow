@@ -145,3 +145,15 @@ Evidence: `app/reports/emergency-coordination-suite-2026-11-07.txt`, `app/report
 - [ ] Reference extension: real medication administration feeds, cross-encounter identity and live hospital/ABDM integrations remain outside this release.
 
 Evidence: `app/reports/visual-gluco-release-2026-11-07.md`.
+
+
+## 7 November — hospital authority and visual evidence
+
+R02/R19: managed role ceiling, live revocation, no implicit record access, optimistic administrator assignment, operator-only orphan recovery. R03/R15: named demo persona switching, role-focused home, compact pipeline stage attribution, correct encounter navigation and mobile checks. R08/R10/R11/R12: explicit unverified episode transcriptions, multi-analyte references, dimensionless values, selectable point metadata, append-only corrections/disputes and no inferred measurements. R17/R18/R20: 406 automated tests in 76 files, 12 database checks, four hospital UI fixture browser cases and six real-local visual cases; simulated review and real institutional validation remain distinct. See [release evidence](../../app/reports/hospital-authority-release-2026-11-07.md). No fresh physical Android acceptance is claimed.
+
+### Final-four PDF demo workflow mapping
+
+- Bounded delegation: fixed encounter/source/rule/recipient/expiry preview, separate versioned approval, pause/edit/reapprove/stop, durable source checks.
+- Role workflow and handover: nurse soft acknowledgement stays separate from completion; lab processing absence remains unknown; edited immutable handover versions have named exact-version receipt.
+- Static prototypes: reachable synthetic supervisor and appointment previews; every changed appointment detail clears approval.
+- Evidence: see `app/reports/pdf-compliance-audit-2026-11-07.md` final-four section and the final release report. No new hospital-production or Android-device claim is implied.
