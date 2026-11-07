@@ -12,7 +12,7 @@ import { clinicHome } from '../../lib/clinic-home';
  * unless the account genuinely holds more than one authorized context.
  */
 export function AccountPage(): React.ReactElement {
-  const { me, config, signOut, storageDescription, storageMode } = useSession();
+  const { me, config, storageDescription, storageMode } = useSession();
   const { t } = useI18n();
   const navigate = useNavigate();
   if (!me) return <p className="text-sm text-ink-soft">{t('account.loading')}</p>;
@@ -81,15 +81,6 @@ export function AccountPage(): React.ReactElement {
           <p>{t('account.storage')} · {me.storage.mode}</p>
           <div className="flex flex-wrap gap-2 pt-2">
             <Button asChild variant="secondary"><Link to="/privacy">{t('ui.privacy')}</Link></Button>
-            <Button
-              variant="secondary"
-              onClick={async () => {
-                await signOut();
-                navigate('/sign-in', { replace: true });
-              }}
-            >
-              {t('ui.signOut')}
-            </Button>
           </div>
         </CardBody>
       </Card>

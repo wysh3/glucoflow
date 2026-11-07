@@ -1,0 +1,14 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ✓ tests/integration/care-pipeline-evidence.test.ts (2 tests) 2ms
+ ✓ tests/integration/care-continuation.test.ts (3 tests) 92ms
+ ✓ tests/integration/care-team.test.ts (9 tests) 731ms
+   ✓ enrolls existing clinic accounts by email and refuses other-clinic discovery or teammate enrollment 618ms
+
+ Test Files  3 passed (3)
+      Tests  14 passed (14)
+   Start at  21:08:30
+   Duration  1.26s (tests 54%, import 27%, transform 18%)
+

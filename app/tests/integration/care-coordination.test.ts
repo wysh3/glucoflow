@@ -1,0 +1,24 @@
+import {beforeAll,afterAll,it,expect} from 'vitest';
+import {randomUUID} from 'node:crypto';
+import {createTestContext,createFixture,removeClinic,type TestContext,type TestFixture} from './harness';
+import {createWorkspace,applyCommand,readWorkspace} from '../../apps/api/src/care/repository';
+import {configureTeamMember} from '../../apps/api/src/care/team';
+let db:TestContext;let f:TestFixture;
+beforeAll(async()=>{db=await createTestContext();f=await createFixture(db,'care-coordination');});
+afterAll(async()=>{if(f){await removeClinic(db,f.clinicId);await removeClinic(db,f.otherClinicId);}await db?.close();});
+it('persists episode records and restricts shared handover acceptance to its authenticated recipient',async()=>{
+ let w=await db.asActor(f.clinicianId,c=>createWorkspace(c,f.clinicianId,f.clinicId));
+ await db.asActor(f.clinicianId,c=>configureTeamMember(c,w.id,{userId:f.reviewerId,role:'doctor',active:true}));
+ const now=new Date();
+ w=await db.asActor(f.clinicianId,c=>applyCommand(c,w.id,f.clinicianId,randomUUID(),{expectedRevision:w.revision,command:{type:'coordination',action:'register_staff',name:'Synthetic receiver',userId:f.reviewerId,role:'doctor',team:'Receiving ward',capabilities:['handover'],shiftEnd:new Date(now.getTime()+3600000).toISOString()}}));
+ const staff=w.coordination!.staff.at(-1)!;const encounter=w.encounters[0]!;const originalOwner=encounter.assignedTo;
+ w=await db.asActor(f.clinicianId,c=>applyCommand(c,w.id,f.clinicianId,randomUUID(),{expectedRevision:w.revision,command:{type:'coordination',action:'request_episode_handover',encounterId:encounter.id,staffId:staff.id,destination:'Synthetic ward',durationMinutes:10,sourceRef:'SIM-TRANSFER'}}));
+ const request={expectedRevision:w.revision,command:{type:'coordination' as const,action:'respond_episode_handover' as const,handoverId:w.coordination!.handovers[0]!.id,decision:'accept' as const}};
+ await expect(db.asActor(f.clinicianId,c=>applyCommand(c,w.id,f.clinicianId,randomUUID(),request))).rejects.toThrow('Only the named authenticated recipient');
+ expect((await db.asActor(f.clinicianId,c=>readWorkspace(c,w.id,f.clinicianId))).encounters[0]!.assignedTo).toBe(originalOwner);
+ w=await db.asActor(f.reviewerId,c=>applyCommand(c,w.id,f.reviewerId,randomUUID(),request));
+ expect(w.encounters[0]!.assignedTo).toBe(staff.name);expect(w.encounters[0]!.bed).toBe(encounter.bed);
+ w=await db.asActor(f.reviewerId,c=>applyCommand(c,w.id,f.reviewerId,randomUUID(),{expectedRevision:w.revision,command:{type:'coordination',action:'record_followup',encounterId:encounter.id,label:'Family contacted',value:'Transport arrangements discussed',unit:'',occurredAt:now.toISOString(),sourceRef:'SIM-CALL'}}));
+ const read=await db.asActor(f.clinicianId,c=>readWorkspace(c,w.id,f.clinicianId));
+ expect(read.coordination!.records[0]).toMatchObject({sourceRef:'SIM-CALL',recordedBy:f.reviewerId});
+});

@@ -1,0 +1,74 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ❯ apps/api/src/care/coordination.test.ts (6 tests | 6 failed) 4ms
+   × reserves pending offers and prevents a second offer from double-booking staff 2ms
+   × rechecks capacity freshness at acceptance and returns expired offers to team ownership 0ms
+   × accepts and completes assigned operational work without falsely completing source monitoring 0ms
+   × binds shared acceptance to the actual authenticated recipient 0ms
+   × keeps episode responsibility until the named receiving clinician accepts without moving the patient 0ms
+   × keeps source-linked observations immutable and rejects future times and conflicting source replay 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/api/src/care/coordination.test.ts > reserves pending offers and prevents a second offer from double-booking staff
+Error: Coordination not implemented
+ ❯ executeCoordinationCommand apps/api/src/care/coordination.ts:2:168
+
+ ❯ setup apps/api/src/care/coordination.test.ts:9:2
+ ❯ apps/api/src/care/coordination.test.ts:15:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+ FAIL  apps/api/src/care/coordination.test.ts > rechecks capacity freshness at acceptance and returns expired offers to team ownership
+Error: Coordination not implemented
+ ❯ executeCoordinationCommand apps/api/src/care/coordination.ts:2:168
+
+ ❯ setup apps/api/src/care/coordination.test.ts:9:2
+ ❯ apps/api/src/care/coordination.test.ts:22:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯
+
+ FAIL  apps/api/src/care/coordination.test.ts > accepts and completes assigned operational work without falsely completing source monitoring
+Error: Coordination not implemented
+ ❯ executeCoordinationCommand apps/api/src/care/coordination.ts:2:168
+
+ ❯ setup apps/api/src/care/coordination.test.ts:9:2
+ ❯ apps/api/src/care/coordination.test.ts:30:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯
+
+ FAIL  apps/api/src/care/coordination.test.ts > binds shared acceptance to the actual authenticated recipient
+Error: Coordination not implemented
+ ❯ executeCoordinationCommand apps/api/src/care/coordination.ts:2:168
+
+ ❯ setup apps/api/src/care/coordination.test.ts:9:2
+ ❯ apps/api/src/care/coordination.test.ts:38:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯
+
+ FAIL  apps/api/src/care/coordination.test.ts > keeps episode responsibility until the named receiving clinician accepts without moving the patient
+Error: Coordination not implemented
+ ❯ executeCoordinationCommand apps/api/src/care/coordination.ts:2:168
+
+ ❯ setup apps/api/src/care/coordination.test.ts:9:2
+ ❯ apps/api/src/care/coordination.test.ts:45:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯
+
+ FAIL  apps/api/src/care/coordination.test.ts > keeps source-linked observations immutable and rejects future times and conflicting source replay
+Error: Coordination not implemented
+ ❯ executeCoordinationCommand apps/api/src/care/coordination.ts:2:168
+
+ ❯ setup apps/api/src/care/coordination.test.ts:9:2
+ ❯ apps/api/src/care/coordination.test.ts:54:16
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  20:52:34
+   Duration  225ms (import 34%, transform 31%, tests 24%, worker 10%)
+

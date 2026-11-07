@@ -185,7 +185,12 @@
 .sidebar-workspace-controls select { width:100%; min-height:36px; font-size:.75rem; }
 .sidebar-workspace-controls > * { max-width:100%; }
 .sidebar-workspace-controls button { min-height:32px; font-size:.75rem; }
-@media(min-width:768px) { .content-header[data-compact][data-v-717320c2] { display:none; } }
+@media(min-width:768px) {
+ .content-header[data-compact][data-v-717320c2] { display:flex; min-height:48px; border-bottom:0; }
+ .content-header[data-compact] .content-leading,
+ .content-header[data-compact] .content-title { display:none; }
+ .content-header[data-compact] .content-actions { margin-left:auto; }
+}
 @media(max-width:767px) { .sidebar-workspace-controls { display:none; } }
 
 /* Keyboard resize uses the visual viewport; browser zoom remains available. */

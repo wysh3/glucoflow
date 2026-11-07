@@ -2,7 +2,7 @@ import {beforeAll,afterAll,it,expect} from 'vitest';
 import {randomUUID} from 'node:crypto';
 import {createTestContext,createFixture,removeClinic,type TestContext,type TestFixture} from './harness';
 import {createWorkspace,applyCommand,readWorkspace} from '../../apps/api/src/care/repository';
-import {configureTeamMember,resolveCareAccess,listTeamAudit,auditTeamCommand} from '../../apps/api/src/care/team';
+import {configureTeamMember,resolveCareAccess,listTeamAudit,auditTeamCommand,listTeamMembers} from '../../apps/api/src/care/team';
 let db:TestContext;let f:TestFixture;
 beforeAll(async()=>{db=await createTestContext();f=await createFixture(db,'care-team');});
 afterAll(async()=>{if(f){await removeClinic(db,f.clinicId);await removeClinic(db,f.otherClinicId);}await db?.close();});
@@ -84,4 +84,18 @@ it('removes doctor access when clinician capability is downgraded, including the
  }finally{
    await db.owner(c=>c.query('update sutra.memberships set clinician=true where clinic_id=$1 and user_id in ($2,$3)',[f.clinicId,f.reviewerId,f.clinicianId]));
  }
+});
+
+it('enrolls existing clinic accounts by email and refuses other-clinic discovery or teammate enrollment',async()=>{
+ const w=await create();
+ const email=await db.owner(async c=>(await c.query('select email from sutra.app_users where id=$1',[f.reviewerId])).rows[0]!.email as string);
+ await db.asActor(f.clinicianId,c=>configureTeamMember(c,w.id,{email:email.toUpperCase(),role:'nurse',active:true}));
+ expect((await db.asActor(f.reviewerId,c=>resolveCareAccess(c,w.id,f.reviewerId))).role).toBe('nurse');
+ expect((await db.asActor(f.reviewerId,c=>listTeamMembers(c,w.id))).every(member=>member.email===null)).toBe(true);
+ expect((await db.asActor(f.clinicianId,c=>listTeamMembers(c,w.id))).find(member=>member.userId===f.reviewerId)?.email).toBe(email);
+ await expect(db.asActor(f.reviewerId,c=>configureTeamMember(c,w.id,{email,role:'doctor',active:true}))).rejects.toThrow();
+ const otherEmail=await db.owner(async c=>(await c.query('select email from sutra.app_users where id=$1',[f.otherReviewerId])).rows[0]!.email as string);
+ await expect(db.asActor(f.clinicianId,c=>configureTeamMember(c,w.id,{email:otherEmail,role:'nurse',active:true}))).rejects.toThrow('An existing active staff account');
+ await expect(db.asActor(f.clinicianId,c=>configureTeamMember(c,w.id,{email:'absent@example.invalid',role:'nurse',active:true}))).rejects.toThrow('An existing active staff account');
+ await expect(db.asActor(f.clinicianId,c=>configureTeamMember(c,w.id,{userId:f.clinicianId,role:'doctor',active:false}))).rejects.toThrow();
 });

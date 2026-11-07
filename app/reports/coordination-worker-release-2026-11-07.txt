@@ -1,0 +1,3 @@
+Previous ready revision: glucoflow-worker--gluco-progress
+Submitted revision: glucoflow-worker--coordination
+Azure marked glucoflow-worker--coordination ready.

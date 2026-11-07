@@ -116,3 +116,6 @@ No unresolved blocker in tasks 1–6; both roles usable on web and Android; ever
 ## 7 November India-context simulation and hardening
 
 [Fresh evidence and remaining gates](../reports/india-readiness-2026-11-07.md) supersede older monitoring-only-on-read descriptions for the new deployed synthetic worker. One minimum worker replica supports bounded background reconciliation independently of Hermes readiness. The passing engineering simulation is not a completed 90-day pilot. Continuous hospital storage, real shared staff authorization, verified connectors, sustained model performance and site governance remain required before customer patient-data use.
+
+### Emergency coordination extension (7 November)
+Implemented capacity-confirmed offers, authenticated recipient acceptance, separate receiving responsibility/bed movement, source-linked follow-up, corrected/out-of-order evidence handling, idempotent monitoring reuse, team administration and pipeline UI. Track final release evidence in `reports/emergency-coordination-release-2026-11-07.md`; see `docs/CARE_PIPELINE.md`. Real hospital readiness remains gated; this extension does not remove the established launch requirements.

@@ -20,3 +20,5 @@ export * from './guide';
 export * from './care';
 
 export * from './speech';
+
+export * from './care-coordination';

@@ -72,6 +72,13 @@ export function seedCareWorkspace(now: Date): CareWorkspace {
       body: '{"handoverOrder":"owner-first"}', status: 'approved',
       createdAt: at, approvedAt: at, tests: [],
     }],
+    coordination: {
+      staff: [
+        {id:randomUUID(),name:'Lab follow-up team (synthetic)',userId:null,role:'lab',team:'Lab team',capabilities:['specimen_followup'],shiftEnd:new Date(now.getTime()+minutes(480)).toISOString(),capacity:null},
+        {id:randomUUID(),name:'Receiving clinician (synthetic)',userId:null,role:'doctor',team:'Receiving team',capabilities:['result_followup','handover'],shiftEnd:new Date(now.getTime()+minutes(480)).toISOString(),capacity:null},
+        {id:randomUUID(),name:'Ward nurse (synthetic)',userId:null,role:'nurse',team:'Ward team',capabilities:['documentation','specimen_followup'],shiftEnd:new Date(now.getTime()+minutes(480)).toISOString(),capacity:null},
+      ],assignments:[],handovers:[],records:[],
+    },
     messages: [],
     feeds: { HIS: { connected: true, lastSyncAt: at }, LIS: { connected: true, lastSyncAt: at } },
   };

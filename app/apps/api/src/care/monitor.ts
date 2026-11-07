@@ -1,3 +1,4 @@
+import {reconcileCoordination} from './coordination';
 import type { CareEvent, CareTask, CareWorkspace } from '@glucoflow/contracts';
 import { feedIsFresh, latestAcknowledgement, latestEvent, logActivity, orderEvents } from './events';
 
@@ -41,7 +42,7 @@ function updateTask(
 /** Reconcile with a single server clock. Unchanged reads do not advance revisions. */
 export function reconcileCareWorkspace(state: CareWorkspace, at: string): boolean {
   const now = Date.parse(at);
-  let changed = false;
+  let changed = reconcileCoordination(state, at);
   for (const task of state.tasks) {
     if (task.status === 'cancelled' || task.status === 'expired') continue;
     const events = task.orderId ? orderEvents(state, task.encounterId, task.orderId) : [];
@@ -90,5 +91,5 @@ export function reconcileCareWorkspace(state: CareWorkspace, at: string): boolea
       changed = true;
     }
   }
-  return changed;
+  return reconcileCoordination(state, at) || changed;
 }

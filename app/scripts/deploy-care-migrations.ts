@@ -23,6 +23,7 @@ const releaseFiles = new Set([
   '058_care_workspace_continuation.sql',
   '059_care_team_live_capabilities.sql',
   '060_care_continuation_capabilities.sql',
+  '061_care_coordination_archive_guard.sql',
 ]);
 const migrationDirectory = join(appRoot, 'supabase', 'migrations');
 

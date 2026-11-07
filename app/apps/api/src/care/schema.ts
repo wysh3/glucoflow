@@ -14,7 +14,7 @@ const minutes = z.number().int().min(1).max(1440);
 const bounded = (max: number) => z.string().trim().min(1).max(max);
 const orderLink = { encounterId: uuid, orderId: uuid.nullable() };
 
-const commandSchema = z.discriminatedUnion('type', [
+const originalCommandSchema = z.discriminatedUnion('type', [
   z.strictObject({ type: z.literal('set_role'), role }),
   z.strictObject({
     type: z.literal('add_encounter'), patientName: bounded(80), bed: bounded(40),
@@ -43,6 +43,19 @@ const commandSchema = z.discriminatedUnion('type', [
   z.strictObject({ type: z.literal('rollback_playbook'), playbookId: uuid }),
   z.strictObject({ type: z.literal('apply_skill'), skillId: uuid, encounterId: uuid, orderId: uuid }),
 ]) satisfies z.ZodType<CareCommand>;
+
+const coordinationBase = {type:z.literal('coordination')};
+const coordinationSchema = z.discriminatedUnion('action', [
+ z.strictObject({...coordinationBase,action:z.literal('register_staff'),name:bounded(80),userId:uuid.nullable(),role,team:bounded(80),capabilities:z.array(z.enum(['specimen_followup','result_followup','handover','documentation'])).min(1).max(4),shiftEnd:z.iso.datetime()}),
+ z.strictObject({...coordinationBase,action:z.literal('confirm_capacity'),staffId:uuid,slots:z.number().int().min(0).max(10),validUntil:z.iso.datetime(),sourceRef:bounded(100)}),
+ z.strictObject({...coordinationBase,action:z.literal('offer_task'),taskId:uuid,staffId:uuid,durationMinutes:z.number().int().min(1).max(60),sourceRef:bounded(100)}),
+ z.strictObject({...coordinationBase,action:z.literal('respond_offer'),assignmentId:uuid,decision:z.enum(['accept','decline'])}),
+ z.strictObject({...coordinationBase,action:z.literal('complete_assignment'),assignmentId:uuid,sourceRef:bounded(100)}),
+ z.strictObject({...coordinationBase,action:z.literal('request_episode_handover'),encounterId:uuid,staffId:uuid,destination:bounded(40),durationMinutes:z.number().int().min(1).max(60),sourceRef:bounded(100)}),
+ z.strictObject({...coordinationBase,action:z.literal('respond_episode_handover'),handoverId:uuid,decision:z.enum(['accept','decline'])}),
+ z.strictObject({...coordinationBase,action:z.enum(['record_observation','record_followup']),encounterId:uuid,label:bounded(100),value:bounded(500),unit:z.string().trim().max(40),occurredAt:z.iso.datetime(),sourceRef:bounded(100)}),
+]);
+const commandSchema=z.union([originalCommandSchema,coordinationSchema]) satisfies z.ZodType<CareCommand>;
 
 export const workspaceParams = z.strictObject({ id: uuid });
 export const workspaceListQuery = z.strictObject({

@@ -1,5 +1,4 @@
 import { ClinicNavigation } from './clinic-navigation';
-import { demoEnabled } from '../auth/demo';
 import * as React from 'react';
 import { Link, NavLink, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { ArrowLeftIcon, FileTextIcon, HeartPulseIcon, FilePenLineIcon, UploadIcon, UserIcon, UsersIcon } from 'lucide-animated';
@@ -127,10 +126,6 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
               <span className="hidden sm:inline">{t('nav.askGluco')}</span>
             </Button>
           ) : null}
-          {demoEnabled ? (
-            <Button type="button" variant="quiet" size="sm" className="min-h-11 px-2 sm:px-3"
-              disabled={switching} onClick={() => void switchAccount()}>{t('ui.switchAccount')}</Button>
-          ) : null}
           {isCareView
             ? <span className="hidden rounded-full border border-line bg-canvas px-2.5 py-1 text-[11px] font-medium text-ink-soft sm:inline-flex">{t('nav.careSimulation')}</span>
             : <DemoLabel />}
@@ -173,7 +168,15 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
           <p className="mt-0.5">{describeRoles(me)}</p>
         </div>
       ) : undefined}
-      toolbar={workspaceControls}
+      toolbar={(
+        <>
+          <div className="flex min-w-0 items-center gap-2 md:hidden">{workspaceControls}</div>
+          <Button type="button" variant="quiet" size="sm" className="min-h-11 shrink-0 px-3"
+            disabled={switching} onClick={() => void switchAccount()}>
+            {t('ui.signOut')}
+          </Button>
+        </>
+      )}
       toolbarFooter={(
         <>
           <LanguageNotice className="no-print border-t border-line px-3 py-1.5" />

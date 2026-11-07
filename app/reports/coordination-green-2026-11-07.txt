@@ -1,0 +1,13 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ✓ apps/api/src/care/coordination.test.ts (8 tests) 5ms
+ ✓ tests/integration/care-coordination.test.ts (1 test) 88ms
+ ✓ tests/integration/care-team.test.ts (8 tests) 122ms
+
+ Test Files  3 passed (3)
+      Tests  17 passed (17)
+   Start at  20:58:14
+   Duration  896ms (import 65%, transform 20%, tests 15%)
+

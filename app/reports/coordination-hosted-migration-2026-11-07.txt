@@ -1,0 +1,3 @@
+Verified 59 hosted migration checksums.
+Pending release migrations: 061_care_coordination_archive_guard.sql
+Applied 1 hosted release migration(s) transactionally.

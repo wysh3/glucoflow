@@ -1,0 +1,14 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ✓ apps/api/src/care/coordination.test.ts (8 tests) 5ms
+ ✓ tests/integration/care-coordination.test.ts (1 test) 72ms
+ ✓ tests/integration/care-team.test.ts (9 tests) 694ms
+   ✓ enrolls existing clinic accounts by email and refuses other-clinic discovery or teammate enrollment 585ms
+
+ Test Files  3 passed (3)
+      Tests  18 passed (18)
+   Start at  21:01:46
+   Duration  1.14s (tests 57%, import 24%, transform 19%)
+

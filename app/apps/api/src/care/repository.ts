@@ -102,6 +102,14 @@ export async function applyCommand(
   }
   if (state.revision !== input.expectedRevision) throw staleRevision();
 
+  if (access.shared && input.command.type === 'coordination' && input.command.action === 'register_staff') {
+    const command=input.command;
+    if(!command.userId) throw ApiError.validation('Choose an authenticated member of this shared workspace.');
+    const {rows:members}=await client.query<{role:string}>(
+      'select role from sutra.care_workspace_team_members where workspace_id=$1 and user_id=$2 and active',
+      [id,command.userId]);
+    if(members[0]?.role!==command.role) throw ApiError.forbidden('The roster role must match an active workspace member.');
+  }
   const before = reconcileCareWorkspace(state, at);
   const persistedRole = state.role;
   if (access.role) state.role = access.role;
@@ -109,7 +117,7 @@ export async function applyCommand(
   try {
     applied = input.command.type === 'apply_skill'
       ? await applySkillProposal(client, state, input.command, at)
-      : executeCareCommand(state, input.command, at);
+      : executeCareCommand(state, input.command, at, {shared:access.shared,actorId:ownerId});
   } finally {
     if (access.shared) state.role = persistedRole;
   }

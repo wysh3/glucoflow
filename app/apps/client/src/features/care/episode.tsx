@@ -4,7 +4,8 @@ import type { CareEvent, CareWorkspace } from '@glucoflow/contracts';
 import { CareDialog, SourceChip, StateBadge, When, isFeedFresh } from './shared';
 
 /** One encounter-scoped view. No clinical conclusions are inferred from the timeline. */
-export function EpisodeDrawer({ workspace, openSource, openDetails }: {
+export function EpisodeDrawer({ workspace, openSource, openDetails, onCoordinate }: {
+  onCoordinate: (id: string) => void;
   workspace: CareWorkspace; openSource: (event: CareEvent) => void; openDetails: (id: string) => void;
 }) {
   const [params, setParams] = useSearchParams();
@@ -30,6 +31,7 @@ export function EpisodeDrawer({ workspace, openSource, openDetails }: {
         <p className="mt-1">Assigned clinician: {encounter.assignedTo}</p>
         <p className="mt-1 text-ink-soft">Admitted <When value={encounter.admittedAt} /></p>
       </div>
+      <Button onClick={() => { close(); onCoordinate(encounter.id); }}>Coordinate team & handover</Button>
       <section aria-label="Episode context">
         <h3 className="font-semibold">Documented context</h3>
         <p className="mt-1 text-xs text-ink-soft">Synthetic context entered in this workspace; original hospital documents are not connected.</p>

@@ -25,6 +25,17 @@ it('refuses active work, then archives settled evidence and creates one linked f
  await expect(db.asActor(f.clinicianId,c=>c.query("update sutra.care_workspaces set state=jsonb_set(state,'{name}','\"changed\"') where id=$1",[s.id]))).rejects.toThrow();
 });
 
+it('guards pending episode handovers inside the SQL lock and preserves settled retry idempotency',async()=>{
+ const s=await db.asActor(f.clinicianId,c=>createWorkspace(c,f.clinicianId,f.clinicId));
+ await db.asWorker(c=>monitorCareBatch(c,new Date(Date.now()+2*86400000).toISOString(),s.id));
+ const settled=await db.asActor(f.clinicianId,c=>readWorkspace(c,s.id,f.clinicianId));
+ await db.owner(c=>c.query("update sutra.care_workspaces set state=jsonb_set(state,'{coordination,handovers}',$2::jsonb) where id=$1",[s.id,JSON.stringify([{status:'pending'}])]));
+ const invoke=()=>db.asActor(f.clinicianId,c=>c.query('select sutra.continue_care_workspace($1,$2,$3::jsonb) as id',[s.id,settled.revision,JSON.stringify(seedCareWorkspace(new Date()))]));
+ await expect(invoke()).rejects.toMatchObject({code:'P0001'});
+ await db.owner(c=>c.query("update sutra.care_workspaces set state=jsonb_set(state,'{coordination,handovers}','[]'::jsonb) where id=$1",[s.id]));
+ const first=await invoke();const second=await invoke();expect(second.rows[0]!.id).toBe(first.rows[0]!.id);
+});
+
 it('does not copy a revoked doctor capability or allow a revoked shared owner to archive via SQL',async()=>{
  const s=await db.asActor(f.reviewerId,c=>createWorkspace(c,f.reviewerId,f.clinicId));
  await db.asActor(f.reviewerId,c=>configureTeamMember(c,s.id,{userId:f.clinicianId,role:'doctor',active:true}));

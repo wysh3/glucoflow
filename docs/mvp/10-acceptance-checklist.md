@@ -123,3 +123,15 @@ See [India readiness report](../../app/reports/india-readiness-2026-11-07.md) fo
 ## 7 November completion release mapping
 
 See [fresh release evidence](../../app/reports/completion-release-2026-11-07.md) and [remaining gates](../../app/docs/SHIP_CHECKLIST.md). R02 has new explicit team authorization/revocation and cross-clinic regression coverage; R03/R15 have desktop/mobile composer, close-control, cancellation and streamed-progress checks; R12 has durable care revision evidence and read-only archival; R14 has bounded runtime cancellation and immutable routine evaluations. This does not pass R01/R16 physical Android checks or R18 real-user outcomes by inference.
+
+## 7 November: emergency coordination extension
+- [x] Duplicate monitoring reuses the saved task and preserves approval/owner/evidence.
+- [x] Staff capacity, offers and named acceptance are enforced server-side.
+- [x] Receiving responsibility remains distinct from physical transfer and lab evidence.
+- [x] Owner-managed enrollment of existing clinic accounts; cross-clinic and nonowner changes rejected.
+- [x] Source-backed operational pipeline and top-right sign out.
+- [x] Full suite: 376 tests passed; TypeScript and production builds passed.
+- [x] Local browser checks: fresh workspace, team form, pipeline, source-record save, duplicate-task shortcut and sign out.
+- [ ] External hospital readiness: real identity provisioning/connectors, security/recovery validation, sustained multi-user capacity and supervised pilot evidence. Not established by this demo.
+
+Evidence: `app/reports/emergency-coordination-suite-2026-11-07.txt`, `app/reports/episode-coordination-2026-11-07.md`; architecture: `app/docs/CARE_PIPELINE.md`.

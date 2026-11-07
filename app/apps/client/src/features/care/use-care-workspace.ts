@@ -17,7 +17,7 @@ type ErrorLocation = Operation | CareCommand['type'];
 export type ChatMode = 'hermes' | 'offline';
 export type WorkspaceTeam = {
   access: { ownerId: string; role: CareRole | null; shared: boolean };
-  members: { userId: string; role: CareRole; active: boolean; assignedAt: string }[];
+  members: { displayName?: string; email?: string | null; userId: string; role: CareRole; active: boolean; assignedAt: string }[];
 };
 
 export function careErrorText(error: unknown): string {

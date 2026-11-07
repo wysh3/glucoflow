@@ -55,11 +55,14 @@ export function feedIsFresh(state: CareWorkspace, source: CareEvent['source'], n
 }
 
 export function latestEvent(events: readonly CareEvent[], ...kinds: CareEventKind[]): CareEvent | undefined {
-  for (let index = events.length - 1; index >= 0; index -= 1) {
-    const event = events[index];
-    if (event && kinds.includes(event.kind) && event.source === eventRules[event.kind].source) return event;
+  let latest: CareEvent | undefined;
+  for (const event of events) {
+    if (!kinds.includes(event.kind) || event.source !== eventRules[event.kind].source) continue;
+    if (!latest || event.occurredAt > latest.occurredAt ||
+        (event.occurredAt === latest.occurredAt &&
+          (event.kind === 'result_corrected' || latest.kind !== 'result_corrected') && event.receivedAt >= latest.receivedAt)) latest = event;
   }
-  return undefined;
+  return latest;
 }
 
 export function orderEvents(state: CareWorkspace, encounterId: string, orderId: string): CareEvent[] {
@@ -69,7 +72,8 @@ export function orderEvents(state: CareWorkspace, encounterId: string, orderId: 
 export function latestAcknowledgement(events: readonly CareEvent[]): CareEvent | undefined {
   const result = latestEvent(events, 'result_validated', 'result_corrected');
   if (!result) return undefined;
-  return latestEvent(events.slice(events.indexOf(result) + 1), 'result_acknowledged');
+  return latestEvent(events.filter((event, index) => event.occurredAt > result.occurredAt ||
+    (event.occurredAt === result.occurredAt && index > events.indexOf(result))), 'result_acknowledged');
 }
 
 /** Apply an independent event from the selected synthetic source system. */
@@ -105,7 +109,7 @@ export function recordSourceEvent(
   }
 
   const events = order ? orderEvents(state, encounter.id, order.id) : [];
-  if (latestEvent(events, 'order_cancelled')) {
+  if (latestEvent(events, 'order_cancelled') && command.source !== 'LIS') {
     throw ApiError.conflict('This simulated order is cancelled.', 'order_cancelled');
   }
   const previous = latestEvent(events, command.kind);
@@ -136,7 +140,8 @@ export function recordSourceEvent(
       prerequisite = latestEvent(events, 'result_validated', 'result_corrected');
       break;
   }
-  if (command.kind !== 'order_placed' && !isHandover && (!prerequisite || occurredAt < prerequisite.occurredAt)) {
+  const sequenceGap = command.kind !== 'order_placed' && !isHandover && (!prerequisite || occurredAt < prerequisite.occurredAt);
+  if (sequenceGap && command.source !== 'LIS') {
     throw ApiError.conflict('The prerequisite source event must be recorded before this step.', 'source_sequence_conflict');
   }
   assertRoom(state.events, limits.events, 'source event');
@@ -145,6 +150,8 @@ export function recordSourceEvent(
     kind: command.kind, source: command.source, sourceRef: command.sourceRef,
     label: rule.label, occurredAt, receivedAt: at,
   });
+  if (sequenceGap) logActivity(state, at, 'source_sequence_gap', 'Source evidence arrived with a missing or inconsistent earlier step', `${command.source} · ${command.sourceRef}. Earlier events remain unverified; none were inferred.`);
+  if (command.source === 'LIS' && latestEvent(events, 'order_cancelled')) logActivity(state, at, 'source_after_cancellation', 'Lab evidence retained after cancellation', `${command.sourceRef}. The order remains cancelled.`);
   state.feeds[command.source].lastSyncAt = at;
   logActivity(state, at, 'source_event', rule.label, `${command.source} · ${command.sourceRef}`);
   return true;

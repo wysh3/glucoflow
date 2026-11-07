@@ -14,6 +14,8 @@ Start with the care desk or ask Gluco a question. Responses bring relevant encou
 - **Useful conversations:** live action progress, concise responses, evidence drawers, Enter to send, Shift+Enter for a newline, cancellation, microphone input and read-aloud controls. Speech requires a configured Sarvam service.
 - **Human control:** actions require authorization and approval. Viewing a result does not silently acknowledge it. Source events and human attestations remain distinguishable.
 - **Care routines:** versioned operational templates with evaluation, clinician approval and rollback. Applying a routine uses the target encounter's own evidence. This is bounded workflow reuse, not autonomous medical learning.
+- **Coordination:** capacity-confirmed staff offers, named receiving-team acceptance, and source-linked follow-up. The evidence pipeline keeps order completion, result acknowledgement and bed placement separate. See the [pipeline diagrams](app/docs/CARE_PIPELINE.md).
+- **Team access:** workspace owners enroll existing clinic accounts, assign server-enforced roles and revoke access. Sign out is available at the top right.
 - **Continuity:** saved workspaces, durable source-bearing revision history, explicit same-clinic team membership, and read-only archives linked to fresh simulations.
 - **Patient records:** upload and review workflows, source-linked records, patient notes and exports. The web client also supplies the Capacitor Android shell.
 

@@ -1,0 +1,38 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ❯ tests/integration/care-team.test.ts (9 tests | 1 failed) 112ms
+   ✓ keeps private workspaces private and grants explicit same-clinic authenticated membership 15ms
+   ✓ prevents teammate self-promotion and direct membership/audit edits 7ms
+   ✓ revokes access immediately and refuses impersonation 5ms
+   ✓ clinic membership revocation wins over team enrollment 3ms
+   ✓ derives role on shared reads and refuses simulation role switching through repository 6ms
+   ✓ applies only the assigned role, audits once on retry, and does not persist actor-specific role 10ms
+   ✓ pages audit by numeric ID without duplicate entries 11ms
+   ✓ removes doctor access when clinician capability is downgraded, including the workspace owner 7ms
+   × enrolls existing clinic accounts by email and refuses other-clinic discovery or teammate enrollment 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/care-team.test.ts > enrolls existing clinic accounts by email and refuses other-clinic discovery or teammate enrollment
+error: An active membership in this clinic is required
+ ❯ node_modules/.pnpm/pg@8.23.1/node_modules/pg/lib/client.js:694:17
+ ❯ configureTeamMember apps/api/src/care/team.ts:21:3
+     19| }
+     20| export async function configureTeamMember(client:DbClient,id:string,in…
+     21|   await client.query('select sutra.configure_care_team_member($1,$2,$3…
+       |   ^
+     22| }
+     23| export async function listTeamMembers(client:DbClient,id:string){
+ ❯ withTransaction packages/data/src/pool.ts:97:20
+ ❯ tests/integration/care-team.test.ts:92:2
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 8 passed (9)
+   Start at  21:00:36
+   Duration  588ms (import 44%, transform 28%, tests 28%)
+

@@ -1,3 +1,4 @@
+import { executeCoordinationCommand, type CoordinationActor } from './coordination';
 import { randomUUID } from 'node:crypto';
 import type { CareCommand, CareTask, CareWorkspace } from '@glucoflow/contracts';
 import { ApiError } from '../errors';
@@ -20,7 +21,6 @@ export function hasCoveredTask(state: CareWorkspace, encounterId: string, orderI
 }
 
 export function createCareTask(state: CareWorkspace, command: Extract<CareCommand, { type: 'create_task' }>, at: string): CareTask {
-  assertRoom(state.tasks, limits.tasks, 'task');
   const encounter = encounterFor(state, command.encounterId);
   if (command.kind === 'handover' && command.orderId !== null) {
     throw ApiError.validation('Choose an encounter without an order for a handover task.');
@@ -29,9 +29,10 @@ export function createCareTask(state: CareWorkspace, command: Extract<CareComman
   if (order && latestEvent(orderEvents(state, encounter.id, order.id), 'order_cancelled')) {
     throw ApiError.conflict('This simulated order is cancelled.', 'order_cancelled');
   }
-  if (hasCoveredTask(state, encounter.id, command.orderId, command.kind)) {
-    throw ApiError.conflict('A monitoring task already covers this evidence.', 'duplicate_task');
-  }
+  const existing = state.tasks.find((task) => task.encounterId === encounter.id && task.orderId === command.orderId &&
+    task.kind === command.kind && (openStatuses.includes(task.status) || (command.orderId !== null && task.status === 'source_confirmed')));
+  if (existing) return existing;
+  assertRoom(state.tasks, limits.tasks, 'task');
 
   const task: CareTask = {
     id: randomUUID(), encounterId: encounter.id, orderId: order?.id ?? null,
@@ -71,8 +72,9 @@ function actOnTask(state: CareWorkspace, command: Extract<CareCommand, { type: '
 }
 
 /** Command schema checks shape, while this function enforces workspace and lifecycle rules. */
-export function executeCareCommand(state: CareWorkspace, command: Exclude<CareCommand, { type: 'apply_skill' }>, at: string): boolean {
+export function executeCareCommand(state: CareWorkspace, command: Exclude<CareCommand, { type: 'apply_skill' }>, at: string, context?: CoordinationActor): boolean {
   switch (command.type) {
+    case 'coordination': return executeCoordinationCommand(state, command, at, context);
     case 'set_role':
       if (state.role === command.role) return false;
       state.role = command.role;
@@ -120,9 +122,11 @@ export function executeCareCommand(state: CareWorkspace, command: Exclude<CareCo
       logActivity(state, at, 'feed_changed', `${command.source} feed ${command.connected ? 'synchronized' : 'disconnected'}`, 'Synthetic feed control.');
       return true;
     }
-    case 'create_task':
+    case 'create_task': {
+      const count = state.tasks.length;
       createCareTask(state, command, at);
-      return true;
+      return state.tasks.length !== count;
+    }
     case 'task_action':
       actOnTask(state, command, at);
       return true;

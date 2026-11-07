@@ -6,13 +6,14 @@ import type { SendCommand } from './use-care-workspace';
 
 export type TaskDraft = Pick<CareProposal, 'title' | 'encounterId' | 'orderId' | 'body' | 'skillId'> & { taskKind?: CareTaskKind };
 
-export function TaskDialog({ draft, workspace, busy, send, close, error }: {
+export function TaskDialog({ draft, workspace, busy, send, close, error, openExisting }: {
   draft: TaskDraft;
   workspace: CareWorkspace;
   busy: boolean;
   send: SendCommand;
   close: () => void;
   error: string;
+  openExisting: (id: string) => void;
 }) {
   const proposedOrder = workspace.orders.find((item) => item.id === draft.orderId);
   const [encounterId, setEncounterId] = useState(proposedOrder?.encounterId ?? draft.encounterId ?? workspace.encounters[0]?.id ?? '');
@@ -24,6 +25,7 @@ export function TaskDialog({ draft, workspace, busy, send, close, error }: {
   const [duration, setDuration] = useState('120');
   const eligibleOrders = workspace.orders.filter((item) => item.encounterId === encounterId);
   const selectedOrderId = eligibleOrders.some((item) => item.id === orderId) ? orderId : eligibleOrders[0]?.id;
+  const existing = workspace.tasks.find(task => task.encounterId === encounterId && task.orderId === (kind === 'handover' ? null : selectedOrderId) && task.kind === kind && (['awaiting_approval', 'monitoring', 'awaiting_evidence', 'paused'].includes(task.status) || (task.orderId !== null && task.status === 'source_confirmed')));
   const durationMinutes = Number(duration);
   const ready = !!encounterId && !!title.trim() && (kind === 'handover' || !!selectedOrderId) && Number.isInteger(durationMinutes) && durationMinutes >= 1 && durationMinutes <= 1440;
 
@@ -32,6 +34,7 @@ export function TaskDialog({ draft, workspace, busy, send, close, error }: {
       description="Set one evidence condition and an expiry. Monitoring starts after approval.">
       <form className="grid gap-3.5" onSubmit={async (event) => {
         event.preventDefault();
+        if (existing) { close(); openExisting(existing.id); return; }
         if (!ready) return;
         const created = await send({
           type: 'create_task', encounterId, orderId: kind === 'handover' ? null : selectedOrderId ?? null,
@@ -68,9 +71,10 @@ export function TaskDialog({ draft, workspace, busy, send, close, error }: {
           <Label htmlFor="task-duration">Monitoring duration in minutes</Label>
           <Input id="task-duration" type="number" min={1} max={1440} step={1} required value={duration} onChange={(event) => setDuration(event.target.value)} />
         </div>
+        {existing ? <p className="text-sm text-ink-soft">This evidence already has a task. Open it to see its owner, approval and progress.</p> : null}
         {error ? <p role="alert" className="text-sm text-danger">{error}</p> : null}
         <div className="flex justify-end">
-          <Button type="submit" variant="primary" disabled={busy || !ready}>Create approval request</Button>
+          <Button type={existing ? "button" : "submit"} onClick={existing ? () => { close(); openExisting(existing.id); } : undefined} variant="primary" disabled={busy || (!existing && !ready)}>{existing ? 'View existing task' : 'Create approval request'}</Button>
         </div>
       </form>
     </CareDialog>

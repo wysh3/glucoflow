@@ -1,3 +1,4 @@
+import type { CareCoordination, CareCoordinationCommand } from './care-coordination';
 /** Synthetic care coordination workspace. Patient facts remain source-attributed. */
 export const CARE_LANGUAGE_CODES = [
   'en-IN', 'hi-IN', 'bn-IN', 'kn-IN', 'ml-IN', 'mr-IN', 'od-IN', 'pa-IN', 'ta-IN', 'te-IN', 'gu-IN',
@@ -22,6 +23,7 @@ export interface CarePlaybook { id: string; version: number; title: string; body
 export interface CareMessage { id: string; role: 'user' | 'assistant'; content: string; at: string; engine?: 'hermes' | 'offline'; languageCode?: CareLanguageCode; sources?: string[]; proposals?: CareProposal[]; }
 export interface CareProposal { kind: 'monitor' | 'handover' | 'playbook'; title: string; encounterId?: string; orderId?: string; body?: string; skillId?: string; }
 export interface CareWorkspace {
+  coordination?: CareCoordination;
   archivedAt?: string;
   previousWorkspaceId?: string;
   id: string; revision: number; name: string; synthetic: true; role: CareRole;
@@ -30,7 +32,7 @@ export interface CareWorkspace {
   tasks: CareTask[]; activity: CareActivity[]; playbooks: CarePlaybook[]; messages: CareMessage[];
   feeds: { HIS: {connected: boolean; lastSyncAt: string}; LIS: {connected: boolean; lastSyncAt: string} };
 }
-export type CareCommand =
+export type CareCommand = CareCoordinationCommand
   | {type: 'set_role'; role: CareRole}
   | {type: 'add_encounter'; patientName: string; bed: string; documentedContext: string[]}
   | {type: 'add_order'; encounterId: string; testName: string; targetMinutes: number}

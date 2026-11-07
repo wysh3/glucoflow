@@ -12,7 +12,9 @@ import { AskPanel } from './ask';
 import { ArchivedWorkspace } from './archived-workspace';
 import { WorkspaceHistory } from './workspace-history';
 import { WorkspaceTeamPanel } from './workspace-team';
+import { CarePipeline } from './pipeline';
 import { EpisodeDrawer } from './episode';
+import { EpisodeCoordination } from './episode-coordination';
 import { CareWorkspaceRecovery } from './workspace-recovery';
 import { PlaybookDraft, PlaybooksPanel } from './playbooks';
 import { SkillProposalApplication } from './skill-library';
@@ -49,6 +51,7 @@ export function CarePage() {
 
 function CareWorkspacePage({ actorId }: { actorId: string }) {
   const [params, setParams] = useSearchParams();
+  const [coordinationId, setCoordinationId] = useState<string | null>(null);
   const { hash } = useLocation();
   const route = params.get('view');
   const view = (primary.some(([key]) => key === route) || route === 'learning' || route === 'activity' ? route : 'ask') as View;
@@ -66,6 +69,7 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
   const [savedOpen, setSavedOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [teamOpen, setTeamOpen] = useState(false);
+  const [pipelineOpen, setPipelineOpen] = useState(false);
   const [eventId, setEventId] = useState<string | null>(null);
   const [taskId, setTaskId] = useState<string | null>(null);
   const [taskDraft, setTaskDraft] = useState<TaskDraft | null>(null);
@@ -107,6 +111,8 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
     setSavedOpen(false);
     setHistoryOpen(false);
     setTeamOpen(false);
+    setPipelineOpen(false);
+    setCoordinationId(null);
     setEventId(null);
     setTaskId(null);
     setTaskDraft(null);
@@ -193,6 +199,8 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
           ) : null}
           <div className="content-body care-tabs" data-v-705e1c85="">
             <ClinicNavigation>
+              <Button type="button" variant="quiet" size="sm" onClick={() => setPipelineOpen(true)}>Pipeline</Button>
+              <Button type="button" variant="quiet" size="sm" onClick={() => setTeamOpen(true)}><Users size={16} aria-hidden /> Team</Button>
               <Button type="button" variant="quiet" size="sm" aria-label="New chat" title="New chat with a fresh simulation; this workspace stays saved" disabled={busy} onClick={() => setResetOpen(true)} className="min-h-11 shrink-0 gap-1.5 px-2">
                 <Plus size={17} aria-hidden /><span className="hidden sm:inline">New chat</span>
               </Button>
@@ -264,16 +272,18 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
           {!workspace.archivedAt && taskDraft?.skillId ? (
             <SkillProposalApplication skillId={taskDraft.skillId} target={taskDraft} workspace={workspace} state={state} close={closeTaskDraft} />
           ) : !workspace.archivedAt && taskDraft ? (
-            <TaskDialog draft={taskDraft} workspace={workspace} busy={busy} send={state.command} error={state.error} close={closeTaskDraft} />
+            <TaskDialog draft={taskDraft} workspace={workspace} busy={busy} send={state.command} error={state.error} close={closeTaskDraft} openExisting={openDetails} />
           ) : null}
           {!workspace.archivedAt && task ? <TaskDetails key={task.id} task={task} workspace={workspace} state={state} close={() => { setTaskId(null); state.clearError(); }} openSource={openSource} /> : null}
           {!workspace.archivedAt && playbookDraft ? <PlaybookDraft proposal={playbookDraft} state={state} close={(saved) => {
             setPlaybookDraft(null); state.clearError(); if (saved) openView('learning');
           }} /> : null}
-          {!workspace.archivedAt ? <EpisodeDrawer workspace={workspace} openSource={openSource} openDetails={openDetails} /> : null}
+          {!workspace.archivedAt ? <EpisodeDrawer workspace={workspace} openSource={openSource} openDetails={openDetails} onCoordinate={setCoordinationId} /> : null}
+          {!workspace.archivedAt && coordinationId ? <EpisodeCoordination workspace={workspace} encounterId={coordinationId} state={state} actorId={actorId} close={() => setCoordinationId(null)} /> : null}
           <EventInspector event={event} workspace={workspace} close={() => setEventId(null)} />
         </>
       ) : null}
+      {pipelineOpen && workspace ? <CarePipeline workspace={workspace} close={() => setPipelineOpen(false)} openEpisode={setCoordinationId} /> : null}
       {teamOpen ? <WorkspaceTeamPanel state={state} close={() => setTeamOpen(false)} /> : null}
       {historyOpen && workspaceId ? <WorkspaceHistory workspaceId={workspaceId} close={() => setHistoryOpen(false)} /> : null}
       <CareDialog title="Open a saved workspace" description="Choose a simulation from this account."

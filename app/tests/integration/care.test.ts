@@ -163,8 +163,10 @@ it('does not create a second order monitor after matching source evidence closes
     type: 'create_task', encounterId: order.encounterId, orderId: order.id,
     kind: 'result_acknowledgement', title: 'Duplicate acknowledgement monitor', durationMinutes: 60,
   });
-  expect(request.statusCode, request.body).toBe(409);
-  expect(request.json().error.code).toBe('duplicate_task');
+  expect(request.statusCode, request.body).toBe(200);
+  const reused = request.json();
+  expect(reused.tasks).toEqual(state.tasks);
+  expect(reused.revision).toBe(state.revision);
 });
 
 it('reports disconnected and stale evidence, then expires monitoring on a later server read', async () => {
