@@ -48,7 +48,7 @@ Care routines currently support governed operational templates; they are not unr
 - Runtime image: `sha256:9dd24be6716466c77e12985c37d7b9ead5ce0e784993bb171cb72453e4059cfb`.
 - Worker image: `sha256:505f62ed63df6744637636eb31170c0803b888fd7c3c860473d42ab8d6862be7`.
 - Vercel Gluco chat release: `dpl_BmUQ48HTgosk62CHtwVbEWM7LBWK` ready at https://glucoflow.vercel.app. A subsequent landing-only release is tracked separately below.
-- GitHub source push pending final landing work and outgoing-source scan.
+- GitHub source release `3fd5634475b41755916ef0da3e5aa27cb74bd8d3` pushed to `codex/hermes-care-workspace`; remote SHA verified. Staged gitleaks scan found no leaks. GitHub accepted the bundled source archive with a large-file advisory (85.9 MiB).
 
 ## Final landing and documentation release
 

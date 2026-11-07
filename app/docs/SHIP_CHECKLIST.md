@@ -72,4 +72,6 @@ Evidence: [runtime packaging/configuration report](../reports/gluco-runtime-pack
 
 - [x] Redesign public entry around product identity, clear care workflow and direct demo access; retain patient and staff sign-in paths.
 - [x] Browser-check desktop/mobile entry and CTA on final deployment.
-- [ ] Scan outgoing source, commit and push current branch to GitHub; verify remote commit.
+- [x] Scan outgoing source, commit and push current branch to GitHub; verify remote commit.
+
+Source release `3fd5634475b41755916ef0da3e5aa27cb74bd8d3` was verified on origin/codex/hermes-care-workspace. New emergency-workflow extensions are reviewed in [the gap analysis](../reports/emergency-workflow-extension-review-2026-11-07.md); they are proposed work, not checked-off implementation.

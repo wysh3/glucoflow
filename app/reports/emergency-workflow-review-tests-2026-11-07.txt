@@ -1,0 +1,11 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ✓ apps/api/src/care/bed-transfer.test.ts (2 tests) 3ms
+ ✓ apps/api/src/care/transfer.test.ts (6 tests) 4ms
+
+ Test Files  2 passed (2)
+      Tests  8 passed (8)
+   Start at  20:43:53
+   Duration  345ms (transform 53%, import 42%, tests 3%, worker 2%)
