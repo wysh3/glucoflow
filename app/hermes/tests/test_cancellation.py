@@ -69,6 +69,15 @@ class CancellationTests(unittest.TestCase):
                               cwd='.', env={}, payload='{}', deadline=2)
         self.assertEqual(len(output.strip()), 131072)
 
+    def test_zero_hourly_cap_does_not_accumulate_or_reject_calls(self):
+        service = Service.__new__(Service)
+        service.hourly_cap = 0
+        service.reservations = deque()
+        service.lock = Lock()
+        for _ in range(1001):
+            self.assertTrue(service.reserve(3))
+        self.assertEqual(len(service.reservations), 0)
+
     def test_cancel_releases_admission_but_retains_reserved_call_budget(self):
         service = Service.__new__(Service)
         service.token = 'local-synthetic-test-token'

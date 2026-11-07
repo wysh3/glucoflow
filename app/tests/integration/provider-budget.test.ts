@@ -118,3 +118,16 @@ it('holds reservations after unknown usage and restart instead of silently resto
     ),
   ).toBeNull();
 });
+
+it('zero removes the monetary ceiling but preserves job token limits and accounting', async () => {
+  const allowed = await context.asWorker(client => reserveProviderCall(client, runId, 12, 1000, {
+    tokens: 1, maxTokens: 1000, maxCostUsd: 0,
+  }));
+  expect(allowed).not.toBeNull();
+  const rejected = await context.asWorker(client => reserveProviderCall(client, runId, 12, 1000, {
+    tokens: 1000, maxTokens: 1000, maxCostUsd: 0,
+  }));
+  expect(rejected).toBeNull();
+  const run = await context.asWorker(client => client.query('select reserved_cost_usd from sutra.extraction_runs where id=$1', [runId]));
+  expect(Number(run.rows[0].reserved_cost_usd)).toBeGreaterThanOrEqual(1000);
+});

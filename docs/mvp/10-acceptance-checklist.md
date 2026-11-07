@@ -135,3 +135,13 @@ See [fresh release evidence](../../app/reports/completion-release-2026-11-07.md)
 - [ ] External hospital readiness: real identity provisioning/connectors, security/recovery validation, sustained multi-user capacity and supervised pilot evidence. Not established by this demo.
 
 Evidence: `app/reports/emergency-coordination-suite-2026-11-07.txt`, `app/reports/episode-coordination-2026-11-07.md`; architecture: `app/docs/CARE_PIPELINE.md`.
+
+## 7 November: visual Gluco and usage settings
+- [x] Department-lane pipeline canvas with encounter/order selection, source inspector and zoom/fit.
+- [x] Visual greeting links to saved tasks, encounters and pipeline; operational prompts are not classified as greetings.
+- [x] Assistant and workspace wordmark display Gluco.
+- [x] Zero/unlimited aggregate speech, guide, runtime and document monetary settings deployed; bounded execution retained.
+- [x] 381 tests across 70 files passed; typecheck and production build passed. Desktop/mobile and hosted greeting/pipeline controls checked.
+- [ ] Reference extension: real medication administration feeds, cross-encounter identity and live hospital/ABDM integrations remain outside this release.
+
+Evidence: `app/reports/visual-gluco-release-2026-11-07.md`.

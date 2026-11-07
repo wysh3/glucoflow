@@ -315,7 +315,7 @@ class Service:
         self.provider = Provider.load()
         self.ready = upstream_ready()
         self.active = BoundedSemaphore(bounded_env("HERMES_MAX_CONCURRENT", 2, 1, 4))
-        self.hourly_cap = bounded_env("HERMES_MAX_PROVIDER_CALLS_PER_HOUR", 60, 3, 1000)
+        self.hourly_cap = bounded_env("HERMES_MAX_PROVIDER_CALLS_PER_HOUR", 0, 0, 1000)
         self.reservations = deque()
         self.lock = Lock()
 
@@ -332,6 +332,8 @@ class Service:
         }
 
     def reserve(self, calls):
+        if self.hourly_cap == 0:
+            return True
         with self.lock:
             now = monotonic()
             while self.reservations and now - self.reservations[0][0] >= 3600:

@@ -1,0 +1,3 @@
+Previous ready revision: glucoflow-service--coordination
+Submitted revision: glucoflow-service--visual-gluco
+Azure marked glucoflow-service--visual-gluco ready.

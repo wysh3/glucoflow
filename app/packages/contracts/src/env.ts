@@ -45,7 +45,7 @@ export const apiEnvSchema = z
     EXTRACTION_MODEL: z.string().default('deterministic-rules-v1'),
 
     GUIDE_MODE: z.enum(['local', 'live']).default('local'),
-    GUIDE_MAX_CALLS_PER_HOUR: z.coerce.number().int().min(1).max(1000).default(60),
+    GUIDE_MAX_CALLS_PER_HOUR: z.coerce.number().int().min(0).max(1000).default(0),
 
     SARVAM_API_KEY: z.string().trim().max(512).default(''),
     SARVAM_STT_MAX_SECONDS: z.coerce.number().int().min(0).max(1_000_000).default(0),
@@ -138,8 +138,8 @@ export const workerEnvSchema = z
     HERMES_URL: z.string().url().optional(),
     HERMES_SERVICE_TOKEN: z.string().min(24).optional(),
     MAX_DOCUMENT_MODEL_CALLS: z.coerce.number().int().positive().max(50).default(12),
-    /** Mandatory positive values before any live model call can be dispatched. */
-    MAX_DOCUMENT_COST_USD: z.coerce.number().positive().optional(),
+    /** Zero disables the monetary ceiling; per-job execution limits stay positive. */
+    MAX_DOCUMENT_COST_USD: z.coerce.number().nonnegative().default(0),
     MAX_RUN_TOKENS: z.coerce.number().int().positive().optional(),
     MAX_DOCUMENT_USD_PER_MTOK_INPUT: z.coerce.number().positive().optional(),
     MAX_DOCUMENT_USD_PER_MTOK_OUTPUT: z.coerce.number().positive().optional(),

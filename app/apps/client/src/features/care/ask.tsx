@@ -1,3 +1,6 @@
+import { GlucoGreeting } from './greeting';
+import { isCareGreeting } from './greeting-intent';
+import './greeting.css';
 import { CareHome } from './home';
 import { shouldSendOnEnter } from './composer-keys';
 import { chatProgressLabels } from '../../lib/chat-progress';
@@ -53,6 +56,7 @@ type AskProps = {
   openExistingTask: (taskId: string) => void;
   openPlaybook: (proposal: CareProposal) => void;
   openView: (view: 'teams' | 'activity' | 'worklist') => void;
+  openPipeline: () => void;
 };
 
 // React port of the published CodexUI ThreadConversation and ThreadComposer DOM.
@@ -60,7 +64,7 @@ const threadScope = { 'data-v-705e1c85': '' };
 const conversationScope = { 'data-v-98932cdc': '' };
 const composerScope = { 'data-v-755e7197': '' };
 
-export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visible, openSource, openTask, openExistingTask, openPlaybook, openView }: AskProps) {
+export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visible, openSource, openTask, openExistingTask, openPlaybook, openView, openPipeline }: AskProps) {
   const { locale } = useI18n();
   const input = useRef<HTMLTextAreaElement>(null);
   const messages = useRef<HTMLUListElement>(null);
@@ -125,12 +129,14 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
       <section className="conversation-root" {...conversationScope}>
         {showingConversation ? (
           <>
-            <h2 id="care-ask-title" className="sr-only">Ask GlucoFlow</h2>
+            <h2 id="care-ask-title" className="sr-only">Ask Gluco</h2>
             <div className="min-h-0 flex-1" role="log" aria-label="Care conversation" aria-live="polite">
               <ul className="conversation-list" {...conversationScope} ref={messages} tabIndex={0}>
-                {workspace.messages.map((message) => (
+                {workspace.messages.map((message, index) => (
                   <Message key={message.id} message={message} workspace={workspace} busy={!!state.busy} visible={visible}
                     openSource={openSource} openTask={openTask} openPlaybook={openPlaybook}
+                    greeting={message.role === 'assistant' && workspace.messages[index - 1]?.role === 'user' && isCareGreeting(workspace.messages[index - 1]!.content) && !message.proposals?.length}
+                    openExistingTask={openExistingTask} openPipeline={openPipeline} openView={openView}
                     draftHandover={(proposal) => void state.command({ type: 'draft_handover', encounterId: proposal.encounterId })} />
                 ))}
                 {sending ? <>
@@ -196,7 +202,7 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
         <form onSubmit={(event) => { event.preventDefault(); void submit(); }} className="thread-composer" {...composerScope}>
           <div className="thread-composer-shell" {...composerScope}>
             <div className="thread-composer-input-wrap" {...composerScope}>
-              <Label htmlFor="care-prompt" className="sr-only">Message GlucoFlow</Label>
+              <Label htmlFor="care-prompt" className="sr-only">Message Gluco</Label>
               <textarea id="care-prompt" ref={input} className="thread-composer-input" {...composerScope}
                 value={draft} onChange={(event) => onDraft(event.target.value)} rows={2} maxLength={4000}
                 placeholder="Ask about an encounter or pending handoff…" aria-describedby="care-composer-help" disabled={sending}
@@ -244,7 +250,11 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
   );
 }
 
-function Message({ message, workspace, busy, visible, openSource, openTask, openPlaybook, draftHandover }: {
+function Message({ message, workspace, busy, visible, openSource, openTask, openPlaybook, draftHandover, greeting, openExistingTask, openPipeline, openView }: {
+  greeting: boolean;
+  openExistingTask: (id: string) => void;
+  openPipeline: () => void;
+  openView: (view: 'teams' | 'worklist') => void;
   message: CareMessage;
   workspace: CareWorkspace;
   busy: boolean;
@@ -268,21 +278,22 @@ function Message({ message, workspace, busy, visible, openSource, openTask, open
     <li className="conversation-item" data-role={message.role} {...conversationScope}>
       <div className="message-row" data-role={message.role} {...conversationScope}>
         <div className="message-stack" data-role={message.role} {...conversationScope}>
-          <article className="message-body" data-role={message.role} {...conversationScope}>
+          <article className={greeting ? "message-body has-visual-greeting" : "message-body"} data-role={message.role} {...conversationScope}>
       <div className={cn('mb-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-soft', user && 'justify-end')}>
         {user ? null : <LoadingOrb size={26} />}
-        <span className="font-semibold text-ink">{user ? 'You' : 'GlucoFlow'}</span>
+        <span className="font-semibold text-ink">{user ? 'You' : 'Gluco'}</span>
         {message.engine === 'offline' ? <span>Workspace helper · no AI</span> : null}
         <When value={message.at} short />
       </div>
       <div className="message-card" data-role={message.role} {...conversationScope}>
-        <div className="message-text-flow" {...conversationScope}>
+        {!greeting ? <div className="message-text-flow" {...conversationScope}>
           <p lang={user ? undefined : toDocumentLanguageTag(replyLanguage)} dir="auto" className="message-text" {...conversationScope}>{presentation?.lead ?? message.content}</p>
         </div>
-        {!user && visible ? <ReadAloud text={spokenReply} languageCode={replyLanguage} /> : null}
-        {presentation?.warning ? <p role="note" className="mt-2 text-sm text-ink-soft">{presentation.warning}</p> : null}
-        {!user ? <IntelligentCareReply message={message} workspace={workspace} openSource={openSource} /> : null}
-        {sources.length && !presentation ? (
+        : <GlucoGreeting workspace={workspace} openTask={openExistingTask} openPipeline={openPipeline} openView={openView} />}
+        {!greeting && !user && visible ? <ReadAloud text={spokenReply} languageCode={replyLanguage} /> : null}
+        {!greeting && presentation?.warning ? <p role="note" className="mt-2 text-sm text-ink-soft">{presentation.warning}</p> : null}
+        {!greeting && !user ? <IntelligentCareReply message={message} workspace={workspace} openSource={openSource} /> : null}
+        {!greeting && sources.length && !presentation ? (
           <div className="mt-3 flex flex-wrap items-center gap-2" aria-label="Reply sources">
             <Database size={14} className="hidden text-primary sm:block" aria-hidden />
             {sources.map((event) => <SourceChip key={event.id} event={event} open={openSource} />)}

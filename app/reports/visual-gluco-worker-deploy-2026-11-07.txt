@@ -1,0 +1,3 @@
+Previous ready revision: glucoflow-worker--coordination
+Submitted revision: glucoflow-worker--visual-gluco
+Azure marked glucoflow-worker--visual-gluco ready.

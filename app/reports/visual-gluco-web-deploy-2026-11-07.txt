@@ -1,0 +1,138 @@
+$ vite build --outDir /Users/wysh/coding/thon/iitb-health/app/.local/care-web-vyfxs535/.vercel/output/static
+vite v8.3.2 building client environment for production...
+transforming...
+✓ 3339 modules transformed.
+
+(!) outDir /Users/wysh/coding/thon/iitb-health/app/.local/care-web-vyfxs535/.vercel/output/static is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../../.local/care-web-vyfxs535/.vercel/output/static/index.html                                 1.17 kB │ gzip:   0.54 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/InterVariable-DiVDrmQJ.woff2      352.24 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/pdf.worker.min-Dswkl-cV.mjs     1,265.41 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-7QMwjk5y.css                  33.56 kB │ gzip:   6.66 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/index-CMVXb3Z3.css                 70.35 kB │ gzip:  13.72 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/pdf.worker.min-zC6nfbxG.js          0.06 kB │ gzip:   0.08 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/arrow-left-576SFlRM.js              0.19 kB │ gzip:   0.17 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/upload-z7S5OZfr.js                  0.25 kB │ gzip:   0.21 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/flask-conical-8Uzsh0xB.js           0.32 kB │ gzip:   0.24 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/shield-check-D1QzwOoi.js            0.34 kB │ gzip:   0.26 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/heart-pulse-CUBgI5Az.js             0.36 kB │ gzip:   0.27 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/web-DJYdkqdG.js                     0.36 kB │ gzip:   0.24 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/load-more-DQshFkZk.js               0.40 kB │ gzip:   0.29 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/notebook-pen-BzeKlRiw.js            0.50 kB │ gzip:   0.30 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/esm-Byhj4IC5.js                     0.53 kB │ gzip:   0.33 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/esm-c2KMNvCW.js                     0.55 kB │ gzip:   0.34 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/system-page-header-Cuh0MbEX.js      0.63 kB │ gzip:   0.35 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/refresh-cw-C9DTrKyE.js              0.70 kB │ gzip:   0.38 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/rolldown-runtime-hePW80VL.js        0.71 kB │ gzip:   0.42 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/native-DJPJ7hhL.js                  0.77 kB │ gzip:   0.33 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/web-DxKfndcD.js                     0.79 kB │ gzip:   0.39 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/state-views-B8p4ky5B.js             0.83 kB │ gzip:   0.47 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/web-51PM8XTm.js                     0.84 kB │ gzip:   0.40 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/tslib.es6-Tae09705.js               1.06 kB │ gzip:   0.52 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/source-pane-DWysFB5E.js             1.10 kB │ gzip:   0.61 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/preload-helper-DjzSQ1t3.js          1.38 kB │ gzip:   0.75 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/esm-DxYIkn1L.js                     1.49 kB │ gzip:   0.64 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/download-C9Q2gnHp.js                1.56 kB │ gzip:   0.88 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/chart-C3aUq82r.js                   2.41 kB │ gzip:   1.16 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-BwzRtMhi.js                    2.43 kB │ gzip:   0.95 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-DlzScxoP.js                    2.66 kB │ gzip:   0.97 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-Bj5UKfrA.js                    2.69 kB │ gzip:   1.20 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/patient-slip-BUgvXk6M.js            2.77 kB │ gzip:   1.17 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/base-CSaQT_5G.js                    2.86 kB │ gzip:   1.02 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-C1njss0R.js                    2.94 kB │ gzip:   1.24 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/patient-layout-BzmtgHWE.js          3.04 kB │ gzip:   1.33 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-DiyzHvhA.js                    3.06 kB │ gzip:   1.28 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/src-BCr25a-J.js                     3.07 kB │ gzip:   1.30 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-X1Ya5s7q.js                    3.48 kB │ gzip:   1.39 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/useInfiniteQuery-CvpH9Pbf.js        3.51 kB │ gzip:   1.32 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/queries-CJpgBVqL.js                 4.24 kB │ gzip:   1.40 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-BNjIHgJQ.js                    5.41 kB │ gzip:   1.83 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-BJqLQtXl.js                    5.65 kB │ gzip:   2.11 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-D7DZ43mk.js                    5.70 kB │ gzip:   2.03 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/source-viewer-b-MOTIjf.js           6.25 kB │ gzip:   2.33 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/patient-search-BRcnLClM.js          6.31 kB │ gzip:   1.92 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-67ubWfTh.js                    7.01 kB │ gzip:   2.52 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-BIvjoAfW.js                    7.08 kB │ gzip:   2.52 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-D-LUYSNZ.js                    8.13 kB │ gzip:   2.94 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/certificate-tGvsTFkR.js             9.15 kB │ gzip:   2.74 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-CZc0oK2p.js                    9.34 kB │ gzip:   3.39 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/esm-BxMeh147.js                     9.73 kB │ gzip:   3.13 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/speech-ZnpfG7_x.js                 10.09 kB │ gzip:   4.18 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/gluco-guide-BFoDslWe.js            10.27 kB │ gzip:   4.09 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/upload-wizard-B9so8QjI.js          12.44 kB │ gzip:   4.58 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-xTxcF8pc.js                   12.86 kB │ gzip:   3.98 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/query-Dyun03ki.js                  14.70 kB │ gzip:   5.01 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-DVG9VE4X.js                   22.93 kB │ gzip:   6.29 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/qr-C0J6mqAc.js                     24.28 kB │ gzip:   9.30 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-B3e8sUUj.js                   26.81 kB │ gzip:   7.02 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-BG8Mifds.js                   37.53 kB │ gzip:  11.86 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-BDtV6Yc2.js                   41.07 kB │ gzip:  10.69 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/src-Cg2eZIWW.js                   127.53 kB │ gzip:  36.74 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/src-CeWFLwDp.js                   156.98 kB │ gzip:  52.14 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/dist-C5cNlcES.js                  213.60 kB │ gzip:  54.82 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/page-KOX1mXOD.js                  261.73 kB │ gzip:  74.19 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/LineChart-DFMHKSrc.js             351.61 kB │ gzip: 102.06 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/pdf-BHUGX9n-.js                   430.94 kB │ gzip: 129.04 kB
+../../.local/care-web-vyfxs535/.vercel/output/static/assets/index-qzny2eod.js               1,063.42 kB │ gzip: 213.45 kB
+
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0m../../node_modules/.pnpm/@capacitor+core@8.5.2/node_modules/@capacitor/core/dist/index.js is dynamically imported by src/auth/session.tsx but also statically imported by src/components/source-viewer.tsx, src/features/care/download-snapshot.ts, src/features/upload/upload-wizard.tsx, src/platform/back.ts, src/platform/camera.ts, ..., dynamic import will not move module into another chunk.
+
+✓ built in 399ms
+Built and scanned the static client for known privileged values.
+Vercel CLI 63.1.2
+Deploying glucoflow
+Uploading [--------------------] (0.0B/1.8MB)
+Uploading [=====---------------] (454.0KB/1.8MB)
+Uploading [==========----------] (914.8KB/1.8MB)
+Uploading [===============-----] (1.3MB/1.8MB)
+Uploading [====================] (1.8MB/1.8MB)
+  Inspect         https://vercel.com/wyshs-projects/glucoflow/G3voZjWcHNbMHP94fqmzsTC3eCfJ
+  Production      https://glucoflow-9udxo0ner-wyshs-projects.vercel.app
+Building…
+[2K[1A[2K[G  Production      https://glucoflow-9udxo0ner-wyshs-projects.vercel.app
+Completing…
+▲ Aliased         https://glucoflow.vercel.app
+{
+  "status": "ok",
+  "deployment": {
+    "id": "dpl_G3voZjWcHNbMHP94fqmzsTC3eCfJ",
+    "url": "https://glucoflow-9udxo0ner-wyshs-projects.vercel.app",
+    "productionUrl": "https://glucoflow.vercel.app",
+    "inspectorUrl": "https://vercel.com/wyshs-projects/glucoflow/G3voZjWcHNbMHP94fqmzsTC3eCfJ",
+    "readyState": "READY",
+    "target": "production",
+    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_G3voZjWcHNbMHP94fqmzsTC3eCfJ",
+    "buildMachine": {
+      "cores": 2,
+      "memory": 8192,
+      "machine": "basic",
+      "selectionType": "fixed",
+      "selectionSource": "plan-default"
+    },
+    "deploymentProtection": [
+      "vercel_authentication"
+    ]
+  },
+  "message": "Deployment glucoflow-9udxo0ner-wyshs-projects.vercel.app ready. Production URL: https://glucoflow.vercel.app",
+  "next": [
+    {
+      "command": "vercel git connect --scope wyshs-projects",
+      "when": "Automatically deploy changes on every push"
+    },
+    {
+      "command": "vercel curl https://glucoflow.vercel.app",
+      "when": "Verify deployment, including when Deployment Protection is enabled"
+    },
+    {
+      "command": "vercel inspect glucoflow-9udxo0ner-wyshs-projects.vercel.app --scope wyshs-projects",
+      "when": "Inspect deployment"
+    },
+    {
+      "command": "vercel deploy --prod --scope wyshs-projects",
+      "when": "Promote to production"
+    }
+  ]
+}

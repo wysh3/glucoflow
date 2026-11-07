@@ -191,3 +191,15 @@ it('limits concurrent provider calls', async () => {
   expect(p.calls()).toBe(2);
   expect(replies.filter((r) => r.mode === 'local')).toHaveLength(1);
 });
+
+
+it('zero hourly limit allows repeated work but still enforces concurrency', async () => {
+  const { createGuideBudget } = await import('./planner');
+  const budget = createGuideBudget(0, 1);
+  for (let i = 0; i < 1001; i++) {
+    const release = budget.acquire();
+    expect(release).not.toBeNull();
+    expect(budget.acquire()).toBeNull();
+    release!();
+  }
+});

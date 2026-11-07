@@ -1,0 +1,11 @@
+test_cancel_releases_admission_but_retains_reserved_call_budget (test_cancellation.CancellationTests.test_cancel_releases_admission_but_retains_reserved_call_budget) ... ok
+test_cancelled_child_is_reaped_promptly (test_cancellation.CancellationTests.test_cancelled_child_is_reaped_promptly) ... ok
+test_deadline_reaps_child (test_cancellation.CancellationTests.test_deadline_reaps_child) ... ok
+test_pre_cancelled_turn_does_not_spawn (test_cancellation.CancellationTests.test_pre_cancelled_turn_does_not_spawn) ... ok
+test_wait_drains_output_larger_than_pipe (test_cancellation.CancellationTests.test_wait_drains_output_larger_than_pipe) ... ok
+test_zero_hourly_cap_does_not_accumulate_or_reject_calls (test_cancellation.CancellationTests.test_zero_hourly_cap_does_not_accumulate_or_reject_calls) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.597s
+
+OK

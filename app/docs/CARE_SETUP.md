@@ -36,7 +36,7 @@ export HERMES_URL=http://127.0.0.1:8642
 docker build -f deploy/hermes.Dockerfile -t gluco-runtime:local .
 docker run -d --rm --name glucoflow-care-runtime \
   --env-file .local/care-gluco.env --env HERMES_SERVICE_TOKEN \
-  --env PORT=8642 --env HERMES_MAX_PROVIDER_CALLS_PER_HOUR=60 \
+  --env PORT=8642 --env GLUCO_MAX_PROVIDER_CALLS_PER_HOUR=0 \
   --env HERMES_MAX_CONCURRENT=1 --publish 127.0.0.1:8642:8642 gluco-runtime:local
 pnpm dev
 ```

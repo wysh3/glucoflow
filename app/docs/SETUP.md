@@ -167,7 +167,7 @@ EXTRACTION_MODEL=<model id>
 EXTRACTION_BASE_URL=<https endpoint>
 EXTRACTION_API_KEY=<key>
 MAX_DOCUMENT_MODEL_CALLS=12
-MAX_DOCUMENT_COST_USD=<positive number>   # or MAX_RUN_TOKENS=<positive number>
+MAX_DOCUMENT_COST_USD=0   # unlimited cumulative document cost; MAX_RUN_TOKENS remains required and positive
 MAX_DOCUMENT_USD_PER_MTOK_INPUT=<number>
 MAX_DOCUMENT_USD_PER_MTOK_OUTPUT=<number>
 ```

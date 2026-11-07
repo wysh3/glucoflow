@@ -136,7 +136,7 @@ export async function reserveProviderCall(
   if (!row) throw new Error('extraction run not found');
   if (!Number.isFinite(reservedCostUsd) || reservedCostUsd < 0) return null;
   if (row.call_count >= Math.min(maxCalls,12) || (row.deadline_at && new Date(row.deadline_at).getTime() <= Date.now())) return null;
-  if (limits && (!(limits.maxCostUsd > 0) || !(limits.maxTokens > 0) || !Number.isInteger(limits.tokens) || limits.tokens <= 0 || Number(row.reserved_cost_usd)+reservedCostUsd > limits.maxCostUsd+0.0000001 || row.reserved_tokens+limits.tokens > limits.maxTokens)) return null;
+  if (limits && (!(Number.isFinite(limits.maxCostUsd) && limits.maxCostUsd >= 0) || !(limits.maxTokens > 0) || !Number.isInteger(limits.tokens) || limits.tokens <= 0 || (limits.maxCostUsd > 0 && Number(row.reserved_cost_usd)+reservedCostUsd > limits.maxCostUsd+0.0000001) || row.reserved_tokens+limits.tokens > limits.maxTokens)) return null;
   const ordinal=row.call_count+1;
   await client.query(`insert into sutra.provider_calls (run_id,ordinal,state,reserved_cost_usd,reserved_tokens) values ($1,$2,'reserved',$3,$4)`,[runId,ordinal,reservedCostUsd,limits?.tokens ?? 0]);
   await client.query('update sutra.extraction_runs set call_count=$2,reserved_cost_usd=reserved_cost_usd+$3,reserved_tokens=reserved_tokens+$4 where id=$1',[runId,ordinal,reservedCostUsd,limits?.tokens ?? 0]);

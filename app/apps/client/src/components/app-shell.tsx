@@ -140,7 +140,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
       sidebarHeading={(
         <div className="flex min-w-0 items-center gap-2 text-primary">
           <HeartPulseIcon size={21} className="shrink-0" aria-hidden />
-          <span className="truncate text-sm font-semibold tracking-tight">glucoflow</span>
+          <span className="truncate text-sm font-semibold tracking-tight">gluco</span>
         </div>
       )}
       sidebar={(close) => (

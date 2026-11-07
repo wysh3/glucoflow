@@ -1,0 +1,92 @@
+$ pnpm --filter @glucoflow/client build && pnpm --filter @glucoflow/api build && pnpm --filter @glucoflow/worker build
+$ vite build
+vite v8.3.2 building client environment for production...
+transforming...
+✓ 3339 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                 1.17 kB │ gzip:   0.54 kB
+dist/assets/InterVariable-DiVDrmQJ.woff2      352.24 kB
+dist/assets/pdf.worker.min-Dswkl-cV.mjs     1,265.41 kB
+dist/assets/page-Bhh642HA.css                  32.92 kB │ gzip:   6.54 kB
+dist/assets/index-CMVXb3Z3.css                 70.35 kB │ gzip:  13.72 kB
+dist/assets/pdf.worker.min-zC6nfbxG.js          0.06 kB │ gzip:   0.08 kB
+dist/assets/arrow-left-576SFlRM.js              0.19 kB │ gzip:   0.17 kB
+dist/assets/upload-z7S5OZfr.js                  0.25 kB │ gzip:   0.21 kB
+dist/assets/flask-conical-8Uzsh0xB.js           0.32 kB │ gzip:   0.24 kB
+dist/assets/shield-check-D1QzwOoi.js            0.34 kB │ gzip:   0.26 kB
+dist/assets/heart-pulse-CUBgI5Az.js             0.36 kB │ gzip:   0.27 kB
+dist/assets/web-RXTjej_M.js                     0.36 kB │ gzip:   0.24 kB
+dist/assets/load-more-BBzc7IXX.js               0.40 kB │ gzip:   0.29 kB
+dist/assets/notebook-pen-BzeKlRiw.js            0.50 kB │ gzip:   0.30 kB
+dist/assets/esm-CW0mxgTT.js                     0.53 kB │ gzip:   0.33 kB
+dist/assets/esm-BRLO2VeI.js                     0.55 kB │ gzip:   0.33 kB
+dist/assets/system-page-header-Cuh0MbEX.js      0.63 kB │ gzip:   0.35 kB
+dist/assets/refresh-cw-C9DTrKyE.js              0.70 kB │ gzip:   0.38 kB
+dist/assets/rolldown-runtime-hePW80VL.js        0.71 kB │ gzip:   0.42 kB
+dist/assets/native-DQK7L5o8.js                  0.77 kB │ gzip:   0.33 kB
+dist/assets/web-B2u8UEFI.js                     0.79 kB │ gzip:   0.39 kB
+dist/assets/state-views-CiZVqbM0.js             0.83 kB │ gzip:   0.48 kB
+dist/assets/web-B54T3cie.js                     0.84 kB │ gzip:   0.40 kB
+dist/assets/tslib.es6-Tae09705.js               1.06 kB │ gzip:   0.52 kB
+dist/assets/source-pane-R_LMvh9o.js             1.10 kB │ gzip:   0.62 kB
+dist/assets/preload-helper-DjzSQ1t3.js          1.38 kB │ gzip:   0.75 kB
+dist/assets/esm-CmRoLvVE.js                     1.49 kB │ gzip:   0.64 kB
+dist/assets/download-B_mYvCHa.js                1.56 kB │ gzip:   0.88 kB
+dist/assets/chart-C3aUq82r.js                   2.41 kB │ gzip:   1.16 kB
+dist/assets/page-B1e0RK2_.js                    2.43 kB │ gzip:   0.96 kB
+dist/assets/page-DMFKSu5p.js                    2.66 kB │ gzip:   0.97 kB
+dist/assets/page-Dme_HyP7.js                    2.69 kB │ gzip:   1.20 kB
+dist/assets/patient-slip-DFS8RzGE.js            2.77 kB │ gzip:   1.17 kB
+dist/assets/base-C85YWxUb.js                    2.86 kB │ gzip:   1.02 kB
+dist/assets/page-GePNi-up.js                    2.94 kB │ gzip:   1.25 kB
+dist/assets/patient-layout-B2xg3k7V.js          3.04 kB │ gzip:   1.34 kB
+dist/assets/page-3tuEIvaI.js                    3.06 kB │ gzip:   1.28 kB
+dist/assets/src-DR72h7-7.js                     3.07 kB │ gzip:   1.30 kB
+dist/assets/page-CtXv-II7.js                    3.48 kB │ gzip:   1.40 kB
+dist/assets/useInfiniteQuery-CkcU1BfB.js        3.51 kB │ gzip:   1.32 kB
+dist/assets/queries-CUe5IW8o.js                 4.24 kB │ gzip:   1.40 kB
+dist/assets/page-BNjIHgJQ.js                    5.41 kB │ gzip:   1.83 kB
+dist/assets/page-DKkTVkkK.js                    5.65 kB │ gzip:   2.11 kB
+dist/assets/page-DD7T51vC.js                    5.70 kB │ gzip:   2.03 kB
+dist/assets/source-viewer-CPwRU8C0.js           6.25 kB │ gzip:   2.34 kB
+dist/assets/patient-search-B4jJEXVZ.js          6.31 kB │ gzip:   1.92 kB
+dist/assets/page-CUM_9G0S.js                    7.01 kB │ gzip:   2.52 kB
+dist/assets/page-jB3YzR5Z.js                    7.08 kB │ gzip:   2.52 kB
+dist/assets/page-BPO9G40Y.js                    8.13 kB │ gzip:   2.94 kB
+dist/assets/certificate-CX7_1zil.js             9.15 kB │ gzip:   2.75 kB
+dist/assets/page-DH1FBFWn.js                    9.34 kB │ gzip:   3.39 kB
+dist/assets/esm-DWOqSBIo.js                     9.73 kB │ gzip:   3.13 kB
+dist/assets/speech-DBOjzwd9.js                 10.09 kB │ gzip:   4.18 kB
+dist/assets/gluco-guide-BG2i_3dw.js            10.27 kB │ gzip:   4.09 kB
+dist/assets/upload-wizard-G1XC9TYM.js          12.44 kB │ gzip:   4.58 kB
+dist/assets/page-BP2dRMLx.js                   12.86 kB │ gzip:   3.98 kB
+dist/assets/query-Dyun03ki.js                  14.70 kB │ gzip:   5.01 kB
+dist/assets/page-CY_MMpFm.js                   22.93 kB │ gzip:   6.29 kB
+dist/assets/qr-C0J6mqAc.js                     24.28 kB │ gzip:   9.30 kB
+dist/assets/page-B7_xMRiT.js                   26.81 kB │ gzip:   7.03 kB
+dist/assets/page-BC3ZHHVQ.js                   37.53 kB │ gzip:  11.87 kB
+dist/assets/page-CchHYnIv.js                   41.07 kB │ gzip:  10.69 kB
+dist/assets/src-CbA0cRaY.js                   127.53 kB │ gzip:  36.74 kB
+dist/assets/src-CeWFLwDp.js                   156.98 kB │ gzip:  52.14 kB
+dist/assets/dist-C5cNlcES.js                  213.60 kB │ gzip:  54.82 kB
+dist/assets/page-CGRnlmij.js                  261.69 kB │ gzip:  74.18 kB
+dist/assets/LineChart-DFMHKSrc.js             351.61 kB │ gzip: 102.06 kB
+dist/assets/pdf-BHUGX9n-.js                   430.94 kB │ gzip: 129.04 kB
+dist/assets/index-BYD9Sja5.js               1,062.04 kB │ gzip: 212.82 kB
+
+[33m[INEFFECTIVE_DYNAMIC_IMPORT] [0m../../node_modules/.pnpm/@capacitor+core@8.5.2/node_modules/@capacitor/core/dist/index.js is dynamically imported by src/auth/session.tsx but also statically imported by src/components/source-viewer.tsx, src/features/care/download-snapshot.ts, src/features/upload/upload-wizard.tsx, src/platform/back.ts, src/platform/camera.ts, ..., dynamic import will not move module into another chunk.
+
+✓ built in 505ms
+$ node build.mjs
+
+  dist/server.mjs      1.1mb ⚠️
+  dist/server.mjs.map  2.1mb
+
+⚡ Done in 32ms
+$ node build.mjs
+
+  dist/worker.mjs      933.0kb
+  dist/worker.mjs.map    1.8mb
+
+⚡ Done in 26ms

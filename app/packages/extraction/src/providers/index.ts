@@ -43,7 +43,7 @@ export function createExtractionProvider(
     usdPerMillionOutputTokens: selection.usdPerMillionOutputTokens,
   };
   if (Object.values(required).some((value) => value === undefined || value === null || value === '')) {
-    return new UnavailableProvider(useHermes ? 'Hermes extraction requires HERMES_URL, HERMES_SERVICE_TOKEN and positive budget limits.' : undefined);
+    return new UnavailableProvider(useHermes ? 'Gluco extraction requires runtime credentials and valid processing limits.' : undefined);
   }
   const config: LiveProviderConfig = {
     baseUrl: baseUrl!,

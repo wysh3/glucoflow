@@ -19,7 +19,7 @@ ARM = 'https://management.azure.com'
 VERSION = '2025-07-01'
 TOKEN_SECRET = 'hermes-service-token'
 SARVAM_SECRET = 'sarvam-api-key'
-SPEECH_LIMITS = {'SARVAM_STT_MAX_SECONDS': '60', 'SARVAM_TTS_MAX_CHARACTERS': '1000'}
+SPEECH_LIMITS = {'SARVAM_STT_MAX_SECONDS': '0', 'SARVAM_TTS_MAX_CHARACTERS': '0'}
 
 
 class ReleaseError(Exception):
@@ -94,7 +94,7 @@ def hermes_sidecar(image, model_secret, model_url, model_name):
             'HERMES_BIND_HOST': '0.0.0.0',
             'MODEL_BASE_URL': model_url,
             'MODEL_NAME': model_name,
-            'HERMES_MAX_PROVIDER_CALLS_PER_HOUR': '60',
+            'HERMES_MAX_PROVIDER_CALLS_PER_HOUR': '0',
             'HERMES_MAX_CONCURRENT': '1',
         }, {'MODEL_API_KEY': model_secret, 'HERMES_SERVICE_TOKEN': TOKEN_SECRET}),
         'probes': [
@@ -172,9 +172,9 @@ def care_revision(app, current, api_image, hermes_image, hermes_extraction=False
     model_secret = previous_sidecar_env.get('MODEL_API_KEY', existing_env.get('GUIDE_API_KEY', {})).get('secretRef')
     model_url = previous_sidecar_env.get('MODEL_BASE_URL', existing_env.get('GUIDE_BASE_URL', {})).get('value', '')
     model_name = previous_sidecar_env.get('MODEL_NAME', existing_env.get('EXTRACTION_MODEL', {})).get('value', '')
-    values = {'HERMES_URL': 'http://127.0.0.1:8642'}
+    values = {'HERMES_URL': 'http://127.0.0.1:8642', 'GUIDE_MAX_CALLS_PER_HOUR': '0', **SPEECH_LIMITS}
     references = {'HERMES_SERVICE_TOKEN': TOKEN_SECRET}
-    replaced = {'HERMES_URL', 'HERMES_SERVICE_TOKEN'}
+    replaced = {*values, 'HERMES_SERVICE_TOKEN'}
     if hermes_extraction:
         values['EXTRACTION_PROVIDER'] = 'hermes'
         replaced.update({'EXTRACTION_PROVIDER', 'GUIDE_API_KEY'})
@@ -216,7 +216,7 @@ def worker_revision(app, current, worker_image, hermes_image, document_call_cap=
     model_secret = previous_sidecar_env.get('MODEL_API_KEY', existing_env.get('EXTRACTION_API_KEY', {})).get('secretRef')
     model_url = previous_sidecar_env.get('MODEL_BASE_URL', existing_env.get('EXTRACTION_BASE_URL', {})).get('value', '')
     model_name = existing_env.get('EXTRACTION_MODEL', {}).get('value', '')
-    values = {'EXTRACTION_PROVIDER': 'hermes', 'HERMES_URL': 'http://127.0.0.1:8642'}
+    values = {'EXTRACTION_PROVIDER': 'hermes', 'HERMES_URL': 'http://127.0.0.1:8642', 'MAX_DOCUMENT_COST_USD': '0'}
     if document_call_cap is not None:
         values['MAX_DOCUMENT_MODEL_CALLS'] = str(document_call_cap)
     replaced = {*values, 'HERMES_SERVICE_TOKEN', 'EXTRACTION_BASE_URL', 'EXTRACTION_API_KEY'}
@@ -252,7 +252,7 @@ def main():
     deploy.add_argument('--suffix', required=True)
     deploy.add_argument('--hermes-extraction', action='store_true', help='Advertise an already verified Hermes worker')
     deploy.add_argument('--sarvam-speech', action='store_true',
-                        help='Set API-only Sarvam speech credentials and bounded deployment quotas')
+                        help='Set API-only Sarvam speech credentials without aggregate usage caps')
     worker = actions.add_parser('deploy-worker', help='Create a private document worker revision')
     worker.add_argument('--worker-image', required=True)
     worker.add_argument('--hermes-image', required=True)

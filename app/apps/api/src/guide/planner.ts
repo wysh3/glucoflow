@@ -27,8 +27,8 @@ export function createGuideBudget(hourlyLimit: number, maxConcurrent: number) {
         hour = current;
         calls = 0;
       }
-      if (calls >= hourlyLimit || active >= maxConcurrent) return null;
-      calls++;
+      if ((hourlyLimit > 0 && calls >= hourlyLimit) || active >= maxConcurrent) return null;
+      if (hourlyLimit > 0) calls++;
       active++;
       return () => { active--; };
     },

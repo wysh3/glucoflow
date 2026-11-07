@@ -232,7 +232,7 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
               <div className="care-conversation-pane min-h-0 min-w-0">
                 <AskPanel key={workspace.id} state={state} workspace={workspace} draft={chatDraft} onDraft={setChatDraft} mode={mode} setMode={setMode}
                   visible={conversationVisible} openSource={openSource} openTask={openTask} openExistingTask={setTaskId} openPlaybook={openPlaybook}
-                  openView={openView} />
+                  openView={openView} openPipeline={() => setPipelineOpen(true)} />
               </div>
               {workOpen ? (
                 <section className="care-working-pane" aria-label="Working panel">

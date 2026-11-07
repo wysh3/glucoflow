@@ -31,7 +31,7 @@ The API still accepts `HERMES_URL=http://127.0.0.1:8080` and
 as the runtime's `GLUCO_SERVICE_TOKEN`. Keep the runtime private to the API.
 `GLUCO_BIND_HOST` and `PORT` configure its listener. A service token must contain
 at least 24 characters. `GLUCO_MAX_CONCURRENT` and
-`GLUCO_MAX_PROVIDER_CALLS_PER_HOUR` bound admission. Legacy `HERMES_*` runtime
+`GLUCO_MAX_PROVIDER_CALLS_PER_HOUR` configure admission. The hourly allowance defaults to `0` (unlimited); concurrency remains bounded. Legacy `HERMES_*` runtime
 settings remain accepted so existing deployment secrets keep working.
 
 Use an OpenAI-compatible provider supporting function calls on
@@ -130,11 +130,10 @@ phase events provide honest progress while the accepted reply is validated.
   unsuccessful attempts). A normal read → accepted response uses two calls. Each provider call
   has an 8-second HTTP timeout and a 56 KiB wire input cap, and requests at most
   650 output tokens. The service reserves the route's full wire allowance at
-  admission, including for failed runs. `HERMES_MAX_PROVIDER_CALLS_PER_HOUR` sets the sliding hourly
-  cap per process, and `HERMES_MAX_CONCURRENT` sets concurrent chat workers.
-  Hourly reservations are in memory and reset on restart. The hosted demo
-  uses one replica and a provider-side project budget can bound spend across
-  deployments.
+  admission only when an optional hourly allowance is configured. `GLUCO_MAX_PROVIDER_CALLS_PER_HOUR=0`
+  (the default) disables the aggregate allowance; positive values enable a sliding hourly
+  allowance per process. `GLUCO_MAX_CONCURRENT` still bounds concurrent workers.
+  Hosted deployments use zero aggregate allowances. Provider account quotas still apply.
 - The private `X-Hermes-Timing` header contains phase durations and the number
   of provider requests dispatched. The care bridge records the bounded numeric
   fields with the HTTP status and bridge duration.

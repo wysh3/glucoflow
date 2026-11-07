@@ -206,7 +206,7 @@ async function runPipeline(provider: ReturnType<typeof createExtractionProvider>
 }
 
 describe('live provider adapter (protocol stub, not a real model)', () => {
-  it('refuses to extract when credentials or a positive budget are missing', async () => {
+  it('refuses to extract when credentials or execution configuration are missing', async () => {
     // An empty credential or budget value yields an unavailable provider, and any attempt
     // to use it fails with an auth error. Fixture output is never substituted.
     for (const incomplete of [{ apiKey: '' }, { baseUrl: '' }, { maxDocumentCostUsd: undefined }]) {
@@ -217,16 +217,24 @@ describe('live provider adapter (protocol stub, not a real model)', () => {
       expect((error as ProviderRequestError).detail.category).toBe('auth');
     }
 
-    // A zero budget is refused outright rather than starting a run that cannot be paid for.
+    // A zero monetary ceiling is valid; bounded per-job execution remains required.
     expect(() =>
       createExtractionProvider({ ...providerConfig(), maxDocumentCostUsd: 0 } as never, budget()),
-    ).toThrow(/MAX_DOCUMENT_COST_USD/);
+    ).not.toThrow();
     expect(() =>
       createExtractionProvider({ ...providerConfig(), maxRunTokens: 0 } as never, budget()),
     ).toThrow(/MAX_RUN_TOKENS/);
 
     // Nothing was dispatched to the stub for any of them.
     expect(requests).toHaveLength(0);
+  });
+
+  it('supports unlimited monetary allowance while recording actual usage', async () => {
+    reset({ kind: 'valid' });
+    const result = await runPipeline(createExtractionProvider(providerConfig({ maxDocumentCostUsd: 0 }) as never, budget()));
+    expect(result.facts).toHaveLength(1);
+    expect(result.usage.inputTokens).toBe(120);
+    expect(result.usage.outputTokens).toBe(40);
   });
 
   it('uses transport usage when model JSON omits bookkeeping fields', async () => {

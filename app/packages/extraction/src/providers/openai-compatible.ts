@@ -83,13 +83,13 @@ export class LiveExtractionProvider implements ExtractionProvider {
       throw new Error('HERMES_SERVICE_TOKEN must contain at least 24 characters.');
     if (!config.apiKey) throw new Error('EXTRACTION_API_KEY is required for live extraction');
     if (
-      !(config.maxDocumentCostUsd > 0) ||
+      !(Number.isFinite(config.maxDocumentCostUsd) && config.maxDocumentCostUsd >= 0) ||
       !(config.maxRunTokens > 0) ||
       !(config.usdPerMillionInputTokens > 0) ||
       !(config.usdPerMillionOutputTokens > 0)
     ) {
       throw new Error(
-        'MAX_DOCUMENT_COST_USD and MAX_RUN_TOKENS must be positive before live processing starts',
+        'MAX_DOCUMENT_COST_USD must be nonnegative; MAX_RUN_TOKENS and token prices must be positive',
       );
     }
   }
@@ -191,7 +191,7 @@ export class LiveExtractionProvider implements ExtractionProvider {
         );
       const inputCost = this.costOf(inputCeiling, 0);
       const remainingCost =
-        this.config.maxDocumentCostUsd - this.committedCostUsd;
+        this.config.maxDocumentCostUsd === 0 ? Infinity : this.config.maxDocumentCostUsd - this.committedCostUsd;
       const remainingTokens = this.config.maxRunTokens - this.committedTokens;
       const outputCeiling = Math.min(
         4096,
@@ -208,7 +208,7 @@ export class LiveExtractionProvider implements ExtractionProvider {
             category: 'budget',
             retryable: false,
             message:
-              'The request does not fit the remaining dollar/token budget.',
+              'This document exceeds the configured processing limit.',
           },
           inputTokens,
           outputTokens,
@@ -228,7 +228,7 @@ export class LiveExtractionProvider implements ExtractionProvider {
           error: {
             category: 'budget',
             retryable: false,
-            message: reserved.reason ?? 'model call budget exhausted',
+            message: reserved.reason ?? 'This document reached its processing step limit.',
           },
           inputTokens,
           outputTokens,

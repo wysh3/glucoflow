@@ -34,15 +34,15 @@ function unsupportedAudio() {
 export function registerSpeechRoutes(app: FastifyInstance, ctx: AppContext) {
   const { SARVAM_API_KEY: key, SARVAM_STT_MAX_SECONDS: stt, SARVAM_TTS_MAX_CHARACTERS: tts } = ctx.config;
   const quotas = { stt, tts };
-  const status = (operation: keyof typeof quotas) => key && quotas[operation] > 0 ? 'configured' : 'setup_required';
+  const status = (operation: keyof typeof quotas) => key ? 'configured' : 'setup_required';
   const speech = createSarvamSpeech({ key });
 
   async function reserve(request: FastifyRequest, operation: keyof typeof quotas, units: number) {
     if (status(operation) !== 'configured') {
-      throw new ApiError(503, 'speech_setup_required', 'Set up Sarvam credentials and a speech budget on the server.');
+      throw new ApiError(503, 'speech_setup_required', 'Set up Sarvam credentials on the server.');
     }
     const limit = quotas[operation];
-    const allowed = units <= limit && await withActorTx(ctx, request, async (client) => {
+    const allowed = (limit === 0 || units <= limit) && await withActorTx(ctx, request, async (client) => {
       const result = await client.query<{ allowed: boolean }>(
         'select sutra.reserve_speech_usage($1, $2, $3) as allowed', [operation, units, limit],
       );

@@ -97,7 +97,7 @@ it('reports STT and TTS separately and rejects a request over the configured tot
   });
   try {
     const capabilities = (await limited.inject({ method: 'GET', url: `${base}/capabilities`, headers: headers() })).json<SpeechCapabilities>();
-    expect(capabilities.stt.status).toBe('setup_required');
+    expect(capabilities.stt.status).toBe('configured');
     expect(capabilities.tts.status).toBe('configured');
     const reply = await limited.inject({ method: 'POST', url: `${base}/synthesize`, headers: headers(), payload: reviewed });
     expect(reply.statusCode).toBe(429);
@@ -117,7 +117,7 @@ it('reserves a bounded total with only the API function and rolls back test usag
     await client.query('savepoint speech_test');
     try {
       const reserve = async () => (await client.query<{ allowed: boolean }>(
-        "select sutra.reserve_speech_usage('stt', 1, $1) as allowed", [before + 1],
+        "select sutra.reserve_speech_usage('stt', 1, $1) as allowed", [Number(before) + 1],
       )).rows[0]?.allowed;
       expect(await reserve()).toBe(true);
       expect(await reserve()).toBe(false);
@@ -128,4 +128,28 @@ it('reserves a bounded total with only the API function and rolls back test usag
   await expect(db.asActor(fixture.patientUserId, (client) =>
     client.query('select * from sutra.speech_usage_budget'),
   )).rejects.toMatchObject({ code: '42501' });
+});
+
+
+it('zero removes the cumulative speech cap while retaining the usage ledger', async () => {
+  await db.asActor(fixture.patientUserId, async client => {
+    await client.query('savepoint unlimited_speech');
+    try {
+      const reserve = async () => (await client.query<{ allowed: boolean }>(
+        "select sutra.reserve_speech_usage('tts', 500, 0) as allowed",
+      )).rows[0]?.allowed;
+      expect(await reserve()).toBe(true);
+      expect(await reserve()).toBe(true);
+    } finally { await client.query('rollback to savepoint unlimited_speech'); }
+  });
+  const stub = vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('Synthetic provider unavailable'));
+  const unlimited = await buildServer({ ...api, config: { ...api.config, SARVAM_API_KEY: 'synthetic-stub-key' } });
+  try {
+    const capabilities = (await unlimited.inject({ method: 'GET', url: `${base}/capabilities`, headers: headers() })).json<SpeechCapabilities>();
+    expect(capabilities.stt.status).toBe('configured');
+    expect(capabilities.tts.status).toBe('configured');
+    const reply = await unlimited.inject({ method: 'POST', url: `${base}/synthesize`, headers: headers(), payload: reviewed });
+    expect(reply.statusCode).not.toBe(429);
+    expect(stub).toHaveBeenCalledTimes(1);
+  } finally { stub.mockRestore(); await unlimited.close(); }
 });
