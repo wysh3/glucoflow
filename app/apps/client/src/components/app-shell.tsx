@@ -9,6 +9,7 @@ import { installBackHandler } from '../platform/back';
 import { CARE_HOME } from '../lib/clinic-home';
 import { LanguageNotice, LanguagePicker, useI18n } from '../i18n';
 import { normalizePathname } from '../lib/route-path';
+import { requestGuideOpen } from '../lib/guide-open';
 import { CodexDesktopLayout, CodexSidebarRow } from '../vendor/codexapp/desktop-layout';
 import { hospitalTeamPath, useHospitals } from '../features/hospital/use-hospitals';
 
@@ -133,7 +134,7 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
           {(isPatientView || /^\/clinic\/patients\/[0-9a-f-]{36}(?:\/|$)/.test(path)) ? (
             <Button type="button" variant="quiet" size="sm" className="min-h-11 px-2.5"
               aria-label={t('nav.askGluco')} title={t('nav.askGluco')}
-              onClick={() => window.dispatchEvent(new Event('gluco:open'))}>
+              onClick={requestGuideOpen}>
               <MessageCircle size={16} aria-hidden />
               <span className="hidden sm:inline">{t('nav.askGluco')}</span>
             </Button>

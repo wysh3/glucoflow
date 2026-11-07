@@ -13,7 +13,11 @@ export async function monitorCareBatch(client: DbClient, at = new Date().toISOSt
       )
     order by monitor_checked_at, id limit 20 for update skip locked`, [at, workspaceId]);
   let changed = 0;
+  const batchTime = Date.parse(at);
   for (const {state} of rows) {
+    // A source command can commit after this batch captured its clock and
+    // before the row was locked. Leave that workspace for the next check.
+    if (Date.parse(state.updatedAt) > batchTime) continue;
     if (reconcileCareWorkspace(state, at)) {
       state.revision += 1;
       state.updatedAt = at;

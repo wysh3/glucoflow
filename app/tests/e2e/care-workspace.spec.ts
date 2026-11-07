@@ -1,18 +1,17 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Locator, type Page } from '@playwright/test';
 import { signIn } from './helpers';
 
-async function openWorkspace(page: import('@playwright/test').Page) {
+async function openWorkspace(page: Page) {
   await signIn(page, 'clinic');
   await page.goto('/clinic/care');
   await page.getByRole('button', { name: 'Create workspace', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Ask GlucoFlow', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Doctor care desk', exact: true })).toBeVisible();
 }
 
 test('a tester creates a workspace, asks with explicit offline mode, and reloads persisted answers', async ({ page }) => {
   await openWorkspace(page);
-  await page.getByRole('combobox', { name: 'Assistant mode' }).click();
-  await page.getByRole('option', { name: 'Deterministic helper', exact: true }).click();
-  await page.getByLabel('Message GlucoFlow').fill('Summarize the pending handoffs for this shift.');
+  await useWorkspaceHelper(page);
+  await page.getByLabel('Message Gluco', { exact: true }).fill('Summarize the pending handoffs for this shift.');
   const reply = page.waitForResponse(response => response.url().endsWith('/chat') && response.request().method() === 'POST');
   await page.getByRole('button', { name: 'Send', exact: true }).click();
   expect((await reply).status()).toBe(200);
@@ -28,7 +27,9 @@ test('a tester creates a workspace, asks with explicit offline mode, and reloads
 test('source evidence opens from the worklist without leaving the workspace', async ({ page }) => {
   await openWorkspace(page);
   await page.goto('/clinic/care?view=worklist');
-  await page.getByRole('button', { name: /(?:HIS|LIS) · (?:Order placed|Specimen collected|Specimen received|Result validated)/ }).first().click();
+  const exception = page.getByRole('listitem').filter({ hasText: 'Dev Mehta · Awaiting lab receipt' });
+  await exception.locator('summary').click();
+  await exception.getByRole('button', { name: 'HIS · Specimen collected', exact: true }).click();
   const source = page.getByRole('dialog', { name: 'Source event', exact: true });
   await expect(source).toBeVisible();
   await expect(source).toContainText('Source reference');
@@ -36,6 +37,7 @@ test('source evidence opens from the worklist without leaving the workspace', as
   await expect(source).toContainText('Received by GlucoFlow');
   await source.getByRole('button', { name: 'Close', exact: true }).click();
   await expect(source).not.toBeVisible();
+  await expect(page).toHaveURL(/\/clinic\/care\?view=worklist$/);
   expect(await page.evaluate('document.documentElement.scrollWidth <= window.innerWidth')).toBe(true);
 });
 
@@ -43,17 +45,18 @@ test('saved workspaces recover after a failed reopen without mixing conversation
   const firstResponse = page.waitForResponse(response => response.url().endsWith('/care/workspaces') && response.request().method() === 'POST');
   await openWorkspace(page);
   const first = await (await firstResponse).json() as import('@glucoflow/contracts').CareWorkspace;
-  await choose(page, 'Assistant mode', 'Deterministic helper');
+  await useWorkspaceHelper(page);
   const firstMessage = 'Show recorded events for workspace recovery verification.';
-  await page.getByLabel('Message GlucoFlow').fill(firstMessage);
+  await page.getByLabel('Message Gluco', { exact: true }).fill(firstMessage);
   await page.getByRole('button', { name: 'Send', exact: true }).click();
   await expect(page.getByRole('log', { name: 'Care conversation' })).toContainText(firstMessage);
-  await page.getByRole('button', { name: 'New workspace', exact: true }).click();
-  await page.getByRole('button', { name: 'Create new workspace', exact: true }).click();
-  await expect(page.getByRole('dialog', { name: 'Start a new workspace?' })).not.toBeVisible();
+  await page.getByRole('button', { name: 'New chat', exact: true }).click();
+  const newChat = page.getByRole('dialog', { name: 'Start a new chat?' });
+  await newChat.getByRole('button', { name: 'Start new chat', exact: true }).click();
+  await expect(newChat).not.toBeVisible();
   await expect(page.getByRole('log', { name: 'Care conversation' })).not.toBeVisible();
 
-  await page.getByRole('button', { name: 'Saved workspaces', exact: true }).click();
+  await workspaceMenu(page, 'Saved workspaces');
   const recovery = page.getByRole('dialog', { name: 'Open a saved workspace' });
   const firstRow = recovery.locator(`[data-workspace-id="${first.id}"]`);
   let failNextReopen = true;
@@ -65,6 +68,7 @@ test('saved workspaces recover after a failed reopen without mixing conversation
       json: { error: { code: 'unavailable', message: 'Temporary workspace load failure.', requestId: 'synthetic-check' } },
     });
   });
+  await revealSavedWorkspace(recovery, firstRow);
   await firstRow.getByRole('button', { name: /Reopen workspace created/ }).click();
   await expect(recovery).toContainText('Temporary workspace load failure.');
   await expect(recovery.getByText('Open now', { exact: true })).toBeVisible();
@@ -77,8 +81,9 @@ test('saved workspaces recover after a failed reopen without mixing conversation
     }
   });
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Start a hospital simulation' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Explore the DKA handover demo', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Saved workspaces', exact: true }).click();
+  await revealSavedWorkspace(recovery, firstRow);
   await firstRow.getByRole('button', { name: /Reopen workspace created/ }).click();
   await expect(recovery).not.toBeVisible();
   await expect(page.getByRole('log', { name: 'Care conversation' })).toContainText(firstMessage);
@@ -86,12 +91,34 @@ test('saved workspaces recover after a failed reopen without mixing conversation
   await expect(page.getByRole('log', { name: 'Care conversation' })).toContainText(firstMessage);
 });
 
-async function choose(page: import('@playwright/test').Page, label: string, option: string) {
+async function revealSavedWorkspace(recovery: Locator, workspace: Locator) {
+  const rows = recovery.locator('[data-workspace-id]');
+  const older = recovery.getByRole('button', { name: 'Load older workspaces', exact: true });
+  await expect(rows.first()).toBeVisible();
+  while (!await workspace.isVisible() && await older.isVisible()) {
+    const before = await rows.count();
+    await older.click();
+    await expect(rows).not.toHaveCount(before);
+  }
+  await expect(workspace).toBeVisible();
+}
+
+async function workspaceMenu(page: Page, action: string) {
+  await page.locator('summary[aria-label="Workspace menu"]').click();
+  await page.getByRole('button', { name: action, exact: true }).click();
+}
+
+async function useWorkspaceHelper(page: Page) {
+  await page.getByRole('button', { name: 'Chat options', exact: true }).click();
+  await choose(page, 'Response mode', 'Workspace helper · no AI');
+}
+
+async function choose(page: Page, label: string, option: string) {
   await page.getByRole('combobox', { name: label, exact: true }).click();
   await page.getByRole('option', { name: option, exact: true }).click();
 }
 
-async function commandResult(page: import('@playwright/test').Page, action: () => Promise<unknown>) {
+async function commandResult(page: Page, action: () => Promise<unknown>) {
   const response = page.waitForResponse(item => item.url().endsWith('/commands') && item.request().method() === 'POST');
   await action();
   const result = await response;
@@ -111,7 +138,7 @@ test('source-confirmed monitoring becomes a reviewed skill and proposes a new ta
   expect(watched.status).toBe('monitoring');
   expect(watched.completionEventId).toBeNull();
   await task.getByRole('button', { name: 'Close', exact: true }).click();
-  await page.locator('#care-simulator summary').click();
+  await workspaceMenu(page, 'Demo controls');
   await commandResult(page, () => choose(page, 'Simulation role', 'Nurse'));
   const collected = await commandResult(page, () => page.getByRole('button', { name: 'Emit synthetic event', exact: true }).click());
   expect(collected.tasks.find(item => item.id === watched.id)?.status).toBe('monitoring');
@@ -121,7 +148,7 @@ test('source-confirmed monitoring becomes a reviewed skill and proposes a new ta
   expect(done.status).toBe('source_confirmed');
   expect(completed.events.find(item => item.id === done.completionEventId)?.kind).toBe('specimen_received');
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Export JSON', exact: true }).click();
+  await workspaceMenu(page, 'Export JSON');
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(/^glucoflow-synthetic-.+-snapshot\.json$/);
   expect(await download.failure()).toBeNull();
@@ -129,25 +156,25 @@ test('source-confirmed monitoring becomes a reviewed skill and proposes a new ta
   await page.getByRole('button', { name: /Inspect completed task/ }).click();
   await expect(task).toContainText('Completion evidence');
   const captured = page.waitForResponse(response => response.url().endsWith('/skills') && response.request().method() === 'POST');
-  await task.getByRole('button', { name: 'Capture skill draft', exact: true }).click();
+  await task.getByRole('button', { name: 'Capture routine draft', exact: true }).click();
   const captureResponse = await captured;
   expect(captureResponse.status()).toBe(201);
   const skill = await captureResponse.json() as import('@glucoflow/contracts').CareSkill;
   expect(skill.origin?.eventId).toBe(done.completionEventId);
-  await task.getByRole('link', { name: 'Open skill library' }).click();
+  await task.getByRole('link', { name: 'Open care routines', exact: true }).click();
   const card = page.locator(`[data-skill-id="${skill.id}"]`);
-  await expect(card.getByRole('button', { name: 'Approve skill', exact: true })).toBeDisabled();
-  await card.getByRole('button', { name: 'Run skill tests', exact: true }).click();
+  await expect(card.getByRole('button', { name: 'Approve routine', exact: true })).toBeDisabled();
+  await card.getByRole('button', { name: 'Run routine tests', exact: true }).click();
   await expect(card).toContainText('5/5 passed');
-  await card.getByRole('button', { name: 'Approve skill', exact: true }).click();
-  await page.getByRole('dialog', { name: 'Approve skill', exact: true }).getByRole('button', { name: 'Approve skill', exact: true }).click();
+  await card.getByRole('button', { name: 'Approve routine', exact: true }).click();
+  await page.getByRole('dialog', { name: 'Approve routine', exact: true }).getByRole('button', { name: 'Approve routine', exact: true }).click();
   await expect(card).toContainText('Approved · Active');
 
   if (!await page.locator('#care-simulator[open]').count()) {
-    await page.locator('#care-simulator summary').click();
+    await workspaceMenu(page, 'Demo controls');
   }
   await commandResult(page, () => choose(page, 'Simulation role', 'Doctor'));
-  await page.getByRole('tab', { name: 'My Care Teams', exact: true }).click();
+  await page.getByRole('link', { name: 'Encounters', exact: true }).click();
   await page.locator('summary').filter({ hasText: 'Dev Mehta' }).click();
   await page.getByRole('button', { name: 'Add lab order', exact: true }).click();
   await page.getByLabel('Test name', { exact: true }).fill('Synthetic skill reuse order');
@@ -161,10 +188,11 @@ test('source-confirmed monitoring becomes a reviewed skill and proposes a new ta
   await page.getByLabel('Source reference (optional)', { exact: true }).fill('HIS-SKILL-REUSE-TARGET');
   const withTarget = await commandResult(page, () => page.getByRole('button', { name: 'Emit synthetic event', exact: true }).click());
   const targetEvent = withTarget.events.find(item => item.sourceRef === 'HIS-SKILL-REUSE-TARGET')!;
+  await commandResult(page, () => choose(page, 'Simulation role', 'Doctor'));
 
-  await page.getByRole('button', { name: 'Workflow learning', exact: true }).click();
+  await workspaceMenu(page, 'Care routines');
   await card.getByRole('button', { name: 'Preview application', exact: true }).click();
-  const preview = page.getByRole('dialog', { name: 'Preview skill application', exact: true });
+  const preview = page.getByRole('dialog', { name: 'Preview care routine', exact: true });
   await choose(page, 'Target encounter', 'Dev Mehta · DEMO-102');
   await choose(page, 'Target laboratory order', targetLabel);
   const apply = preview.getByRole('button', { name: 'Create approval request', exact: true });
@@ -184,7 +212,7 @@ test('source-confirmed monitoring becomes a reviewed skill and proposes a new ta
 
 test('a workflow layout is tested, approved, and rolled back through human review', async ({ page }) => {
   await openWorkspace(page);
-  await page.getByRole('button', { name: 'Workflow learning', exact: true }).click();
+  await workspaceMenu(page, 'Care routines');
   await page.getByRole('button', { name: 'Propose layout', exact: true }).click();
   await page.getByLabel('Layout title', { exact: true }).fill('Evidence first handover');
   await choose(page, 'Handover layout', 'Evidence before owner');

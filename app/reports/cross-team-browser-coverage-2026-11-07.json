@@ -1,0 +1,1444 @@
+[
+  {
+    "project": "desktop-chromium",
+    "file": "assistive-scope.spec.ts",
+    "title": "home reports show source values without clinical thresholds or derived review flags",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "assistive-scope.spec.ts",
+    "title": "overview preserves month and year source date precision",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "assistive-scope.spec.ts",
+    "title": "tracking requires an explicitly configured interval",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "canvas-workspace.spec.ts",
+    "title": "collapsed desktop navigation remains a labelled icon rail after reload",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "canvas-workspace.spec.ts",
+    "title": "resizing the sidebar cannot squeeze the conversation into an unusable split",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "canvas-workspace.spec.ts",
+    "title": "sidebar controls keep authorized record navigation usable",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "canvas-workspace.spec.ts",
+    "title": "the upstream shell wraps the public entry and stays within the viewport",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "canvas-workspace.spec.ts",
+    "title": "working panels preserve the conversation draft and browser history",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-episode.spec.ts",
+    "title": "appointment preview requires explicit details and review; changing details clears approval",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-episode.spec.ts",
+    "title": "episode navigation keeps encounter sources and tasks together and supports browser back",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-multiactor.spec.ts",
+    "title": "separate authenticated staff progress source work and receive a named handover",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-preview.spec.ts",
+    "title": "appointment approval resets after every detail change and unit preview stays illustrative",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-role-work.spec.ts",
+    "title": "lab separates expected and validated specimens from missing processing evidence",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-role-work.spec.ts",
+    "title": "nurse sees a source-backed specimen exception and can soft-acknowledge without closure",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-role-work.spec.ts",
+    "title": "reviewed handover export and named receipt keep the exact saved version",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-shift-monitoring.spec.ts",
+    "title": "real API shift scope requires approval, can pause/edit/reapprove/stop, and opens evidence",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-workspace.spec.ts",
+    "title": "a tester creates a workspace, asks with explicit offline mode, and reloads persisted answers",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-workspace.spec.ts",
+    "title": "a workflow layout is tested, approved, and rolled back through human review",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-workspace.spec.ts",
+    "title": "saved workspaces recover after a failed reopen without mixing conversations",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-workspace.spec.ts",
+    "title": "source evidence opens from the worklist without leaving the workspace",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "care-workspace.spec.ts",
+    "title": "source-confirmed monitoring becomes a reviewed skill and proposes a new task with target evidence",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "demo-data-use.spec.ts",
+    "title": "clinic upload discloses provider processing when the server reports live extraction",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "demo-data-use.spec.ts",
+    "title": "public data-use information and the patient upload warning are available before files are sent",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "guide-chat.spec.ts",
+    "title": "Gluco recovers from a failed request and opens original evidence",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "guide-chat.spec.ts",
+    "title": "Record assistant supports factual follow-ups and clear chat",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "guide-chat.spec.ts",
+    "title": "changing patient scope clears conversation and draft",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "guide-chat.spec.ts",
+    "title": "first guide click is retained while its code is still loading",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "guide-chat.spec.ts",
+    "title": "patient chat opens only their own context without ornamental animation",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "hospital-team.spec.ts",
+    "title": "an administrator activates a provisioned account and confirms revocation",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "hospital-team.spec.ts",
+    "title": "staff see assigned roles and the shared workspace entry without admin controls",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "landing.spec.ts",
+    "title": "the demo role cards sign in without a password",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "landing.spec.ts",
+    "title": "the public home opens the synthetic inpatient care workspace in one click",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "localization.spec.ts",
+    "title": "Hindi follows the patient through records, notes, upload entry and account",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "localization.spec.ts",
+    "title": "Urdu preview applies right-to-left direction and explains the English fallback",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "a chosen assistant mode persists on reload for the same workspace",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "a simulated event can safely retry after the server saved it but the response was lost",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "an unreachable receipt has no completion marks for patient contact or the next step",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "clinic navigation groups retained closure screens at either viewport",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "first simulator action has matching evidence and exposes completion",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "switching accounts opens the new account home rather than the prior clinic route",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "trailing slash keeps the care section active and hides the retained guide launcher",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "trailing slash keeps the retained closure section active",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "notes.spec.ts",
+    "title": "a blank note is refused and a written note is sent with a submission time",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "notes.spec.ts",
+    "title": "patient can prepare a summary and open an approved original report",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "notes.spec.ts",
+    "title": "records screen explains where uploads appear and lists review status",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "notes.spec.ts",
+    "title": "the account screen states how the session is stored",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "notes.spec.ts",
+    "title": "the add-report screen states the limits and the process-loss limitation",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "obligations.spec.ts",
+    "title": "a reviewer cannot open the clinician line by URL",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "obligations.spec.ts",
+    "title": "intake offers custody and identity actions",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "obligations.spec.ts",
+    "title": "the clinician sees one line and closes a review with one tap",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "obligations.spec.ts",
+    "title": "the nurse records a contact and the call leaves the queue",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "obligations.spec.ts",
+    "title": "the register renders and offers a print",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "obligations.spec.ts",
+    "title": "the showcase and the replay state what they are",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "polish.spec.ts",
+    "title": "a correction opens an editable draft before sending a new version",
+    "status": "passed",
+    "evidence": "gluco-cross-last-fixes.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "polish.spec.ts",
+    "title": "a quarantined upload does not offer a draft review",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "polish.spec.ts",
+    "title": "a saved SOS snapshot downloads JSON without leaving the workspace",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "polish.spec.ts",
+    "title": "clinic note submission dates use the same local calendar day as patient notes",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "polish.spec.ts",
+    "title": "demo samples are available without choosing a local file",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "polish.spec.ts",
+    "title": "home reading and problem timestamps are independent",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "polish.spec.ts",
+    "title": "published reviews show success and lock further draft actions",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "polish.spec.ts",
+    "title": "sample upload leads to an available review even on a repeated run",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "progression.spec.ts",
+    "title": "custom dates constrain progression to the selected historical range",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "progression.spec.ts",
+    "title": "offers the summary export action",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "progression.spec.ts",
+    "title": "opens original prescription evidence from the context lane",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "progression.spec.ts",
+    "title": "opens the source document for the approved value",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "progression.spec.ts",
+    "title": "plots three seeded points and exposes the same values in the table",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "progression.spec.ts",
+    "title": "search in patient context keeps the patient and returns a source action",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "progression.spec.ts",
+    "title": "shows events and patient notes in separate labelled lanes",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "progression.spec.ts",
+    "title": "shows the approved HbA1c progression with the most recent value",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "removal.spec.ts",
+    "title": "keyboard users can skip repeated navigation",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "removal.spec.ts",
+    "title": "patient cannot use a retired URL to enter clinic records",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "removal.spec.ts",
+    "title": "retired demo leads to the current walkthrough",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "removal.spec.ts",
+    "title": "retired patient views redirect to the same protected record",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "removal.spec.ts",
+    "title": "simplified public and record views remain readable",
+    "status": "passed",
+    "evidence": "gluco-cross-removal.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "results.spec.ts",
+    "title": "imports a lab feed and holds an unmatched report",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "results.spec.ts",
+    "title": "matches an ambiguous report and shows the value-echo acknowledgement",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "results.spec.ts",
+    "title": "opens the ledger with patient contact and closure",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "results.spec.ts",
+    "title": "records an unreachable patient without a false informed tick",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "review.spec.ts",
+    "title": "an approved document offers a reasoned correction rather than another initial review",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "review.spec.ts",
+    "title": "offers explicit Source and Fields tabs",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "review.spec.ts",
+    "title": "review screen keeps patient identity and the fixture label visible",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "review.spec.ts",
+    "title": "shows the review action without horizontal scrolling",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "review.spec.ts",
+    "title": "the queue lists documents with an observed state",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "review.spec.ts",
+    "title": "the reviewer queue shows the retry control only for a failed run",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "review.spec.ts",
+    "title": "two uploaded photos remain separately accessible during review",
+    "status": "passed",
+    "evidence": "gluco-cross-remaining.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "session.spec.ts",
+    "title": "account retains navigation back to the authorized workspace",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "session.spec.ts",
+    "title": "clinic account signs in and sees the patient list",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "session.spec.ts",
+    "title": "invalid credentials are explained without revealing account existence",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "session.spec.ts",
+    "title": "patient account signs in and lands in the patient workspace",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "session.spec.ts",
+    "title": "signing out clears previously rendered records",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "session.spec.ts",
+    "title": "the demo label and extraction mode are visible in the interface",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "session.spec.ts",
+    "title": "the review queue refuses a clinician-only account",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "speech.spec.ts",
+    "title": "cancelling an in-flight transcript stops the mic and ignores the late response",
+    "status": "passed",
+    "evidence": "gluco-speech-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "speech.spec.ts",
+    "title": "denied microphone permission leaves typed input available and sends no audio",
+    "status": "passed",
+    "evidence": "gluco-speech-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "speech.spec.ts",
+    "title": "missing Sarvam setup leaves typed input available without accessing the microphone",
+    "status": "passed",
+    "evidence": "gluco-speech-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "speech.spec.ts",
+    "title": "records WAV audio, inserts an editable draft without sending, and plays a reply on request",
+    "status": "passed",
+    "evidence": "gluco-speech-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "speech.spec.ts",
+    "title": "switching to the narrow worklist stops conversation audio",
+    "status": "passed",
+    "evidence": "gluco-speech-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "upload-review.spec.ts",
+    "title": "a patient upload reaches the review queue and can be approved",
+    "status": "passed",
+    "evidence": "gluco-cross-upload-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "workspace.spec.ts",
+    "title": "doctor overview consolidates approved facts and source links",
+    "status": "passed",
+    "evidence": "gluco-cross-desktop-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "workspace.spec.ts",
+    "title": "dropdowns open an in-app listbox and support keyboard selection",
+    "status": "passed",
+    "evidence": "gluco-cross-desktop-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "workspace.spec.ts",
+    "title": "landing keeps primary entry actions visible and avoids horizontal overflow",
+    "status": "passed",
+    "evidence": "gluco-cross-last-fixes.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "workspace.spec.ts",
+    "title": "record guide helps navigate without providing clinical advice",
+    "status": "passed",
+    "evidence": "gluco-cross-desktop-final.log"
+  },
+  {
+    "project": "desktop-chromium",
+    "file": "workspace.spec.ts",
+    "title": "screening menu preserves implicit option values",
+    "status": "passed",
+    "evidence": "gluco-cross-desktop-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "assistive-scope.spec.ts",
+    "title": "home reports show source values without clinical thresholds or derived review flags",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "assistive-scope.spec.ts",
+    "title": "overview preserves month and year source date precision",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "assistive-scope.spec.ts",
+    "title": "tracking requires an explicitly configured interval",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "canvas-workspace.spec.ts",
+    "title": "collapsed desktop navigation remains a labelled icon rail after reload",
+    "status": "skipped",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "canvas-workspace.spec.ts",
+    "title": "resizing the sidebar cannot squeeze the conversation into an unusable split",
+    "status": "skipped",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "canvas-workspace.spec.ts",
+    "title": "sidebar controls keep authorized record navigation usable",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "canvas-workspace.spec.ts",
+    "title": "the upstream shell wraps the public entry and stays within the viewport",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "canvas-workspace.spec.ts",
+    "title": "working panels preserve the conversation draft and browser history",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-episode.spec.ts",
+    "title": "appointment preview requires explicit details and review; changing details clears approval",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-episode.spec.ts",
+    "title": "episode navigation keeps encounter sources and tasks together and supports browser back",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-multiactor.spec.ts",
+    "title": "separate authenticated staff progress source work and receive a named handover",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-preview.spec.ts",
+    "title": "appointment approval resets after every detail change and unit preview stays illustrative",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-role-work.spec.ts",
+    "title": "lab separates expected and validated specimens from missing processing evidence",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-role-work.spec.ts",
+    "title": "nurse sees a source-backed specimen exception and can soft-acknowledge without closure",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-role-work.spec.ts",
+    "title": "reviewed handover export and named receipt keep the exact saved version",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-shift-monitoring.spec.ts",
+    "title": "real API shift scope requires approval, can pause/edit/reapprove/stop, and opens evidence",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-workspace.spec.ts",
+    "title": "a tester creates a workspace, asks with explicit offline mode, and reloads persisted answers",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-workspace.spec.ts",
+    "title": "a workflow layout is tested, approved, and rolled back through human review",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-workspace.spec.ts",
+    "title": "saved workspaces recover after a failed reopen without mixing conversations",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-workspace.spec.ts",
+    "title": "source evidence opens from the worklist without leaving the workspace",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "care-workspace.spec.ts",
+    "title": "source-confirmed monitoring becomes a reviewed skill and proposes a new task with target evidence",
+    "status": "passed",
+    "evidence": "gluco-historical-care-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "demo-data-use.spec.ts",
+    "title": "clinic upload discloses provider processing when the server reports live extraction",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "demo-data-use.spec.ts",
+    "title": "public data-use information and the patient upload warning are available before files are sent",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "guide-chat.spec.ts",
+    "title": "Gluco recovers from a failed request and opens original evidence",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "guide-chat.spec.ts",
+    "title": "Record assistant supports factual follow-ups and clear chat",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "guide-chat.spec.ts",
+    "title": "changing patient scope clears conversation and draft",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "guide-chat.spec.ts",
+    "title": "first guide click is retained while its code is still loading",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "guide-chat.spec.ts",
+    "title": "patient chat opens only their own context without ornamental animation",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "hospital-team.spec.ts",
+    "title": "an administrator activates a provisioned account and confirms revocation",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "hospital-team.spec.ts",
+    "title": "staff see assigned roles and the shared workspace entry without admin controls",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "landing.spec.ts",
+    "title": "the demo role cards sign in without a password",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "landing.spec.ts",
+    "title": "the public home opens the synthetic inpatient care workspace in one click",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "localization.spec.ts",
+    "title": "Hindi follows the patient through records, notes, upload entry and account",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "localization.spec.ts",
+    "title": "Urdu preview applies right-to-left direction and explains the English fallback",
+    "status": "passed",
+    "evidence": "guide-browser-coverage-2026-11-07.md"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "a chosen assistant mode persists on reload for the same workspace",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "a simulated event can safely retry after the server saved it but the response was lost",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "an unreachable receipt has no completion marks for patient contact or the next step",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "clinic navigation groups retained closure screens at either viewport",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "first simulator action has matching evidence and exposes completion",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "switching accounts opens the new account home rather than the prior clinic route",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "trailing slash keeps the care section active and hides the retained guide launcher",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "navigation-audit.spec.ts",
+    "title": "trailing slash keeps the retained closure section active",
+    "status": "passed",
+    "evidence": "gluco-navigation-audit.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "notes.spec.ts",
+    "title": "a blank note is refused and a written note is sent with a submission time",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "notes.spec.ts",
+    "title": "patient can prepare a summary and open an approved original report",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "notes.spec.ts",
+    "title": "records screen explains where uploads appear and lists review status",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "notes.spec.ts",
+    "title": "the account screen states how the session is stored",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "notes.spec.ts",
+    "title": "the add-report screen states the limits and the process-loss limitation",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "obligations.spec.ts",
+    "title": "a reviewer cannot open the clinician line by URL",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "obligations.spec.ts",
+    "title": "intake offers custody and identity actions",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "obligations.spec.ts",
+    "title": "the clinician sees one line and closes a review with one tap",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "obligations.spec.ts",
+    "title": "the nurse records a contact and the call leaves the queue",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "obligations.spec.ts",
+    "title": "the register renders and offers a print",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "obligations.spec.ts",
+    "title": "the showcase and the replay state what they are",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "polish.spec.ts",
+    "title": "a correction opens an editable draft before sending a new version",
+    "status": "passed",
+    "evidence": "gluco-cross-last-fixes.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "polish.spec.ts",
+    "title": "a quarantined upload does not offer a draft review",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "polish.spec.ts",
+    "title": "a saved SOS snapshot downloads JSON without leaving the workspace",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "polish.spec.ts",
+    "title": "clinic note submission dates use the same local calendar day as patient notes",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "polish.spec.ts",
+    "title": "demo samples are available without choosing a local file",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "polish.spec.ts",
+    "title": "home reading and problem timestamps are independent",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "polish.spec.ts",
+    "title": "published reviews show success and lock further draft actions",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "polish.spec.ts",
+    "title": "sample upload leads to an available review even on a repeated run",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "progression.spec.ts",
+    "title": "custom dates constrain progression to the selected historical range",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "progression.spec.ts",
+    "title": "offers the summary export action",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "progression.spec.ts",
+    "title": "opens original prescription evidence from the context lane",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "progression.spec.ts",
+    "title": "opens the source document for the approved value",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "progression.spec.ts",
+    "title": "plots three seeded points and exposes the same values in the table",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "progression.spec.ts",
+    "title": "search in patient context keeps the patient and returns a source action",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "progression.spec.ts",
+    "title": "shows events and patient notes in separate labelled lanes",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "progression.spec.ts",
+    "title": "shows the approved HbA1c progression with the most recent value",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "removal.spec.ts",
+    "title": "keyboard users can skip repeated navigation",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "removal.spec.ts",
+    "title": "patient cannot use a retired URL to enter clinic records",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "removal.spec.ts",
+    "title": "retired demo leads to the current walkthrough",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "removal.spec.ts",
+    "title": "retired patient views redirect to the same protected record",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "removal.spec.ts",
+    "title": "simplified public and record views remain readable",
+    "status": "passed",
+    "evidence": "gluco-cross-removal.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "results.spec.ts",
+    "title": "imports a lab feed and holds an unmatched report",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "results.spec.ts",
+    "title": "matches an ambiguous report and shows the value-echo acknowledgement",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "results.spec.ts",
+    "title": "opens the ledger with patient contact and closure",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "results.spec.ts",
+    "title": "records an unreachable patient without a false informed tick",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "review.spec.ts",
+    "title": "an approved document offers a reasoned correction rather than another initial review",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "review.spec.ts",
+    "title": "offers explicit Source and Fields tabs",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "review.spec.ts",
+    "title": "review screen keeps patient identity and the fixture label visible",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "review.spec.ts",
+    "title": "shows the review action without horizontal scrolling",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "review.spec.ts",
+    "title": "the queue lists documents with an observed state",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "review.spec.ts",
+    "title": "the reviewer queue shows the retry control only for a failed run",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "review.spec.ts",
+    "title": "two uploaded photos remain separately accessible during review",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "session.spec.ts",
+    "title": "account retains navigation back to the authorized workspace",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "session.spec.ts",
+    "title": "clinic account signs in and sees the patient list",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "session.spec.ts",
+    "title": "invalid credentials are explained without revealing account existence",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "session.spec.ts",
+    "title": "patient account signs in and lands in the patient workspace",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "session.spec.ts",
+    "title": "signing out clears previously rendered records",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "session.spec.ts",
+    "title": "the demo label and extraction mode are visible in the interface",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "session.spec.ts",
+    "title": "the review queue refuses a clinician-only account",
+    "status": "passed",
+    "evidence": "gluco-cross-session-green.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "speech.spec.ts",
+    "title": "cancelling an in-flight transcript stops the mic and ignores the late response",
+    "status": "passed",
+    "evidence": "gluco-speech-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "speech.spec.ts",
+    "title": "denied microphone permission leaves typed input available and sends no audio",
+    "status": "passed",
+    "evidence": "gluco-speech-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "speech.spec.ts",
+    "title": "missing Sarvam setup leaves typed input available without accessing the microphone",
+    "status": "passed",
+    "evidence": "gluco-speech-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "speech.spec.ts",
+    "title": "records WAV audio, inserts an editable draft without sending, and plays a reply on request",
+    "status": "passed",
+    "evidence": "gluco-speech-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "speech.spec.ts",
+    "title": "switching to the narrow worklist stops conversation audio",
+    "status": "passed",
+    "evidence": "gluco-speech-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "upload-review.spec.ts",
+    "title": "a patient upload reaches the review queue and can be approved",
+    "status": "passed",
+    "evidence": "gluco-cross-upload-final.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "workspace.spec.ts",
+    "title": "doctor overview consolidates approved facts and source links",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "workspace.spec.ts",
+    "title": "dropdowns open an in-app listbox and support keyboard selection",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "workspace.spec.ts",
+    "title": "landing keeps primary entry actions visible and avoids horizontal overflow",
+    "status": "passed",
+    "evidence": "gluco-cross-last-fixes.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "workspace.spec.ts",
+    "title": "record guide helps navigate without providing clinical advice",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  },
+  {
+    "project": "mobile-chromium",
+    "file": "workspace.spec.ts",
+    "title": "screening menu preserves implicit option values",
+    "status": "passed",
+    "evidence": "gluco-cross-mobile.log"
+  }
+]

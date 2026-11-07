@@ -1,9 +1,10 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, afterEach, beforeAll, beforeEach, expect, it } from 'vitest';
-import type { CareWorkspace, HospitalStaffAudit, HospitalStaffDirectory } from '@glucoflow/contracts';
+import type { CareCommand, CareWorkspace, HospitalStaffAudit, HospitalStaffDirectory } from '@glucoflow/contracts';
 import { buildServer } from '../../apps/api/src/server';
 import { createAppContext, type AppContext } from '../../apps/api/src/context';
 import { signLocalToken } from '../../apps/api/src/auth';
+import { monitorCareBatch } from '../../apps/worker/src/care-monitor';
 import { createTestContext, type TestContext } from './harness';
 
 const accounts = {
@@ -56,10 +57,10 @@ afterAll(async () => {
   await db?.close();
 });
 
-function request(actor: Account, method: 'GET' | 'PATCH' | 'POST', url: string, payload?: object) {
+function request(actor: Account, method: 'GET' | 'PATCH' | 'POST', url: string, payload?: object, idempotencyKey = randomUUID()) {
   return app.inject({
     method, url, payload,
-    headers: { authorization: `Bearer ${tokens[actor]}`, 'idempotency-key': randomUUID() },
+    headers: { authorization: `Bearer ${tokens[actor]}`, 'idempotency-key': idempotencyKey },
   });
 }
 
@@ -283,4 +284,145 @@ it('rechecks shared shift and handover recipients when a saved draft is approved
   expect(received.handoverDocuments?.[0]?.versions[0]?.receivedBy).toMatchObject({ id: accounts.lab, simulated: false });
   expect(received.shiftMonitoring?.[0]?.status).toBe('monitoring');
   expect(received.tasks[1]?.owner).toBe(state.tasks[1]?.owner);
+});
+
+it('carries a synthetic result through separate admission, nursing, laboratory and physician accounts', async () => {
+  const otherClinicId = randomUUID();
+  await db.owner(async (client) => {
+    await client.query("insert into sutra.clinics(id,display_name,hospital_managed) values ($1,'Other Synthetic Hospital',true)", [otherClinicId]);
+    await client.query("insert into sutra.memberships(clinic_id,user_id,care_role) values ($1,$2,'lab')", [otherClinicId, accounts.outsider]);
+  });
+  try {
+    const created = await create('doctor');
+    expect(created.statusCode).toBe(201);
+    let state = created.json<CareWorkspace>();
+    expect(state.synthetic).toBe(true);
+    expect((await assign('admin', 'nurse', 'nurse')).statusCode).toBe(200);
+    for (const role of ['coordinator', 'nurse', 'lab'] as const) {
+      expect((await enroll('doctor', state, role, role)).statusCode).toBe(200);
+    }
+
+    const url = `${care}/${state.id}`;
+    const otherWorkspace = await request('outsider', 'POST', care, { clinicId: otherClinicId });
+    expect(otherWorkspace.statusCode).toBe(201);
+    expect((await request('outsider', 'GET', url)).statusCode).toBe(404);
+    expect((await request('outsider', 'GET', `${url}/team`)).statusCode).toBe(404);
+    expect((await request('outsider', 'GET', `${url}/history`)).statusCode).toBe(404);
+    expect((await enroll('doctor', state, 'outsider', 'lab')).statusCode).toBe(403);
+    expect((await request('doctor', 'GET', `${care}/${otherWorkspace.json<CareWorkspace>().id}`)).statusCode).toBe(404);
+
+    const post = (actor: Account, command: CareCommand, expectedRevision = state.revision, key = randomUUID()) =>
+      request(actor, 'POST', `${url}/commands`, { expectedRevision, command }, key);
+    const apply = async (actor: Account, command: CareCommand) => {
+      const response = await post(actor, command);
+      expect(response.statusCode, JSON.stringify(response.json())).toBe(200);
+      state = response.json<CareWorkspace>();
+    };
+
+    await apply('coordinator', { type: 'add_encounter', patientName: 'Synthetic cross-team patient', bed: 'Demo bed 21', documentedContext: [] });
+    const encounter = state.encounters.at(-1)!;
+    expect(encounter.registeredBy).toMatchObject({ id: accounts.coordinator, simulated: false, role: 'coordinator' });
+    await apply('doctor', { type: 'add_order', encounterId: encounter.id, testName: 'Synthetic cross-team lab panel', targetMinutes: 30 });
+    const order = state.orders.at(-1)!;
+    const scope = { encounterId: encounter.id, orderId: order.id };
+    const sourceEvent = (kind: CareWorkspace['events'][number]['kind'], source: 'HIS' | 'LIS', sourceRef: string) =>
+      ({ type: 'source_event', kind, source, sourceRef, ...scope }) as const;
+    expect(state.events.at(-1)).toMatchObject({ kind: 'order_placed', source: 'HIS', recordedBy: { id: accounts.doctor } });
+
+    const shiftEnd = new Date(Date.now() + 60 * 60_000).toISOString();
+    await apply('doctor', { type: 'coordination', action: 'register_staff', name: 'Synthetic shift nurse', userId: accounts.nurse,
+      team: 'Synthetic ward', role: 'nurse', capabilities: ['specimen_followup'], shiftEnd });
+    const nurse = state.coordination!.staff.find((person) => person.userId === accounts.nurse)!;
+    for (const [kind, title] of [['specimen_receipt', 'Follow specimen receipt'], ['result_acknowledgement', 'Follow current result acknowledgement']] as const) {
+      await apply('doctor', { type: 'create_task', ...scope, kind, title, durationMinutes: 30 });
+      await apply('doctor', { type: 'task_action', action: 'approve', taskId: state.tasks.at(-1)!.id });
+    }
+    const findTask = (kind: 'specimen_receipt' | 'result_acknowledgement') => state.tasks.find((task) => task.orderId === order.id && task.kind === kind)!;
+    await apply('doctor', { type: 'shift_monitoring', action: 'create', scope: {
+      encounterIds: [encounter.id], rule: 'validated_result_acknowledgement', sources: ['HIS', 'LIS'],
+      recipientStaffIds: [nurse.id], expiresAt: shiftEnd,
+    } });
+    const monitorId = state.shiftMonitoring![0]!.id;
+    const approve = { type: 'shift_monitoring', action: 'approve', monitorId, expectedVersion: 1 } as const;
+    expect((await post('nurse', approve)).statusCode).toBe(403);
+    await apply('doctor', approve);
+
+    const beforeSoftAck = state.events.length;
+    await apply('nurse', { type: 'soft_acknowledge_task', taskId: findTask('specimen_receipt').id, note: 'I am following up on the specimen.' });
+    expect(state.events).toHaveLength(beforeSoftAck);
+    expect(findTask('specimen_receipt')).toMatchObject({ status: 'monitoring', completionEventId: null,
+      softAcknowledgements: [{ actor: { id: accounts.nurse, role: 'nurse' } }],
+    });
+    const receipt = sourceEvent('specimen_received', 'LIS', 'SIM-E2E-RECEIPT');
+    expect((await post('nurse', receipt)).statusCode).toBe(403);
+    expect((await post('lab', { ...receipt, source: 'HIS' })).statusCode).toBe(422);
+    expect((await post('outsider', receipt)).statusCode).toBe(404);
+    await apply('nurse', sourceEvent('specimen_collected', 'HIS', 'SIM-E2E-COLLECTION'));
+    expect(findTask('specimen_receipt').completionEventId).toBeNull();
+    await apply('lab', receipt);
+    const receiptProof = state.events.at(-1)!;
+    expect(findTask('specimen_receipt')).toMatchObject({ status: 'source_confirmed', completionEventId: receiptProof.id });
+    expect(receiptProof.recordedBy).toMatchObject({ id: accounts.lab, role: 'lab', simulated: false });
+
+    await apply('lab', sourceEvent('result_validated', 'LIS', 'SIM-E2E-VALIDATED'));
+    const validation = state.events.at(-1)!;
+    const item = () => state.shiftMonitoring!.find((monitor) => monitor.id === monitorId)!.items[0]!;
+    expect(item()).toMatchObject({ status: 'pending', orderId: order.id, sourceEventId: validation.id, existingTaskId: findTask('result_acknowledgement').id });
+    expect(findTask('result_acknowledgement').completionEventId).toBeNull();
+    const firstAck = { ...sourceEvent('result_acknowledged', 'HIS', 'SIM-E2E-PHYSICIAN-ACK'), occurredAt: validation.occurredAt };
+    expect((await post('lab', firstAck)).statusCode).toBe(403);
+
+    const acknowledgementRevision = state.revision;
+    const keys = [randomUUID(), randomUUID()];
+    const outcomes = await Promise.all(keys.map((key) => post('doctor', firstAck, acknowledgementRevision, key)));
+    expect(outcomes.map((response) => response.statusCode).sort()).toEqual([200, 409]);
+    const winner = outcomes.findIndex((response) => response.statusCode === 200);
+    state = outcomes[winner]!.json<CareWorkspace>();
+    const firstProof = state.events.at(-1)!;
+    expect(firstProof.recordedBy).toMatchObject({ id: accounts.doctor, role: 'doctor', simulated: false });
+    expect(item()).toMatchObject({ status: 'source_confirmed', sourceEventId: firstProof.id });
+    const replay = await post('doctor', firstAck, acknowledgementRevision, keys[winner]!);
+    expect(replay.statusCode).toBe(200);
+    const replayedState = replay.json<CareWorkspace>();
+    expect(replayedState.events.filter((event) => event.sourceRef === firstAck.sourceRef)).toHaveLength(1);
+    expect(replayedState.revision).toBe(state.revision);
+    expect(replayedState.shiftMonitoring).toEqual(state.shiftMonitoring);
+    const nurseView = await request('nurse', 'GET', url);
+    expect(nurseView.statusCode).toBe(200);
+    expect(nurseView.json<CareWorkspace>()).toMatchObject({ role: 'nurse', revision: state.revision });
+    // A worker can capture its batch timestamp before the source command commits.
+    const staleBatchAt = new Date(Date.parse(firstProof.receivedAt) - 1).toISOString();
+    const staleBatch = await db.asWorker(async (client) => {
+      await client.query("update sutra.care_workspaces set monitor_checked_at='-infinity' where id=$1", [state.id]);
+      return monitorCareBatch(client, staleBatchAt, state.id);
+    });
+    expect(staleBatch).toBe(0);
+
+    await apply('lab', sourceEvent('result_corrected', 'LIS', 'SIM-E2E-CORRECTED'));
+    const corrected = state.events.at(-1)!;
+    expect(findTask('result_acknowledgement')).toMatchObject({ status: 'monitoring', completionEventId: null });
+    expect(item()).toMatchObject({ status: 'pending', sourceEventId: corrected.id });
+    expect(state.events).toContainEqual(firstProof);
+    expect((await post('doctor', { ...firstAck, sourceRef: 'SIM-E2E-STALE-ACK' })).statusCode).toBe(409);
+    await apply('doctor', sourceEvent('result_acknowledged', 'HIS', 'SIM-E2E-CORRECTED-ACK'));
+    const currentProof = state.events.at(-1)!;
+    expect(findTask('result_acknowledgement')).toMatchObject({ status: 'source_confirmed', completionEventId: currentProof.id });
+    expect(item()).toMatchObject({ status: 'source_confirmed', sourceEventId: currentProof.id });
+
+    const audit = await request('doctor', 'GET', `${url}/team/audit`);
+    expect(audit.statusCode).toBe(200);
+    expect(audit.json().events).toEqual(expect.arrayContaining([
+      expect.objectContaining({ actorId: accounts.nurse, actorRole: 'nurse', action: 'soft_acknowledge_task' }),
+      expect.objectContaining({ actorId: accounts.lab, actorRole: 'lab', action: 'source_event' }),
+      expect.objectContaining({ actorId: accounts.doctor, actorRole: 'doctor', action: 'shift_monitoring' }),
+    ]));
+    expect((await assign('admin', 'lab', 'lab', false)).statusCode).toBe(200);
+    expect((await request('lab', 'GET', url)).statusCode).toBe(403);
+    expect((await post('lab', sourceEvent('result_corrected', 'LIS', 'SIM-E2E-REVOKED-CORRECTION'))).statusCode).toBe(403);
+    const exported = await request('doctor', 'GET', `${url}/export`);
+    expect(exported.statusCode).toBe(200);
+    expect(exported.json<CareWorkspace>()).toMatchObject({ synthetic: true, revision: state.revision, events: state.events });
+  } finally {
+    await db.owner((client) => client.query('delete from sutra.clinics where id=$1', [otherClinicId]));
+  }
 });

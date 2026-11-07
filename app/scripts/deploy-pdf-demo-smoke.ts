@@ -4,6 +4,12 @@ import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import type {CareWorkspace,CareCommand} from '@glucoflow/contracts';
 import {localRoot} from './lib/env';
+
+class SmokeHttpError extends Error {
+  constructor(readonly status: number, expectedStatus: number, operation: string, readonly code?: string) {
+    super(`${operation} returned HTTP ${status}; expected ${expectedStatus}${code ? ` (${code})` : ''}`);
+  }
+}
 async function main(){
   const hosted = JSON.parse(readFileSync(join(localRoot, 'azure-deployment-secrets.json'), 'utf8'));
   const fixture = JSON.parse(readFileSync(join(localRoot, 'hosted-demo-credentials.json'), 'utf8'));
@@ -25,7 +31,7 @@ async function main(){
     return access_token;
   }
 
-  async function api<T>(path: string, status: number, token?: string, body?: object, key?: string): Promise<T> {
+  async function api<T>(path: string, status: number, token?: string, body?: object, key?: string, operation = path.replace(/\/[a-f0-9-]{36}/g, '/:id')): Promise<T> {
     const response = await fetch(`${base}${path}`, {
       method: body ? 'POST' : 'GET',
       headers: {
@@ -36,7 +42,11 @@ async function main(){
       body: body ? JSON.stringify(body) : undefined,
       signal: AbortSignal.timeout(75_000),
     });
-    assert.equal(response.status, status, `Care ${path.replace(/\/[a-f0-9-]{36}/, '/:id')} HTTP status`);
+    if (response.status !== status) {
+      const failure = await response.json().catch(() => null) as { error?: { code?: unknown } } | null;
+      const code = failure?.error?.code;
+      throw new SmokeHttpError(response.status, status, operation, typeof code === 'string' && /^[a-z0-9_]{1,50}$/.test(code) ? code : undefined);
+    }
     return response.json() as Promise<T>;
   }
 
@@ -44,7 +54,10 @@ async function main(){
  const token=await signIn('clinic');
  let state=await api<CareWorkspace>('/care/workspaces',201,token,{});
  const path=`/care/workspaces/${state.id}`;
- const send=async(command:CareCommand)=>{state=await api<CareWorkspace>(`${path}/commands`,200,token,{expectedRevision:state.revision,command},randomUUID());};
+ const send = async (command: CareCommand) => {
+   const operation = 'action' in command ? `${command.type}/${command.action}` : command.type;
+   state = await api<CareWorkspace>(`${path}/commands`, 200, token, { expectedRevision: state.revision, command }, randomUUID(), operation);
+ };
  const doctor=state.coordination!.staff.find(p=>p.role==='doctor'&&!p.userId)!;
  const nurse=state.coordination!.staff.find(p=>p.role==='nurse'&&!p.userId)!;
  const encounter=state.orders[2]!.encounterId;

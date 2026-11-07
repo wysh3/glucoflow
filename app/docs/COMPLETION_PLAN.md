@@ -10,6 +10,10 @@ For each task: reproduce the specific failure, add a meaningful regression test,
 
 The active November web/runtime implementation and remaining gates are tracked in [SHIP_CHECKLIST.md](SHIP_CHECKLIST.md). Fresh evidence is in [completion release](../reports/completion-release-2026-11-07.md). Azure API/worker and Vercel web deployment supersede the historical Railway/deferred-hosting notes below. The original acceptance requirements still apply; older dated passes do not establish final Android or hospital readiness.
 
+## 7 November cross-team verification
+
+The user's latest scope treats external HIS/LIS/ABDM integrations as simulated demo dependencies. Actual application authorization, source reconciliation, role workflows, handover receipts and browser interactions are tested with fictional data. Evidence and remaining limits: [cross-team application verification](../reports/cross-team-application-2026-11-07.md). Real hospital connectors and institutional approval remain pilot requirements, not blockers to this simulated demo.
+
 ## Historical local status
 
 GPT-6 Luna is configured locally and verified on the production worker, synthetic observation evaluation and API smoke flow. See [current evidence](../reports/key-cleanup-and-luna-2026-10-03.md). Independent holdout, human review measurements, hosted services and latest device walkthrough remain gates.

@@ -39,10 +39,10 @@ test.describe('session', () => {
     await expect(page.getByRole('heading', { name: 'Patients' })).toBeVisible();
     await page.goto('/account');
     await page.getByRole('button', { name: 'Sign out' }).first().click();
-    await page.waitForURL(/\/sign-in/);
+    await expect(page.getByTestId('demo-card-patient')).toBeVisible();
     // Going back to a records route must not show cached rows.
     await page.goto('/clinic/patients');
-    await page.waitForURL(/\/sign-in/);
+    await expect(page.getByTestId('demo-card-patient')).toBeVisible();
     await expect(page.getByText('Asha Rao', { exact: false })).toHaveCount(0);
   });
 
@@ -56,7 +56,7 @@ test.describe('session', () => {
 
   test('the demo label and extraction mode are visible in the interface', async ({ page }) => {
     await signIn(page, 'clinic');
-    const label = page.locator('header span:visible').filter({ hasText: /^(Synthetic demo(?: · fixture data)?|Demo)$/ }).first();
+    const label = page.locator('header span:visible, aside span:visible').filter({ hasText: /^(Synthetic demo(?: · fixture data)?|Demo)$/ }).first();
     await expect(label).toBeVisible();
     // Fixture mode is stated wherever extraction output is shown.
     await page.goto('/clinic/queue');
@@ -68,7 +68,7 @@ test.describe('session', () => {
 test('account retains navigation back to the authorized workspace', async ({page}) => {
   await signIn(page, 'clinic');
   await page.goto('/account');
-  await page.getByRole('link', {name: 'Patient records', exact: true}).locator('visible=true').click();
+  await page.getByRole('link', {name: 'Records', exact: true}).locator('visible=true').click();
   await expect(page.getByRole('heading', {name: 'Patients', exact: true})).toBeVisible();
   const action = page.getByRole('link', {name: 'Open patient'}).first();
   const bounds = await action.boundingBox();

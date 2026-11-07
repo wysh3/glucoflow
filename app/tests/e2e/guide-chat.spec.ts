@@ -73,30 +73,28 @@ test('changing patient scope clears conversation and draft', async ({
   page,
 }) => {
   await signIn(page, 'clinician');
-  await page
-    .getByRole('link', { name: 'Open patient', exact: true })
-    .first()
-    .click();
-  await page.getByRole('link', { name: 'Visit overview', exact: true }).first().click();
+  await openDemoPatient(page, 'Visit overview');
   await page
     .getByRole('button', { name: 'Ask Gluco', exact: true })
     .click();
   const chat = page.getByRole('dialog', { name: 'Gluco guide', exact: true });
-  await chat
-    .getByRole('textbox', { name: 'Ask Gluco' })
-    .fill('PRIVATE SYNTHETIC DRAFT');
+  const input = chat.getByRole('textbox', { name: 'Ask Gluco' });
+  await input.fill('What is the latest HbA1c?');
+  await input.press('Enter');
+  await expect(chat.getByText('latest precisely dated', { exact: false })).toBeVisible();
+  await input.fill('PRIVATE SYNTHETIC DRAFT');
   await chat.getByRole('button', { name: 'Close guide' }).click();
   await page
-    .getByRole('link', { name: 'Patient records', exact: true })
+    .getByRole('link', { name: 'Records', exact: true })
     .first()
     .click();
-  await page
-    .getByRole('button', { name: 'Ask Gluco', exact: true })
-    .click();
-  await expect(chat.getByRole('textbox', { name: 'Ask Gluco' })).toHaveValue(
-    '',
-  );
-  await expect(chat.getByTestId('guide-patient')).toHaveCount(0);
+  await expect(page).toHaveURL(/\/clinic\/patients$/);
+  await expect(page.getByRole('button', { name: 'Ask Gluco', exact: true })).toHaveCount(0);
+  await openDemoPatient(page, 'Visit overview');
+  await page.getByRole('button', { name: 'Ask Gluco', exact: true }).click();
+  await expect(chat.getByRole('textbox', { name: 'Ask Gluco' })).toHaveValue('');
+  await expect(chat.getByText('What is the latest HbA1c?', { exact: true })).toHaveCount(0);
+  await expect(chat.getByTestId('guide-patient')).toContainText('Asha');
 });
 
 test('Gluco recovers from a failed request and opens original evidence', async ({
@@ -165,4 +163,21 @@ test('Gluco recovers from a failed request and opens original evidence', async (
     dialog!.x + dialog!.width,
   );
   expect(controls!.y).toBeLessThan(dialog!.y + 90);
+});
+
+test('first guide click is retained while its code is still loading', async ({ page }) => {
+  let release!: () => void;
+  const gate = new Promise<void>(resolve => { release = resolve; });
+  let requested!: () => void;
+  const loading = new Promise<void>(resolve => { requested = resolve; });
+  await page.route('**/features/guide/gluco-guide.tsx*', async route => {
+    requested();
+    await gate;
+    await route.continue();
+  });
+  await signIn(page, 'patient');
+  await loading;
+  await page.getByRole('button', { name: 'Ask Gluco', exact: true }).click();
+  release();
+  await expect(page.getByRole('dialog', { name: 'Gluco guide', exact: true }).getByTestId('guide-patient')).toContainText('Your records');
 });

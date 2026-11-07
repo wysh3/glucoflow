@@ -44,10 +44,7 @@ test.describe('upload to approval', () => {
     await expect(dialog.getByText('Upload complete', { exact: false }).first()).toBeVisible({ timeout: 60_000 });
 
     // 3. The reviewer sees it in the queue.
-    await page.goto('/account');
-    await page.getByRole('button', { name: 'Sign out' }).first().click();
-    await page.waitForURL(/\/sign-in/);
-    await signIn(page, 'clinic');
+    await switchAccount(page, 'clinic');
     await page.goto('/clinic/queue');
     await page.getByRole('button', { name: 'Awaiting review' }).click();
     // Both queue layouts are in the DOM; only one is visible at this width.

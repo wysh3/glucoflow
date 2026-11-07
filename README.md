@@ -25,6 +25,8 @@ The public demo uses shared accounts and fictional records only. Select **Explor
 
 GlucoFlow assists operational work. It does not diagnose, prescribe, calculate clinical risk, decide ICU admission, or replace clinical judgment. DKA/HHS provides the coordination context; treatment protocols are not executable agent skills.
 
+HIS/LIS are intentionally simulated for the demo; real connectors are not a demo acceptance requirement. ABHA/ABDM remains unconnected. Cross-team testing uses fictional records against the actual UI, API, worker and database; see the [cross-team verification](app/reports/cross-team-application-2026-11-07.md).
+
 The deployed demonstration is not a certified hospital production system. Live HIS/LIS connectors, ABHA/ABDM registration, hospital security and privacy review, reviewed regional language coverage, physical Android regression, and a real clinic pilot remain separate release gates. Simulated usage is not clinical validation. See the [release report](app/reports/completion-release-2026-11-07.md) and [PDF scope audit](app/reports/pdf-compliance-audit-2026-11-07.md).
 
 ## Run locally

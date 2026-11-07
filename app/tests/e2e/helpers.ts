@@ -44,12 +44,15 @@ export async function signIn(page: Page, account: 'patient' | 'clinic' | 'review
   const credentials = demoCredentials().accounts[account];
   if (!credentials) throw new Error(`No seeded account named ${account}`);
   await page.goto('/sign-in');
-  const roleLabels = { patient: 'Patient', clinic: 'Clinic team', reviewer: 'Reviewer', clinician: 'Doctor' };
-  const role = page.getByRole('button', { name: new RegExp(`^${roleLabels[account]} `) });
-  await expect(role.or(page.getByLabel('Email'))).toBeVisible();
-  if (await role.count()) {
-    await role.click();
-    await page.waitForURL((url) => !url.pathname.startsWith('/sign-in'), { timeout: 30_000 });
+  const primary = page.getByTestId('demo-card-patient');
+  await expect(primary.or(page.getByLabel('Email'))).toBeVisible();
+  if (await primary.count()) {
+    if (account !== 'patient' && account !== 'clinic') {
+      await page.getByRole('button', {name: 'Explore another team role', exact: true}).click();
+    }
+    await page.getByTestId(`demo-card-${account}`).click();
+    // /sign-in aliases /; waiting merely for a different URL races authentication.
+    await expect(page.getByRole('button', {name: 'Sign out', exact: true})).toBeVisible({timeout:30_000});
     if (account === 'patient') await page.goto('/patient/records');
     else await page.goto('/clinic/patients');
     return;
@@ -57,7 +60,7 @@ export async function signIn(page: Page, account: 'patient' | 'clinic' | 'review
   await page.getByLabel('Email').fill(credentials.email);
   await page.getByLabel('Password').fill(credentials.password);
   await page.getByRole('button', { name: 'Sign in' }).click();
-  await page.waitForURL((url) => !url.pathname.startsWith('/sign-in'), { timeout: 30_000 });
+  await expect(page.getByRole('button', { name: 'Sign out', exact: true })).toBeVisible({ timeout: 30_000 });
 }
 
 /**
@@ -104,7 +107,7 @@ export async function switchAccount(
 ): Promise<void> {
   await page.goto('/account');
   await page.getByRole('button', { name: 'Sign out' }).first().click();
-  await page.waitForURL(/\/sign-in/);
+  await expect(page.getByTestId('demo-card-patient').or(page.getByLabel('Email'))).toBeVisible();
   await signIn(page, account);
 }
 

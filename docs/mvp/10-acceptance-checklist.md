@@ -157,3 +157,8 @@ R02/R19: managed role ceiling, live revocation, no implicit record access, optim
 - Role workflow and handover: nurse soft acknowledgement stays separate from completion; lab processing absence remains unknown; edited immutable handover versions have named exact-version receipt.
 - Static prototypes: reachable synthetic supervisor and appointment previews; every changed appointment detail clears approval.
 - Evidence: see `app/reports/pdf-compliance-audit-2026-11-07.md` final-four section and the final release report. No new hospital-production or Android-device claim is implied.
+
+
+### 7 November — cross-team application simulation
+
+R02/R19: separately authenticated hospital users, role/tenant denial, live revocation and named-recipient boundaries. R08/R12: unchanged monitor checks no longer advance revisions; worker batches cannot reconcile newer state backward; corrected source results reopen work. R03/R15: delayed guide initialization retains the user's open request; navigation and speech tests follow the simplified UI. R18/R20: fresh 420-test run plus desktop/mobile workflow evidence recorded in [cross-team verification](../../app/reports/cross-team-application-2026-11-07.md). Simulated feeds are the authorized demo scope; these checks are not real staff feedback or live ABDM integration.

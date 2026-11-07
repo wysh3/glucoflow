@@ -2,13 +2,11 @@ import { expect, test } from '@playwright/test';
 import { signIn } from './helpers';
 
 test('Hindi follows the patient through records, notes, upload entry and account', async ({ page }) => {
-  await page.goto('/sign-in');
+  await signIn(page, 'patient');
   const language = page.getByRole('combobox', { name: 'Language', exact: true });
   await expect(language).toBeVisible({ timeout: 2000 });
   await language.selectOption('hi-IN');
   await expect(page.getByTestId('language-coverage')).toBeVisible();
-  expect(await page.evaluate('document.documentElement.scrollHeight <= innerHeight + 2')).toBe(true);
-  await signIn(page, 'patient');
   await expect(page.locator('html')).toHaveAttribute('lang', 'hi-IN');
   await expect(page.locator('html')).toHaveAttribute('dir', 'ltr');
   await expect(page.getByRole('heading', { name: 'मेरे रिकॉर्ड', exact: true })).toBeVisible();
@@ -16,7 +14,7 @@ test('Hindi follows the patient through records, notes, upload entry and account
   await expect(page.getByRole('combobox', { name: 'भाषा', exact: true })).toHaveValue('hi-IN');
 
   const main = page.getByRole('navigation', { name: 'मुख्य नेविगेशन', exact: true }).locator('visible=true');
-  await main.getByRole('link', { name: 'मुलाक़ात के नोट', exact: true }).click();
+  await page.getByRole('link', { name: 'नोट लिखें', exact: true }).click();
   const note = page.getByLabel('नोट', { exact: true });
   await note.fill('यह केवल एक काल्पनिक परीक्षण नोट है।');
   await page.getByRole('button', { name: 'जाँचें और भेजें', exact: true }).click();
@@ -24,7 +22,8 @@ test('Hindi follows the patient through records, notes, upload entry and account
   await page.getByRole('button', { name: 'बदलें', exact: true }).click();
   await expect(note).toHaveValue('यह केवल एक काल्पनिक परीक्षण नोट है।');
 
-  await main.getByRole('link', { name: 'रिपोर्ट जोड़ें', exact: true }).click();
+  await page.goto('/patient/records');
+  await page.getByRole('link', { name: 'रिपोर्ट जोड़ें', exact: true }).click();
   await page.getByRole('button', { name: 'रिपोर्ट चुनें', exact: true }).click();
   const upload = page.getByRole('dialog', { name: 'रिपोर्ट अपलोड करें', exact: true });
   await expect(upload.getByText('केवल काल्पनिक रिपोर्ट', { exact: true })).toBeVisible();

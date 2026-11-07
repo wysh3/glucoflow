@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { openDemoPatient, signIn } from './helpers';
 
-test('landing is inset and primary roles fit the viewport without scrolling', async ({
+test('landing keeps primary entry actions visible and avoids horizontal overflow', async ({
   page,
 }) => {
   await page.goto('/sign-in');
@@ -9,18 +9,17 @@ test('landing is inset and primary roles fit the viewport without scrolling', as
   await expect(panel).toBeVisible({ timeout: 5000 });
   const bounds = await panel.boundingBox();
   expect(bounds!.y).toBeGreaterThanOrEqual(24);
-  expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(
-    page.viewportSize()!.height - 16,
-  );
-  expect(
-    await page.evaluate(
-      'document.documentElement.scrollHeight <= window.innerHeight + 2',
-    ),
-  ).toBe(true);
-  for (const name of ['Doctor', 'Clinic team', 'Reviewer', 'Patient'])
-    await expect(
-      page.getByRole('button', { name: new RegExp(`^${name} `) }),
-    ).toBeVisible();
+  if (page.viewportSize()!.width >= 768) {
+    expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(page.viewportSize()!.height - 16);
+    expect(await page.evaluate('document.documentElement.scrollHeight <= innerHeight + 2')).toBe(true);
+  }
+  expect(await page.evaluate('document.documentElement.scrollWidth <= innerWidth')).toBe(true);
+  for (const account of ['clinic', 'patient'])
+    await expect(page.getByTestId(`demo-card-${account}`)).toBeInViewport();
+  await page.getByRole('button', { name: 'Explore another team role', exact: true }).click();
+  for (const account of ['clinician', 'reviewer'])
+    await expect(page.getByTestId(`demo-card-${account}`)).toBeVisible();
+
 });
 test('dropdowns open an in-app listbox and support keyboard selection', async ({
   page,

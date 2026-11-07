@@ -38,17 +38,17 @@ test('keyboard users can skip repeated navigation', async ({ page }) => {
 
 test('simplified public and record views remain readable', async ({ page }, testInfo) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Less chasing. More continuity.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Your care team, a little more connected.' })).toBeVisible();
   const mobileNavigation = page.getByRole('button', { name: 'Open navigation', exact: true });
   if (await mobileNavigation.isVisible()) await mobileNavigation.click();
   await expect(page.getByRole('link', { name: 'Walkthrough', exact: true })).toHaveCount(1);
   if (await page.getByRole('dialog').isVisible()) await page.keyboard.press('Escape');
-  await page.screenshot({ path: `reports/evidence/removal-2026-11-07/${testInfo.project.name}-landing.png`, fullPage: true });
+  await page.screenshot({ path: testInfo.outputPath('landing.png'), fullPage: true });
   await signIn(page, 'clinic');
   await page.goto(`/clinic/patients/${demoCredentials().patientId}/overview`);
   await expect(page.getByRole('heading', { name: 'Visit overview', exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Progression', exact: true }).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Latest approved measurements', exact: true })).toBeVisible();
-  await page.screenshot({ path: `reports/evidence/removal-2026-11-07/${testInfo.project.name}-record.png`, fullPage: true });
+  await page.screenshot({ path: testInfo.outputPath('record.png'), fullPage: true });
   expect(await page.evaluate("document.documentElement.scrollWidth <= innerWidth")).toBe(true);
 });

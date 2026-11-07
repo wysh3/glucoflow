@@ -133,9 +133,9 @@ function checksFor(state: CareWorkspace, monitor: CareShiftMonitor, at: string):
       !['cancelled', 'expired'].includes(task.status));
     const sourceEventId = evidence.id;
     const existingTaskId = existingTask?.id ?? null;
-    const unchanged = old && old.status === status && old.sourceEventId === sourceEventId && old.existingTaskId === existingTaskId;
-    const lastCheckedAt = unchanged && checkTime - Date.parse(old.lastCheckedAt) < checkIntervalMs ? old.lastCheckedAt : at;
-    return [{ encounterId: order.encounterId, orderId: order.id, status, lastCheckedAt, sourceEventId, existingTaskId }];
+    if (old && old.encounterId === order.encounterId && old.status === status && old.sourceEventId === sourceEventId
+      && old.existingTaskId === existingTaskId && checkTime - Date.parse(old.lastCheckedAt) < checkIntervalMs) return [old];
+    return [{ encounterId: order.encounterId, orderId: order.id, status, lastCheckedAt: at, sourceEventId, existingTaskId }];
   });
 }
 
@@ -146,7 +146,7 @@ export function reconcileShiftMonitoring(state: CareWorkspace, at: string): bool
     const ending = Date.parse(at) >= Date.parse(monitor.scope.expiresAt);
     if (monitor.status === 'monitoring') {
       const items = checksFor(state, monitor, ending ? monitor.scope.expiresAt : at);
-      if (JSON.stringify(monitor.items) !== JSON.stringify(items)) {
+      if (items.length !== monitor.items.length || items.some((item, index) => item !== monitor.items[index])) {
         monitor.items = items;
         monitor.updatedAt = at;
         changed = true;

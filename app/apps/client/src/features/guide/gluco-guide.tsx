@@ -18,6 +18,7 @@ import type {
 import { useSession, describeApiError } from '../../auth/session';
 import { usePatient } from '../../lib/queries';
 import { normalizePathname } from '../../lib/route-path';
+import { consumeGuideOpen } from '../../lib/guide-open';
 import { useSourcePane } from '../../components/source-pane';
 
 const intro: GuideAnswer = {
@@ -54,8 +55,9 @@ function GuideSession(): React.ReactElement {
     { question?: string; answer: GuideAnswer | GuideChatAnswer }[]
   >([{ answer: intro }]);
   React.useEffect(() => {
-    const open = (): void => setOpen(true);
+    const open = (): void => { if (consumeGuideOpen()) setOpen(true); };
     window.addEventListener('gluco:open', open);
+    open();
     return () => window.removeEventListener('gluco:open', open);
   }, []);
   const log = React.useRef<HTMLDivElement>(null),
