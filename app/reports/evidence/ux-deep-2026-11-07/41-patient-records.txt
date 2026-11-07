@@ -1,0 +1,181 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Records":
+      - /url: /patient/records
+      - generic: Records
+    - link "Home readings":
+      - /url: /patient/master
+      - generic: Home readings
+    - link "Add report":
+      - /url: /patient/add-report
+      - generic: Add report
+    - link "Visit notes":
+      - /url: /patient/visit-notes
+      - generic: Visit notes
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Asha Rao (synthetic)
+  - paragraph: Patient
+- separator "Resize sidebar"
+- generic "Patient workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - heading "My records" [level=1]
+  - button "Export visit summary"
+  - link "Add report":
+    - /url: /patient/add-report
+  - generic: Search this patient's records
+  - textbox "Search this patient's records":
+    - /placeholder: Search records
+  - button "Search this patient's records":
+    - generic: Search
+  - combobox "Test":
+    - generic: HbA1c
+  - combobox "Range":
+    - generic: All dates
+  - paragraph:
+    - text: HbA1c
+    - generic: · %
+  - paragraph: 7 recorded results
+  - paragraph: 7.1 %
+  - paragraph: Collected 30 September 2026
+  - application:
+    - generic: Jan 26
+    - generic: Apr 26
+    - generic: Jul 26
+    - generic: Oct 26
+    - generic: "6.51"
+    - generic: "7.01"
+    - generic: "7.51"
+    - generic: "8.01"
+    - generic: "8.42"
+  - paragraph: Lines connect recorded results.
+  - heading "Recorded results" [level=2]
+  - generic: 7 shown · approved records
+  - list:
+    - text: HbA1c
+    - generic: 7.8 %
+    - paragraph: 03 October 2026
+    - button "Open source"
+    - text: HbA1c
+    - generic: 7.8 %
+    - paragraph: 03 October 2026
+    - button "Open source"
+    - text: HbA1c
+    - generic: 6.73 %
+    - paragraph: 03 October 2026
+    - button "Open source"
+    - text: HbA1c
+    - generic: 7.1 %
+    - paragraph: 30 September 2026
+    - button "Open source"
+    - text: HbA1c
+    - generic: 7.5 %
+    - paragraph: 09 July 2026
+    - button "Open source"
+    - text: HbA1c
+    - generic: 7.9 %
+    - paragraph: 10 April 2026
+    - button "Open source"
+    - text: HbA1c
+    - generic: 8.2 %
+    - paragraph: 12 January 2026
+    - button "Open source"
+  - heading "Reports" [level=2]
+  - list:
+    - generic: 2026-09-14_lab_report_photo_a.jpg
+    - generic: Awaiting review
+    - generic: Uploaded 07 November 2026
+    - button "Open source"
+    - generic: synthetic-hermes-proof-eb17b78c-15ed-44bd-8cb8-a2e6be06b836.pdf
+    - generic: Awaiting review
+    - generic: Uploaded 07 November 2026
+    - button "Open source"
+    - generic: Document
+    - generic: Already uploaded
+    - generic: Uploaded 04 November 2026
+    - generic: Document
+    - generic: Already uploaded
+    - generic: Uploaded 04 November 2026
+    - generic: Document
+    - generic: Already uploaded
+    - generic: Uploaded 04 November 2026
+    - generic: synthetic-lab.pdf
+    - generic: Already uploaded
+    - generic: Uploaded 21 October 2026
+    - button "Open source"
+    - generic: Document
+    - generic: Already uploaded
+    - generic: Uploaded 04 October 2026
+    - generic: synthetic-lab.pdf
+    - generic: Approved
+    - generic: Uploaded 04 October 2026
+    - button "Open source"
+    - generic: synthetic-deployment-audit-2026-10-04.pdf
+    - generic: Approved
+    - generic: Uploaded 04 October 2026
+    - button "Open source"
+    - generic: synthetic-smoke-2026-10-03.pdf
+    - generic: Approved
+    - generic: Uploaded 03 October 2026
+    - button "Open source"
+    - generic: 2026-06-11_foot_examination.pdf
+    - generic: Approved
+    - generic: Uploaded 03 October 2026
+    - button "Open source"
+    - generic: 2026-05-20_eye_examination.pdf
+    - generic: Approved
+    - generic: Uploaded 03 October 2026
+    - button "Open source"
+    - generic: 2026-03-02_prescription.pdf
+    - generic: Approved
+    - generic: Uploaded 03 October 2026
+    - button "Open source"
+    - generic: 2026-07-09_lab_report.pdf
+    - generic: Approved
+    - generic: Uploaded 03 October 2026
+    - button "Open source"
+    - generic: 2026-04-10_lab_report.pdf
+    - generic: Approved
+    - generic: Uploaded 03 October 2026
+    - button "Open source"
+    - generic: 2026-01-12_lab_report.pdf
+    - generic: Approved
+    - generic: Uploaded 03 October 2026
+    - button "Open source"
+  - heading "Recent visit notes" [level=2]
+  - link "Write a note":
+    - /url: /patient/visit-notes
+  - paragraph: "QA audit note: felt fine after walking."
+  - paragraph: Diet / activity · Patient-reported · 04 November 2026
+  - paragraph: Walked 30 minutes after dinner on most days this month; reduced sweet tea to one cup a day.
+  - paragraph: Diet / activity · Patient-reported · 04 October 2026 · read by clinic
+  - paragraph: Walked 30 minutes after dinner on most days this month; reduced sweet tea to one cup a day.
+  - paragraph: Diet / activity · Patient-reported · 03 October 2026
+- region "Notifications"
+- generic: "6.51"

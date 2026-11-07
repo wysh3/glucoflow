@@ -182,3 +182,14 @@ describe('patient-side result closure', () => {
     expect(exact?.reasons).toContain('Clinic ID matches exactly');
   });
 });
+
+
+it('never invents a follow-up deadline when staff omit one', async () => {
+  const id = await createCritical();
+  await context.asActor(fixture.reviewerId, async client => {
+    await assignResult(client, id, fixture.reviewerId);
+    await acknowledgeResult(client, id, { valueText: '5.9', flag: 'critical', notifierName: 'Synthetic lab staff', notifierRole: 'technician', readBackValue: '5.9' });
+    await recordResultCommunication(client, id, { channel: 'call', outcome: 'informed_patient', recipient: 'Synthetic participant', nextStep: 'collect_report', teachBack: true });
+    expect((await getResult(client, id))?.nextStepDueAt).toBeNull();
+  });
+});

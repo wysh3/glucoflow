@@ -85,6 +85,9 @@ export function SessionProvider({
     setStatus('signed-out');
     // Logout clears cached records so nothing remains on screen.
     queryClient.clear();
+    try {
+      for (const key of Object.keys(sessionStorage)) if (key.startsWith('glucoflow.care.draft.')) sessionStorage.removeItem(key);
+    } catch { /* Storage may be unavailable. */ }
   }, [queryClient]);
 
   const api = React.useMemo(
@@ -129,6 +132,11 @@ export function SessionProvider({
             projectUrl,
             import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '',
             {
+              global: { fetch: (input, init) => fetch(input, {
+                ...init, signal: init?.signal
+                  ? AbortSignal.any([init.signal, AbortSignal.timeout(15_000)])
+                  : AbortSignal.timeout(15_000),
+              }) },
               auth: {
                 persistSession: true,
                 autoRefreshToken: true,
@@ -191,7 +199,7 @@ export function SessionProvider({
       setToken(stored);
       try {
         const response = await fetch(`${apiBaseUrl}/api/v1/me`, {
-          headers: { authorization: `Bearer ${stored}` },
+          headers: { authorization: `Bearer ${stored}` }, signal: AbortSignal.timeout(15_000),
         });
         if (cancelled) return;
         if (!response.ok) {
@@ -271,7 +279,7 @@ export function SessionProvider({
       const response = await fetch(`${apiBaseUrl}/api/v1/auth/local-sign-in`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password }), signal: AbortSignal.timeout(15_000),
       });
       if (!response.ok) {
         const payload = (await response.json().catch(() => null)) as {

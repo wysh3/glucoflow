@@ -7,7 +7,7 @@ import { useApi, useSession, describeApiError } from '../../auth/session';
 import { captureReport, type CapturedPage } from '../../platform/camera';
 import { uploadToSignedUrl } from '../../platform/download';
 import { useJob } from '../../lib/queries';
-import { PROCESS_LOSS_NOTICE } from '../../components/state-views';
+import { useI18n } from '../../i18n';
 import { Capacitor } from '@capacitor/core';
 import { Link } from 'react-router-dom';
 import { demoEnabled } from '../../auth/demo';
@@ -41,6 +41,7 @@ type Stage = 'select' | 'uploading' | 'processing' | 'done';
 export function UploadWizard(props: UploadWizardProps): React.ReactElement {
   const api = useApi();
   const { me } = useSession();
+  const { t } = useI18n();
   const [loadingSample, setLoadingSample] = React.useState(false);
   const notified = React.useRef<string | null>(null);
   const [stage, setStage] = React.useState<Stage>('select');
@@ -49,7 +50,7 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
   const [notice, setNotice] = React.useState<string | null>(null);
   const [session, setSession] = React.useState<UploadSessionDto | null>(null);
   const [jobId, setJobId] = React.useState<string | null>(null);
-  const [completedDocument, setCompletedDocument] = React.useState<DocumentDto | null>(null);
+  const [completedUpload, setCompletedUpload] = React.useState<{ document: DocumentDto; original: DocumentDto } | null>(null);
   const [documentId, setDocumentId] = React.useState<string | null>(null);
   const [progress, setProgress] = React.useState(0);
   const [cameraAvailable, setCameraAvailable] = React.useState(false);
@@ -64,7 +65,7 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
     if (!job.data) return;
     if (job.data.state === 'succeeded' && documentId && notified.current !== documentId) {
       notified.current = documentId;
-      void api.request<DocumentDto>(`/api/v1/documents/${documentId}`).then(async document => {
+      void api.request<DocumentDto>(`/api/v1/documents/${documentId}`).then(async (document) => {
         let original = document;
         const visited = new Set([document.documentId]);
         while (original.duplicateOfDocumentId) {
@@ -72,11 +73,13 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
           visited.add(original.duplicateOfDocumentId);
           original = await api.request<DocumentDto>(`/api/v1/documents/${original.duplicateOfDocumentId}`);
         }
-        document = {...document, duplicateOfDocumentId: document.duplicateOfDocumentId ? original.documentId : null};
-        setCompletedDocument(document);
+        setCompletedUpload({ document, original });
         setStage('done');
-        props.onUploaded?.(document.duplicateOfDocumentId ?? documentId, session?.sessionId);
-      }).catch(caught => {setError(describeApiError(caught));setStage('done');});
+        props.onUploaded?.(original.documentId, original.state === 'quarantined' ? undefined : session?.sessionId);
+      }).catch(() => {
+        setError('The report was received. Check the record or contact the clinic to confirm its final status.');
+        setStage('done');
+      });
     }
     if (job.data.state === 'failed') {
       setError(job.data.errorMessage ?? 'Processing could not finish. A retry may be available.');
@@ -93,7 +96,7 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
     setSession(null);
     setJobId(null);
     setDocumentId(null);
-    setCompletedDocument(null);
+    setCompletedUpload(null);
     setProgress(0);
   };
 
@@ -238,12 +241,23 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
     reset();
   };
 
+  const original = completedUpload?.original;
+  const quarantined = original?.state === 'quarantined';
+  const duplicate = completedUpload?.document.state === 'duplicate';
+  const canReview = me?.capabilities.canReview === true;
+  const reviewable = original && ['awaiting_review', 'review_in_progress', 'approved'].includes(original.state);
+  const doneLink = canReview && reviewable
+    ? { to: `/clinic/review/${original.documentId}`, label: t(duplicate ? 'wizard.openExisting' : 'wizard.reviewReport') }
+    : canReview
+      ? { to: `/clinic/patients/${props.patientId}/documents`, label: t('wizard.viewDocs') }
+      : { to: '/patient/records', label: t('wizard.viewRecords') };
+
   return (
     <Dialog
       open={props.open}
       onOpenChange={(open) => {
         if (!open && stage === 'select' && files.length > 0) {
-          if (!window.confirm('Discard the selected files?')) return;
+          if (!window.confirm(t('wizard.discard'))) return;
         }
         if (!open) reset();
         props.onOpenChange(open);
@@ -251,8 +265,8 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
     >
       <DialogContent side="center">
         <DialogHeader
-          title="Upload a report"
-          description={`Uploading for ${props.patientLabel}. The patient is confirmed before the upload begins.`}
+          title={t('wizard.title')}
+          description={t('wizard.patient', { name: props.patientLabel })}
           actions={
             <Button
               variant="quiet"
@@ -262,14 +276,14 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
                 reset();
               }}
             >
-              Cancel
+              {t('ui.cancel')}
             </Button>
           }
         />
 
         {error ? (
           <div className="mb-3">
-            <Alert tone="error" title="The upload did not complete">
+            <Alert tone="error" title={t(job.data?.state === 'succeeded' ? 'wizard.unavailable' : 'wizard.failed')}>
               {error}
             </Alert>
           </div>
@@ -282,27 +296,38 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
 
         {stage === 'select' ? (
           <div className="space-y-4 pb-20">
+            {demoEnabled ? (
+              <Alert tone="review" title={t('wizard.fictional')}>
+                <p>{t('wizard.sharedDemo')}</p>
+                <p className="mt-1">
+                  {t('wizard.serverStorage')}{' '}{t(me?.extraction.mode === 'fixture'
+                    ? 'wizard.fixture'
+                    : me?.extraction.mode === 'live' ? 'wizard.live' : 'wizard.maybeLive')}
+                </p>
+                <Link to="/privacy" className="mt-1 inline-flex min-h-11 items-center font-medium underline underline-offset-2">{t('ui.privacy')}</Link>
+              </Alert>
+            ) : null}
             {demoEnabled ? <section className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
-              <div className="flex items-center gap-2 text-primary"><FlaskConicalIcon size={20} aria-hidden /><h3 className="text-lg font-semibold">Try a synthetic sample</h3></div>
-              <p className="mt-2 text-xs leading-5 text-ink-soft">No documents needed. Upload a sample and check the source. A clinician reviewer approves or corrects it before it enters the record. Samples use the same extraction workflow as your own uploads.</p>
+              <div className="flex items-center gap-2 text-primary"><FlaskConicalIcon size={20} aria-hidden /><h3 className="text-lg font-semibold">{t('wizard.sampleTitle')}</h3></div>
+              <p className="mt-2 text-xs leading-5 text-ink-soft">{t('wizard.sampleIntro')}</p>
               <div className="mt-3 space-y-2">
                 {[
-                  {file:'synthetic-lab.pdf',name:'lab',title:'Lab report',detail:'HbA1c, kidney markers and blood pressure. Start here.'},
-                  {file:'synthetic-identity-check.pdf',name:'identity check',title:'Missing patient identifier',detail:'Practice confirming identity against the source.'},
-                  {file:'synthetic-wrong-patient.pdf',name:'wrong patient',title:'Different patient',detail:'See how a mismatched identifier blocks publication.'},
+                  {file:'synthetic-lab.pdf',name:t('wizard.labName'),title:t('wizard.labTitle'),detail:t('wizard.labDetail')},
+                  {file:'synthetic-identity-check.pdf',name:t('wizard.missingName'),title:t('wizard.missingTitle'),detail:t('wizard.missingDetail')},
+                  {file:'synthetic-wrong-patient.pdf',name:t('wizard.wrongName'),title:t('wizard.wrongTitle'),detail:t('wizard.wrongDetail')},
                 ].map(sample => <div key={sample.file} className="rounded-xl border border-line bg-surface p-3">
-                  <div className="flex items-center gap-2"><FileTextIcon size={16} className="text-primary" aria-hidden /><p className="text-sm font-medium">{sample.title}</p><Badge>Synthetic</Badge></div>
+                  <div className="flex items-center gap-2"><FileTextIcon size={16} className="text-primary" aria-hidden /><p className="text-sm font-medium">{sample.title}</p><Badge>{t('wizard.synthetic')}</Badge></div>
                   <p className="mt-1 text-xs leading-5 text-ink-soft">{sample.detail}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <Button size="sm" variant="secondary" disabled={loadingSample} onClick={() => void trySample(sample.file)}><UploadIcon size={14} aria-hidden />Upload {sample.name} sample</Button>
-                    <a className="inline-flex min-h-9 items-center px-2 text-xs text-primary underline underline-offset-4" href={`/demo/${sample.file}`} target="_blank" rel="noreferrer" aria-label={`Preview PDF: ${sample.name} sample`}>Preview PDF</a>
+                    <Button size="sm" variant="secondary" disabled={loadingSample} onClick={() => void trySample(sample.file)}><UploadIcon size={14} aria-hidden />{t('wizard.uploadSample', { sample: sample.name })}</Button>
+                    <a className="inline-flex min-h-9 items-center px-2 text-xs text-primary underline underline-offset-4" href={`/demo/${sample.file}`} target="_blank" rel="noreferrer" aria-label={t('wizard.previewSample', { sample: sample.name })}>{t('wizard.preview')}</a>
                   </div>
                 </div>)}
               </div>
             </section> : null}
             <div className="flex flex-wrap gap-2">
               <label className="inline-flex min-h-11 cursor-pointer items-center rounded-[10px] border border-line bg-surface px-4 text-sm font-medium text-ink hover:bg-canvas">
-                Choose PDF or image
+                {t('wizard.chooseFile')}
                 <input
                   type="file"
                   accept="application/pdf,image/jpeg,image/png"
@@ -314,7 +339,7 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
               {cameraAvailable ? (
                 <Button variant="secondary" onClick={() => void onCapture()}>
                   <CameraIcon size={16} aria-hidden />
-                  Take a photo
+                  {t('wizard.takePhoto')}
                 </Button>
               ) : null}
             </div>
@@ -333,23 +358,22 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
                       variant="quiet"
                       onClick={() => setFiles(files.filter((_, position) => position !== index))}
                     >
-                      Remove
+                      {t('wizard.remove')}
                     </Button>
                   </li>
                 ))}
               </ul>
             ) : (
               <p className="text-sm text-ink-soft">
-                PDF, JPEG or PNG. Up to 15 MiB per file, at most 10 pages per document, and at most{' '}
-                {UPLOAD_MAX_PHOTOS} images in one photo batch.
+                {t('wizard.limits', { photos: UPLOAD_MAX_PHOTOS })}
               </p>
             )}
 
-            <p className="text-[12px] text-ink-soft">{PROCESS_LOSS_NOTICE}</p>
+            <p className="text-[12px] text-ink-soft">{t('upload.processLoss')}</p>
 
             <div className="sticky bottom-0 z-10 -mx-1 mt-1 flex flex-wrap gap-2 border-t border-line bg-surface px-1 pb-1 pt-3">
               <Button variant="primary" disabled={files.length === 0 || loadingSample} onClick={() => void upload()}>
-                Upload {files.length > 1 ? `${files.length} pages` : 'report'}
+                {files.length > 1 ? t('wizard.uploadPages', { count: files.length }) : t('wizard.uploadReport')}
               </Button>
             </div>
           </div>
@@ -357,13 +381,13 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
 
         {stage === 'uploading' ? (
           <div className="space-y-3">
-            <Progress value={progress} label="Sending bytes to the private source bucket" />
+            <Progress value={progress} label={t('wizard.sending')} />
             <p className="text-[12px] text-ink-soft">
-              Upload measured: {progress}% of the selected bytes.
+              {t('wizard.progress', { percent: progress })}
             </p>
             <div className="flex gap-2">
               <Button variant="secondary" onClick={() => void cancelUpload()}>
-                Cancel upload
+                {t('wizard.cancelUpload')}
               </Button>
             </div>
           </div>
@@ -371,7 +395,7 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
 
         {stage === 'processing' ? (
           <div className="space-y-3">
-            <Spinner label="Reading document" />
+            <Spinner label={t('wizard.reading')} />
             <ul className="space-y-1 text-sm text-ink-soft">
               {(job.data?.observedStages ?? []).map((stageEntry) => (
                 <li key={stageEntry.stage}>
@@ -380,25 +404,34 @@ export function UploadWizard(props: UploadWizardProps): React.ReactElement {
               ))}
             </ul>
             <p className="text-[12px] text-ink-soft">
-              Stages shown here are committed by the worker. Nothing is simulated.
+              {t('wizard.workerStages')}
             </p>
           </div>
         ) : null}
 
         {stage === 'done' ? (
           <div className="space-y-3">
-            <Alert
-              tone={job.data?.state === 'succeeded' ? 'success' : 'error'}
-              title={job.data?.state === 'succeeded' ? completedDocument?.state === 'duplicate' ? 'Already uploaded' : 'Upload complete' : 'Processing stopped'}
-            >
-              {job.data?.state === 'succeeded'
-                ? completedDocument?.state === 'duplicate' ? 'This exact report is already in the patient record. Open the existing report to continue; no extra review is needed.' : 'The report is ready for source review. Entries appear in the approved record only after a reviewer checks and publishes them.'
-                : (job.data?.errorMessage ?? 'The document could not be read. A retry may be available in the review queue.')}
-            </Alert>
+            {quarantined ? (
+              <Alert tone="review" title={t('wizard.identityHold')}>
+                {t('wizard.identityHoldBody')}
+              </Alert>
+            ) : original ? (
+              <Alert tone="success" title={t(duplicate ? 'wizard.duplicate' : 'wizard.done')}>
+                {t(duplicate ? 'wizard.duplicateBody' : 'wizard.doneBody')}
+              </Alert>
+            ) : job.data?.state === 'failed' ? (
+              <Alert tone="error" title={t('wizard.stopped')}>
+                {job.data.errorMessage ?? t('wizard.stoppedBody')}
+              </Alert>
+            ) : null}
             <div className="flex flex-wrap gap-2">
-              {job.data?.state === 'succeeded' ? <Button asChild variant="primary"><Link to={me?.capabilities.canReview ? `/clinic/review/${completedDocument?.duplicateOfDocumentId ?? documentId}` : '/patient/records'} onClick={() => {props.onOpenChange(false);reset();}}>{me?.capabilities.canReview ? completedDocument?.state === 'duplicate' ? 'Open existing report' : 'Review this report' : 'View my records'}</Link></Button> : null}
+              {job.data?.state === 'succeeded' ? (
+                <Button asChild variant="primary">
+                  <Link to={doneLink.to} onClick={() => { props.onOpenChange(false); reset(); }}>{doneLink.label}</Link>
+                </Button>
+              ) : null}
               <Button variant="secondary" onClick={() => { props.onOpenChange(false); reset(); }}>
-                Close
+                {t('wizard.close')}
               </Button>
             </div>
           </div>

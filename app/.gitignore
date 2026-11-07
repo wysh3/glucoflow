@@ -3,6 +3,7 @@ dist/
 build/
 coverage/
 *.tsbuildinfo
+__pycache__/
 
 # Local environment and generated local state (never committed)
 .env

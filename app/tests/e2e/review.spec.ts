@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { signIn, switchAccount, uploadSyntheticReport } from './helpers';
+import { openDemoPatient, signIn, switchAccount, uploadSyntheticReport } from './helpers';
 
 /**
  * Reviewer workflow: the queue exposes processing and review states, an open review
@@ -19,11 +19,7 @@ test.describe('review', () => {
 
   test('an approved document offers a reasoned correction rather than another initial review', async ({ page }) => {
     await signIn(page, 'clinic');
-    await page.goto('/clinic/queue?state=all');
-    // Open the first patient document list instead: the review route needs a document id.
-    await page.goto('/clinic/patients');
-    await page.getByRole('link', { name: 'Open patient' }).first().click();
-    await page.getByRole('link', { name: 'Documents' }).click();
+    await openDemoPatient(page, 'Documents');
     await expect(page.getByRole('heading', { name: 'Documents' })).toBeVisible();
     const approved = page.locator('[data-document-row]:visible').filter({hasText: 'Approved'}).first();
     await expect(approved.getByRole('link', {name: 'Review', exact: true})).toHaveCount(0);

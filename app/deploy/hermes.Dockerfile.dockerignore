@@ -1,0 +1,17 @@
+**
+!hermes/
+!hermes/server.py
+!hermes/runtime.py
+!hermes/policy.py
+!hermes/LICENSE.hermes
+!hermes/skills/
+!hermes/skills/document-extraction/
+!hermes/skills/document-extraction/SKILL.md
+!hermes/skills/record-plan/
+!hermes/skills/record-plan/SKILL.md
+!hermes/skills/source-handoff/
+!hermes/skills/source-handoff/SKILL.md
+!hermes/unpack_source.py
+!hermes/vendor/
+!hermes/vendor/manifest.json
+!hermes/vendor/gluco-runtime-source.tar.gz

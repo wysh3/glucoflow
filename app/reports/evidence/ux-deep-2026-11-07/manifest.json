@@ -1,0 +1,254 @@
+[
+  {
+    "name": "01-landing-loading",
+    "url": "https://glucoflow.vercel.app/"
+  },
+  {
+    "name": "02-walkthrough",
+    "url": "https://glucoflow.vercel.app/showcase"
+  },
+  {
+    "name": "03-privacy",
+    "url": "https://glucoflow.vercel.app/privacy"
+  },
+  {
+    "name": "04-verify-empty",
+    "url": "https://glucoflow.vercel.app/verify"
+  },
+  {
+    "name": "05-sign-in-loading",
+    "url": "https://glucoflow.vercel.app/clinic/care"
+  },
+  {
+    "name": "06-care-empty",
+    "url": "https://glucoflow.vercel.app/clinic/care"
+  },
+  {
+    "name": "07-care-ask",
+    "url": "https://glucoflow.vercel.app/clinic/care"
+  },
+  {
+    "name": "08-care-worklist",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=worklist"
+  },
+  {
+    "name": "09-task-approval-dialog",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=worklist"
+  },
+  {
+    "name": "10-new-monitor-dialog",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=worklist"
+  },
+  {
+    "name": "11-care-activity",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=activity"
+  },
+  {
+    "name": "12-care-teams",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=teams"
+  },
+  {
+    "name": "13-episode",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=teams&encounter=e5cc2c3e-bcb0-4357-8ac8-a4960453609b"
+  },
+  {
+    "name": "14-handover-draft",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=teams"
+  },
+  {
+    "name": "15-workflow-learning",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=learning"
+  },
+  {
+    "name": "15-workflow-learning",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=learning"
+  },
+  {
+    "name": "16-simulator",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=learning"
+  },
+  {
+    "name": "17-saved-workspaces",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=learning"
+  },
+  {
+    "name": "18-clinic-patients",
+    "url": "https://glucoflow.vercel.app/clinic/patients"
+  },
+  {
+    "name": "19-clinic-overview",
+    "url": "https://glucoflow.vercel.app/clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/overview"
+  },
+  {
+    "name": "20-record-source",
+    "url": "https://glucoflow.vercel.app/clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/overview"
+  },
+  {
+    "name": "20-record-source",
+    "url": "https://glucoflow.vercel.app/clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/overview"
+  },
+  {
+    "name": "22-documents",
+    "url": "https://glucoflow.vercel.app/clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents"
+  },
+  {
+    "name": "23-upload-dialog",
+    "url": "https://glucoflow.vercel.app/clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents"
+  },
+  {
+    "name": "24-review-workbench",
+    "url": "https://glucoflow.vercel.app/clinic/review/df603e54-676d-4121-b268-c5f283d20650"
+  },
+  {
+    "name": "25-correct-entry",
+    "url": "https://glucoflow.vercel.app/clinic/review/df603e54-676d-4121-b268-c5f283d20650"
+  },
+  {
+    "name": "26-record-history",
+    "url": "https://glucoflow.vercel.app/clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/history"
+  },
+  {
+    "name": "21-progression",
+    "url": "https://glucoflow.vercel.app/clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/progression"
+  },
+  {
+    "name": "27-clinic-home-reports",
+    "url": "https://glucoflow.vercel.app/clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/master"
+  },
+  {
+    "name": "28-result-ledger",
+    "url": "https://glucoflow.vercel.app/clinic/results"
+  },
+  {
+    "name": "29-result-detail",
+    "url": "https://glucoflow.vercel.app/clinic/results"
+  },
+  {
+    "name": "30-closure-certificate",
+    "url": "https://glucoflow.vercel.app/clinic/results/21deaf44-0e56-4fa3-b0e9-872c5382abfd/survey-pack"
+  },
+  {
+    "name": "31-patient-receipt-slip",
+    "url": "https://glucoflow.vercel.app/clinic/results/21deaf44-0e56-4fa3-b0e9-872c5382abfd/patient-slip"
+  },
+  {
+    "name": "32-receipt-verification",
+    "url": "https://glucoflow.vercel.app/verify/GLF-A008B69C6D"
+  },
+  {
+    "name": "33-clinician-closure",
+    "url": "https://glucoflow.vercel.app/clinic/line"
+  },
+  {
+    "name": "34-patient-calls",
+    "url": "https://glucoflow.vercel.app/clinic/calls"
+  },
+  {
+    "name": "35-lab-intake",
+    "url": "https://glucoflow.vercel.app/clinic/intake"
+  },
+  {
+    "name": "36-closure-register",
+    "url": "https://glucoflow.vercel.app/clinic/register"
+  },
+  {
+    "name": "37-cohort-replay",
+    "url": "https://glucoflow.vercel.app/clinic/replay"
+  },
+  {
+    "name": "38-clinic-account",
+    "url": "https://glucoflow.vercel.app/account"
+  },
+  {
+    "name": "39-review-queue",
+    "url": "https://glucoflow.vercel.app/clinic/queue"
+  },
+  {
+    "name": "40-sign-in-ready",
+    "url": "https://glucoflow.vercel.app/sign-in"
+  },
+  {
+    "name": "41-patient-records",
+    "url": "https://glucoflow.vercel.app/patient/records"
+  },
+  {
+    "name": "42-patient-add-report",
+    "url": "https://glucoflow.vercel.app/patient/add-report"
+  },
+  {
+    "name": "43-patient-notes",
+    "url": "https://glucoflow.vercel.app/patient/visit-notes"
+  },
+  {
+    "name": "44-voice-input",
+    "url": "https://glucoflow.vercel.app/patient/visit-notes"
+  },
+  {
+    "name": "45-note-review",
+    "url": "https://glucoflow.vercel.app/patient/visit-notes"
+  },
+  {
+    "name": "46-patient-home",
+    "url": "https://glucoflow.vercel.app/patient/master"
+  },
+  {
+    "name": "47-record-guide",
+    "url": "https://glucoflow.vercel.app/patient/master"
+  },
+  {
+    "name": "48-patient-account",
+    "url": "https://glucoflow.vercel.app/account"
+  },
+  {
+    "name": "49-mobile-patient-notes",
+    "url": "https://glucoflow.vercel.app/patient/visit-notes"
+  },
+  {
+    "name": "50-mobile-navigation",
+    "url": "https://glucoflow.vercel.app/patient/visit-notes"
+  },
+  {
+    "name": "51-consolidated-worklist",
+    "url": "http://127.0.0.1:5173/clinic/care?view=worklist"
+  },
+  {
+    "name": "52-consolidated-split",
+    "url": "http://127.0.0.1:5173/clinic/care?view=worklist"
+  },
+  {
+    "name": "53-minimal-worklist",
+    "url": "http://127.0.0.1:5173/clinic/care?view=worklist"
+  },
+  {
+    "name": "54-minimal-chat",
+    "url": "http://127.0.0.1:5173/clinic/care"
+  },
+  {
+    "name": "55-minimal-mobile-chat",
+    "url": "http://127.0.0.1:5173/clinic/care"
+  },
+  {
+    "name": "56-minimal-mobile-worklist",
+    "url": "http://127.0.0.1:5173/clinic/care?view=worklist"
+  },
+  {
+    "name": "57-hosted-minimal-chat",
+    "url": "https://glucoflow.vercel.app/clinic/care"
+  },
+  {
+    "name": "58-hosted-minimal-worklist",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=worklist"
+  },
+  {
+    "name": "59-hosted-task-review",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=worklist"
+  },
+  {
+    "name": "60-hosted-mobile-worklist",
+    "url": "https://glucoflow.vercel.app/clinic/care?view=worklist"
+  },
+  {
+    "name": "61-hosted-mobile-chat",
+    "url": "https://glucoflow.vercel.app/clinic/care"
+  }
+]

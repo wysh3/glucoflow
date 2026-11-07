@@ -14,9 +14,7 @@ export function ReplayPage(): React.ReactElement {
   return (
     <div className="space-y-5">
       <SystemPageHeader
-        index="05"
-        label="Evidence"
-        title="The replay"
+          title="Cohort replay"
         meta="A retrospective baseline and a deterministic queue simulation on the same cohort. It is not a controlled trial."
         actions={
           <Badge tone={synthetic ? 'review' : 'success'}>

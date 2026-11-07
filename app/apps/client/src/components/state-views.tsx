@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { EmptyState, ErrorState, Skeleton, Spinner } from '@glucoflow/ui';
+import { useI18n } from '../i18n';
 import { describeApiError } from '../auth/session';
 
 /** Shared loading, empty, failure and incomplete states. */
 
-export function LoadingBlock({ label = 'Loading' }: { label?: string }): React.ReactElement {
+export function LoadingBlock({ label }: { label?: string }): React.ReactElement {
+  const { t } = useI18n();
   return (
     <div className="rounded-[12px] border border-line bg-surface px-6 py-8">
-      <Spinner label={label} />
+      <Spinner label={label ?? t('ui.loading')} />
     </div>
   );
 }
@@ -41,11 +43,12 @@ export function QueryState({
   onRetry?: () => void;
   children: React.ReactNode;
 }): React.ReactElement {
+  const { t } = useI18n();
   if (isLoading) return <LoadingBlock />;
   if (error) {
     return (
       <ErrorState
-        title="This could not be loaded"
+        title={t('ui.loadFailed')}
         description={describeApiError(error)}
         action={
           onRetry ? (
@@ -54,7 +57,7 @@ export function QueryState({
               onClick={onRetry}
               className="min-h-11 rounded-[10px] border border-line bg-surface px-4 text-sm text-ink"
             >
-              Try again
+              {t('ui.retry')}
             </button>
           ) : null
         }

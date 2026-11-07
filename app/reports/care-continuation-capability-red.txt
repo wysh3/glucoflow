@@ -1,0 +1,33 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ❯ tests/integration/care-continuation.test.ts (2 tests | 1 failed) 87ms
+   ✓ refuses active work, then archives settled evidence and creates one linked fresh demo on retries 25ms
+   × does not copy a revoked doctor capability or allow a revoked shared owner to archive via SQL 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/care-continuation.test.ts > does not copy a revoked doctor capability or allow a revoked shared owner to archive via SQL
+AssertionError: expected [ Array(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   {
++     "user_id": "73aafaf3-b889-464d-a1ab-08f887c9a809",
++   },
++ ]
+
+ ❯ tests/integration/care-continuation.test.ts:36:17
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  19:45:10
+   Duration  625ms (import 49%, transform 29%, tests 21%)

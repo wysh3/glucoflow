@@ -1,0 +1,138 @@
+- link:
+  - /url: "#main-content"
+  - text: Skip to content
+- complementary:
+  - button [expanded]:
+  - generic: glucoflow
+  - navigation:
+    - link:
+      - /url: /patient/records
+      - generic: Records
+    - link:
+      - /url: /patient/master
+      - generic: Home readings
+    - link:
+      - /url: /patient/add-report
+      - generic: Add report
+    - link:
+      - /url: /patient/visit-notes
+      - generic: Visit notes
+    - link:
+      - /url: /account
+      - generic: Account
+  - paragraph: Asha Rao (synthetic)
+  - paragraph: Patient
+- separator
+- generic: Patient workspace
+- generic: Language
+- combobox
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button:
+  - generic: Ask Gluco
+- button: Switch account
+- generic: Synthetic demo
+- main:
+  - heading [level=1]: Home readings & reporting
+  - generic: Synthetic demo
+  - link:
+    - /url: /patient/add-report
+    - text: Try a sample report
+  - link:
+    - /url: /patient/records
+    - text: My records
+  - link:
+    - /url: /patient/visit-notes
+    - text: Write a note
+  - heading [level=2]: Add a home glucose reading
+  - text: Glucose (mg/dL)
+  - spinbutton
+  - text: Reading type
+  - combobox:
+    - generic: Fasting
+  - combobox
+  - text: Measured at
+  - textbox: 2026-11-07T16:14
+  - text: Medication timing (optional)
+  - textbox
+  - button: Save reading
+  - heading [level=2]: Report a problem
+  - text: What happened?
+  - textbox:
+    - /placeholder: Dizziness, foot numbness, shaking or medication side effects
+  - text: Reported severity
+  - combobox:
+    - generic: Mild
+  - combobox
+  - text: Occurred at
+  - textbox: 2026-11-07T16:14
+  - button: Send problem report
+  - generic: Synthetic example history
+  - heading [level=2]: Configured tracking
+  - paragraph: Retinal screening
+  - paragraph: No date entered · Staff-configured 365-day interval
+  - generic: No recorded date
+  - paragraph: Renal monitoring
+  - paragraph: No date entered
+  - generic: No tracking rule configured
+  - paragraph: Foot / neuropathy review
+  - paragraph: No date entered
+  - generic: No tracking rule configured
+  - paragraph: Cardiovascular review
+  - paragraph: No date entered
+  - generic: No tracking rule configured
+  - paragraph: Pending means the staff-configured administrative interval elapsed; it is not a clinical screening recommendation. No recorded date does not establish whether a test was performed.
+  - heading [level=2]: Home telemetry & patient-reported events
+  - application:
+    - generic: 10/4/2026
+    - generic: 10/12/2026
+    - generic: 10/20/2026
+    - generic: 10/28/2026
+    - generic: 11/4/2026
+    - generic: 0 mg/dL
+    - generic: 35 mg/dL
+    - generic: 70 mg/dL
+    - generic: 105mg/dL
+    - generic: 140mg/dL
+  - list:
+    - paragraph: 118 mg/dL · fasting
+    - paragraph: Patient reported · 11/4/2026, 2:00:00 AM
+    - paragraph: △ QA audit test symptom · mild
+    - paragraph: Patient reported · 11/4/2026, 2:00:00 AM
+    - paragraph: 118 mg/dL · fasting
+    - paragraph: Patient reported · 11/4/2026, 2:00:00 AM
+    - paragraph: △ Synthetic audit test only — no actual symptom. · mild
+    - paragraph: Patient reported · 10/4/2026, 12:06:00 AM
+    - paragraph: 123 mg/dL · fasting
+    - paragraph: Patient reported · 10/4/2026, 12:06:00 AM · Synthetic deployment audit — 4 October 2026
+  - heading [level=2]: One-tap SOS snapshot
+  - button: Send SOS snapshot
+  - paragraph: Freezes medication history, approved records, reported problems and baseline telemetry for the demo clinic desk. This demo does not contact emergency responders or replace emergency medical care.
+  - list:
+    - generic: 11/4/2026, 2:00:58 AM · Delivered to demo clinic desk
+    - button: Inspect snapshot
+    - button: Download JSON
+    - generic: 11/4/2026, 2:00:37 AM · Delivered to demo clinic desk
+    - button: Inspect snapshot
+    - button: Download JSON
+    - generic: 10/4/2026, 12:06:55 AM · Acknowledged by clinic
+    - button: Inspect snapshot
+    - button: Download JSON
+  - paragraph: Objective technical tracking. Clinical interpretation remains with the licensed physician. The supplied five-year scenario is illustrative; home reports remain patient reported. Saved events are append-only in the application. Database administrators retain technical control.
+- generic: "0"
+- dialog "Gluco guide":
+  - heading "Gluco guide" [level=2]
+  - paragraph:
+    - generic: Deterministic record guide
+  - button "Clear conversation":
+  - button "Close guide":
+  - strong: Your records
+  - generic: P0482 · Approved + patient-reported
+  - log:
+    - paragraph: Hi, I’m Gluco. I can help you find your recorded results, documented prescriptions, notes and home entries. Ask a question, then follow up naturally. I’ll bring the dates and sources with me.
+  - button "Summarize the records"
+  - button "Show latest lab results"
+  - button "What notes were reported?"
+  - textbox "Ask Gluco" [active]:
+    - /placeholder: Ask about records, or follow up…
+  - button "Send message" [disabled]:
+  - paragraph: Recorded facts, not medical advice. Session-only chat. Questions go to the model; stored records aren’t attached.

@@ -1,0 +1,3 @@
+/vendor/hermes-agent/
+/.venv/
+__pycache__/

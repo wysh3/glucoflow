@@ -1,0 +1,135 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Records":
+      - /url: /patient/records
+      - generic: Records
+    - link "Home readings" [active]:
+      - /url: /patient/master
+      - generic: Home readings
+    - link "Add report":
+      - /url: /patient/add-report
+      - generic: Add report
+    - link "Visit notes":
+      - /url: /patient/visit-notes
+      - generic: Visit notes
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Asha Rao (synthetic)
+  - paragraph: Patient
+- separator "Resize sidebar"
+- generic "Patient workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - heading "Home readings & reporting" [level=1]
+  - generic: Synthetic demo
+  - link "Try a sample report":
+    - /url: /patient/add-report
+    - text: Try a sample report
+  - link "My records":
+    - /url: /patient/records
+    - text: My records
+  - link "Write a note":
+    - /url: /patient/visit-notes
+    - text: Write a note
+  - heading "Add a home glucose reading" [level=2]
+  - text: Glucose (mg/dL)
+  - spinbutton "Glucose (mg/dL)"
+  - text: Reading type
+  - combobox "Reading type":
+    - generic: Fasting
+  - combobox
+  - text: Measured at
+  - textbox "Measured at": 2026-11-07T16:14
+  - text: Medication timing (optional)
+  - textbox "Medication timing (optional)"
+  - button "Save reading"
+  - heading "Report a problem" [level=2]
+  - text: What happened?
+  - textbox "What happened?":
+    - /placeholder: Dizziness, foot numbness, shaking or medication side effects
+  - text: Reported severity
+  - combobox "Reported severity":
+    - generic: Mild
+  - combobox
+  - text: Occurred at
+  - textbox "Occurred at": 2026-11-07T16:14
+  - button "Send problem report"
+  - generic "Synthetic example history"
+  - heading "Configured tracking" [level=2]
+  - paragraph: Retinal screening
+  - paragraph: No date entered · Staff-configured 365-day interval
+  - generic: No recorded date
+  - paragraph: Renal monitoring
+  - paragraph: No date entered
+  - generic: No tracking rule configured
+  - paragraph: Foot / neuropathy review
+  - paragraph: No date entered
+  - generic: No tracking rule configured
+  - paragraph: Cardiovascular review
+  - paragraph: No date entered
+  - generic: No tracking rule configured
+  - paragraph: Pending means the staff-configured administrative interval elapsed; it is not a clinical screening recommendation. No recorded date does not establish whether a test was performed.
+  - heading "Home telemetry & patient-reported events" [level=2]
+  - application:
+    - generic: 10/4/2026
+    - generic: 10/12/2026
+    - generic: 10/20/2026
+    - generic: 10/28/2026
+    - generic: 11/4/2026
+    - generic: 0 mg/dL
+    - generic: 35 mg/dL
+    - generic: 70 mg/dL
+    - generic: 105mg/dL
+    - generic: 140mg/dL
+  - list:
+    - paragraph: 118 mg/dL · fasting
+    - paragraph: Patient reported · 11/4/2026, 2:00:00 AM
+    - paragraph: △ QA audit test symptom · mild
+    - paragraph: Patient reported · 11/4/2026, 2:00:00 AM
+    - paragraph: 118 mg/dL · fasting
+    - paragraph: Patient reported · 11/4/2026, 2:00:00 AM
+    - paragraph: △ Synthetic audit test only — no actual symptom. · mild
+    - paragraph: Patient reported · 10/4/2026, 12:06:00 AM
+    - paragraph: 123 mg/dL · fasting
+    - paragraph: Patient reported · 10/4/2026, 12:06:00 AM · Synthetic deployment audit — 4 October 2026
+  - heading "One-tap SOS snapshot" [level=2]
+  - button "Send SOS snapshot"
+  - paragraph: Freezes medication history, approved records, reported problems and baseline telemetry for the demo clinic desk. This demo does not contact emergency responders or replace emergency medical care.
+  - list:
+    - generic: 11/4/2026, 2:00:58 AM · Delivered to demo clinic desk
+    - button "Inspect snapshot"
+    - button "Download JSON"
+    - generic: 11/4/2026, 2:00:37 AM · Delivered to demo clinic desk
+    - button "Inspect snapshot"
+    - button "Download JSON"
+    - generic: 10/4/2026, 12:06:55 AM · Acknowledged by clinic
+    - button "Inspect snapshot"
+    - button "Download JSON"
+  - paragraph: Objective technical tracking. Clinical interpretation remains with the licensed physician. The supplied five-year scenario is illustrative; home reports remain patient reported. Saved events are append-only in the application. Database administrators retain technical control.
+- region "Notifications"
+- generic: "0"

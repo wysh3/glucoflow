@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { openDemoPatient, signIn } from './helpers';
+import type { TimelineResult } from '@glucoflow/contracts';
+import { demoCredentials, openDemoPatient, signIn } from './helpers';
 
 /**
  * Progression: the approved reset history plots three points on a date-proportional
@@ -57,13 +58,11 @@ test.describe('progression', () => {
   });
 
   test('search in patient context keeps the patient and returns a source action', async ({ page }) => {
-    // Two typed characters already open the search panel, which is modal: the header
-    // button behind it is not reachable, so the panel is driven directly.
-    await page.getByPlaceholder("Search this patient's records").fill('eye');
-    await expect(page.getByRole('heading', { name: "Search this patient's records" })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Open source' }).first()).toBeVisible();
-    // The scope note is always shown with results.
-    await expect(page.getByText('No result means no match in these records.', { exact: false })).toBeVisible();
+    await page.getByRole('textbox', { name: "Search this patient's records", exact: true }).fill('eye');
+    const search = page.getByRole('dialog', { name: "Search this patient's records", exact: true });
+    await expect(search.getByRole('heading', { name: "Search this patient's records" })).toBeVisible();
+    await expect(search.getByRole('button', { name: 'Open source', exact: true }).first()).toBeVisible();
+    await expect(search.getByText('No result means no match in these records.', { exact: false })).toBeVisible();
   });
 });
 
@@ -72,7 +71,19 @@ test('custom dates constrain progression to the selected historical range', asyn
   await openDemoPatient(page);
   await page.getByRole('combobox', {name:'Range',exact:true}).click();
   await page.getByRole('option', {name:'Custom',exact:true}).click();
-  await page.getByLabel('From', {exact:true}).fill('2026-01-01');
-  await page.getByLabel('To', {exact:true}).fill('2026-07-31');
-  await expect(page.getByText('3 recorded results in approved records', {exact:false})).toBeVisible();
+  const from = '2026-01-01';
+  const to = '2026-07-31';
+  const filtered = page.waitForResponse(response => {
+    const { pathname, searchParams } = new URL(response.url());
+    return response.ok() && pathname === `/api/v1/patients/${demoCredentials().patientId}/timeline` &&
+      searchParams.get('from') === from && searchParams.get('to') === to && searchParams.get('testCode') === 'hba1c' && !searchParams.has('cursor');
+  });
+  await page.getByLabel('From', {exact:true}).fill(from);
+  await page.getByLabel('To', {exact:true}).fill(to);
+  const { observations, scopeNote } = await (await filtered).json() as TimelineResult & { scopeNote: string };
+  const dates = observations.map(observation => observation.date);
+  expect(dates).toEqual(expect.arrayContaining(['2026-01-12', '2026-04-10', '2026-07-09']));
+  expect(observations.every(({ date, testCode }) => date && date >= from && date <= to && testCode === 'hba1c')).toBe(true);
+  expect(scopeNote).toContain(`Dates ${from} to ${to}`);
+  await expect(page.getByText(scopeNote, { exact: true })).toBeVisible();
 });

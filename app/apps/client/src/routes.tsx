@@ -1,11 +1,9 @@
-import {GlucoGuide} from './features/guide/gluco-guide';
-import { roleHome } from './lib/clinic-home';
-import {VisitOverviewPage} from './features/clinic/overview/page';
-import {DeltaPage} from './features/delta/page';
-import {DeltaDemoPage} from './features/delta/demo-page';
-import {BodyMapPage} from './features/clinic/bodymap/page';
-import {LandingPage} from './features/landing/page';
-import {MasterPage} from './features/master/page';
+import { LocaleDocument } from './i18n';
+
+import { CARE_HOME, roleHome } from './lib/clinic-home';
+import { normalizePathname } from './lib/route-path';
+
+
 import * as React from 'react';
 import {
   BrowserRouter,
@@ -14,31 +12,69 @@ import {
   Route,
   Routes,
   useLocation,
+  useNavigationType,
 } from 'react-router-dom';
 import { useSession } from './auth/session';
 import { AppShell } from './components/app-shell';
 import { ErrorState, Spinner } from '@glucoflow/ui';
 import { SignInPage } from './features/sign-in/page';
-import { AccountPage } from './features/account/page';
-import { ClinicPatientsPage } from './features/clinic/patients/page';
-import { ResultsPage } from './features/clinic/results/page';
-import { ObligationWorkspace } from './features/clinic/obligations/page';
-import { ReplayPage } from './features/clinic/replay/page';
-import { ShowcasePage } from './features/showcase/page';
+
+
+
+
+
+
 import { RoleGate } from './components/role-gate';
-import { ClosureCertificatePage } from './features/clinic/results/certificate';
-import { PatientReceiptSlipPage } from './features/clinic/results/patient-slip';
-import { ClinicQueuePage } from './features/clinic/queue/page';
-import { ClinicPatientLayout } from './features/clinic/patient-layout';
-import { ProgressionPage } from './features/clinic/progression/page';
-import { DocumentsPage } from './features/clinic/documents/page';
-import { HistoryPage } from './features/clinic/history/page';
-import { ReviewPage } from './features/clinic/review/page';
-import { PatientRecordsPage } from './features/patient/records/page';
-import { PatientAddReportPage } from './features/patient/add-report/page';
-import { PatientVisitNotesPage } from './features/patient/visit-notes/page';
+
+
+
+
+
+
+
+
+
+
+
 import { NotFoundPage } from './features/not-found/page';
-import { VerifyReceiptPage } from './features/verify/page';
+
+
+
+const GlucoGuide = React.lazy(() => import('./features/guide/gluco-guide').then(module => ({ default: module.GlucoGuide })));
+const VisitOverviewPage = React.lazy(() => import('./features/clinic/overview/page').then(module => ({ default: module.VisitOverviewPage })));
+const AccountPage = React.lazy(() => import('./features/account/page').then(module => ({ default: module.AccountPage })));
+const ClinicPatientsPage = React.lazy(() => import('./features/clinic/patients/page').then(module => ({ default: module.ClinicPatientsPage })));
+const ShowcasePage = React.lazy(() => import('./features/showcase/page').then(module => ({ default: module.ShowcasePage })));
+const ClinicQueuePage = React.lazy(() => import('./features/clinic/queue/page').then(module => ({ default: module.ClinicQueuePage })));
+const ClinicPatientLayout = React.lazy(() => import('./features/clinic/patient-layout').then(module => ({ default: module.ClinicPatientLayout })));
+const DocumentsPage = React.lazy(() => import('./features/clinic/documents/page').then(module => ({ default: module.DocumentsPage })));
+const HistoryPage = React.lazy(() => import('./features/clinic/history/page').then(module => ({ default: module.HistoryPage })));
+const PatientRecordsPage = React.lazy(() => import('./features/patient/records/page').then(module => ({ default: module.PatientRecordsPage })));
+const PatientAddReportPage = React.lazy(() => import('./features/patient/add-report/page').then(module => ({ default: module.PatientAddReportPage })));
+const PatientVisitNotesPage = React.lazy(() => import('./features/patient/visit-notes/page').then(module => ({ default: module.PatientVisitNotesPage })));
+const PrivacyPage = React.lazy(() => import('./features/privacy/page').then(module => ({ default: module.PrivacyPage })));
+const VerifyReceiptPage = React.lazy(() => import('./features/verify/page').then(module => ({ default: module.VerifyReceiptPage })));
+
+const MasterPage = React.lazy(() => import('./features/master/page').then(module => ({ default: module.MasterPage })));
+
+const ResultsPage = React.lazy(() => import('./features/clinic/results/page').then(module => ({ default: module.ResultsPage })));
+
+const ObligationWorkspace = React.lazy(() => import('./features/clinic/obligations/page').then(module => ({ default: module.ObligationWorkspace })));
+
+const ReplayPage = React.lazy(() => import('./features/clinic/replay/page').then(module => ({ default: module.ReplayPage })));
+
+const ClosureCertificatePage = React.lazy(() => import('./features/clinic/results/certificate').then(module => ({ default: module.ClosureCertificatePage })));
+
+const PatientReceiptSlipPage = React.lazy(() => import('./features/clinic/results/patient-slip').then(module => ({ default: module.PatientReceiptSlipPage })));
+
+const ProgressionPage = React.lazy(() => import('./features/clinic/progression/page').then(module => ({ default: module.ProgressionPage })));
+
+const ReviewPage = React.lazy(() => import('./features/clinic/review/page').then(module => ({ default: module.ReviewPage })));
+
+const CarePage = React.lazy(async () => {
+  const { CarePage } = await import('./features/care/page');
+  return { default: CarePage };
+});
 
 /**
  * Routes for both roles on web and Android. The active role comes from the
@@ -47,16 +83,26 @@ import { VerifyReceiptPage } from './features/verify/page';
 export function AppRoutes(): React.ReactElement {
   return (
     <BrowserRouter>
+      <LocaleDocument />
+      <React.Suspense fallback={<div className="p-6"><Spinner label="Opening page" /></div>}>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/sign-in" element={<SignInPage />} />
-        <Route path="/demo/delta" element={<DeltaDemoPage />} />
+        <Route path="/" element={<SignInPage />} />
+        <Route path="/sign-in" element={<EntryRedirect />} />
+        <Route path="/demo/delta" element={<Navigate to="/showcase" replace />} />
         <Route path="/showcase" element={<ShowcasePage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/verify/:code?" element={<VerifyReceiptPage />} />
         <Route path="/clinic/results/:resultId/survey-pack" element={<ClinicGate><ClosureCertificatePage /></ClinicGate>} />
         <Route path="/clinic/results/:resultId/patient-slip" element={<ClinicGate><PatientReceiptSlipPage /></ClinicGate>} />
         <Route element={<ProtectedShell />}>
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/clinic/care" element={
+            <ClinicGate>
+              <React.Suspense fallback={<Spinner label="Opening care workspace" />}>
+                <CarePage />
+              </React.Suspense>
+            </ClinicGate>
+          } />
           <Route path="/clinic/results" element={<ClinicGate><ResultsPage /></ClinicGate>} />
           <Route path="/clinic/line" element={<ClinicGate><RoleGate capability="canClinician"><ObligationWorkspace view="line" /></RoleGate></ClinicGate>} />
           <Route path="/clinic/calls" element={<ClinicGate><RoleGate capability="canNurse"><ObligationWorkspace view="calls" /></RoleGate></ClinicGate>} />
@@ -67,8 +113,8 @@ export function AppRoutes(): React.ReactElement {
           <Route path="/clinic/queue" element={<ClinicGate><ClinicQueuePage /></ClinicGate>} />
           <Route path="/clinic/patients/:patientId" element={<ClinicGate><ClinicPatientLayout /></ClinicGate>}>
             <Route index element={<Navigate to="overview" replace />} />
-            <Route path="delta" element={<DeltaPage />} />
-            <Route path="bodymap" element={<BodyMapPage />} />
+            <Route path="delta" element={<Navigate to="../overview" relative="path" replace />} />
+            <Route path="bodymap" element={<Navigate to="../overview" relative="path" replace />} />
             <Route path="overview" element={<VisitOverviewPage />} />
             <Route path="master" element={<MasterPage />} />
             <Route path="progression" element={<ProgressionPage />} />
@@ -83,9 +129,64 @@ export function AppRoutes(): React.ReactElement {
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-      <GlucoGuide/>
+      </React.Suspense>
+      <RouteTitle />
+      <ContextualGuide />
     </BrowserRouter>
   );
+}
+
+function EntryRedirect() {
+  const { state } = useLocation();
+  return <Navigate to="/" replace state={state} />;
+}
+
+const titles: Record<string, string> = {
+  '/': 'Inpatient diabetes care',
+  '/sign-in': 'Sign in',
+  '/showcase': 'Walkthrough',
+  '/privacy': 'Privacy and data use',
+  '/account': 'Account',
+  [CARE_HOME]: 'Care',
+  '/clinic/patients': 'Patient records',
+  '/clinic/queue': 'Report review queue',
+  '/clinic/results': 'Result ledger',
+  '/clinic/line': 'Clinician review',
+  '/clinic/calls': 'Patient calls',
+  '/clinic/intake': 'Lab intake',
+  '/clinic/register': 'Closure register',
+  '/clinic/replay': 'Cohort replay',
+  '/patient/records': 'My records',
+  '/patient/master': 'Home readings',
+  '/patient/add-report': 'Add a report',
+  '/patient/visit-notes': 'Visit notes',
+};
+
+function RouteTitle() {
+  const location = useLocation();
+  const { hash } = location;
+  const pathname = normalizePathname(location.pathname);
+  const action = useNavigationType();
+  React.useEffect(() => {
+    const name = titles[pathname] ??
+      (pathname.startsWith('/verify') ? 'Verify a receipt' :
+        pathname.startsWith('/clinic/patients/') ? 'Patient record' :
+        pathname.startsWith('/clinic/review/') ? 'Report review' :
+        pathname.startsWith('/clinic/results/') ? 'Result receipt' : 'Page not found');
+    document.title = `${name} · GlucoFlow`;
+  }, [pathname]);
+  React.useEffect(() => {
+    if (action !== 'POP' && !hash) window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+}
+
+function ContextualGuide() {
+  const { pathname } = useLocation();
+  const path = normalizePathname(pathname);
+  const { status } = useSession();
+  return status !== 'signed-in' || path === CARE_HOME || path === '/privacy' || path === '/' ? null :
+    <React.Suspense fallback={null}><GlucoGuide /></React.Suspense>;
 }
 
 function roleFallback(contexts: { kind: string; clinician?: boolean; desk?: boolean; nurse?: boolean; quality?: boolean }[]): string {
@@ -136,11 +237,13 @@ function ProtectedShell(): React.ReactElement {
     );
   }
   if (status !== 'signed-in' || !me) {
-    return <Navigate to="/sign-in" replace state={{ from: location.pathname }} />;
+    return <Navigate to="/sign-in" replace state={{ from: `${location.pathname}${location.search}${location.hash}` }} />;
   }
   return (
     <AppShell>
-      <Outlet />
+      <React.Suspense fallback={<div className="p-6"><Spinner label="Opening page" /></div>}>
+        <Outlet />
+      </React.Suspense>
     </AppShell>
   );
 }

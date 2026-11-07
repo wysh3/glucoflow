@@ -12,8 +12,6 @@ export const MEDICATION_PHASES=[
  {phase:'Mealtime titration & safety tracking',period:'Q2 2024 – 2025',date:'2024-06-12',medication:'Insulin Lispro 4 units pre-prandial; Glimepiride 2 mg',detail:'Shaking, dizziness and sweating reported in the supplied scenario. No numerical low reading was supplied.'},
  {phase:'Current long-term management',period:'2026 Q1 – Q2',date:null,medication:'Metformin 1000 mg + Basal Glargine 14 units nightly + Mealtime Lispro 4 units TID',detail:'Supplied regimen log. Continued use and missing stop dates require physician confirmation.'},
 ] as const;
-export function glucoseFlag(value:number|null):boolean{return value!==null&&value<70;}
-export function annualDecline(before:number,after:number,years:number):number|null{return years>0?(before-after)/years:null;}
 export function screeningState(lastDate:string|null,interval:number,today:string):string{
  if(!lastDate)return 'No recorded date';
  const days=(Date.parse(today+'T00:00:00Z')-Date.parse(lastDate+'T00:00:00Z'))/86400000;

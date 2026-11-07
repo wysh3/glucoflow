@@ -1,0 +1,610 @@
+$ vitest run
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+stdout | apps/worker/src/hermes-readiness.test.ts > monitors care during Hermes cold start without leasing document jobs
+{"level":"info","message":"waiting for Hermes extraction readiness","workerId":"worker-65701"}
+{"level":"info","message":"worker started","workerId":"worker-65701","concurrency":2,"extractionProvider":"hermes","extractionMode":"live","extractionModel":"synthetic-health-model","promptHash":"0732f1a0dc32a3c588b73bbe190f14d0","storageMode":"local","ocrEnabled":true}
+
+{"level":30,"time":1794062819424,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819454,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1","res":{"statusCode":201},"responseTime":29.601791999999932,"msg":"request completed"}
+{"level":30,"time":1794062819456,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819464,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2","res":{"statusCode":201},"responseTime":8.474042000000054,"msg":"request completed"}
+{"level":30,"time":1794062819467,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3","req":{"method":"GET","url":"/api/v1/care/workspaces/c9e056e0-0e89-496f-ba28-7d47a0dd383e","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819467,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3","res":{"statusCode":401},"responseTime":0.5015839999998661,"msg":"request completed"}
+{"level":30,"time":1794062819467,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-4","req":{"method":"GET","url":"/api/v1/care/workspaces/c9e056e0-0e89-496f-ba28-7d47a0dd383e","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819475,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-4","res":{"statusCode":403},"responseTime":7.442833000000064,"msg":"request completed"}
+{"level":30,"time":1794062819475,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-5","req":{"method":"GET","url":"/api/v1/care/workspaces/c9e056e0-0e89-496f-ba28-7d47a0dd383e","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819482,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-5","res":{"statusCode":404},"responseTime":6.851417000000083,"msg":"request completed"}
+{"level":30,"time":1794062819483,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-6","req":{"method":"GET","url":"/api/v1/care/workspaces/c9e056e0-0e89-496f-ba28-7d47a0dd383e/export","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819492,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-6","res":{"statusCode":404},"responseTime":9.642875000000004,"msg":"request completed"}
+{"level":30,"time":1794062819493,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-7","req":{"method":"GET","url":"/api/v1/care/workspaces/c9e056e0-0e89-496f-ba28-7d47a0dd383e","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819501,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-7","res":{"statusCode":404},"responseTime":7.698292000000038,"msg":"request completed"}
+{"level":30,"time":1794062819501,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-8","req":{"method":"GET","url":"/api/v1/care/workspaces/c9e056e0-0e89-496f-ba28-7d47a0dd383e/export","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819506,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-8","res":{"statusCode":404},"responseTime":5.120499999999993,"msg":"request completed"}
+{"level":30,"time":1794062819523,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-9","req":{"method":"GET","url":"/api/v1/care/workspaces/c9e056e0-0e89-496f-ba28-7d47a0dd383e/export","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819534,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-9","res":{"statusCode":200},"responseTime":10.294375000000173,"msg":"request completed"}
+{"level":30,"time":1794062819536,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-a","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819547,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-a","res":{"statusCode":201},"responseTime":10.359249999999975,"msg":"request completed"}
+{"level":30,"time":1794062819547,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-b","req":{"method":"POST","url":"/api/v1/care/workspaces/4fe344b2-21a1-4aed-87e2-9cfa8f8d808b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819548,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-c","req":{"method":"POST","url":"/api/v1/care/workspaces/4fe344b2-21a1-4aed-87e2-9cfa8f8d808b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819583,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-b","res":{"statusCode":200},"responseTime":35.83095800000001,"msg":"request completed"}
+{"level":30,"time":1794062819591,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-c","res":{"statusCode":200},"responseTime":43.47554200000013,"msg":"request completed"}
+{"level":30,"time":1794062819592,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-d","req":{"method":"POST","url":"/api/v1/care/workspaces/4fe344b2-21a1-4aed-87e2-9cfa8f8d808b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819600,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-d","res":{"statusCode":409},"responseTime":7.8120420000000195,"msg":"request completed"}
+{"level":30,"time":1794062819600,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-e","req":{"method":"POST","url":"/api/v1/care/workspaces/4fe344b2-21a1-4aed-87e2-9cfa8f8d808b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819617,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-e","res":{"statusCode":409},"responseTime":16.967415999999957,"msg":"request completed"}
+{"level":30,"time":1794062819618,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-f","req":{"method":"POST","url":"/api/v1/care/workspaces/4fe344b2-21a1-4aed-87e2-9cfa8f8d808b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819622,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-f","res":{"statusCode":422},"responseTime":3.91666599999985,"msg":"request completed"}
+{"level":30,"time":1794062819622,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-g","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819631,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-g","res":{"statusCode":201},"responseTime":8.69708300000002,"msg":"request completed"}
+{"level":30,"time":1794062819632,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-h","req":{"method":"POST","url":"/api/v1/care/workspaces/dc74d936-f892-4bdd-a117-ef85fe3eeff9/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819643,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-h","res":{"statusCode":403},"responseTime":11.73008300000015,"msg":"request completed"}
+{"level":30,"time":1794062819644,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-i","req":{"method":"POST","url":"/api/v1/care/workspaces/dc74d936-f892-4bdd-a117-ef85fe3eeff9/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819657,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-i","res":{"statusCode":200},"responseTime":13.503999999999905,"msg":"request completed"}
+{"level":30,"time":1794062819658,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-j","req":{"method":"POST","url":"/api/v1/care/workspaces/dc74d936-f892-4bdd-a117-ef85fe3eeff9/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819665,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-j","res":{"statusCode":422},"responseTime":7.344624999999951,"msg":"request completed"}
+{"level":30,"time":1794062819665,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-k","req":{"method":"POST","url":"/api/v1/care/workspaces/dc74d936-f892-4bdd-a117-ef85fe3eeff9/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819676,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-k","res":{"statusCode":422},"responseTime":10.75308300000006,"msg":"request completed"}
+{"level":30,"time":1794062819676,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-l","req":{"method":"POST","url":"/api/v1/care/workspaces/dc74d936-f892-4bdd-a117-ef85fe3eeff9/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819692,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-l","res":{"statusCode":200},"responseTime":15.182166000000052,"msg":"request completed"}
+{"level":30,"time":1794062819693,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-m","req":{"method":"POST","url":"/api/v1/care/workspaces/dc74d936-f892-4bdd-a117-ef85fe3eeff9/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819705,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-m","res":{"statusCode":200},"responseTime":11.893583000000035,"msg":"request completed"}
+{"level":30,"time":1794062819706,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-n","req":{"method":"POST","url":"/api/v1/care/workspaces/dc74d936-f892-4bdd-a117-ef85fe3eeff9/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819722,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-n","res":{"statusCode":200},"responseTime":15.90579200000002,"msg":"request completed"}
+{"level":30,"time":1794062819722,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-o","req":{"method":"POST","url":"/api/v1/care/workspaces/dc74d936-f892-4bdd-a117-ef85fe3eeff9/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+stdout | apps/worker/src/hermes-readiness.test.ts > monitors care during Hermes cold start without leasing document jobs
+{"level":"info","message":"worker stopped","workerId":"worker-65701"}
+
+{"level":30,"time":1794062819738,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-o","res":{"statusCode":200},"responseTime":15.828709000000117,"msg":"request completed"}
+{"level":30,"time":1794062819739,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-p","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819758,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-p","res":{"statusCode":201},"responseTime":18.670374999999922,"msg":"request completed"}
+{"level":30,"time":1794062819758,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-q","req":{"method":"POST","url":"/api/v1/care/workspaces/1d4d954b-4e41-4116-ad9f-f78a8332938e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819784,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-q","res":{"statusCode":200},"responseTime":26.085624999999936,"msg":"request completed"}
+{"level":30,"time":1794062819785,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-r","req":{"method":"POST","url":"/api/v1/care/workspaces/1d4d954b-4e41-4116-ad9f-f78a8332938e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819825,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-r","res":{"statusCode":200},"responseTime":40.215374999999995,"msg":"request completed"}
+{"level":30,"time":1794062819826,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-s","req":{"method":"POST","url":"/api/v1/care/workspaces/1d4d954b-4e41-4116-ad9f-f78a8332938e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819852,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-s","res":{"statusCode":200},"responseTime":26.141417000000047,"msg":"request completed"}
+{"level":30,"time":1794062819853,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-t","req":{"method":"POST","url":"/api/v1/care/workspaces/1d4d954b-4e41-4116-ad9f-f78a8332938e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819864,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-t","res":{"statusCode":200},"responseTime":11.54316700000004,"msg":"request completed"}
+{"level":30,"time":1794062819865,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-u","req":{"method":"POST","url":"/api/v1/care/workspaces/1d4d954b-4e41-4116-ad9f-f78a8332938e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819871,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-u","res":{"statusCode":200},"responseTime":6.70879200000013,"msg":"request completed"}
+{"level":30,"time":1794062819872,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-v","req":{"method":"POST","url":"/api/v1/care/workspaces/1d4d954b-4e41-4116-ad9f-f78a8332938e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819882,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-v","res":{"statusCode":200},"responseTime":10.267249999999876,"msg":"request completed"}
+{"level":30,"time":1794062819883,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-w","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819890,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-w","res":{"statusCode":201},"responseTime":7.411249999999882,"msg":"request completed"}
+{"level":30,"time":1794062819891,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-x","req":{"method":"POST","url":"/api/v1/care/workspaces/6caf3dd4-ce66-452e-bad3-58c1b5bfc4ec/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819898,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-x","res":{"statusCode":200},"responseTime":7.323333000000048,"msg":"request completed"}
+{"level":30,"time":1794062819898,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-y","req":{"method":"POST","url":"/api/v1/care/workspaces/6caf3dd4-ce66-452e-bad3-58c1b5bfc4ec/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819906,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-y","res":{"statusCode":409},"responseTime":7.5930839999998625,"msg":"request completed"}
+{"level":30,"time":1794062819907,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-z","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819916,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-z","res":{"statusCode":201},"responseTime":8.870417000000089,"msg":"request completed"}
+{"level":30,"time":1794062819917,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-10","req":{"method":"POST","url":"/api/v1/care/workspaces/0b886569-e030-4d8b-9775-e086cedd4167/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819925,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-10","res":{"statusCode":200},"responseTime":8.688833999999815,"msg":"request completed"}
+{"level":30,"time":1794062819926,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-11","req":{"method":"POST","url":"/api/v1/care/workspaces/0b886569-e030-4d8b-9775-e086cedd4167/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819949,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-11","res":{"statusCode":200},"responseTime":23.475208000000066,"msg":"request completed"}
+{"level":30,"time":1794062819960,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-12","req":{"method":"GET","url":"/api/v1/care/workspaces/0b886569-e030-4d8b-9775-e086cedd4167","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819967,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-12","res":{"statusCode":200},"responseTime":7.1407500000000255,"msg":"request completed"}
+{"level":30,"time":1794062819971,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-13","req":{"method":"GET","url":"/api/v1/care/workspaces/0b886569-e030-4d8b-9775-e086cedd4167","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819979,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-13","res":{"statusCode":200},"responseTime":8.247499999999945,"msg":"request completed"}
+{"level":30,"time":1794062819979,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-14","req":{"method":"GET","url":"/api/v1/care/workspaces/0b886569-e030-4d8b-9775-e086cedd4167","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819987,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-14","res":{"statusCode":200},"responseTime":7.053292000000056,"msg":"request completed"}
+{"level":30,"time":1794062819987,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-15","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062819995,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-15","res":{"statusCode":201},"responseTime":8.120374999999967,"msg":"request completed"}
+{"level":30,"time":1794062819996,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-16","req":{"method":"POST","url":"/api/v1/care/workspaces/ad7e6c6c-4a0b-4c9d-8591-803ac66e8cb8/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820004,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-16","res":{"statusCode":200},"responseTime":8.045082999999977,"msg":"request completed"}
+{"level":30,"time":1794062820004,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-17","req":{"method":"POST","url":"/api/v1/care/workspaces/ad7e6c6c-4a0b-4c9d-8591-803ac66e8cb8/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820027,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-17","res":{"statusCode":403},"responseTime":23.317624999999907,"msg":"request completed"}
+{"level":30,"time":1794062820028,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-18","req":{"method":"POST","url":"/api/v1/care/workspaces/ad7e6c6c-4a0b-4c9d-8591-803ac66e8cb8/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820067,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-18","res":{"statusCode":200},"responseTime":38.887084000000186,"msg":"request completed"}
+{"level":30,"time":1794062820067,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-19","req":{"method":"POST","url":"/api/v1/care/workspaces/ad7e6c6c-4a0b-4c9d-8591-803ac66e8cb8/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820077,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-19","res":{"statusCode":200},"responseTime":9.509833000000071,"msg":"request completed"}
+{"level":30,"time":1794062820077,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1a","req":{"method":"POST","url":"/api/v1/care/workspaces/ad7e6c6c-4a0b-4c9d-8591-803ac66e8cb8/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820086,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1a","res":{"statusCode":200},"responseTime":9.392166999999972,"msg":"request completed"}
+{"level":30,"time":1794062820087,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1b","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820094,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1b","res":{"statusCode":201},"responseTime":6.485458000000108,"msg":"request completed"}
+{"level":30,"time":1794062820094,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1c","req":{"method":"POST","url":"/api/v1/care/workspaces/a5b339b6-e378-4ae7-9636-0c70b57e113d/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820104,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1c","res":{"statusCode":200},"responseTime":9.856082999999899,"msg":"request completed"}
+{"level":30,"time":1794062820104,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1d","req":{"method":"POST","url":"/api/v1/care/workspaces/a5b339b6-e378-4ae7-9636-0c70b57e113d/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820115,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1d","res":{"statusCode":200},"responseTime":10.499583000000257,"msg":"request completed"}
+{"level":30,"time":1794062820115,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1e","req":{"method":"POST","url":"/api/v1/care/workspaces/a5b339b6-e378-4ae7-9636-0c70b57e113d/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820123,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1e","res":{"statusCode":409},"responseTime":7.755040999999892,"msg":"request completed"}
+{"level":30,"time":1794062820123,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1f","req":{"method":"POST","url":"/api/v1/care/workspaces/a5b339b6-e378-4ae7-9636-0c70b57e113d/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820131,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1f","res":{"statusCode":200},"responseTime":7.456584000000021,"msg":"request completed"}
+{"level":30,"time":1794062820131,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1g","req":{"method":"POST","url":"/api/v1/care/workspaces/a5b339b6-e378-4ae7-9636-0c70b57e113d/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820139,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1g","res":{"statusCode":200},"responseTime":7.322083999999904,"msg":"request completed"}
+{"level":30,"time":1794062820139,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1h","req":{"method":"POST","url":"/api/v1/care/workspaces/a5b339b6-e378-4ae7-9636-0c70b57e113d/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820144,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1h","res":{"statusCode":409},"responseTime":4.750040999999783,"msg":"request completed"}
+{"level":30,"time":1794062820144,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1i","req":{"method":"POST","url":"/api/v1/care/workspaces/a5b339b6-e378-4ae7-9636-0c70b57e113d/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820152,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1i","res":{"statusCode":200},"responseTime":8.309124999999767,"msg":"request completed"}
+{"level":30,"time":1794062820153,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1j","req":{"method":"POST","url":"/api/v1/care/workspaces/a5b339b6-e378-4ae7-9636-0c70b57e113d/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820162,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1j","res":{"statusCode":200},"responseTime":8.864000000000033,"msg":"request completed"}
+{"level":30,"time":1794062820162,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1k","req":{"method":"POST","url":"/api/v1/care/workspaces/a5b339b6-e378-4ae7-9636-0c70b57e113d/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820170,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1k","res":{"statusCode":200},"responseTime":8.305458000000272,"msg":"request completed"}
+{"level":30,"time":1794062820171,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1l","req":{"method":"POST","url":"/api/v1/care/workspaces/a5b339b6-e378-4ae7-9636-0c70b57e113d/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820182,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1l","res":{"statusCode":200},"responseTime":10.782666000000063,"msg":"request completed"}
+{"level":30,"time":1794062820182,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1m","req":{"method":"POST","url":"/api/v1/care/workspaces/a5b339b6-e378-4ae7-9636-0c70b57e113d/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820195,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1m","res":{"statusCode":200},"responseTime":12.879791999999725,"msg":"request completed"}
+{"level":30,"time":1794062820196,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1n","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820202,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1n","res":{"statusCode":201},"responseTime":5.66045800000029,"msg":"request completed"}
+{"level":30,"time":1794062820202,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1o","req":{"method":"POST","url":"/api/v1/care/workspaces/72926e63-a73f-47f9-8e36-f1f5b0721aea/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820208,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1o","res":{"statusCode":422},"responseTime":5.113792000000103,"msg":"request completed"}
+{"level":30,"time":1794062820208,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1p","req":{"method":"POST","url":"/api/v1/care/workspaces/72926e63-a73f-47f9-8e36-f1f5b0721aea/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820222,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1p","res":{"statusCode":200},"responseTime":13.80520800000022,"msg":"request completed"}
+{"level":30,"time":1794062820223,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1q","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820230,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1q","res":{"statusCode":201},"responseTime":7.2565410000001975,"msg":"request completed"}
+{"level":30,"time":1794062820253,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1","req":{"method":"GET","url":"/api/v1/care/runtime","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820312,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1","res":{"statusCode":200},"responseTime":58.93920799999978,"msg":"request completed"}
+{"level":30,"time":1794062820313,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2","req":{"method":"POST","url":"/api/v1/care/workspaces/d9d6af72-bd4d-4812-b642-c4a909fe6567/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+Warning: Invalid resolution 25 dpi. Using 70 instead.
+{"level":30,"time":1794062820331,"pid":65706,"hostname":"wysh-m5.local","hermes":{"bridgeMs":6,"httpStatus":503,"runtime":null},"msg":"Care Hermes timings"}
+{"level":50,"time":1794062820331,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2","code":"hermes_unavailable","err":"Gluco is unavailable. Try again or explicitly select the deterministic helper.","msg":"request failed"}
+{"level":30,"time":1794062820331,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2","res":{"statusCode":503},"responseTime":17.624832999999853,"msg":"request completed"}
+{"level":30,"time":1794062820331,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3","req":{"method":"POST","url":"/api/v1/care/workspaces/d9d6af72-bd4d-4812-b642-c4a909fe6567/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820342,"pid":65706,"hostname":"wysh-m5.local","hermes":{"bridgeMs":5,"httpStatus":200,"runtime":null},"msg":"Care Hermes timings"}
+{"level":50,"time":1794062820342,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3","code":"hermes_invalid_response","err":"Gluco returned a response that could not be verified against this workspace.","msg":"request failed"}
+{"level":30,"time":1794062820343,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3","res":{"statusCode":502},"responseTime":11.443499999999858,"msg":"request completed"}
+{"level":30,"time":1794062820343,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-4","req":{"method":"POST","url":"/api/v1/care/workspaces/d9d6af72-bd4d-4812-b642-c4a909fe6567/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820353,"pid":65706,"hostname":"wysh-m5.local","hermes":{"bridgeMs":4,"httpStatus":200,"runtime":null},"msg":"Care Hermes timings"}
+{"level":50,"time":1794062820353,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-4","code":"hermes_invalid_response","err":"Gluco returned a response that could not be verified against this workspace.","msg":"request failed"}
+{"level":30,"time":1794062820353,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-4","res":{"statusCode":502},"responseTime":10.119708000000173,"msg":"request completed"}
+{"level":30,"time":1794062820353,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-5","req":{"method":"GET","url":"/api/v1/care/workspaces/d9d6af72-bd4d-4812-b642-c4a909fe6567","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820358,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-5","res":{"statusCode":200},"responseTime":5.045959000000039,"msg":"request completed"}
+{"level":30,"time":1794062820359,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-6","req":{"method":"POST","url":"/api/v1/care/workspaces/d9d6af72-bd4d-4812-b642-c4a909fe6567/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820367,"pid":65706,"hostname":"wysh-m5.local","hermes":{"bridgeMs":3,"httpStatus":200,"runtime":null},"msg":"Care Hermes timings"}
+{"level":30,"time":1794062820371,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-6","res":{"statusCode":200},"responseTime":12.860208000000057,"msg":"request completed"}
+{"level":30,"time":1794062820373,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1r","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820381,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1r","res":{"statusCode":201},"responseTime":8.032000000000153,"msg":"request completed"}
+{"level":30,"time":1794062820382,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1s","req":{"method":"POST","url":"/api/v1/care/workspaces/fce80a09-72f4-443d-b6df-482b3bf24c4c/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820393,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1s","res":{"statusCode":200},"responseTime":11.123583000000053,"msg":"request completed"}
+{"level":30,"time":1794062820394,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1t","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820399,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1t","res":{"statusCode":201},"responseTime":4.9074999999998,"msg":"request completed"}
+{"level":30,"time":1794062820399,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1u","req":{"method":"POST","url":"/api/v1/care/workspaces/6d43fae0-0f52-42bd-92e1-7c14109a5ff1/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820407,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1u","res":{"statusCode":200},"responseTime":7.958000000000084,"msg":"request completed"}
+{"level":30,"time":1794062820408,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1v","req":{"method":"POST","url":"/api/v1/care/workspaces/6d43fae0-0f52-42bd-92e1-7c14109a5ff1/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820419,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1v","res":{"statusCode":200},"responseTime":11.845957999999882,"msg":"request completed"}
+{"level":30,"time":1794062820420,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1w","req":{"method":"POST","url":"/api/v1/care/workspaces/6d43fae0-0f52-42bd-92e1-7c14109a5ff1/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820428,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1w","res":{"statusCode":200},"responseTime":8.38274999999976,"msg":"request completed"}
+{"level":30,"time":1794062820429,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1x","req":{"method":"POST","url":"/api/v1/care/workspaces/6d43fae0-0f52-42bd-92e1-7c14109a5ff1/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820439,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1x","res":{"statusCode":200},"responseTime":10.218124999999873,"msg":"request completed"}
+{"level":30,"time":1794062820439,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1y","req":{"method":"POST","url":"/api/v1/care/workspaces/6d43fae0-0f52-42bd-92e1-7c14109a5ff1/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820449,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1y","res":{"statusCode":200},"responseTime":9.314833000000363,"msg":"request completed"}
+{"level":30,"time":1794062820449,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1z","req":{"method":"POST","url":"/api/v1/care/workspaces/6d43fae0-0f52-42bd-92e1-7c14109a5ff1/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820458,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-1z","res":{"statusCode":200},"responseTime":8.39995799999997,"msg":"request completed"}
+{"level":30,"time":1794062820458,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-20","req":{"method":"POST","url":"/api/v1/care/workspaces/6d43fae0-0f52-42bd-92e1-7c14109a5ff1/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820467,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-20","res":{"statusCode":200},"responseTime":8.892582999999831,"msg":"request completed"}
+{"level":30,"time":1794062820468,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-21","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820475,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-21","res":{"statusCode":201},"responseTime":7.035875000000033,"msg":"request completed"}
+{"level":30,"time":1794062820475,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-22","req":{"method":"GET","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+ ✓ tests/integration/exports.test.ts (6 tests) 1415ms
+   ✓ export snapshots (6)
+     ✓ scopes direct historical-fact reads and excludes unreleased facts from patient exports 541ms
+{"level":30,"time":1794062820499,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-22","res":{"statusCode":200},"responseTime":23.907000000000153,"msg":"request completed"}
+{"level":30,"time":1794062820501,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-23","req":{"method":"GET","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820519,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-23","res":{"statusCode":200},"responseTime":17.81162499999982,"msg":"request completed"}
+{"level":30,"time":1794062820520,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-24","req":{"method":"GET","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820540,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-24","res":{"statusCode":200},"responseTime":20.234875000000102,"msg":"request completed"}
+{"level":30,"time":1794062820540,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-25","req":{"method":"GET","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820544,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-25","res":{"statusCode":403},"responseTime":3.709957999999915,"msg":"request completed"}
+{"level":30,"time":1794062820546,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-26","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820560,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-26","res":{"statusCode":201},"responseTime":13.156958000000031,"msg":"request completed"}
+{"level":30,"time":1794062820560,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-27","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820578,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-27","res":{"statusCode":200},"responseTime":17.58008400000017,"msg":"request completed"}
+{"level":30,"time":1794062820578,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-28","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820591,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-28","res":{"statusCode":200},"responseTime":13.510166000000027,"msg":"request completed"}
+{"level":30,"time":1794062820592,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-29","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/skills","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820597,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-29","res":{"statusCode":422},"responseTime":4.7834170000000995,"msg":"request completed"}
+{"level":30,"time":1794062820597,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2a","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/skills","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820605,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2a","res":{"statusCode":409},"responseTime":7.551958000000013,"msg":"request completed"}
+{"level":30,"time":1794062820605,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2b","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/skills","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820619,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2b","res":{"statusCode":201},"responseTime":14.219916999999896,"msg":"request completed"}
+{"level":30,"time":1794062820620,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2c","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/skills","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820626,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2c","res":{"statusCode":201},"responseTime":6.820291999999881,"msg":"request completed"}
+{"level":30,"time":1794062820627,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2d","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820634,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2d","res":{"statusCode":201},"responseTime":7.245042000000012,"msg":"request completed"}
+{"level":30,"time":1794062820634,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2e","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820642,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2e","res":{"statusCode":201},"responseTime":7.352415999999721,"msg":"request completed"}
+{"level":30,"time":1794062820642,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2f","req":{"method":"GET","url":"/api/v1/care/workspaces/744c8b30-3481-4b33-92fc-154083a4c0a7/skills","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820647,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2f","res":{"statusCode":200},"responseTime":4.867957999999817,"msg":"request completed"}
+{"level":30,"time":1794062820648,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2g","req":{"method":"POST","url":"/api/v1/care/workspaces/744c8b30-3481-4b33-92fc-154083a4c0a7/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/actions","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820653,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2g","res":{"statusCode":403},"responseTime":5.911207999999988,"msg":"request completed"}
+{"level":30,"time":1794062820654,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2h","req":{"method":"POST","url":"/api/v1/care/workspaces/e388be42-269e-4637-97dc-d35f6006a599/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/actions","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820658,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2h","res":{"statusCode":404},"responseTime":4.326958000000104,"msg":"request completed"}
+{"level":30,"time":1794062820658,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2i","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/actions","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820663,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2i","res":{"statusCode":409},"responseTime":4.355750000000171,"msg":"request completed"}
+{"level":30,"time":1794062820663,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2j","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/actions","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820671,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2j","res":{"statusCode":200},"responseTime":8.63037499999973,"msg":"request completed"}
+{"level":30,"time":1794062820672,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2k","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/actions","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820684,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2k","res":{"statusCode":200},"responseTime":11.554459000000406,"msg":"request completed"}
+{"level":30,"time":1794062820684,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2l","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820688,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2l","res":{"statusCode":201},"responseTime":3.88149999999996,"msg":"request completed"}
+{"level":30,"time":1794062820688,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2m","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820705,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2m","res":{"statusCode":200},"responseTime":16.73504200000025,"msg":"request completed"}
+{"level":30,"time":1794062820706,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2n","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/preview","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820728,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2n","res":{"statusCode":200},"responseTime":22.302208999999948,"msg":"request completed"}
+{"level":30,"time":1794062820728,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2o","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820754,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2o","res":{"statusCode":409},"responseTime":25.4887090000002,"msg":"request completed"}
+ ✓ tests/integration/document-queue.test.ts (1 test) 1686ms
+   ✓ returns the newest pending upload to its reviewer in a clinic with a long document history 1685ms
+{"level":30,"time":1794062820754,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2p","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820781,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2p","res":{"statusCode":200},"responseTime":26.408250000000407,"msg":"request completed"}
+{"level":30,"time":1794062820781,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2q","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+ ✓ tests/integration/review.test.ts (15 tests) 1714ms
+   ✓ review and publication (15)
+     ✓ renormalizes corrected values and removes obsolete chart eligibility for unsupported units 416ms
+{"level":30,"time":1794062820799,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2q","res":{"statusCode":200},"responseTime":17.605958999999984,"msg":"request completed"}
+{"level":30,"time":1794062820799,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2r","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/preview","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820806,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2r","res":{"statusCode":200},"responseTime":7.41412500000024,"msg":"request completed"}
+{"level":30,"time":1794062820807,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2s","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820815,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2s","res":{"statusCode":200},"responseTime":8.454334000000017,"msg":"request completed"}
+{"level":30,"time":1794062820816,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2t","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/preview","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820821,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2t","res":{"statusCode":200},"responseTime":5.357250000000022,"msg":"request completed"}
+{"level":30,"time":1794062820821,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2u","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820829,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2u","res":{"statusCode":409},"responseTime":7.693416999999954,"msg":"request completed"}
+{"level":30,"time":1794062820829,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2v","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820838,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2v","res":{"statusCode":200},"responseTime":8.236667000000125,"msg":"request completed"}
+{"level":30,"time":1794062820838,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2w","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820848,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2w","res":{"statusCode":200},"responseTime":10.157709000000068,"msg":"request completed"}
+{"level":30,"time":1794062820848,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2x","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/actions","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820858,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2x","res":{"statusCode":200},"responseTime":9.013249999999971,"msg":"request completed"}
+{"level":30,"time":1794062820858,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2y","req":{"method":"POST","url":"/api/v1/care/workspaces/4131707b-e1b9-4614-913d-bc37231b3b4f/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/preview","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820865,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2y","res":{"statusCode":200},"responseTime":7.027874999999767,"msg":"request completed"}
+{"level":30,"time":1794062820865,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2z","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/actions","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820876,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-2z","res":{"statusCode":200},"responseTime":10.443833000000268,"msg":"request completed"}
+{"level":30,"time":1794062820876,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-30","req":{"method":"POST","url":"/api/v1/care/workspaces/20bbd80b-debf-45c2-825f-eab658c115f3/skills/a3ebf517-22c2-42cf-bb2f-eec260dcd757/actions","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820882,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-30","res":{"statusCode":200},"responseTime":6.284874999999829,"msg":"request completed"}
+{"level":30,"time":1794062820883,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-31","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820888,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-31","res":{"statusCode":201},"responseTime":5.353958000000148,"msg":"request completed"}
+{"level":30,"time":1794062820889,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-32","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820895,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-32","res":{"statusCode":200},"responseTime":6.60425000000032,"msg":"request completed"}
+{"level":30,"time":1794062820896,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-33","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820903,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-33","res":{"statusCode":200},"responseTime":7.3285829999999805,"msg":"request completed"}
+{"level":30,"time":1794062820903,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-34","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/skills","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+stdout | apps/worker/src/hermes-readiness.test.ts > respects the maintenance pause for care and document work
+{"level":"info","message":"worker started","workerId":"worker-65701","concurrency":2,"extractionProvider":"fixture","extractionMode":"fixture","extractionModel":"gpt-6-luna","promptHash":"fb08314be5635c7b0ad446da47fc3f2e","storageMode":"local","ocrEnabled":true}
+
+stdout | apps/worker/src/hermes-readiness.test.ts > respects the maintenance pause for care and document work
+{"level":"info","message":"queue paused by another process; waiting","workerId":"worker-65701"}
+
+{"level":30,"time":1794062820909,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-34","res":{"statusCode":409},"responseTime":5.962625000000116,"msg":"request completed"}
+{"level":30,"time":1794062820909,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-35","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820917,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-35","res":{"statusCode":200},"responseTime":7.928875000000062,"msg":"request completed"}
+{"level":30,"time":1794062820918,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-36","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820925,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-36","res":{"statusCode":200},"responseTime":7.292834000000312,"msg":"request completed"}
+{"level":30,"time":1794062820925,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-37","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820934,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-37","res":{"statusCode":200},"responseTime":8.29404199999999,"msg":"request completed"}
+{"level":30,"time":1794062820934,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-38","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/skills","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820938,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-38","res":{"statusCode":409},"responseTime":4.256291000000147,"msg":"request completed"}
+{"level":30,"time":1794062820938,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-39","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820965,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-39","res":{"statusCode":200},"responseTime":26.82529199999999,"msg":"request completed"}
+{"level":30,"time":1794062820966,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3a","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820972,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3a","res":{"statusCode":200},"responseTime":6.527415999999903,"msg":"request completed"}
+{"level":30,"time":1794062820972,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3b","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/skills","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820981,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3b","res":{"statusCode":201},"responseTime":8.246624999999767,"msg":"request completed"}
+{"level":30,"time":1794062820981,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3c","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/skills/8c1548fe-18c2-4dc2-b29e-ffd32c0b48cb/actions","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820988,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3c","res":{"statusCode":200},"responseTime":6.61133400000017,"msg":"request completed"}
+{"level":30,"time":1794062820988,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3d","req":{"method":"POST","url":"/api/v1/care/workspaces/aa88298a-bc5d-4cd5-9087-d0c545acea7b/skills/8c1548fe-18c2-4dc2-b29e-ffd32c0b48cb/actions","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062820995,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3d","res":{"statusCode":200},"responseTime":6.9431250000002365,"msg":"request completed"}
+{"level":30,"time":1794062820995,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3e","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821000,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3e","res":{"statusCode":201},"responseTime":4.692083999999795,"msg":"request completed"}
+{"level":30,"time":1794062821000,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3f","req":{"method":"POST","url":"/api/v1/care/workspaces/0e81ae13-6639-48fc-8b93-81687110bc2e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821007,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3f","res":{"statusCode":200},"responseTime":6.565875000000233,"msg":"request completed"}
+{"level":30,"time":1794062821007,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3g","req":{"method":"POST","url":"/api/v1/care/workspaces/0e81ae13-6639-48fc-8b93-81687110bc2e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821013,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3g","res":{"statusCode":200},"responseTime":5.818499999999858,"msg":"request completed"}
+{"level":30,"time":1794062821013,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3h","req":{"method":"POST","url":"/api/v1/care/workspaces/0e81ae13-6639-48fc-8b93-81687110bc2e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821020,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3h","res":{"statusCode":200},"responseTime":6.823624999999993,"msg":"request completed"}
+{"level":30,"time":1794062821020,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3i","req":{"method":"POST","url":"/api/v1/care/workspaces/0e81ae13-6639-48fc-8b93-81687110bc2e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821027,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3i","res":{"statusCode":200},"responseTime":7.064624999999978,"msg":"request completed"}
+{"level":30,"time":1794062821028,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3j","req":{"method":"POST","url":"/api/v1/care/workspaces/0e81ae13-6639-48fc-8b93-81687110bc2e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821036,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3j","res":{"statusCode":200},"responseTime":8.090458000000126,"msg":"request completed"}
+{"level":30,"time":1794062821036,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3k","req":{"method":"POST","url":"/api/v1/care/workspaces/0e81ae13-6639-48fc-8b93-81687110bc2e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821064,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3k","res":{"statusCode":200},"responseTime":27.780499999999847,"msg":"request completed"}
+{"level":30,"time":1794062821064,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3l","req":{"method":"POST","url":"/api/v1/care/workspaces/0e81ae13-6639-48fc-8b93-81687110bc2e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+ ✓ apps/api/src/speech/speech.test.ts (6 tests) 2737ms
+   ✓ canonical PCM voice input (2)
+     ✓ checks exact decoded duration and rounds budget units up 2606ms
+{"level":30,"time":1794062821074,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3l","res":{"statusCode":200},"responseTime":9.380540999999994,"msg":"request completed"}
+{"level":30,"time":1794062821074,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3m","req":{"method":"POST","url":"/api/v1/care/workspaces/0e81ae13-6639-48fc-8b93-81687110bc2e/skills/8c1548fe-18c2-4dc2-b29e-ffd32c0b48cb/preview","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821084,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3m","res":{"statusCode":200},"responseTime":9.828125,"msg":"request completed"}
+{"level":30,"time":1794062821084,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3n","req":{"method":"POST","url":"/api/v1/care/workspaces/0e81ae13-6639-48fc-8b93-81687110bc2e/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821094,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3n","res":{"statusCode":200},"responseTime":9.964500000000044,"msg":"request completed"}
+{"level":30,"time":1794062821095,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3o","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821101,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3o","res":{"statusCode":201},"responseTime":5.728207999999995,"msg":"request completed"}
+{"level":30,"time":1794062821101,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3p","req":{"method":"POST","url":"/api/v1/care/workspaces/67d40eee-eb05-46e4-9a7b-c893c78d5b84/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821110,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3p","res":{"statusCode":200},"responseTime":8.34333400000014,"msg":"request completed"}
+{"level":30,"time":1794062821114,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3q","req":{"method":"POST","url":"/api/v1/care/workspaces/67d40eee-eb05-46e4-9a7b-c893c78d5b84/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821120,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3q","res":{"statusCode":403},"responseTime":5.778291999999965,"msg":"request completed"}
+{"level":30,"time":1794062821120,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3r","req":{"method":"POST","url":"/api/v1/care/workspaces/67d40eee-eb05-46e4-9a7b-c893c78d5b84/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821124,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3r","res":{"statusCode":422},"responseTime":4.181082999999944,"msg":"request completed"}
+{"level":30,"time":1794062821125,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3s","req":{"method":"POST","url":"/api/v1/care/workspaces/67d40eee-eb05-46e4-9a7b-c893c78d5b84/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821166,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3s","res":{"statusCode":200},"responseTime":41.75666700000011,"msg":"request completed"}
+{"level":30,"time":1794062821167,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3t","req":{"method":"POST","url":"/api/v1/care/workspaces/67d40eee-eb05-46e4-9a7b-c893c78d5b84/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821176,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3t","res":{"statusCode":200},"responseTime":8.648417000000336,"msg":"request completed"}
+{"level":30,"time":1794062821176,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3u","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821183,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3u","res":{"statusCode":201},"responseTime":6.52316699999983,"msg":"request completed"}
+{"level":30,"time":1794062821183,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3v","req":{"method":"POST","url":"/api/v1/care/workspaces/65a33e38-143c-4638-b980-7a824cecef44/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821190,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3v","res":{"statusCode":200},"responseTime":7.067625000000135,"msg":"request completed"}
+{"level":30,"time":1794062821190,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3w","req":{"method":"GET","url":"/api/v1/care/workspaces/65a33e38-143c-4638-b980-7a824cecef44/history","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821195,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3w","res":{"statusCode":200},"responseTime":4.250375000000076,"msg":"request completed"}
+{"level":30,"time":1794062821195,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3x","req":{"method":"GET","url":"/api/v1/care/workspaces/65a33e38-143c-4638-b980-7a824cecef44/history/1327","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821199,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3x","res":{"statusCode":200},"responseTime":4.323875000000044,"msg":"request completed"}
+{"level":30,"time":1794062821199,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3y","req":{"method":"GET","url":"/api/v1/care/workspaces/65a33e38-143c-4638-b980-7a824cecef44/history","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821203,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3y","res":{"statusCode":404},"responseTime":3.5079169999999067,"msg":"request completed"}
+{"level":30,"time":1794062821204,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3z","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821207,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-3z","res":{"statusCode":201},"responseTime":3.880916999999954,"msg":"request completed"}
+{"level":30,"time":1794062821208,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-40","req":{"method":"POST","url":"/api/v1/care/workspaces/283e49e4-0455-47dc-b914-d749122bd4f7/team","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821217,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-40","res":{"statusCode":200},"responseTime":9.621375000000171,"msg":"request completed"}
+{"level":30,"time":1794062821218,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-41","req":{"method":"GET","url":"/api/v1/care/workspaces/283e49e4-0455-47dc-b914-d749122bd4f7","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821222,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-41","res":{"statusCode":200},"responseTime":4.55016599999999,"msg":"request completed"}
+{"level":30,"time":1794062821223,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-42","req":{"method":"POST","url":"/api/v1/care/workspaces/283e49e4-0455-47dc-b914-d749122bd4f7/commands","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821228,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-42","res":{"statusCode":403},"responseTime":4.917917000000216,"msg":"request completed"}
+{"level":30,"time":1794062821228,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-43","req":{"method":"POST","url":"/api/v1/care/workspaces/283e49e4-0455-47dc-b914-d749122bd4f7/team","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821231,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-43","res":{"statusCode":403},"responseTime":3.5102499999998145,"msg":"request completed"}
+{"level":30,"time":1794062821231,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-44","req":{"method":"POST","url":"/api/v1/care/workspaces/283e49e4-0455-47dc-b914-d749122bd4f7/team","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821236,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-44","res":{"statusCode":200},"responseTime":4.594583000000057,"msg":"request completed"}
+{"level":30,"time":1794062821236,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-45","req":{"method":"GET","url":"/api/v1/care/workspaces/283e49e4-0455-47dc-b914-d749122bd4f7","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821239,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-45","res":{"statusCode":404},"responseTime":2.790834000000359,"msg":"request completed"}
+{"level":30,"time":1794062821239,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-46","req":{"method":"POST","url":"/api/v1/care/workspaces","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821243,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-46","res":{"statusCode":201},"responseTime":3.4555840000002718,"msg":"request completed"}
+{"level":30,"time":1794062821243,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-47","req":{"method":"POST","url":"/api/v1/care/workspaces/f5763f31-3357-4386-9529-fd44e65fc8f3/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821245,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-47","res":{"statusCode":403},"responseTime":2.1736249999999018,"msg":"request completed"}
+{"level":30,"time":1794062821246,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-48","req":{"method":"POST","url":"/api/v1/care/workspaces/f5763f31-3357-4386-9529-fd44e65fc8f3/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821249,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-48","res":{"statusCode":404},"responseTime":3.3053749999999127,"msg":"request completed"}
+{"level":30,"time":1794062821249,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-49","req":{"method":"POST","url":"/api/v1/care/workspaces/f5763f31-3357-4386-9529-fd44e65fc8f3/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821257,"pid":65706,"hostname":"wysh-m5.local","reqId":"req-49","res":{"statusCode":200},"responseTime":7.391583000000082,"msg":"request completed"}
+ ✓ tests/integration/care.test.ts (19 tests) 2237ms
+   ✓ governs reuse of a source-confirmed receipt on a new encounter with fresh B evidence 338ms
+{"level":30,"time":1794062821398,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-1","req":{"method":"POST","url":"/api/v1/uploads","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821418,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-1","res":{"statusCode":422},"responseTime":19.553874999999948,"msg":"request completed"}
+{"level":30,"time":1794062821420,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-2","req":{"method":"POST","url":"/api/v1/uploads","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821429,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-2","res":{"statusCode":201},"responseTime":9.826374999999985,"msg":"request completed"}
+{"level":30,"time":1794062821433,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-3","req":{"method":"POST","url":"/api/v1/uploads/35b16124-7ede-46c7-b049-a3a4cafbbec4/complete","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821438,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-3","res":{"statusCode":422},"responseTime":5.3597089999999525,"msg":"request completed"}
+{"level":30,"time":1794062821439,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-4","req":{"method":"GET","url":"/api/v1/uploads/35b16124-7ede-46c7-b049-a3a4cafbbec4","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821443,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-4","res":{"statusCode":200},"responseTime":4.4040410000000065,"msg":"request completed"}
+{"level":30,"time":1794062821444,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-5","req":{"method":"POST","url":"/api/v1/uploads","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821453,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-5","res":{"statusCode":201},"responseTime":8.592250000000035,"msg":"request completed"}
+{"level":30,"time":1794062821454,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-6","req":{"method":"POST","url":"/api/v1/uploads/421d3ef3-5608-454d-a2df-6aba5816be32/complete","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821458,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-6","res":{"statusCode":422},"responseTime":3.8760409999999865,"msg":"request completed"}
+{"level":30,"time":1794062821459,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-7","req":{"method":"GET","url":"/api/v1/uploads/421d3ef3-5608-454d-a2df-6aba5816be32","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821464,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-7","res":{"statusCode":200},"responseTime":4.894999999999982,"msg":"request completed"}
+{"level":30,"time":1794062821464,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-8","req":{"method":"POST","url":"/api/v1/uploads","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821469,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-8","res":{"statusCode":201},"responseTime":4.728457999999932,"msg":"request completed"}
+{"level":30,"time":1794062821471,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-9","req":{"method":"POST","url":"/api/v1/uploads/745c2e3b-f65e-4060-a1a5-fc5ed318ae0e/complete","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821477,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-9","res":{"statusCode":422},"responseTime":5.613583999999946,"msg":"request completed"}
+{"level":30,"time":1794062821477,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-a","req":{"method":"GET","url":"/api/v1/uploads/745c2e3b-f65e-4060-a1a5-fc5ed318ae0e","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821484,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-a","res":{"statusCode":200},"responseTime":6.355208999999945,"msg":"request completed"}
+{"level":30,"time":1794062821484,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-b","req":{"method":"POST","url":"/api/v1/uploads","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821489,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-b","res":{"statusCode":201},"responseTime":4.308749999999918,"msg":"request completed"}
+{"level":30,"time":1794062821489,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-c","req":{"method":"POST","url":"/api/v1/uploads/948519e4-63c6-4cad-bd11-d31c2c69dcf7/complete","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821493,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-c","res":{"statusCode":422},"responseTime":3.9400000000000546,"msg":"request completed"}
+{"level":30,"time":1794062821494,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-d","req":{"method":"POST","url":"/api/v1/uploads/948519e4-63c6-4cad-bd11-d31c2c69dcf7/complete","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821502,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-d","res":{"statusCode":202},"responseTime":7.931707999999958,"msg":"request completed"}
+{"level":30,"time":1794062821502,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-e","req":{"method":"POST","url":"/api/v1/uploads/948519e4-63c6-4cad-bd11-d31c2c69dcf7/complete","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062821507,"pid":65738,"hostname":"wysh-m5.local","reqId":"req-e","res":{"statusCode":202},"responseTime":4.452125000000024,"msg":"request completed"}
+ ✓ tests/integration/uploads.test.ts (14 tests) 673ms
+stdout | apps/worker/src/hermes-readiness.test.ts > respects the maintenance pause for care and document work
+{"level":"info","message":"worker stopped","workerId":"worker-65701"}
+
+stdout | apps/worker/src/hermes-readiness.test.ts > does not overlap monitor batches or allow duplicate runtime loops
+{"level":"info","message":"worker started","workerId":"worker-65701","concurrency":2,"extractionProvider":"fixture","extractionMode":"fixture","extractionModel":"gpt-6-luna","promptHash":"fb08314be5635c7b0ad446da47fc3f2e","storageMode":"local","ocrEnabled":true}
+
+ ✓ tests/integration/worker-scratch.test.ts (2 tests) 685ms
+   ✓ removes only the job scratch when extraction succeeded 384ms
+ ✓ tests/integration/isolation.test.ts (7 tests) 797ms
+ ✓ tests/integration/jobs.test.ts (11 tests) 538ms
+ ✓ apps/api/src/care/india-simulation.test.ts (10 tests) 773ms
+{"level":30,"time":1794062822691,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-1","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062822716,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-1","res":{"statusCode":401},"responseTime":24.871083,"msg":"request completed"}
+{"level":30,"time":1794062822718,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-2","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062822847,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-2","res":{"statusCode":200},"responseTime":128.21887500000003,"msg":"request completed"}
+{"level":30,"time":1794062822847,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-3","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062822858,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-3","res":{"statusCode":200},"responseTime":10.653749999999945,"msg":"request completed"}
+{"level":30,"time":1794062822859,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-4","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062822865,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-4","res":{"statusCode":404},"responseTime":6.138541000000032,"msg":"request completed"}
+{"level":30,"time":1794062822865,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-5","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062822869,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-5","res":{"statusCode":404},"responseTime":3.899583000000007,"msg":"request completed"}
+{"level":30,"time":1794062822870,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-6","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062822876,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-6","res":{"statusCode":403},"responseTime":5.762333000000012,"msg":"request completed"}
+{"level":30,"time":1794062822876,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-7","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062822885,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-7","res":{"statusCode":200},"responseTime":9.00120800000002,"msg":"request completed"}
+{"level":30,"time":1794062822887,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-8","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062822896,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-8","res":{"statusCode":200},"responseTime":9.766209000000003,"msg":"request completed"}
+{"level":30,"time":1794062822898,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-9","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062822902,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-9","res":{"statusCode":422},"responseTime":4.138000000000034,"msg":"request completed"}
+{"level":30,"time":1794062822903,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-a","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062822905,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-a","res":{"statusCode":422},"responseTime":2.574624999999969,"msg":"request completed"}
+{"level":30,"time":1794062822962,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-1","req":{"method":"GET","url":"/api/v1/documents/24dc3f0c-0706-4b56-a24d-4766a1c1228b/source","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+stdout | apps/worker/src/hermes-readiness.test.ts > does not overlap monitor batches or allow duplicate runtime loops
+{"level":"info","message":"worker stopped","workerId":"worker-65701"}
+
+stdout | apps/worker/src/hermes-readiness.test.ts > isolates a care batch failure so ready document work can still be leased
+{"level":"info","message":"worker started","workerId":"worker-65701","concurrency":2,"extractionProvider":"fixture","extractionMode":"fixture","extractionModel":"gpt-6-luna","promptHash":"fb08314be5635c7b0ad446da47fc3f2e","storageMode":"local","ocrEnabled":true}
+
+stdout | apps/worker/src/hermes-readiness.test.ts > isolates a care batch failure so ready document work can still be leased
+{"level":"info","message":"care monitoring batch failed","workerId":"worker-65701"}
+
+{"level":30,"time":1794062822996,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-1","res":{"statusCode":200},"responseTime":32.988666999999964,"msg":"request completed"}
+{"level":30,"time":1794062822997,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-2","req":{"method":"GET","url":"/api/v1/documents/c7843fec-4966-4731-9b21-6c89d50b117f/source","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823014,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-2","res":{"statusCode":200},"responseTime":16.46391600000004,"msg":"request completed"}
+{"level":30,"time":1794062823015,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-3","req":{"method":"GET","url":"/api/v1/documents/c7843fec-4966-4731-9b21-6c89d50b117f/source","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823023,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-3","res":{"statusCode":404},"responseTime":7.993583000000058,"msg":"request completed"}
+{"level":30,"time":1794062823024,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-4","req":{"method":"GET","url":"/api/v1/documents/24dc3f0c-0706-4b56-a24d-4766a1c1228b/source","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823038,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-4","res":{"statusCode":404},"responseTime":13.601374999999962,"msg":"request completed"}
+{"level":30,"time":1794062823049,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-5","req":{"method":"GET","url":"/api/v1/documents/c7843fec-4966-4731-9b21-6c89d50b117f/source","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823064,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-5","res":{"statusCode":404},"responseTime":14.587791999999922,"msg":"request completed"}
+{"level":30,"time":1794062823066,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-6","req":{"method":"GET","url":"/api/v1/documents/c7843fec-4966-4731-9b21-6c89d50b117f/source","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823074,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-6","res":{"statusCode":200},"responseTime":8.680875000000015,"msg":"request completed"}
+{"level":30,"time":1794062823076,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-7","req":{"method":"GET","url":"/api/v1/documents/24dc3f0c-0706-4b56-a24d-4766a1c1228b/source","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823082,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-7","res":{"statusCode":404},"responseTime":5.620374999999967,"msg":"request completed"}
+{"level":30,"time":1794062823082,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-8","req":{"method":"GET","url":"/api/v1/documents/24dc3f0c-0706-4b56-a24d-4766a1c1228b/source","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823091,"pid":65757,"hostname":"wysh-m5.local","reqId":"req-8","res":{"statusCode":200},"responseTime":8.271125000000097,"msg":"request completed"}
+ ✓ tests/integration/notes.test.ts (7 tests) 520ms
+{"level":30,"time":1794062823121,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-b","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+ ✓ tests/integration/document-source-policy.test.ts (1 test) 481ms
+{"level":30,"time":1794062823159,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-b","res":{"statusCode":200},"responseTime":38.14195799999993,"msg":"request completed"}
+ ✓ tests/integration/timeline-pagination.test.ts (3 tests) 684ms
+{"level":30,"time":1794062823174,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-1","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823181,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-1","res":{"statusCode":401},"responseTime":6.565917000000013,"msg":"request completed"}
+{"level":30,"time":1794062823182,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-2","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823187,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-c","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823197,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-2","res":{"statusCode":422},"responseTime":14.450958000000014,"msg":"request completed"}
+{"level":30,"time":1794062823197,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-3","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823200,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-3","res":{"statusCode":422},"responseTime":2.6297080000000506,"msg":"request completed"}
+{"level":30,"time":1794062823200,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-4","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823203,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-4","res":{"statusCode":422},"responseTime":2.467958000000067,"msg":"request completed"}
+{"level":30,"time":1794062823203,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-5","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823204,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-c","res":{"statusCode":200},"responseTime":16.999250000000075,"msg":"request completed"}
+{"level":30,"time":1794062823206,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-d","req":{"method":"POST","url":"/api/v1/guide/chat","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823207,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-5","res":{"statusCode":200},"responseTime":3.8358749999999873,"msg":"request completed"}
+{"level":30,"time":1794062823208,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-6","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823210,"pid":65754,"hostname":"wysh-m5.local","reqId":"req-d","res":{"statusCode":404},"responseTime":3.7554170000000795,"msg":"request completed"}
+{"level":30,"time":1794062823211,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-6","res":{"statusCode":200},"responseTime":2.730458999999996,"msg":"request completed"}
+{"level":30,"time":1794062823212,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-7","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823215,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-7","res":{"statusCode":200},"responseTime":2.912582999999927,"msg":"request completed"}
+{"level":30,"time":1794062823215,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-8","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823218,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-8","res":{"statusCode":200},"responseTime":3.24837500000001,"msg":"request completed"}
+{"level":30,"time":1794062823219,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-9","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823223,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-9","res":{"statusCode":200},"responseTime":3.967208000000028,"msg":"request completed"}
+{"level":30,"time":1794062823224,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-a","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823226,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-a","res":{"statusCode":200},"responseTime":2.623625000000061,"msg":"request completed"}
+{"level":30,"time":1794062823227,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-b","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823229,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-b","res":{"statusCode":200},"responseTime":2.245249999999942,"msg":"request completed"}
+{"level":30,"time":1794062823229,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-c","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823231,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-c","res":{"statusCode":200},"responseTime":2.284667000000013,"msg":"request completed"}
+{"level":30,"time":1794062823231,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-d","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823234,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-d","res":{"statusCode":200},"responseTime":2.0426250000000437,"msg":"request completed"}
+{"level":30,"time":1794062823234,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-e","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823236,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-e","res":{"statusCode":429},"responseTime":2.0244579999999814,"msg":"request completed"}
+{"level":30,"time":1794062823236,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-f","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823238,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-f","res":{"statusCode":429},"responseTime":1.9645839999999453,"msg":"request completed"}
+{"level":30,"time":1794062823238,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-g","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823241,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-g","res":{"statusCode":429},"responseTime":2.8919590000000426,"msg":"request completed"}
+{"level":30,"time":1794062823241,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-h","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823243,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-h","res":{"statusCode":429},"responseTime":2.3031250000000227,"msg":"request completed"}
+{"level":30,"time":1794062823244,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-i","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823246,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-i","res":{"statusCode":429},"responseTime":2.250499999999988,"msg":"request completed"}
+{"level":30,"time":1794062823246,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-j","req":{"method":"POST","url":"/api/v1/guide","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+ ✓ tests/integration/guide-chat.test.ts (7 tests) 799ms
+{"level":30,"time":1794062823249,"pid":65759,"hostname":"wysh-m5.local","reqId":"req-j","res":{"statusCode":429},"responseTime":2.9634580000000597,"msg":"request completed"}
+ ✓ tests/integration/guide.test.ts (4 tests) 278ms
+stdout | apps/worker/src/hermes-readiness.test.ts > isolates a care batch failure so ready document work can still be leased
+{"level":"info","message":"worker stopped","workerId":"worker-65701"}
+
+ ✓ apps/worker/src/hermes-readiness.test.ts (8 tests) 4274ms
+   ✓ monitors care during Hermes cold start without leasing document jobs 524ms
+   ✓ keeps care monitoring alive after readiness rejection without retrying or leasing 1005ms
+   ✓ respects the maintenance pause for care and document work 1002ms
+   ✓ does not overlap monitor batches or allow duplicate runtime loops 1062ms
+   ✓ isolates a care batch failure so ready document work can still be leased 503ms
+ ✓ tests/integration/obligation-lifecycle.test.ts (4 tests) 235ms
+{"level":30,"time":1794062823904,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-1","req":{"method":"GET","url":"/api/v1/speech/capabilities","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823908,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-1","res":{"statusCode":401},"responseTime":3.887457999999924,"msg":"request completed"}
+{"level":30,"time":1794062823909,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-2","req":{"method":"GET","url":"/api/v1/speech/capabilities","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823941,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-2","res":{"statusCode":403},"responseTime":31.26795800000002,"msg":"request completed"}
+{"level":30,"time":1794062823941,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-3","req":{"method":"GET","url":"/api/v1/speech/capabilities","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823945,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-3","res":{"statusCode":200},"responseTime":3.3822079999999914,"msg":"request completed"}
+{"level":30,"time":1794062823946,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-4","req":{"method":"GET","url":"/api/v1/speech/capabilities","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823949,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-4","res":{"statusCode":200},"responseTime":2.416541000000052,"msg":"request completed"}
+{"level":30,"time":1794062823951,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-5","req":{"method":"POST","url":"/api/v1/speech/transcribe","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823952,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-5","res":{"statusCode":415},"responseTime":0.6347090000000435,"msg":"request completed"}
+{"level":30,"time":1794062823952,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-6","req":{"method":"POST","url":"/api/v1/speech/transcribe","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823956,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-6","res":{"statusCode":422},"responseTime":4.562457999999992,"msg":"request completed"}
+{"level":30,"time":1794062823957,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-7","req":{"method":"POST","url":"/api/v1/speech/transcribe","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823958,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-7","res":{"statusCode":413},"responseTime":0.4881669999999758,"msg":"request completed"}
+{"level":30,"time":1794062823958,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-8","req":{"method":"POST","url":"/api/v1/speech/synthesize","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823962,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-8","res":{"statusCode":422},"responseTime":4.572375000000079,"msg":"request completed"}
+{"level":30,"time":1794062823964,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-9","req":{"method":"POST","url":"/api/v1/speech/synthesize","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+ ✓ tests/integration/care-team.test.ts (8 tests) 282ms
+{"level":30,"time":1794062823968,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-9","res":{"statusCode":422},"responseTime":4.370041000000015,"msg":"request completed"}
+{"level":30,"time":1794062823969,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-a","req":{"method":"POST","url":"/api/v1/speech/synthesize","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823969,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-a","res":{"statusCode":422},"responseTime":0.42916700000000674,"msg":"request completed"}
+{"level":30,"time":1794062823969,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-b","req":{"method":"POST","url":"/api/v1/speech/synthesize","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823973,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-b","res":{"statusCode":503},"responseTime":3.303042000000005,"msg":"request completed"}
+{"level":30,"time":1794062823985,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-1","req":{"method":"GET","url":"/api/v1/speech/capabilities","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823991,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-1","res":{"statusCode":200},"responseTime":6.0474590000000035,"msg":"request completed"}
+{"level":30,"time":1794062823992,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-2","req":{"method":"POST","url":"/api/v1/speech/synthesize","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062823996,"pid":65773,"hostname":"wysh-m5.local","reqId":"req-2","res":{"statusCode":429},"responseTime":3.858791999999994,"msg":"request completed"}
+ ✓ tests/integration/care-history.test.ts (3 tests) 216ms
+ ✓ tests/integration/speech.test.ts (4 tests) 357ms
+{"level":30,"time":1794062824086,"pid":65778,"hostname":"wysh-m5.local","reqId":"req-1","req":{"method":"GET","url":"/api/v1/patients/7e95599e-3527-4823-961b-3b3d41a591a8/master/snapshots/cf5e30d1-0cfd-4477-8742-ae2db31aab5d/download","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062824117,"pid":65778,"hostname":"wysh-m5.local","reqId":"req-1","res":{"statusCode":200},"responseTime":29.784625000000005,"msg":"request completed"}
+{"level":30,"time":1794062824120,"pid":65778,"hostname":"wysh-m5.local","reqId":"req-2","req":{"method":"GET","url":"/api/v1/patients/7e95599e-3527-4823-961b-3b3d41a591a8/master/snapshots/cf5e30d1-0cfd-4477-8742-ae2db31aab5d/download","remoteAddress":"127.0.0.1"},"msg":"incoming request"}
+{"level":30,"time":1794062824131,"pid":65778,"hostname":"wysh-m5.local","reqId":"req-2","res":{"statusCode":404},"responseTime":10.849542000000042,"msg":"request completed"}
+ ✓ tests/integration/master.test.ts (5 tests) 164ms
+ ✓ tests/integration/snapshot-download.test.ts (2 tests) 292ms
+ ✓ tests/integration/live-provider.test.ts (15 tests) 5151ms
+   ✓ live provider adapter (protocol stub, not a real model) (11)
+     ✓ refuses to extract when credentials or a positive budget are missing 756ms
+     ✓ gives up on a provider that never answers 1531ms
+   ✓ Hermes extraction bridge (protocol stub) (4)
+     ✓ rejects unverified and unavailable Hermes without a fixture fallback 452ms
+stdout | tests/integration/maintenance.test.ts > retention maintenance > refuses a clinic that is not a demo tenant
+Dry run maintenance for 12 demo tenant(s).
+  orphaned_upload_sessions: 0
+  expired_upload_sessions: 0
+  exports_past_retention: 0
+  documents_past_retention: 0
+  audit_events_past_retention: 0
+  objects_removed: 0
+  objects_pending: 0
+Nothing was changed. Re-run with --apply --confirm-demo to remove these rows and objects.
+
+ ✓ apps/api/src/hosted-auth.test.ts (5 tests) 204ms
+ ✓ tests/integration/care-skill-artifact.test.ts (4 tests) 228ms
+ ✓ tests/integration/maintenance.test.ts (4 tests) 171ms
+ ✓ tests/integration/care-background.test.ts (5 tests) 196ms
+(node:65802) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ tests/integration/care-continuation.test.ts (2 tests) 242ms
+ ✓ tests/integration/result-closure.test.ts (5 tests) 234ms
+ ✓ apps/api/src/guide/service.test.ts (11 tests) 157ms
+ ✓ tests/integration/provider-budget.test.ts (3 tests) 168ms
+ ✓ tests/integration/chat-progress-client.test.ts (3 tests) 84ms
+(node:65810) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ✓ tests/integration/hosted-storage.test.ts (6 tests) 65ms
+ ✓ tests/integration/obligation-read-policy.test.ts (1 test) 202ms
+ ✓ apps/api/src/guide/conversation.test.ts (16 tests) 99ms
+ ✓ tests/integration/care-hermes-bridge.test.ts (8 tests) 71ms
+ ✓ tests/integration/escalation-scope.test.ts (1 test) 220ms
+ ✓ tests/integration/demo-polish.test.ts (2 tests) 153ms
+ ✓ tests/integration/care-progress.test.ts (3 tests) 33ms
+ ✓ tests/integration/client-request.test.ts (6 tests) 28ms
+ ✓ packages/data/src/storage.test.ts (2 tests) 34ms
+ ✓ tests/integration/localization.test.ts (5 tests) 34ms
+ ✓ packages/ui/src/utils.test.ts (2 tests) 19ms
+ ✓ tests/integration/speech-wav-client.test.ts (4 tests) 25ms
+ ✓ packages/domain/src/timeline.test.ts (8 tests) 27ms
+ ✓ apps/api/src/care/transfer.test.ts (6 tests) 11ms
+ ✓ packages/domain/src/delta.test.ts (4 tests) 16ms
+ ✓ tests/extraction/evaluation-metrics.test.ts (7 tests) 6ms
+ ✓ tests/integration/care-skill-rollback.test.ts (3 tests) 11ms
+ ✓ packages/domain/src/obligation.test.ts (20 tests) 19ms
+ ✓ apps/api/src/care/bed-transfer.test.ts (2 tests) 14ms
+ ✓ apps/api/src/care/skill-artifact.test.ts (9 tests) 7ms
+ ✓ tests/integration/result-event-acl.test.ts (1 test) 21ms
+ ✓ tests/integration/worker-scan.test.ts (4 tests) 6704ms
+   ✓ the worker reads an uploaded scan (4)
+     ✓ processes both photo pages and checks later-page identity (mismatch=false) 2305ms
+     ✓ processes both photo pages and checks later-page identity (mismatch=true) 1633ms
+     ✓ extracts facts from a scanned page with no page-image callback 2485ms
+ ✓ apps/api/src/care/request-lifetime.test.ts (3 tests) 3ms
+ ✓ packages/domain/src/timeline-loading.test.ts (3 tests) 15ms
+ ✓ tests/extraction/evaluation-input.test.ts (3 tests) 5ms
+ ✓ tests/integration/language-boundary.test.ts (3 tests) 10ms
+ ✓ tests/integration/latest-measurements.test.ts (2 tests) 3ms
+ ✓ apps/api/src/errors.test.ts (1 test) 3ms
+ ✓ packages/domain/src/master.test.ts (2 tests) 4ms
+ ✓ tests/integration/speech-text.test.ts (2 tests) 3ms
+ ✓ tests/integration/composer-keys.test.ts (1 test) 2ms
+ ✓ tests/extraction/engine.test.ts (13 tests) 14632ms
+   ✓ extraction engine (13)
+     ✓ marks a blank scan unreadable instead of inventing values 13821ms
+     ✓ reads a phone photo through OCR without inventing values 457ms
+
+ Test Files  64 passed (64)
+      Tests  357 passed (357)
+   Start at  20:16:57
+   Duration  15.98s (tests 71%, import 26%, transform 3%)

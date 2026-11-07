@@ -1,0 +1,305 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Result closure":
+      - /url: /clinic/results
+      - generic: Result closure
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - heading "Review queue" [level=1]
+  - generic: Uploaded documents for this clinic
+  - button "All"
+  - button "Processing"
+  - button "Awaiting review"
+  - button "In review"
+  - button "Could not finish"
+  - button "Identity blocked"
+  - table:
+    - rowgroup:
+      - row "Uploaded Patient Document State Action":
+        - columnheader "Uploaded"
+        - columnheader "Patient"
+        - columnheader "Document"
+        - columnheader "State"
+        - columnheader "Action"
+    - rowgroup:
+      - row "Nov 07, 2026, 01:44 PM Asha Rao (synthetic) P0482 2026-09-14_lab_report_photo_a.jpg Uploaded by Asha Rao (synthetic) Awaiting review Review document Open document":
+        - cell "Nov 07, 2026, 01:44 PM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "2026-09-14_lab_report_photo_a.jpg Uploaded by Asha Rao (synthetic)":
+          - text: 2026-09-14_lab_report_photo_a.jpg
+          - generic: Uploaded by Asha Rao (synthetic)
+        - cell "Awaiting review":
+          - generic: Awaiting review
+        - cell "Review document Open document":
+          - link "Review document":
+            - /url: /clinic/review/df603e54-676d-4121-b268-c5f283d20650
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Nov 07, 2026, 01:34 PM Asha Rao (synthetic) P0482 synthetic-hermes-proof-eb17b78c-15ed-44bd-8cb8-a2e6be06b836.pdf Uploaded by Asha Rao (synthetic) Awaiting review Review document Open document":
+        - cell "Nov 07, 2026, 01:34 PM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "synthetic-hermes-proof-eb17b78c-15ed-44bd-8cb8-a2e6be06b836.pdf Uploaded by Asha Rao (synthetic)":
+          - text: synthetic-hermes-proof-eb17b78c-15ed-44bd-8cb8-a2e6be06b836.pdf
+          - generic: Uploaded by Asha Rao (synthetic)
+        - cell "Awaiting review":
+          - generic: Awaiting review
+        - cell "Review document Open document":
+          - link "Review document":
+            - /url: /clinic/review/0e548344-f9c5-4764-83bf-3c8082681ccc
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Nov 04, 2026, 01:56 AM Asha Rao (synthetic) P0482 synthetic-wrong-patient.pdf Uploaded by Dr Meera Nair (synthetic) Patient details need checking Check patient details":
+        - cell "Nov 04, 2026, 01:56 AM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "synthetic-wrong-patient.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: synthetic-wrong-patient.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Patient details need checking":
+          - generic: Patient details need checking
+        - cell "Check patient details":
+          - link "Check patient details":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Nov 04, 2026, 01:49 AM Asha Rao (synthetic) P0482 synthetic-lab.pdf Uploaded by Dr Meera Nair (synthetic) Already uploaded Open document":
+        - cell "Nov 04, 2026, 01:49 AM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "synthetic-lab.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: synthetic-lab.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Already uploaded":
+          - generic: Already uploaded
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Nov 04, 2026, 01:48 AM Asha Rao (synthetic) P0482 synthetic-lab.pdf Uploaded by Dr Meera Nair (synthetic) Already uploaded Open document":
+        - cell "Nov 04, 2026, 01:48 AM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "synthetic-lab.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: synthetic-lab.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Already uploaded":
+          - generic: Already uploaded
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Nov 04, 2026, 01:48 AM Asha Rao (synthetic) P0482 synthetic-lab.pdf Uploaded by Dr Meera Nair (synthetic) Already uploaded Open document":
+        - cell "Nov 04, 2026, 01:48 AM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "synthetic-lab.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: synthetic-lab.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Already uploaded":
+          - generic: Already uploaded
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Oct 21, 2026, 01:44 PM Asha Rao (synthetic) P0482 synthetic-lab.pdf Uploaded by Asha Rao (synthetic) Already uploaded Open document":
+        - cell "Oct 21, 2026, 01:44 PM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "synthetic-lab.pdf Uploaded by Asha Rao (synthetic)":
+          - text: synthetic-lab.pdf
+          - generic: Uploaded by Asha Rao (synthetic)
+        - cell "Already uploaded":
+          - generic: Already uploaded
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Oct 04, 2026, 03:18 AM Asha Rao (synthetic) P0482 synthetic-lab.pdf Uploaded by Dr Meera Nair (synthetic) Already uploaded Open document":
+        - cell "Oct 04, 2026, 03:18 AM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "synthetic-lab.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: synthetic-lab.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Already uploaded":
+          - generic: Already uploaded
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Oct 04, 2026, 02:40 AM Asha Rao (synthetic) P0482 synthetic-lab.pdf Uploaded by Dr Meera Nair (synthetic) Approved Open document":
+        - cell "Oct 04, 2026, 02:40 AM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "synthetic-lab.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: synthetic-lab.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Approved":
+          - generic: Approved
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Oct 04, 2026, 12:11 AM Asha Rao (synthetic) P0482 synthetic-deployment-audit-2026-10-04.pdf Uploaded by Asha Rao (synthetic) Approved Open document":
+        - cell "Oct 04, 2026, 12:11 AM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "synthetic-deployment-audit-2026-10-04.pdf Uploaded by Asha Rao (synthetic)":
+          - text: synthetic-deployment-audit-2026-10-04.pdf
+          - generic: Uploaded by Asha Rao (synthetic)
+        - cell "Approved":
+          - generic: Approved
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Oct 03, 2026, 10:26 PM Asha Rao (synthetic) P0482 synthetic-smoke-2026-10-03.pdf Uploaded by Asha Rao (synthetic) Approved Open document":
+        - cell "Oct 03, 2026, 10:26 PM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "synthetic-smoke-2026-10-03.pdf Uploaded by Asha Rao (synthetic)":
+          - text: synthetic-smoke-2026-10-03.pdf
+          - generic: Uploaded by Asha Rao (synthetic)
+        - cell "Approved":
+          - generic: Approved
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Oct 03, 2026, 08:52 PM Asha Rao (synthetic) P0482 2026-06-11_foot_examination.pdf Uploaded by Dr Meera Nair (synthetic) Approved Open document":
+        - cell "Oct 03, 2026, 08:52 PM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "2026-06-11_foot_examination.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: 2026-06-11_foot_examination.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Approved":
+          - generic: Approved
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Oct 03, 2026, 08:51 PM Asha Rao (synthetic) P0482 2026-05-20_eye_examination.pdf Uploaded by Dr Meera Nair (synthetic) Approved Open document":
+        - cell "Oct 03, 2026, 08:51 PM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "2026-05-20_eye_examination.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: 2026-05-20_eye_examination.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Approved":
+          - generic: Approved
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Oct 03, 2026, 08:51 PM Asha Rao (synthetic) P0482 2026-03-02_prescription.pdf Uploaded by Dr Meera Nair (synthetic) Approved Open document":
+        - cell "Oct 03, 2026, 08:51 PM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "2026-03-02_prescription.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: 2026-03-02_prescription.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Approved":
+          - generic: Approved
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Oct 03, 2026, 08:51 PM Asha Rao (synthetic) P0482 2026-07-09_lab_report.pdf Uploaded by Dr Meera Nair (synthetic) Approved Open document":
+        - cell "Oct 03, 2026, 08:51 PM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "2026-07-09_lab_report.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: 2026-07-09_lab_report.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Approved":
+          - generic: Approved
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Oct 03, 2026, 08:50 PM Asha Rao (synthetic) P0482 2026-04-10_lab_report.pdf Uploaded by Dr Meera Nair (synthetic) Approved Open document":
+        - cell "Oct 03, 2026, 08:50 PM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "2026-04-10_lab_report.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: 2026-04-10_lab_report.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Approved":
+          - generic: Approved
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - row "Oct 03, 2026, 08:50 PM Asha Rao (synthetic) P0482 2026-01-12_lab_report.pdf Uploaded by Dr Meera Nair (synthetic) Approved Open document":
+        - cell "Oct 03, 2026, 08:50 PM"
+        - cell "Asha Rao (synthetic) P0482":
+          - link "Asha Rao (synthetic)":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+          - generic: P0482
+        - cell "2026-01-12_lab_report.pdf Uploaded by Dr Meera Nair (synthetic)":
+          - text: 2026-01-12_lab_report.pdf
+          - generic: Uploaded by Dr Meera Nair (synthetic)
+        - cell "Approved":
+          - generic: Approved
+        - cell "Open document":
+          - link "Open document":
+            - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+  - paragraph: 17 row(s) shown · Queue progress comes from committed server stages, polled while this screen is visible.
+- region "Notifications"

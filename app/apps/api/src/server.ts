@@ -1,4 +1,6 @@
+import { registerCareRoutes } from './care/routes';
 import { registerGuideRoutes } from './guide/routes';
+import { registerSpeechRoutes } from './speech/routes';
 import { registerMasterRoutes } from './routes/master';
 import { registerDeltaRoutes } from './routes/delta';
 import cors from '@fastify/cors';
@@ -99,6 +101,8 @@ export async function buildServer(existingContext?: AppContext): Promise<Fastify
     });
 
     registerGuideRoutes(instance, ctx);
+    registerSpeechRoutes(instance, ctx);
+    registerCareRoutes(instance, ctx);
     registerPatientRoutes(instance, ctx);
     registerMasterRoutes(instance, ctx);
     // The pre-visit delta is quarantined from this product. A derived comparison
@@ -111,20 +115,8 @@ export async function buildServer(existingContext?: AppContext): Promise<Fastify
     registerUploadRoutes(instance, ctx);
   });
 
-  // The critical clock is not theatre: every open, overdue receipt is escalated
-  // on a timer, and a queued notification row is written. The delivery adapter is
-  // intentionally separate so the evidence never claims a message was delivered.
-  if (process.env.NODE_ENV !== 'test' && process.env.RESULT_ESCALATION_DISABLED !== 'true') {
-    const timer = setInterval(() => {
-      void withTransaction(ctx.pool, { role: ctx.config.apiRole }, (client) =>
-        client.query('select sutra.escalate_overdue_results(null)'),
-      ).catch((error: unknown) => {
-        app.log.error({ err: error instanceof Error ? error.message : 'unknown' }, 'overdue escalation failed');
-      });
-    }, 60_000);
-    timer.unref();
-    app.addHook('onClose', async () => clearInterval(timer));
-  }
+  // Escalation is an explicit clinic-scoped action. A future scheduler needs
+  // its own constrained identity and durable delivery; the API cannot run globally.
 
   return app;
 }

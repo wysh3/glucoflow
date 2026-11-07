@@ -4,11 +4,9 @@ import {
   createConversationService,
   type ConversationRecords,
 } from './conversation';
-import {
-  createGuideBudget,
-  createGuideService,
-  type GuideConfig,
-} from './service';
+import { createGuideService } from './service';
+import { createGuideBudget, type GuideConfig } from './planner';
+import { RECORD_PLAN_PROMPT } from './prompts';
 import type {
   GuideChatRequest,
   TimelineObservation,
@@ -20,7 +18,7 @@ afterEach(async () => {
 });
 const config: GuideConfig = {
   mode: 'local',
-  baseUrl: '',
+  hermes: null,
   hourlyLimit: 3,
   maxConcurrent: 2,
   timeoutMs: 100,
@@ -184,7 +182,9 @@ it('does not select another test for unknown names or label a generic result pre
 async function provider(plan: unknown, delay = 0) {
   let calls = 0,
     body: Record<string, unknown> = {};
+  let path: string | undefined;
   listener = createServer((req, res) => {
+    path = req.url;
     calls++;
     let data = '';
     req.on('data', (c) => (data += c));
@@ -194,6 +194,10 @@ async function provider(plan: unknown, delay = 0) {
         res.writeHead(200, { 'content-type': 'application/json' });
         res.end(
           JSON.stringify({
+            engine: 'hermes',
+            runtimeVersion: '0.23.0',
+            model: 'gpt-6-luna',
+            usage: { prompt_tokens: null, completion_tokens: null },
             choices: [
               {
                 message: {
@@ -211,12 +215,13 @@ async function provider(plan: unknown, delay = 0) {
   const address = listener.address();
   if (!address || typeof address === 'string') throw Error();
   return {
-    baseUrl: `http://127.0.0.1:${address.port}`,
+    hermes: { url: new URL(`http://127.0.0.1:${address.port}`), token: 'synthetic-hermes-service-token' },
     calls: () => calls,
     body: () => body,
+    path: () => path,
   };
 }
-it('uses Luna to resolve a natural question but sends no patient records or identity', async () => {
+it('uses Hermes to resolve a natural question while keeping patient records and identity out of the request', async () => {
   const p = await provider({
     kind: 'measurements',
     testCode: 'hba1c',
@@ -226,24 +231,37 @@ it('uses Luna to resolve a natural question but sends no patient records or iden
   const a = await createConversationService({
     ...config,
     mode: 'live',
-    apiKey: 'synthetic',
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
   }).answer(
     question('Can you bring up the sugar marker?'),
-    records,
+    {
+      ...records,
+      timeline: {
+        ...records.timeline,
+        observations: records.timeline.observations.map((item) => ({ ...item, displayName: 'Private display label' })),
+      },
+    },
     'clinician',
   );
   expect(a.mode).toBe('live');
   expect(a.cards.length).toBe(3);
   expect(p.body()).toMatchObject({
     model: 'gpt-6-luna',
-    reasoning_effort: 'none',
     max_completion_tokens: 300,
-    store: false,
+    response_format: { type: 'json_object' },
+    messages: [
+      { role: 'system', content: RECORD_PLAN_PROMPT },
+      { role: 'user', content: JSON.stringify({
+        screen: 'overview', role: 'clinician', availableTests: [{ code: 'hba1c', name: 'HbA1c' }],
+        previousQuestions: [], question: 'Can you bring up the sugar marker?',
+      }) },
+    ],
   });
+  expect(p.path()).toBe('/record-plan');
   const sent = JSON.stringify(p.body());
   for (const secret of [
     'Synthetic Asha',
+    'Private display label',
     '11111111-1111',
     '7.8%',
     '2026-10-03',
@@ -261,8 +279,7 @@ it('rejects provider prose, unrecognized codes and extra instructions', async ()
   const a = await createConversationService({
     ...config,
     mode: 'live',
-    apiKey: 'synthetic',
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
   }).answer(question('latest HbA1c'), records, 'patient');
   expect(a.mode).toBe('local');
   expect(a.cards[0]?.id).toBe('latest');
@@ -278,8 +295,7 @@ it('shares bounded call budget with navigation help and returns honest fallback'
   const live = {
     ...config,
     mode: 'live' as const,
-    apiKey: 'synthetic',
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
     budget: createGuideBudget(1, 2),
   };
   await createConversationService(live).answer(
@@ -303,8 +319,7 @@ it('times out without fabricating a live answer', async () => {
   const a = await createConversationService({
     ...config,
     mode: 'live',
-    apiKey: 'synthetic',
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
     timeoutMs: 10,
   }).answer(question('summary'), records, 'patient');
   expect(a.mode).toBe('local');
@@ -341,8 +356,7 @@ it('blocks clinical requests before using provider budget', async () => {
   const a = await createConversationService({
     ...config,
     mode: 'live',
-    apiKey: 'synthetic',
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
   }).answer(question('Please recommend a treatment'), records, 'patient');
   expect(a.cards).toEqual([]);
   expect(p.calls()).toBe(0);
@@ -357,8 +371,7 @@ it('does not trust an unknown provider test code', async () => {
   const a = await createConversationService({
     ...config,
     mode: 'live',
-    apiKey: 'synthetic',
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
   }).answer(question('latest HbA1c'), records, 'patient');
   expect(a.mode).toBe('local');
   expect(a.cards[0]?.detail).toBe('7.8 %');

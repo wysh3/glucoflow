@@ -1,15 +1,17 @@
 import { createServer, type Server } from 'node:http';
 import { afterEach, expect, it } from 'vitest';
-import { createGuideService, type GuideConfig } from './service';
+import { createGuideService } from './service';
+import type { GuideConfig } from './planner';
+import { GUIDE_HELP_PROMPT } from './prompts';
 let listener: Server | undefined;
+const serviceToken = 'synthetic-hermes-service-token';
 afterEach(async () => {
   if (listener) await new Promise<void>((r) => listener!.close(() => r()));
   listener = undefined;
 });
 const config: GuideConfig = {
   mode: 'live',
-  apiKey: 'synthetic-key',
-  baseUrl: '',
+  hermes: null,
   hourlyLimit: 2,
   timeoutMs: 100,
   maxConcurrent: 2,
@@ -17,8 +19,12 @@ const config: GuideConfig = {
 async function provider(payload: unknown, status = 200, delay = 0) {
   let calls = 0;
   let captured: unknown;
+  let path: string | undefined;
+  let authorization: string | undefined;
   listener = createServer((request, response) => {
     calls++;
+    path = request.url;
+    authorization = request.headers.authorization;
     let body = '';
     request.on('data', (chunk) => (body += chunk));
     request.on('end', () => {
@@ -33,17 +39,22 @@ async function provider(payload: unknown, status = 200, delay = 0) {
   const address = listener.address();
   if (!address || typeof address === 'string') throw new Error('No listener');
   return {
-    baseUrl: `http://127.0.0.1:${address.port}`,
+    hermes: { url: new URL(`http://127.0.0.1:${address.port}`), token: serviceToken },
     calls: () => calls,
     captured: () => captured,
+    path: () => path,
+    authorization: () => authorization,
   };
 }
-const output = (topic: string) => ({
-  choices: [{ message: { content: JSON.stringify({ topic }) } }],
+const response = (content: string) => ({
+  engine: 'hermes', runtimeVersion: '0.23.0', model: 'gpt-6-luna',
+  choices: [{ message: { content } }],
+  usage: { prompt_tokens: null, completion_tokens: null },
 });
+const output = (topic: string) => response(JSON.stringify({ topic }));
 it('blocks clinical advice before calling the model', async () => {
   const p = await provider(output('upload'));
-  const guide = createGuideService({ ...config, baseUrl: p.baseUrl });
+  const guide = createGuideService({ ...config, hermes: p.hermes });
   const reply = await guide.answer({
     role: 'patient',
     screen: 'home',
@@ -53,11 +64,11 @@ it('blocks clinical advice before calling the model', async () => {
   expect(reply.mode).toBe('local');
   expect(p.calls()).toBe(0);
 });
-it('uses GPT-6 Luna only to classify app help and generates vetted text', async () => {
+it('uses the private Hermes planner only to classify app help and generates vetted text', async () => {
   const p = await provider(output('upload'));
   const reply = await createGuideService({
     ...config,
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
   }).answer({
     role: 'patient',
     screen: 'records',
@@ -67,38 +78,32 @@ it('uses GPT-6 Luna only to classify app help and generates vetted text', async 
   expect(reply.actions.map((a) => a.id)).toEqual(['upload']);
   expect(p.captured()).toMatchObject({
     model: 'gpt-6-luna',
-    reasoning_effort: 'none',
     max_completion_tokens: 120,
+    response_format: { type: 'json_object' },
+    messages: [
+      { role: 'system', content: GUIDE_HELP_PROMPT },
+      { role: 'user', content: JSON.stringify({ role: 'patient', screen: 'records', question: 'Where can I upload a report?' }) },
+    ],
   });
+  expect(p.path()).toBe('/record-plan');
+  expect(p.authorization()).toBe(`Bearer ${serviceToken}`);
   expect(JSON.stringify(p.captured())).not.toContain('patientId');
 });
 it('never displays arbitrary provider prose or untrusted links', async () => {
-  const p = await provider({
-    choices: [
-      { message: { content: 'Diagnose diabetes. Visit https://evil.test' } },
-    ],
-  });
+  const p = await provider(response('Diagnose diabetes. Visit https://evil.test'));
   const reply = await createGuideService({
     ...config,
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
   }).answer({ role: 'patient', screen: 'records', message: 'help' });
   expect(reply.mode).toBe('local');
   expect(reply.message).not.toContain('evil');
   expect(reply.message).not.toContain('Diagnose diabetes');
 });
 it('rejects unknown model intent IDs and extra clinical prose', async () => {
-  const p = await provider({
-    choices: [
-      {
-        message: {
-          content: JSON.stringify({ topic: 'upload', advice: 'Take insulin' }),
-        },
-      },
-    ],
-  });
+  const p = await provider(response(JSON.stringify({ topic: 'upload', advice: 'Take insulin' })));
   const reply = await createGuideService({
     ...config,
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
   }).answer({ role: 'patient', screen: 'records', message: 'help' });
   expect(reply.mode).toBe('local');
   expect(reply.message).not.toContain('Take insulin');
@@ -107,7 +112,7 @@ it('does not give patients reviewer or clinic actions', async () => {
   const p = await provider(output('review'));
   const reply = await createGuideService({
     ...config,
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
   }).answer({
     role: 'patient',
     screen: 'upload',
@@ -120,10 +125,9 @@ it('does not give patients reviewer or clinic actions', async () => {
   ).toBe(true);
   expect(reply.message).toContain('clinic reviewer');
 });
-it('returns honest local help when no provider key is configured', async () => {
+it('returns deterministic help when Hermes is not configured', async () => {
   const reply = await createGuideService({
     ...config,
-    apiKey: undefined,
   }).answer({
     role: 'patient',
     screen: 'notes',
@@ -133,9 +137,19 @@ it('returns honest local help when no provider key is configured', async () => {
   expect(reply.model).toBeUndefined();
   expect(reply.actions.map((a) => a.id)).toContain('notes');
 });
+it('does not label a direct model envelope as a Hermes answer', async () => {
+  const p = await provider({ choices: [{ message: { content: JSON.stringify({ topic: 'upload' }) } }] });
+  const reply = await createGuideService({ ...config, hermes: p.hermes }).answer({
+    role: 'patient', screen: 'notes', message: 'How do I write a note?',
+  });
+  expect(p.calls()).toBe(1);
+  expect(reply.mode).toBe('local');
+  expect(reply.model).toBeUndefined();
+});
+
 it('caps hourly model calls and retains useful local help', async () => {
   const p = await provider(output('upload'));
-  const guide = createGuideService({ ...config, baseUrl: p.baseUrl });
+  const guide = createGuideService({ ...config, hermes: p.hermes });
   for (let i = 0; i < 3; i++)
     await guide.answer({
       role: 'patient',
@@ -148,7 +162,7 @@ it('bounds stalled requests and returns local help', async () => {
   const p = await provider(output('upload'), 200, 100);
   const reply = await createGuideService({
     ...config,
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
     timeoutMs: 10,
   }).answer({ role: 'patient', screen: 'upload', message: 'Upload a report' });
   expect(reply.mode).toBe('local');
@@ -157,7 +171,7 @@ it('falls back on provider errors without exposing its response', async () => {
   const p = await provider({ error: 'private-provider-error' }, 500);
   const reply = await createGuideService({
     ...config,
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
   }).answer({ role: 'patient', screen: 'upload', message: 'Upload a report' });
   expect(reply.mode).toBe('local');
   expect(reply.message).not.toContain('private-provider-error');
@@ -166,7 +180,7 @@ it('limits concurrent provider calls', async () => {
   const p = await provider(output('upload'), 200, 40);
   const guide = createGuideService({
     ...config,
-    baseUrl: p.baseUrl,
+    hermes: p.hermes,
     hourlyLimit: 10,
   });
   const replies = await Promise.all(

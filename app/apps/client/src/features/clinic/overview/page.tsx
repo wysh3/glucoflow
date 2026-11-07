@@ -1,3 +1,5 @@
+import { useI18n } from '../../../i18n';
+import { latestMeasurements } from '../../../lib/latest-measurements';
 import * as React from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import {
@@ -24,33 +26,27 @@ import {
 } from '@glucoflow/ui';
 import {
   useTimeline,
-  useDelta,
   useCreateExport,
   useExportStatus,
 } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
-import { ConflictNotice } from '../../../components/conflict-notice';
 import { SystemPageHeader } from '../../../components/system-page-header';
 import { useSourcePane } from '../../../components/source-pane';
 import { describeApiError } from '../../../auth/session';
 import { openAuthorizedUrl } from '../../../platform/download';
 
 export function VisitOverviewPage(): React.ReactElement {
+  const { dateOnly } = useI18n();
   const patient = useOutletContext<PatientSummaryDto>();
   const timeline = useTimeline(patient.patientId, { testCodes: [] });
-  const delta = useDelta(patient.patientId);
   const source = useSourcePane();
+  const [measurementLimit, setMeasurementLimit] = React.useState(6);
   const [error, setError] = React.useState<string | null>(null);
   const [exportId, setExportId] = React.useState<string | null>(null);
   const exportJob = useCreateExport(patient.patientId);
   const exportStatus = useExportStatus(exportId);
   const data = timeline.data;
   const measurements = React.useMemo(() => {
-    const latest = new Map<string, TimelineObservation>();
-    for (const entry of [...(data?.observations ?? [])].sort((a, b) =>
-      (b.date ?? '').localeCompare(a.date ?? ''),
-    ))
-      if (!latest.has(entry.testCode)) latest.set(entry.testCode, entry);
     const order = [
       'hba1c',
       'glucose_fasting',
@@ -65,11 +61,19 @@ export function VisitOverviewPage(): React.ReactElement {
       'triglycerides',
       'weight',
     ];
-    return [...latest.values()].sort((a, b) => {
+    const ordered = latestMeasurements(data?.observations ?? []).sort((a, b) => {
       const rank = (code: string) =>
         order.includes(code) ? order.indexOf(code) : 99;
       return rank(a.testCode) - rank(b.testCode);
     });
+    const seen = new Set<string>();
+    const first: TimelineObservation[] = [], additional: TimelineObservation[] = [];
+    for (const entry of ordered) {
+      const key = JSON.stringify([entry.testCode, entry.unit ?? entry.rawUnit]);
+      (seen.has(key) ? additional : first).push(entry);
+      seen.add(key);
+    }
+    return [...first, ...additional];
   }, [data?.observations]);
   const openSource = async (entry: TimelineObservation | TimelineEvent) => {
     setError(null);
@@ -122,7 +126,7 @@ export function VisitOverviewPage(): React.ReactElement {
                       <p className="text-sm font-medium">{event.label}</p>
                       <p className="mt-1 text-xs text-ink-soft">
                         {event.date
-                          ? formatDateOnly(event.date)
+                          ? dateOnly(event.date, event.datePrecision) || event.dateRaw || 'No recorded date'
                           : event.dateRaw || 'No recorded date'}
                       </p>
                       {event.detail ? (
@@ -163,9 +167,7 @@ export function VisitOverviewPage(): React.ReactElement {
   return (
     <div className="space-y-5">
       <SystemPageHeader
-        index="03"
-        label="Patient record / Overview"
-        title="Visit overview"
+          title="Visit overview"
         meta="Approved records, their sources and the patient’s own notes in one view."
         actions={
           <Button
@@ -182,27 +184,6 @@ export function VisitOverviewPage(): React.ReactElement {
           </Button>
         }
       />
-      <ConflictNotice patientId={patient.patientId} items={delta.data?.blocks.conflict ?? []} />
-      <div className="flex flex-wrap gap-2">
-        <Button asChild variant="secondary">
-          <Link to="../progression">
-            <Activity size={16} aria-hidden />
-            Full progression
-          </Link>
-        </Button>
-        <Button asChild variant="secondary">
-          <Link to="../documents">
-            <FileText size={16} aria-hidden />
-            Source reports
-          </Link>
-        </Button>
-        <Button asChild variant="secondary">
-          <Link to="../master">
-            Home reports
-            <Activity size={15} aria-hidden />
-          </Link>
-        </Button>
-      </div>
       {error ? (
         <Alert tone="error" title="This action could not finish">
           {error}
@@ -260,23 +241,22 @@ export function VisitOverviewPage(): React.ReactElement {
                   Latest approved measurements
                 </h2>
                 <span className="text-xs text-ink-soft">
-                  Dates belong to each source record
+                  Same-day results and uncertain dates remain separate
                 </span>
               </div>
               {measurements.length ? (
-                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {measurements.map((entry) => (
+                <div className="divide-y divide-line rounded-xl border border-line bg-surface px-4">
+                  {measurements.slice(0, measurementLimit).map((entry) => (
                     <article
                       key={entry.factId}
-                      className="rounded-2xl border border-line bg-surface p-4"
+                      className="record-measurement-row grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 py-3"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <p className="text-sm font-medium text-ink-soft">
                           {entry.displayName}
                         </p>
-                        <Badge tone="success">Approved</Badge>
                       </div>
-                      <p className="mt-3 text-2xl font-semibold tracking-tight tabular-nums">
+                      <p className="text-right text-lg font-semibold tabular-nums">
                         {entry.numericValue ?? entry.rawValue ?? 'Source only'}
                         <span className="ml-1.5 text-sm font-normal text-ink-soft">
                           {entry.unit ?? entry.rawUnit}
@@ -284,14 +264,14 @@ export function VisitOverviewPage(): React.ReactElement {
                       </p>
                       <p className="mt-2 text-xs text-ink-soft">
                         {entry.date
-                          ? formatDateOnly(entry.date)
+                          ? dateOnly(entry.date, entry.datePrecision) || 'No recorded date'
                           : 'No recorded date'}{' '}
                         · {entry.dateKind.replace(/_/g, ' ')}
                       </p>
                       <Button
                         variant="quiet"
                         size="sm"
-                        className="mt-3 -ml-2"
+                        className="justify-self-end px-2"
                         aria-label={`Open source for ${entry.displayName}`}
                         onClick={() => void openSource(entry)}
                       >
@@ -312,6 +292,12 @@ export function VisitOverviewPage(): React.ReactElement {
                   </CardBody>
                 </Card>
               )}
+              {measurements.length > measurementLimit ? (
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-sm text-ink-soft">Showing {measurementLimit} of {measurements.length} records, including same-day and uncertain-date entries.</p>
+                  <Button onClick={() => setMeasurementLimit(limit => limit + 6)}>Show more measurements</Button>
+                </div>
+              ) : null}
             </section>
             <div className="grid items-start gap-4 xl:grid-cols-2">
               {eventPanel(

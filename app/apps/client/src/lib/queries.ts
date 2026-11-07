@@ -8,9 +8,6 @@ import {
 import type {
   AuditEventDto,
   CursorPage,
-  DeltaAction,
-  DeltaDisposition,
-  DeltaSummary,
   DocumentDto,
   ExportJobDto,
   JobDto,
@@ -210,33 +207,6 @@ export function useExportStatus(exportId: string | null): UseQueryResult<ExportJ
     },
   });
 }
-
-export function useDelta(patientId: string | undefined) {
-  const api = useApi();
-  const actor = useActorKey();
-  return useQuery({
-    queryKey: ['delta', actor, patientId],
-    enabled: Boolean(patientId),
-    queryFn: () => api.request<DeltaSummary>(`/api/v1/patients/${patientId}/delta`),
-  });
-}
-
-export function useRecordDeltaDisposition(patientId: string | undefined) {
-  const api = useApi();
-  const actor = useActorKey();
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input: { itemId: string; action: DeltaAction; note?: string }) =>
-      api.request<DeltaDisposition>(`/api/v1/patients/${patientId}/delta/dispositions`, {
-        method: 'POST',
-        body: input,
-      }),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['delta', actor, patientId] });
-    },
-  });
-}
-
 
 export function useResults(filter: ResultFilter) {
   const api = useApi();

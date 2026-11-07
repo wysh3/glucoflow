@@ -1,3 +1,4 @@
+import { LoadingOrb } from './loading-orb';
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../utils';
@@ -93,10 +94,7 @@ export function Alert({
 export function Spinner({ label = 'Loading' }: { label?: string }): React.ReactElement {
   return (
     <span className="inline-flex items-center gap-2 text-sm text-ink-soft" role="status" aria-live="polite">
-      <span
-        aria-hidden
-        className="h-4 w-4 animate-spin rounded-full border-2 border-line border-t-primary motion-reduce:animate-none"
-      />
+      <LoadingOrb />
       {label}
     </span>
   );

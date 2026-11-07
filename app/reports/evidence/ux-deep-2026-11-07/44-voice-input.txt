@@ -1,0 +1,95 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Records":
+      - /url: /patient/records
+      - generic: Records
+    - link "Home readings":
+      - /url: /patient/master
+      - generic: Home readings
+    - link "Add report":
+      - /url: /patient/add-report
+      - generic: Add report
+    - link "Visit notes":
+      - /url: /patient/visit-notes
+      - generic: Visit notes
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Asha Rao (synthetic)
+  - paragraph: Patient
+- separator "Resize sidebar"
+- generic "Patient workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - heading "Visit notes" [level=1]
+  - generic: Notes you write stay patient-reported
+  - heading "New note" [level=2]
+  - text: Category
+  - combobox "Category":
+    - generic: Diet / activity
+  - text: Event date (optional)
+  - textbox "Event date (optional)"
+  - text: Note
+  - textbox "Note":
+    - /placeholder: "For example: took the evening tablet most days, walked after dinner."
+  - button "Voice input" [expanded] [active]:
+    - text: Voice input
+  - region "Voice input":
+    - generic: Audio language
+    - combobox "Audio language":
+      - generic: English (India)
+    - button "Record"
+    - button "Upload WAV"
+    - paragraph: Record up to 30 seconds or choose a 16 kHz mono PCM WAV.
+  - paragraph: 0 of 1000 characters. The submission date is recorded separately from the event date.
+  - button "Review and send" [disabled]
+  - paragraph: A note is never converted into a measured result, and it does not change your record.
+  - heading "Sent notes" [level=2]
+  - list:
+    - generic: Diet / activity
+    - generic: submitted 04 November 2026 · version 1
+    - paragraph: "QA audit note: felt fine after walking."
+    - generic: No event date given
+    - generic: ·
+    - generic: Patient-reported
+    - button "Send a corrected version"
+    - generic: Diet / activity
+    - generic: submitted 04 October 2026 · version 2
+    - paragraph: Walked 30 minutes after dinner on most days this month; reduced sweet tea to one cup a day.
+    - generic: No event date given
+    - generic: ·
+    - generic: Patient-reported
+    - button "Send a corrected version"
+    - generic: Diet / activity
+    - generic: submitted 03 October 2026 · version 1
+    - paragraph: Walked 30 minutes after dinner on most days this month; reduced sweet tea to one cup a day.
+    - generic: Event date 10 September 2026
+    - generic: ·
+    - generic: Patient-reported
+    - button "Send a corrected version"
+- region "Notifications"
+- generic: "6.51"

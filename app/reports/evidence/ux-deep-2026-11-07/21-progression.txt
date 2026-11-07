@@ -1,0 +1,171 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Result closure":
+      - /url: /clinic/results
+      - generic: Result closure
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Current patient
+  - paragraph: Asha Rao (synthetic)
+  - paragraph: P0482
+  - navigation "Patient record sections":
+    - link "Visit overview":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/overview
+      - generic: Visit overview
+    - link "Progression" [active]:
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/progression
+      - generic: Progression
+    - link "Documents":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - generic: Documents
+    - link "Home reports":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/master
+      - generic: Home reports
+    - link "Record history":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/history
+      - generic: Record history
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - heading "Asha Rao (synthetic)" [level=1]
+  - generic: P0482
+  - generic: ·
+  - generic: Approval revision 10
+  - generic: 2 documents awaiting review
+  - generic: ·
+  - generic: Latest recorded result 03 October 2026
+  - generic: Search this patient's records
+  - textbox "Search this patient's records":
+    - /placeholder: Search records
+  - button "Search this patient's records":
+    - generic: Search
+  - heading "Progression" [level=1]
+  - generic: "All recorded dates · Tests: HbA1c · 7 recorded results in approved records"
+  - button "Export visit summary"
+  - text: Test
+  - combobox "Test":
+    - generic: HbA1c
+  - text: Compare
+  - combobox "Compare":
+    - generic: One panel
+  - text: Range
+  - combobox "Range":
+    - generic: All
+  - button "Plot"
+  - button "Table"
+  - heading "Most recent recorded HbA1c" [level=2]
+  - generic: 6.73 %
+  - generic: 03 October 2026
+  - button "Open source"
+  - paragraph:
+    - text: HbA1c
+    - generic: · %
+  - paragraph: 7 recorded results
+  - application:
+    - generic: Jan 26
+    - generic: Apr 26
+    - generic: Jul 26
+    - generic: Oct 26
+    - generic: "6.51"
+    - generic: "7.01"
+    - generic: "7.51"
+    - generic: "8.01"
+    - generic: "8.42"
+  - paragraph: Lines connect recorded results.
+  - heading "Prescriptions" [level=2]
+  - generic: Metformin
+  - generic: 02 March 2026
+  - paragraph: 500 mg · twice daily after meals
+  - generic: Prescription
+  - button "Open source"
+  - generic: Atorvastatin
+  - generic: 02 March 2026
+  - paragraph: 10 mg · once daily at bedtime
+  - generic: Prescription
+  - button "Open source"
+  - generic: Telmisartan
+  - generic: 02 March 2026
+  - paragraph: 40 mg · once daily in the morning
+  - generic: Prescription
+  - button "Open source"
+  - heading "Examinations" [level=2]
+  - generic: Foot Examination
+  - generic: 11 June 2026
+  - paragraph: "Foot examination: monofilament testing performed."
+  - generic: Examination record
+  - button "Open source"
+  - generic: Eye Examination
+  - generic: 20 May 2026
+  - paragraph: "Eye examination: dilated fundus examination performed."
+  - generic: Examination record
+  - button "Open source"
+  - heading "Patient-reported notes" [level=2]
+  - generic: Diet / activity
+  - generic: No event date · submitted 04 November 2026
+  - paragraph: "QA audit note: felt fine after walking."
+  - generic: Patient reported
+  - button "Mark as read"
+  - generic: Diet / activity
+  - generic: No event date · submitted 04 October 2026
+  - paragraph: Walked 30 minutes after dinner on most days this month; reduced sweet tea to one cup a day.
+  - generic: Patient reported
+  - generic: Seen by clinic · Clinician Arun Das (synthetic)
+  - generic: Diet / activity
+  - generic: Event 10 September 2026 · submitted 03 October 2026
+  - paragraph: Walked 30 minutes after dinner on most days this month; reduced sweet tea to one cup a day.
+  - generic: Patient reported
+  - button "Mark as read"
+  - heading "Document availability" [level=2]
+  - paragraph: Awaiting review. This states what is present in the uploaded, reviewed collection for this patient; it is not a statement about whether a test was performed.
+  - list:
+    - generic: 2026-09-14_lab_report_photo_a.jpg
+    - generic: Awaiting review
+    - generic: uploaded 07 November 2026
+    - generic: synthetic-hermes-proof-eb17b78c-15ed-44bd-8cb8-a2e6be06b836.pdf
+    - generic: Awaiting review
+    - generic: uploaded 07 November 2026
+    - generic: synthetic-wrong-patient.pdf
+    - generic: Patient details need checking
+    - generic: uploaded 04 November 2026
+    - generic: synthetic-lab.pdf
+    - generic: Already uploaded
+    - generic: uploaded 04 November 2026
+    - generic: synthetic-lab.pdf
+    - generic: Already uploaded
+    - generic: uploaded 04 November 2026
+- region "Notifications"
+- generic: "6.51"

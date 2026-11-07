@@ -108,9 +108,14 @@ export async function switchAccount(
   await signIn(page, account);
 }
 
-export async function openDemoPatient(page: Page): Promise<void> {
+export async function openDemoPatient(
+  page: Page,
+  section: 'Documents' | 'Progression' | 'Visit overview' = 'Progression',
+): Promise<void> {
+  const patientPath = `/clinic/patients/${demoCredentials().patientId}`;
   await page.goto('/clinic/patients');
-  await page.getByRole('link', { name: 'Open patient' }).first().click();
-  await page.waitForURL(/\/clinic\/patients\/[0-9a-f-]+\//);
-  await page.getByRole('link', { name: 'Progression', exact: true }).click();
+  await page.getByRole('link', { name: 'Open patient', exact: true })
+    .and(page.locator(`a[href="${patientPath}"], a[href^="${patientPath}/"]`)).click();
+  await page.waitForURL(({ pathname }) => pathname === patientPath || pathname.startsWith(`${patientPath}/`));
+  await page.getByRole('link', { name: section, exact: true }).click();
 }

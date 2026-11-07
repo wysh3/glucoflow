@@ -1,0 +1,45 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/api.Dockerfile
+    env_file: ${CARE_API_ENV_FILE:-../.local/care-api.env}
+    environment:
+      PORT: '8787'
+      HERMES_URL: http://gluco:8642
+      HERMES_SERVICE_TOKEN: ${HERMES_SERVICE_TOKEN:?Set a shared Gluco service token}
+    ports:
+      - '127.0.0.1:8787:8787'
+
+  gluco:
+    build:
+      context: ..
+      dockerfile: deploy/hermes.Dockerfile
+    env_file: ${CARE_GLUCO_ENV_FILE:-../.local/care-gluco.env}
+    environment:
+      PORT: '8642'
+      HERMES_BIND_HOST: 0.0.0.0
+      HERMES_SERVICE_TOKEN: ${HERMES_SERVICE_TOKEN:?Set a shared Gluco service token}
+      HERMES_MAX_PROVIDER_CALLS_PER_HOUR: '60'
+      HERMES_MAX_CONCURRENT: '1'
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8642/health', timeout=2)"]
+      interval: 15s
+      timeout: 3s
+      retries: 3
+      start_period: 20s
+
+  worker:
+    profiles: [documents]
+    build:
+      context: ..
+      dockerfile: deploy/worker.Dockerfile
+    env_file: ${CARE_WORKER_ENV_FILE:-../.local/care-worker.env}
+    environment:
+      EXTRACTION_PROVIDER: hermes
+      EXTRACTION_API_KEY: ''
+      HERMES_URL: http://gluco:8642
+      HERMES_SERVICE_TOKEN: ${HERMES_SERVICE_TOKEN:?Set a shared Gluco service token}
+    depends_on:
+      gluco:
+        condition: service_healthy

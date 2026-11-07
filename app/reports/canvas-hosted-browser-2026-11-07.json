@@ -1,0 +1,22 @@
+[
+  {
+    "viewport": "desktop",
+    "upstreamShell": true,
+    "workingPanel": true,
+    "draftPreserved": true,
+    "navigationControls": true,
+    "horizontalOverflow": false,
+    "pageErrors": 0,
+    "modelOrSpeechPosts": 0
+  },
+  {
+    "viewport": "mobile",
+    "upstreamShell": true,
+    "workingPanel": true,
+    "draftPreserved": true,
+    "navigationControls": true,
+    "horizontalOverflow": false,
+    "pageErrors": 0,
+    "modelOrSpeechPosts": 0
+  }
+]

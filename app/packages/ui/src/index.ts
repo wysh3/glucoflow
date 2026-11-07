@@ -32,3 +32,5 @@ export {
 } from './components/tabs';
 export { ToastProvider, useToast, type Toast } from './components/toast';
 export { ANIMATED_ICON_DURATION_MS, useAnimatedIcon, type AnimatedIconHandle } from './icons/animated';
+
+export { LoadingOrb } from './components/loading-orb';

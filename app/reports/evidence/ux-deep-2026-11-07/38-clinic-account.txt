@@ -1,0 +1,60 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Result closure":
+      - /url: /clinic/results
+      - generic: Result closure
+    - link "Account" [active]:
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Account"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - heading "Account" [level=1]
+  - heading "Signed-in identity" [level=2]
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: clinic@glucoflow.demo
+  - paragraph: Authorized access · Reviewer, Clinician, Nurse, Desk, Quality
+  - paragraph: Clinic · Glucoflow Demo Clinic (synthetic)
+  - heading "This device" [level=2]
+  - paragraph: The session is stored by this browser for this site only.
+  - paragraph: Session storage · browser
+  - paragraph: Environment · production
+  - paragraph: "Extraction pipeline · Hermes extraction: gpt-6-luna (new uploads)"
+  - paragraph: Object storage · supabase
+  - link "Privacy and data use":
+    - /url: /privacy
+  - button "Sign out"
+- region "Notifications"

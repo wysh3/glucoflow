@@ -1,0 +1,36 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ❯ tests/integration/care-continuation.test.ts (1 test | 1 failed) 55ms
+   × refuses active work, then archives settled evidence and creates one linked fresh demo on retries 9ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/care-continuation.test.ts > refuses active work, then archives settled evidence and creates one linked fresh demo on retries
+AssertionError: expected TypeError: (0 , __vite_ssr_import_2__.con… to match object { status: 409 }
+
+- Expected
++ Received
+
+- {
+-   "status": 409,
++ TypeError {
++   "message": "(0 , __vite_ssr_import_2__.continueWorkspace) is not a function",
+  }
+
+ ❯ tests/integration/care-continuation.test.ts:10:95
+      8| it('refuses active work, then archives settled evidence and creates on…
+      9|  const s=await db.asActor(f.clinicianId,c=>createWorkspace(c,f.clinici…
+     10|  await expect(db.asActor(f.clinicianId,c=>continueWorkspace(c,s.id,f.c…
+       |                                                                                               ^
+     11|  await db.asWorker(c=>monitorCareBatch(c,new Date(Date.now()+2*8640000…
+     12|  const settled=await db.asActor(f.clinicianId,c=>readWorkspace(c,s.id,…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  19:42:18
+   Duration  592ms (import 56%, transform 30%, tests 14%)

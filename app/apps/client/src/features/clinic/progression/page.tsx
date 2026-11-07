@@ -40,11 +40,9 @@ import {
   useExportStatus,
   useCreateExport,
   useTimeline,
-  useDelta,
 } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
 import { SystemPageHeader } from '../../../components/system-page-header';
-import { ConflictNotice } from '../../../components/conflict-notice';
 import { openAuthorizedUrl } from '../../../platform/download';
 
 /**
@@ -64,7 +62,6 @@ export function ProgressionPage(): React.ReactElement {
   const [selected, setSelected] = React.useState<string[]>([]);
   const [view, setView] = React.useState<'plot' | 'table'>('plot');
   const sourcePane = useSourcePane();
-  const delta = useDelta(patientId);
   const [exportId, setExportId] = React.useState<string | null>(null);
 
   const rangeBounds = React.useMemo(() => {
@@ -167,9 +164,7 @@ export function ProgressionPage(): React.ReactElement {
         </Alert>
       ) : null}
       <SystemPageHeader
-        index="04"
-        label="Patient record / Progression"
-        title="Progression"
+          title="Progression"
         meta={timeline.data?.scopeNote ?? 'Approved results only'}
         actions={
           <div className="flex flex-wrap items-center gap-2">

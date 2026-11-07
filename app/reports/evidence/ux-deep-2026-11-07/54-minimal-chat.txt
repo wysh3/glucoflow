@@ -1,0 +1,91 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Switch account"
+- generic: Care simulation
+- main:
+  - tablist "Care workspace areas":
+    - tab "Chat" [selected]:
+      - text: Chat
+    - tab "Worklist":
+      - text: Worklist
+    - tab "Encounters":
+      - text: Encounters
+  - generic "Workspace menu": ⋯
+  - tabpanel "Chat":
+    - region "Ask GlucoFlow":
+      - heading "Ask GlucoFlow" [level=2]
+      - log "Care conversation":
+        - list:
+          - article:
+            - generic: You
+            - time: 4:29 PM
+            - paragraph: What is pending for Asha?
+          - article:
+            - generic: GlucoFlow
+            - generic: Deterministic helper
+            - time: 4:29 PM
+            - paragraph: "Deterministic helper · Synthetic workspace Showing 1 of 1 matching synthetic orders and their latest recorded events. • DEMO-101 · Basic metabolic panel: Order placed in the synthetic HIS (HIS HIS-SIM-1-order_placed)."
+            - button "Read aloud":
+            - region "Explore this reply":
+              - heading "Explore this reply" [level=3]
+              - generic: Synthetic records
+              - paragraph: Asha Shah · DEMO-101
+              - group "Reply details":
+                - button "Evidence timeline" [pressed]:
+                  - text: Evidence timeline
+                - button "Monitoring status":
+                  - text: Monitoring status
+              - list "Cited events in chronological order":
+                - generic: HIS
+                - time: Nov 7, 2026, 4:11 PM
+                - 'button "Open HIS evidence: Order placed"':
+                  - generic: Order placed
+                - paragraph: Basic metabolic panel
+            - generic "Reply sources":
+              - button "HIS · Order placed":
+                - generic: HIS · Order placed
+      - status: Deterministic helper uses the workspace records.
+      - generic "Suggested questions"
+      - generic: Message GlucoFlow
+      - textbox "Message GlucoFlow":
+        - /placeholder: Ask about an encounter or pending handoff…
+      - combobox "Assistant mode":
+        - generic: Deterministic helper
+      - combobox
+      - button "Voice input":
+      - button "Send" [disabled]:
+- region "Notifications"

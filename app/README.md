@@ -1,82 +1,41 @@
-# Glucoflow application
+# GlucoFlow application
 
-Working implementation of the Glucoflow MVP: patient and clinic workflows on web and Android,
-with the API, worker, database, extraction pipeline, review, progression, search, patient
-notes and exports.
+The implementation behind [GlucoFlow](https://glucoflow.vercel.app/): care conversations, source-backed operational work, patient records and review workflows.
 
-Baseline documents live one level up: [`../README.md`](../README.md),
-[`../AGENTS.md`](../AGENTS.md), [`../docs/mvp/`](../docs/mvp/) and
-[`../HANDOFF.md`](../HANDOFF.md).
+Read the [project overview](../README.md) for the product, current screenshot, verification and limitations. Use [SETUP.md](docs/SETUP.md) for the local database and application, and [CARE_SETUP.md](docs/CARE_SETUP.md) for the bundled Gluco runtime, provider configuration, containers and deployment.
 
-## Quick start
+## Code map
 
-```bash
-pnpm install
-pnpm db:start && pnpm db:migrate
-pnpm fixtures:generate && pnpm fixtures:reference
-pnpm seed:demo -- --clinic demo --confirm-demo
-pnpm dev
-```
-
-Web client <http://127.0.0.1:5173>, API <http://127.0.0.1:8787>. Demonstration passwords
-are written once to `.local/demo-credentials.json` (Git-ignored).
-
-Full instructions: [`docs/SETUP.md`](docs/SETUP.md). Demonstration script:
-[`docs/DEMO.md`](docs/DEMO.md). Deployment: [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md).
-Decisions and deviations: [`docs/DECISIONS.md`](docs/DECISIONS.md).
-
-## Layout
-
-```
-apps/api          Fastify API: auth, patients, uploads, review, exports, search
-apps/worker       Durable job worker: document processing, export rendering
-apps/client       React web client + Capacitor Android shell
-packages/contracts  Shared schemas and vocabularies
-packages/domain     Units, aliases, dates, timeline and review rules
-packages/data       Database access, storage adapters, identity, queue
-packages/extraction Page preparation, OCR routing, provider boundary, validation
-packages/ui         Design-system primitives
-supabase/migrations Database schema, policies and procedures
-supabase/tests      SQL isolation and constraint checks
-scripts           Setup, fixtures, seed, smoke, evaluation, maintenance
-tests             Unit, integration and browser suites
-reports           Measured results and acceptance mapping
-```
-
-## Commands
-
-| Command | Purpose |
+| Directory | Responsibility |
 | --- | --- |
-| `pnpm dev` | API, worker and web client |
-| `pnpm db:start` / `db:stop` / `db:status` | Private PostgreSQL 16 cluster in `.local/pgdata` |
-| `pnpm db:migrate` / `db:reset` / `db:test` | Apply migrations, rebuild, run SQL checks |
-| `pnpm fixtures:generate` / `fixtures:reference` / `fixtures:corpus` | Synthetic sources, reference manifests, held-out corpus |
-| `pnpm seed:demo` / `reset:demo` | Build or reset the synthetic demonstration tenant |
-| `pnpm maintenance:demo` | Retention and orphan cleanup (`--dry-run` by default) |
-| `pnpm smoke` | Authenticated end-to-end API sequence |
-| `pnpm test` / `pnpm typecheck` / `pnpm build` | Unit and integration tests, both TypeScript projects, all bundles |
-| `pnpm e2e` | Browser workflows on desktop and mobile viewports |
-| `pnpm evaluate:extraction` | Measured extraction report (`--live` for a model) |
-| `pnpm android:keystore` / `android:sync` / `android:apk` | Android signing and release build |
+| `apps/client` | React web app and Capacitor Android shell |
+| `apps/api` | Authentication, authorization, care workspaces, uploads, review and exports |
+| `apps/worker` | Durable processing and export jobs |
+| `packages/contracts` | Shared schemas |
+| `packages/domain` | Domain rules and source interpretation |
+| `packages/data` | Database, storage, identity and queue access |
+| `packages/extraction` | Page preparation, provider boundary and validation |
+| `packages/ui` | Shared components and orb |
+| `hermes` | Gluco runtime adapter, bundled upstream source, license and checksum |
+| `supabase/migrations` | Versioned database schema and access controls |
+| `deploy` | Containerfiles, Compose and example configuration |
+| `scripts` | Local setup, deployment, fixtures and verification |
+| `tests` / `reports` | Automated checks and dated evidence |
 
-## Current verification and limits
+## Development
 
-The [repository README](../README.md) and [GitHub preparation report](reports/github-upload-2026-10-03.md)
-record the current local checks. The [hosted deployment report](reports/hosted-deployment-2026-10-03.md)
-documents the deployed synthetic flow, including Supabase Auth/Storage and live extraction.
-The newer Master dashboard is covered by domain/API tests; see the revised plan in
-[`../docs/superpowers/plans/2026-10-03-pdf-demo.md`](../docs/superpowers/plans/2026-10-03-pdf-demo.md).
+Node 22.12–22.x and pnpm 12.5.1 are required. Run commands from this directory. Follow the setup guide before starting `pnpm dev`; it serves web on port 5173 and API on 8787.
 
-Local extraction defaults to a labelled deterministic fixture engine. Live extraction requires
-credentials and a positive budget and keeps output in human-reviewed drafts. No clinical
-validation, treatment decisions, live ABHA integration or real emergency dispatch is claimed.
-Physical-device checks and phone OTP remain pending. The bundled signed APK contains the current shared client. See [workspace and guide verification](reports/workspace-guide-2026-10-04.md) and [guide operations](docs/APP_GUIDE.md).
+- `pnpm typecheck` — check server and web TypeScript.
+- `pnpm test` — automated tests; service-dependent checks have separate prerequisites.
+- `pnpm build` — client, API and worker bundles.
+- `pnpm db:test` — database isolation and constraints, against a configured test database.
+- `pnpm lint:ui --json` — lintapple against the running local web application.
 
+Credentials belong in ignored `.env` / `.local` files. Use synthetic data only in fixtures, screenshots, demos and public testing. Do not run local reset or demo seed operations against hosted customer data.
 
-## Result accountability ledger (current lead)
+## Shipping
 
-The clinic's primary screen is now `/clinic/results`. It records an incoming report as an administrative receipt with a named owner, a due clock, clinician acknowledgement, patient communication, escalation and an append-only audit trail. The lab's own flag is copied as supplied. The ledger does not diagnose, risk-score or recommend treatment.
+The [shipping checklist](docs/SHIP_CHECKLIST.md) is the current task ledger. The [release report](reports/completion-release-2026-11-07.md) records measured tests and deployed components. The [care demo guide](docs/CARE_DEMO.md) describes the intended walkthrough. The [acceptance checklist](../docs/mvp/10-acceptance-checklist.md) maps implementation back to scope.
 
-The state model is in `supabase/migrations/021_result_ledger.sql`, `022_result_event_guard.sql`, `024_result_read_back.sql` and `025_result_critical_read_back.sql`. The API is in `apps/api/src/routes/results.ts`; the screen is `apps/client/src/features/clinic/results/page.tsx`; the public verifier is `apps/client/src/features/verify/page.tsx`. Receipts are hash-chained and verify without patient data at `/verify/:code`. Synthetic receipts are loaded by `supabase/seed/results-demo.sql` and by `pnpm seed:demo`.
-
-The pre-visit delta remains available inside a patient record as a secondary view. It is no longer the lead product. The decision memo and the unpulled validation gates are in `../docs/research/2026-11-04-decision/README.md`.
+The current public deployment is an operational simulation. Clinical production use still requires the explicit integration, security, validation and pilot gates in the shipping checklist.

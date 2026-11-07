@@ -1,0 +1,15 @@
+- main:
+  - link "Back":
+    - /url: /clinic/results
+    - text: Back
+  - button "Print slip":
+    - text: Print slip
+  - paragraph: Patient receipt
+  - heading "Your report is ready." [level=1]
+  - paragraph: Please contact the clinic to discuss the next step. This slip does not contain your result.
+  - img "Receipt verification QR code"
+  - paragraph: GLF-A008B69C6D
+  - paragraph: Receipt code
+  - paragraph: Scan the code to see the recorded stage. It shows whether the clinic has acknowledged the report and contacted you. It does not show your name or result.
+  - paragraph: Printed Nov 07, 2026, 04:12 PM. If this slip is not yours, return it to the clinic.
+- region "Notifications"

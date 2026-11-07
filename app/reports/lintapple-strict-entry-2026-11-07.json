@@ -1,0 +1,987 @@
+{
+  "url": "https://glucoflow.vercel.app",
+  "rules": [
+    "font-family",
+    "font-size",
+    "copy",
+    "control-size",
+    "control-gap",
+    "control-inset",
+    "content-inset",
+    "icon-size",
+    "layout-gap",
+    "layout-alignment",
+    "tabular-numbers",
+    "numeric-alignment",
+    "nested-radius",
+    "root-background",
+    "horizontal-overflow",
+    "viewport-bounds",
+    "content-clipping",
+    "content-overflow",
+    "text-contrast",
+    "font-loading",
+    "accessible-name",
+    "form-label",
+    "aria-reference",
+    "label-consistency",
+    "control-state",
+    "keyboard-operation",
+    "focus-visible",
+    "focus-obscured",
+    "dialog-focus",
+    "icon-button-tooltip",
+    "target-size"
+  ],
+  "runs": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "colorScheme": "light",
+      "frameCoverage": {
+        "checked": {
+          "url": "https://glucoflow.vercel.app/",
+          "name": "",
+          "path": "main"
+        },
+        "omitted": []
+      },
+      "elements": 67,
+      "controls": 3,
+      "insetControls": 0,
+      "controlContentCoverage": {
+        "checked": 3,
+        "unmeasured": [
+          {
+            "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > select:nth-of-type(1)",
+            "reason": "Native select label and arrow have no separate DOM boxes."
+          }
+        ]
+      },
+      "numericElements": 0,
+      "alignmentGroups": 0,
+      "radiusContracts": 0,
+      "suppressed": [],
+      "accessibilityCoverage": {
+        "pageRules": [
+          "accessible-name",
+          "form-label",
+          "label-consistency",
+          "control-state",
+          "keyboard-operation",
+          "target-size",
+          "aria-reference",
+          "icon-button-tooltip",
+          "dialog-focus"
+        ],
+        "interactionRules": "not tested without an interaction plan",
+        "tooltips": {
+          "checked": [],
+          "unmeasured": []
+        }
+      },
+      "states": [
+        {
+          "name": "initial",
+          "url": "https://glucoflow.vercel.app/",
+          "findings": [
+            {
+              "rule": "font-size",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+              "message": "Expected one of 24, 28, 30, 32, 40, 48, 64px. Found 42px.",
+              "actual": "42px",
+              "expected": "one of 24, 28, 30, 32, 40, 48, 64px",
+              "fix": "Use a configured size for this text role.",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "font-size",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > span:nth-of-type(2)",
+              "message": "Expected one of 11, 12, 14, 16, 18, 20, 24, 28, 30, 32, 40, 48, 64px. Found 10px.",
+              "actual": "10px",
+              "expected": "one of 11, 12, 14, 16, 18, 20, 24, 28, 30, 32, 40, 48, 64px",
+              "fix": "Use a configured size for this text role.",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "content-inset",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+              "message": "Expected at least 8px from the container's inner left edge. Found left inset 0px.",
+              "actual": "left inset 0px",
+              "expected": "at least 8px from the container's inner left edge",
+              "fix": "Add content padding or correct the content position. Borders do not count as padding.",
+              "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "content-inset",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+              "message": "Expected at least 8px from the container's inner right edge. Found right inset 0px.",
+              "actual": "right inset 0px",
+              "expected": "at least 8px from the container's inner right edge",
+              "fix": "Add content padding or correct the content position. Borders do not count as padding.",
+              "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "control-size",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+              "message": "Expected at least 44px in each dimension. Found 98.27 × 32px.",
+              "actual": "98.27 × 32px",
+              "expected": "at least 44px in each dimension",
+              "fix": "Increase the control hit area.",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "content-clipping",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+              "message": "Expected text lines inside the clipping area. Found right text clipping 64.53px, bottom text clipping 17px.",
+              "actual": "right text clipping 64.53px, bottom text clipping 17px",
+              "expected": "text lines inside the clipping area",
+              "fix": "Allow text to wrap, increase the container size, or provide a local scroll region. Use a reasoned exception for intentional truncation.",
+              "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "content-clipping",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+              "message": "Expected text lines inside the clipping area. Found right text clipping 743.45px, bottom text clipping 17px.",
+              "actual": "right text clipping 743.45px, bottom text clipping 17px",
+              "expected": "text lines inside the clipping area",
+              "fix": "Allow text to wrap, increase the container size, or provide a local scroll region. Use a reasoned exception for intentional truncation.",
+              "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "control-state",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2)",
+              "message": "Expected Elements must only use permitted ARIA attributes. Found Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute..",
+              "actual": "Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute.",
+              "expected": "Elements must only use permitted ARIA attributes",
+              "fix": "Review https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI and fix the reported control.",
+              "status": "unresolved",
+              "category": "accessibility",
+              "sourceRule": "aria-prohibited-attr",
+              "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            }
+          ],
+          "suppressed": [],
+          "accessibilityCoverage": {
+            "pageRules": [
+              "accessible-name",
+              "form-label",
+              "label-consistency",
+              "control-state",
+              "keyboard-operation",
+              "target-size",
+              "aria-reference",
+              "icon-button-tooltip",
+              "dialog-focus"
+            ],
+            "interactionRules": "not tested without an interaction plan"
+          },
+          "elements": 67,
+          "controls": 3,
+          "insetControls": 0,
+          "controlContentCoverage": {
+            "checked": 3,
+            "unmeasured": [
+              {
+                "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > select:nth-of-type(1)",
+                "reason": "Native select label and arrow have no separate DOM boxes."
+              }
+            ]
+          },
+          "numericElements": 0,
+          "alignmentGroups": 0,
+          "radiusContracts": 0,
+          "frameCoverage": {
+            "checked": {
+              "url": "https://glucoflow.vercel.app/",
+              "name": "",
+              "path": "main"
+            },
+            "omitted": []
+          }
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "colorScheme": "light",
+      "frameCoverage": {
+        "checked": {
+          "url": "https://glucoflow.vercel.app/",
+          "name": "",
+          "path": "main"
+        },
+        "omitted": []
+      },
+      "elements": 67,
+      "controls": 3,
+      "insetControls": 0,
+      "controlContentCoverage": {
+        "checked": 3,
+        "unmeasured": [
+          {
+            "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > select:nth-of-type(1)",
+            "reason": "Native select label and arrow have no separate DOM boxes."
+          }
+        ]
+      },
+      "numericElements": 0,
+      "alignmentGroups": 0,
+      "radiusContracts": 0,
+      "suppressed": [],
+      "accessibilityCoverage": {
+        "pageRules": [
+          "accessible-name",
+          "form-label",
+          "label-consistency",
+          "control-state",
+          "keyboard-operation",
+          "target-size",
+          "aria-reference",
+          "icon-button-tooltip",
+          "dialog-focus"
+        ],
+        "interactionRules": "not tested without an interaction plan",
+        "tooltips": {
+          "checked": [],
+          "unmeasured": []
+        }
+      },
+      "states": [
+        {
+          "name": "initial",
+          "url": "https://glucoflow.vercel.app/",
+          "findings": [
+            {
+              "rule": "font-size",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+              "message": "Expected one of 24, 28, 30, 32, 40, 48, 64px. Found 60px.",
+              "actual": "60px",
+              "expected": "one of 24, 28, 30, 32, 40, 48, 64px",
+              "fix": "Use a configured size for this text role.",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "font-size",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > span:nth-of-type(2)",
+              "message": "Expected one of 11, 12, 14, 16, 18, 20, 24, 28, 30, 32, 40, 48, 64px. Found 10px.",
+              "actual": "10px",
+              "expected": "one of 11, 12, 14, 16, 18, 20, 24, 28, 30, 32, 40, 48, 64px",
+              "fix": "Use a configured size for this text role.",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "content-inset",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+              "message": "Expected at least 8px from the container's inner left edge. Found left inset 0px.",
+              "actual": "left inset 0px",
+              "expected": "at least 8px from the container's inner left edge",
+              "fix": "Add content padding or correct the content position. Borders do not count as padding.",
+              "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "content-inset",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+              "message": "Expected at least 8px from the container's inner right edge. Found right inset 0px.",
+              "actual": "right inset 0px",
+              "expected": "at least 8px from the container's inner right edge",
+              "fix": "Add content padding or correct the content position. Borders do not count as padding.",
+              "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "control-size",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+              "message": "Expected at least 44px in each dimension. Found 98.27 × 32px.",
+              "actual": "98.27 × 32px",
+              "expected": "at least 44px in each dimension",
+              "fix": "Increase the control hit area.",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "content-clipping",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+              "message": "Expected text lines inside the clipping area. Found right text clipping 64.53px, bottom text clipping 17px.",
+              "actual": "right text clipping 64.53px, bottom text clipping 17px",
+              "expected": "text lines inside the clipping area",
+              "fix": "Allow text to wrap, increase the container size, or provide a local scroll region. Use a reasoned exception for intentional truncation.",
+              "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "content-clipping",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+              "message": "Expected text lines inside the clipping area. Found right text clipping 743.45px, bottom text clipping 17px.",
+              "actual": "right text clipping 743.45px, bottom text clipping 17px",
+              "expected": "text lines inside the clipping area",
+              "fix": "Allow text to wrap, increase the container size, or provide a local scroll region. Use a reasoned exception for intentional truncation.",
+              "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            },
+            {
+              "rule": "control-state",
+              "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2)",
+              "message": "Expected Elements must only use permitted ARIA attributes. Found Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute..",
+              "actual": "Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute.",
+              "expected": "Elements must only use permitted ARIA attributes",
+              "fix": "Review https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI and fix the reported control.",
+              "status": "unresolved",
+              "category": "accessibility",
+              "sourceRule": "aria-prohibited-attr",
+              "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI",
+              "documentUrl": "https://glucoflow.vercel.app/",
+              "framePath": "main"
+            }
+          ],
+          "suppressed": [],
+          "accessibilityCoverage": {
+            "pageRules": [
+              "accessible-name",
+              "form-label",
+              "label-consistency",
+              "control-state",
+              "keyboard-operation",
+              "target-size",
+              "aria-reference",
+              "icon-button-tooltip",
+              "dialog-focus"
+            ],
+            "interactionRules": "not tested without an interaction plan"
+          },
+          "elements": 67,
+          "controls": 3,
+          "insetControls": 0,
+          "controlContentCoverage": {
+            "checked": 3,
+            "unmeasured": [
+              {
+                "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > select:nth-of-type(1)",
+                "reason": "Native select label and arrow have no separate DOM boxes."
+              }
+            ]
+          },
+          "numericElements": 0,
+          "alignmentGroups": 0,
+          "radiusContracts": 0,
+          "frameCoverage": {
+            "checked": {
+              "url": "https://glucoflow.vercel.app/",
+              "name": "",
+              "path": "main"
+            },
+            "omitted": []
+          }
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "rule": "font-size",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "message": "Expected one of 24, 28, 30, 32, 40, 48, 64px. Found 42px.",
+      "actual": "42px",
+      "expected": "one of 24, 28, 30, 32, 40, 48, 64px",
+      "fix": "Use a configured size for this text role.",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "font-size",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > span:nth-of-type(2)",
+      "message": "Expected one of 11, 12, 14, 16, 18, 20, 24, 28, 30, 32, 40, 48, 64px. Found 10px.",
+      "actual": "10px",
+      "expected": "one of 11, 12, 14, 16, 18, 20, 24, 28, 30, 32, 40, 48, 64px",
+      "fix": "Use a configured size for this text role.",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "content-inset",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "message": "Expected at least 8px from the container's inner left edge. Found left inset 0px.",
+      "actual": "left inset 0px",
+      "expected": "at least 8px from the container's inner left edge",
+      "fix": "Add content padding or correct the content position. Borders do not count as padding.",
+      "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "content-inset",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "message": "Expected at least 8px from the container's inner right edge. Found right inset 0px.",
+      "actual": "right inset 0px",
+      "expected": "at least 8px from the container's inner right edge",
+      "fix": "Add content padding or correct the content position. Borders do not count as padding.",
+      "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "control-size",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "message": "Expected at least 44px in each dimension. Found 98.27 × 32px.",
+      "actual": "98.27 × 32px",
+      "expected": "at least 44px in each dimension",
+      "fix": "Increase the control hit area.",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "content-clipping",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+      "message": "Expected text lines inside the clipping area. Found right text clipping 64.53px, bottom text clipping 17px.",
+      "actual": "right text clipping 64.53px, bottom text clipping 17px",
+      "expected": "text lines inside the clipping area",
+      "fix": "Allow text to wrap, increase the container size, or provide a local scroll region. Use a reasoned exception for intentional truncation.",
+      "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "content-clipping",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "message": "Expected text lines inside the clipping area. Found right text clipping 743.45px, bottom text clipping 17px.",
+      "actual": "right text clipping 743.45px, bottom text clipping 17px",
+      "expected": "text lines inside the clipping area",
+      "fix": "Allow text to wrap, increase the container size, or provide a local scroll region. Use a reasoned exception for intentional truncation.",
+      "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "control-state",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2)",
+      "message": "Expected Elements must only use permitted ARIA attributes. Found Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute..",
+      "actual": "Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute.",
+      "expected": "Elements must only use permitted ARIA attributes",
+      "fix": "Review https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI and fix the reported control.",
+      "status": "unresolved",
+      "category": "accessibility",
+      "sourceRule": "aria-prohibited-attr",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "font-size",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+      "message": "Expected one of 24, 28, 30, 32, 40, 48, 64px. Found 60px.",
+      "actual": "60px",
+      "expected": "one of 24, 28, 30, 32, 40, 48, 64px",
+      "fix": "Use a configured size for this text role.",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "font-size",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > span:nth-of-type(2)",
+      "message": "Expected one of 11, 12, 14, 16, 18, 20, 24, 28, 30, 32, 40, 48, 64px. Found 10px.",
+      "actual": "10px",
+      "expected": "one of 11, 12, 14, 16, 18, 20, 24, 28, 30, 32, 40, 48, 64px",
+      "fix": "Use a configured size for this text role.",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "content-inset",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "message": "Expected at least 8px from the container's inner left edge. Found left inset 0px.",
+      "actual": "left inset 0px",
+      "expected": "at least 8px from the container's inner left edge",
+      "fix": "Add content padding or correct the content position. Borders do not count as padding.",
+      "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "content-inset",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "message": "Expected at least 8px from the container's inner right edge. Found right inset 0px.",
+      "actual": "right inset 0px",
+      "expected": "at least 8px from the container's inner right edge",
+      "fix": "Add content padding or correct the content position. Borders do not count as padding.",
+      "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "control-size",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+      "message": "Expected at least 44px in each dimension. Found 98.27 × 32px.",
+      "actual": "98.27 × 32px",
+      "expected": "at least 44px in each dimension",
+      "fix": "Increase the control hit area.",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "content-clipping",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+      "message": "Expected text lines inside the clipping area. Found right text clipping 64.53px, bottom text clipping 17px.",
+      "actual": "right text clipping 64.53px, bottom text clipping 17px",
+      "expected": "text lines inside the clipping area",
+      "fix": "Allow text to wrap, increase the container size, or provide a local scroll region. Use a reasoned exception for intentional truncation.",
+      "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "content-clipping",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "message": "Expected text lines inside the clipping area. Found right text clipping 743.45px, bottom text clipping 17px.",
+      "actual": "right text clipping 743.45px, bottom text clipping 17px",
+      "expected": "text lines inside the clipping area",
+      "fix": "Allow text to wrap, increase the container size, or provide a local scroll region. Use a reasoned exception for intentional truncation.",
+      "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "colorScheme": "light"
+    },
+    {
+      "rule": "control-state",
+      "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2)",
+      "message": "Expected Elements must only use permitted ARIA attributes. Found Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute..",
+      "actual": "Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute.",
+      "expected": "Elements must only use permitted ARIA attributes",
+      "fix": "Review https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI and fix the reported control.",
+      "status": "unresolved",
+      "category": "accessibility",
+      "sourceRule": "aria-prohibited-attr",
+      "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI",
+      "documentUrl": "https://glucoflow.vercel.app/",
+      "framePath": "main",
+      "state": "initial",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "colorScheme": "light"
+    }
+  ],
+  "summary": {
+    "occurrences": 16,
+    "problems": 8,
+    "failed": 14,
+    "unresolved": 2,
+    "byRule": [
+      {
+        "rule": "font-size",
+        "occurrences": 4,
+        "problems": 2,
+        "failed": 4,
+        "unresolved": 0
+      },
+      {
+        "rule": "content-inset",
+        "occurrences": 4,
+        "problems": 2,
+        "failed": 4,
+        "unresolved": 0
+      },
+      {
+        "rule": "control-size",
+        "occurrences": 2,
+        "problems": 1,
+        "failed": 2,
+        "unresolved": 0
+      },
+      {
+        "rule": "content-clipping",
+        "occurrences": 4,
+        "problems": 2,
+        "failed": 4,
+        "unresolved": 0
+      },
+      {
+        "rule": "control-state",
+        "occurrences": 2,
+        "problems": 1,
+        "failed": 0,
+        "unresolved": 2
+      }
+    ],
+    "groups": [
+      {
+        "finding": {
+          "rule": "font-size",
+          "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > h1:nth-of-type(1)",
+          "message": "Expected one of 24, 28, 30, 32, 40, 48, 64px. Found 42px.",
+          "actual": "42px",
+          "expected": "one of 24, 28, 30, 32, 40, 48, 64px",
+          "fix": "Use a configured size for this text role.",
+          "documentUrl": "https://glucoflow.vercel.app/",
+          "framePath": "main"
+        },
+        "occurrences": [
+          {
+            "actual": "42px",
+            "state": "initial",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "colorScheme": "light"
+          },
+          {
+            "actual": "60px",
+            "state": "initial",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "colorScheme": "light"
+          }
+        ]
+      },
+      {
+        "finding": {
+          "rule": "font-size",
+          "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > span:nth-of-type(2)",
+          "message": "Expected one of 11, 12, 14, 16, 18, 20, 24, 28, 30, 32, 40, 48, 64px. Found 10px.",
+          "actual": "10px",
+          "expected": "one of 11, 12, 14, 16, 18, 20, 24, 28, 30, 32, 40, 48, 64px",
+          "fix": "Use a configured size for this text role.",
+          "documentUrl": "https://glucoflow.vercel.app/",
+          "framePath": "main"
+        },
+        "occurrences": [
+          {
+            "actual": "10px",
+            "state": "initial",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "colorScheme": "light"
+          },
+          {
+            "actual": "10px",
+            "state": "initial",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "colorScheme": "light"
+          }
+        ]
+      },
+      {
+        "finding": {
+          "rule": "content-inset",
+          "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+          "message": "Expected at least 8px from the container's inner left edge. Found left inset 0px.",
+          "actual": "left inset 0px",
+          "expected": "at least 8px from the container's inner left edge",
+          "fix": "Add content padding or correct the content position. Borders do not count as padding.",
+          "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+          "documentUrl": "https://glucoflow.vercel.app/",
+          "framePath": "main"
+        },
+        "occurrences": [
+          {
+            "actual": "left inset 0px",
+            "state": "initial",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "colorScheme": "light"
+          },
+          {
+            "actual": "left inset 0px",
+            "state": "initial",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "colorScheme": "light"
+          }
+        ]
+      },
+      {
+        "finding": {
+          "rule": "content-inset",
+          "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+          "message": "Expected at least 8px from the container's inner right edge. Found right inset 0px.",
+          "actual": "right inset 0px",
+          "expected": "at least 8px from the container's inner right edge",
+          "fix": "Add content padding or correct the content position. Borders do not count as padding.",
+          "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+          "documentUrl": "https://glucoflow.vercel.app/",
+          "framePath": "main"
+        },
+        "occurrences": [
+          {
+            "actual": "right inset 0px",
+            "state": "initial",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "colorScheme": "light"
+          },
+          {
+            "actual": "right inset 0px",
+            "state": "initial",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "colorScheme": "light"
+          }
+        ]
+      },
+      {
+        "finding": {
+          "rule": "control-size",
+          "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(1) > details:nth-of-type(1) > summary:nth-of-type(1)",
+          "message": "Expected at least 44px in each dimension. Found 98.27 × 32px.",
+          "actual": "98.27 × 32px",
+          "expected": "at least 44px in each dimension",
+          "fix": "Increase the control hit area.",
+          "documentUrl": "https://glucoflow.vercel.app/",
+          "framePath": "main"
+        },
+        "occurrences": [
+          {
+            "actual": "98.27 × 32px",
+            "state": "initial",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "colorScheme": "light"
+          },
+          {
+            "actual": "98.27 × 32px",
+            "state": "initial",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "colorScheme": "light"
+          }
+        ]
+      },
+      {
+        "finding": {
+          "rule": "content-clipping",
+          "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+          "message": "Expected text lines inside the clipping area. Found right text clipping 64.53px, bottom text clipping 17px.",
+          "actual": "right text clipping 64.53px, bottom text clipping 17px",
+          "expected": "text lines inside the clipping area",
+          "fix": "Allow text to wrap, increase the container size, or provide a local scroll region. Use a reasoned exception for intentional truncation.",
+          "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)",
+          "documentUrl": "https://glucoflow.vercel.app/",
+          "framePath": "main"
+        },
+        "occurrences": [
+          {
+            "actual": "right text clipping 64.53px, bottom text clipping 17px",
+            "state": "initial",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "colorScheme": "light"
+          },
+          {
+            "actual": "right text clipping 64.53px, bottom text clipping 17px",
+            "state": "initial",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "colorScheme": "light"
+          }
+        ]
+      },
+      {
+        "finding": {
+          "rule": "content-clipping",
+          "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+          "message": "Expected text lines inside the clipping area. Found right text clipping 743.45px, bottom text clipping 17px.",
+          "actual": "right text clipping 743.45px, bottom text clipping 17px",
+          "expected": "text lines inside the clipping area",
+          "fix": "Allow text to wrap, increase the container size, or provide a local scroll region. Use a reasoned exception for intentional truncation.",
+          "relatedSelector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > header:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)",
+          "documentUrl": "https://glucoflow.vercel.app/",
+          "framePath": "main"
+        },
+        "occurrences": [
+          {
+            "actual": "right text clipping 743.45px, bottom text clipping 17px",
+            "state": "initial",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "colorScheme": "light"
+          },
+          {
+            "actual": "right text clipping 743.45px, bottom text clipping 17px",
+            "state": "initial",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "colorScheme": "light"
+          }
+        ]
+      },
+      {
+        "finding": {
+          "rule": "control-state",
+          "selector": "html > body:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > main:nth-of-type(1) > section:nth-of-type(1) > div:nth-of-type(2)",
+          "message": "Expected Elements must only use permitted ARIA attributes. Found Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute..",
+          "actual": "Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute.",
+          "expected": "Elements must only use permitted ARIA attributes",
+          "fix": "Review https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI and fix the reported control.",
+          "status": "unresolved",
+          "category": "accessibility",
+          "sourceRule": "aria-prohibited-attr",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/aria-prohibited-attr?application=axeAPI",
+          "documentUrl": "https://glucoflow.vercel.app/",
+          "framePath": "main"
+        },
+        "occurrences": [
+          {
+            "actual": "Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute.",
+            "state": "initial",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "colorScheme": "light"
+          },
+          {
+            "actual": "Fix all of the following:\n  aria-label attribute is not well supported on \"div\" elements with no valid role attribute.",
+            "state": "initial",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "colorScheme": "light"
+          }
+        ]
+      }
+    ]
+  }
+}

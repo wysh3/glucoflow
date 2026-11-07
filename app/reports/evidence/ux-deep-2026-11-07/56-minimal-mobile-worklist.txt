@@ -1,0 +1,71 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- button "Open navigation":
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Switch account"
+- main:
+  - tablist "Care workspace areas":
+    - tab "Chat":
+      - text: Chat
+    - tab "Worklist" [active] [selected]:
+      - text: Worklist
+    - tab "Encounters":
+      - text: Encounters
+  - generic "Workspace menu": ⋯
+  - region "Working panel":
+    - tabpanel "Worklist":
+      - heading "Worklist" [level=2]
+      - button "New task":
+        - text: New task
+      - heading "Needs attention" [level=2]
+      - generic: "1"
+      - list:
+        - generic "Dev Mehta · Awaiting lab receipt · 1 h 16 min":
+          - text: Dev Mehta · Awaiting lab receipt
+          - generic: · 1 h 16 min
+      - generic "Filter tasks"
+      - paragraph:
+        - text: 3 tasks
+      - paragraph: Asha Shah · Confirm specimen receipt
+      - generic: Awaiting approval
+      - generic: Lab team
+      - button "Review task":
+        - text: Review task
+      - paragraph: Dev Mehta · Confirm specimen receipt
+      - generic: Monitoring
+      - generic: Lab team
+      - button "View task":
+        - text: View task
+      - paragraph: Sara Khan · Confirm clinician acknowledgement
+      - generic: Monitoring
+      - generic: Dr Anil Sen
+      - button "View task":
+        - text: View task
+- navigation "Main":
+  - link "Care":
+    - /url: /clinic/care
+    - text: Care
+  - link "Patient records":
+    - /url: /clinic/patients
+    - text: Patient records
+  - link "Account":
+    - /url: /account
+    - text: Account
+- region "Notifications"

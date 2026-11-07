@@ -1,0 +1,198 @@
+/* GlucoFlow integration for the CodexApp presentation. */
+.desktop-layout[data-v-59d3c494] {
+  height: 100vh;
+  height: 100dvh;
+}
+
+.desktop-sidebar[data-v-59d3c494] {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.desktop-resize-handle[data-v-59d3c494] {
+  z-index: 120;
+  touch-action: none;
+}
+
+.desktop-resize-handle[data-v-59d3c494]:focus-visible {
+  outline-offset: 0;
+}
+
+.desktop-main[data-v-59d3c494] {
+  min-width: 0;
+}
+
+.sidebar-scrollable[data-v-705e1c85] {
+  overscroll-behavior: contain;
+}
+
+.sidebar-menu-row[data-v-36239f39] {
+  min-height: 2.5rem;
+  text-align: start;
+}
+
+.sidebar-menu-row-main[data-v-36239f39] {
+  overflow-wrap: anywhere;
+}
+
+.sidebar-thread-controls-button[data-v-2369affb],
+.sidebar-settings-area[data-v-705e1c85] {
+  border-style: solid;
+}
+
+.sidebar-thread-controls-button[data-v-2369affb] {
+  cursor: pointer;
+}
+
+.content-header[data-v-717320c2] {
+  flex: none;
+  min-height: calc(3.5rem + env(safe-area-inset-top));
+  padding-top: calc(.625rem + env(safe-area-inset-top));
+}
+
+.content-actions[data-v-717320c2] {
+  flex-shrink: 1;
+  flex-wrap: wrap;
+  min-width: 0;
+  margin-left: 0;
+  margin-inline-start: auto;
+}
+
+.codexapp-main-scroll {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding-bottom: 0;
+}
+
+.codexapp-main-scroll.justify-center {
+  justify-content: safe center;
+}
+
+.codexapp-main-scroll[data-care] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.codexapp-mobile-footer,
+.sidebar-thread-controls-button.codexapp-mobile-toggle[data-v-2369affb] {
+  display: none;
+}
+
+.mobile-drawer.codexapp-mobile-dialog[data-v-59d3c494] {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: auto;
+  inset-inline-start: 0;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 25px 50px -12px #0004;
+}
+
+@media (max-width: 767px) {
+  .desktop-layout[data-v-59d3c494] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .desktop-sidebar[data-v-59d3c494],
+  .desktop-resize-handle[data-v-59d3c494],
+  .sidebar-thread-controls-button.codexapp-desktop-toggle[data-v-2369affb] {
+    display: none;
+  }
+
+  .sidebar-thread-controls-button[data-v-2369affb] {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .sidebar-thread-controls-button.codexapp-mobile-toggle[data-v-2369affb] {
+    display: flex;
+  }
+
+  .sidebar-menu-row[data-v-36239f39] {
+    min-height: 2.75rem;
+  }
+
+  .codexapp-mobile-footer {
+    display: block;
+    flex: none;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .content-header[data-v-717320c2] {
+    gap: .375rem;
+    padding-inline: .5rem;
+  }
+}
+
+@media (max-width: 479px) {
+  .content-header[data-compact] .content-title[data-v-717320c2] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+
+@media print {
+  .desktop-layout[data-v-59d3c494],
+  .desktop-main[data-v-59d3c494],
+  .content-root[data-v-705e1c85],
+  .codexapp-main-scroll {
+    display: block;
+    height: auto;
+    overflow: visible;
+    background: white;
+  }
+}
+
+/* A collapsed desktop sidebar remains a navigable icon rail. */
+@media (min-width: 768px) {
+  .desktop-sidebar[data-collapsed="true"] { border-inline-end: 1px solid var(--color-line); }
+  .desktop-sidebar[data-collapsed="true"] .sidebar-thread-controls { justify-content: center; padding-inline: 0; }
+  .desktop-sidebar[data-collapsed="true"] .sidebar-thread-controls > :not(button),
+  .desktop-sidebar[data-collapsed="true"] .sidebar-settings-area,
+  .desktop-sidebar[data-collapsed="true"] details,
+  .desktop-sidebar[data-collapsed="true"] .sidebar-menu-row-main { display: none; }
+  .desktop-sidebar[data-collapsed="true"] .sidebar-scrollable { padding-inline: 6px; }
+  .desktop-sidebar[data-collapsed="true"] .sidebar-menu-row { justify-content: center; padding-inline: 0; min-height: 44px; }
+  .desktop-sidebar[data-collapsed="true"] .sidebar-thread-controls-button { width: 44px; height: 44px; }
+}
+
+/* Quiet neutral navigation shared with the reference-inspired workspace. */
+.desktop-sidebar[data-v-59d3c494] { background:#f7f6f3; border-color:#e9e7e3; }
+.sidebar-menu-row[data-v-36239f39][data-active="true"] { background:#ebe9e5; }
+
+/* One neutral palette across the imported shell and application screens. */
+.desktop-layout[data-v-59d3c494] {
+ --color-slate-50:#faf9f7; --color-slate-100:#f4f3f0; --color-slate-200:#eae9e5;
+ --color-slate-300:#ddded7; --color-slate-400:#95988f; --color-slate-500:#73766f;
+ --color-slate-600:#646762; --color-slate-700:#454842; --color-slate-800:#30322d; --color-slate-900:#262724;
+ color:var(--color-ink); background:var(--color-canvas);
+}
+.content-root[data-v-705e1c85], .content-header[data-v-717320c2], .codexapp-main-scroll { background:var(--color-canvas); color:var(--color-ink); }
+.sidebar-settings-area[data-v-705e1c85] { background:transparent; border-color:var(--color-line); }
+.content-header[data-v-717320c2] { border-bottom:1px solid var(--color-line); }
+
+/* Desktop uses the reference's single canvas, without a second global toolbar. */
+.sidebar-workspace-controls { display:flex; flex-wrap:wrap; align-items:center; gap:.35rem; padding-bottom:.75rem; margin-bottom:.5rem; border-bottom:1px solid var(--color-line); }
+.sidebar-workspace-controls select { width:100%; min-height:36px; font-size:.75rem; }
+.sidebar-workspace-controls > * { max-width:100%; }
+.sidebar-workspace-controls button { min-height:32px; font-size:.75rem; }
+@media(min-width:768px) { .content-header[data-compact][data-v-717320c2] { display:none; } }
+@media(max-width:767px) { .sidebar-workspace-controls { display:none; } }
+
+/* Keyboard resize uses the visual viewport; browser zoom remains available. */
+@media(max-width:767px) {
+ .desktop-layout[data-v-59d3c494] { height:var(--app-viewport-height,100dvh); }
+ .desktop-layout[data-keyboard-open="true"] .codexapp-mobile-footer { display:none; }
+}
+@media(min-width:768px) {
+ .desktop-sidebar[data-collapsed="true"] .record-tools { border-top:0; margin-top:.5rem; padding-top:0; }
+}

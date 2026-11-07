@@ -23,6 +23,8 @@ import { createPool, type DbPool } from '@glucoflow/data/pool';
 import { withTransaction } from '@glucoflow/data/pool';
 import { renderExportSummary } from './jobs/export-summary';
 import { workerConfig, type WorkerConfig } from './config';
+import { monitorCareBatch } from './care-monitor';
+import { waitForHermesExtraction } from './hermes-readiness';
 
 /**
  * Worker process: leases durable jobs, heartbeats the lease every 15 seconds and
@@ -67,6 +69,25 @@ export function createRuntime(config: WorkerConfig): WorkerRuntime {
   });
   const storage = createStorage(config);
   let running = true;
+  let runStarted = false;
+  const startupStop = new AbortController();
+  const providerSelection = {
+    provider: config.EXTRACTION_PROVIDER,
+    model: config.EXTRACTION_MODEL,
+    maxCalls: config.MAX_DOCUMENT_MODEL_CALLS,
+    ...(config.EXTRACTION_BASE_URL ? { baseUrl: config.EXTRACTION_BASE_URL } : {}),
+    ...(config.EXTRACTION_API_KEY ? { apiKey: config.EXTRACTION_API_KEY } : {}),
+    ...(config.HERMES_URL ? { hermesUrl: config.HERMES_URL } : {}),
+    ...(config.HERMES_SERVICE_TOKEN ? { hermesServiceToken: config.HERMES_SERVICE_TOKEN } : {}),
+    ...(config.MAX_DOCUMENT_COST_USD !== undefined ? { maxDocumentCostUsd: config.MAX_DOCUMENT_COST_USD } : {}),
+    ...(config.MAX_RUN_TOKENS !== undefined ? { maxRunTokens: config.MAX_RUN_TOKENS } : {}),
+    ...(config.MAX_DOCUMENT_USD_PER_MTOK_INPUT !== undefined
+      ? { usdPerMillionInputTokens: config.MAX_DOCUMENT_USD_PER_MTOK_INPUT }
+      : {}),
+    ...(config.MAX_DOCUMENT_USD_PER_MTOK_OUTPUT !== undefined
+      ? { usdPerMillionOutputTokens: config.MAX_DOCUMENT_USD_PER_MTOK_OUTPUT }
+      : {}),
+  };
 
   const tx = <T>(fn: (client: DbClient) => Promise<T>): Promise<T> =>
     withTransaction(
@@ -95,29 +116,7 @@ export function createRuntime(config: WorkerConfig): WorkerRuntime {
             ...(config.OCR_LANG_PATH ? { ocrLanguagePath: config.OCR_LANG_PATH } : {}),
             maxPages: 10,
             maxCalls: config.MAX_DOCUMENT_MODEL_CALLS,
-            createProvider: (budget: ProviderBudget) =>
-              createExtractionProvider(
-                {
-                  provider: config.EXTRACTION_PROVIDER,
-                  model: config.EXTRACTION_MODEL,
-                  ...(config.EXTRACTION_BASE_URL ? { baseUrl: config.EXTRACTION_BASE_URL } : {}),
-                  ...(config.EXTRACTION_API_KEY ? { apiKey: config.EXTRACTION_API_KEY } : {}),
-                  maxCalls: config.MAX_DOCUMENT_MODEL_CALLS,
-                  ...(config.MAX_DOCUMENT_COST_USD !== undefined
-                    ? { maxDocumentCostUsd: config.MAX_DOCUMENT_COST_USD }
-                    : {}),
-                  ...(config.MAX_RUN_TOKENS !== undefined
-                    ? { maxRunTokens: config.MAX_RUN_TOKENS }
-                    : {}),
-                  ...(config.MAX_DOCUMENT_USD_PER_MTOK_INPUT !== undefined
-                    ? { usdPerMillionInputTokens: config.MAX_DOCUMENT_USD_PER_MTOK_INPUT }
-                    : {}),
-                  ...(config.MAX_DOCUMENT_USD_PER_MTOK_OUTPUT !== undefined
-                    ? { usdPerMillionOutputTokens: config.MAX_DOCUMENT_USD_PER_MTOK_OUTPUT }
-                    : {}),
-                },
-                budget,
-              ),
+            createProvider: (budget: ProviderBudget) => createExtractionProvider(providerSelection, budget),
             heartbeat: () => undefined,
             log,
           },
@@ -208,34 +207,41 @@ export function createRuntime(config: WorkerConfig): WorkerRuntime {
   }
 
   async function run(): Promise<void> {
+    if (runStarted) throw new Error('Worker runtime can only be started once.');
+    runStarted = true;
+    let extractionReady = config.EXTRACTION_PROVIDER !== 'hermes';
+    let readiness: Promise<void> = Promise.resolve();
     // The provider is constructed once at startup so a live configuration fails here,
     // loudly, rather than on the first document. The prompt hash identifies exactly which
     // instructions the model will be given.
-    const startupProvider = createExtractionProvider(
-      {
-        provider: config.EXTRACTION_PROVIDER,
-        model: config.EXTRACTION_MODEL,
-        ...(config.EXTRACTION_BASE_URL ? { baseUrl: config.EXTRACTION_BASE_URL } : {}),
-        ...(config.EXTRACTION_API_KEY ? { apiKey: config.EXTRACTION_API_KEY } : {}),
-        maxCalls: config.MAX_DOCUMENT_MODEL_CALLS,
-        ...(config.MAX_DOCUMENT_COST_USD !== undefined
-          ? { maxDocumentCostUsd: config.MAX_DOCUMENT_COST_USD }
-          : {}),
-        ...(config.MAX_RUN_TOKENS !== undefined ? { maxRunTokens: config.MAX_RUN_TOKENS } : {}),
-        ...(config.MAX_DOCUMENT_USD_PER_MTOK_INPUT !== undefined
-          ? { usdPerMillionInputTokens: config.MAX_DOCUMENT_USD_PER_MTOK_INPUT }
-          : {}),
-        ...(config.MAX_DOCUMENT_USD_PER_MTOK_OUTPUT !== undefined
-          ? { usdPerMillionOutputTokens: config.MAX_DOCUMENT_USD_PER_MTOK_OUTPUT }
-          : {}),
-      },
-      // Startup only builds the provider to read its identity; no call is dispatched, so
-      // the budget is never consulted.
-      {
+    let startupProvider: ReturnType<typeof createExtractionProvider>;
+    try {
+      startupProvider = createExtractionProvider(providerSelection, {
         reserve: async () => ({ allowed: false, ordinal: null, reason: 'startup check' }),
         reconcile: async () => undefined,
-      },
-    );
+      });
+      if (config.EXTRACTION_PROVIDER === 'hermes') {
+        if (startupProvider.name !== 'hermes' || !config.HERMES_URL || !config.HERMES_SERVICE_TOKEN) {
+          throw new Error('Hermes extraction requires HERMES_URL, HERMES_SERVICE_TOKEN, and positive budget limits.');
+        }
+        log('waiting for Hermes extraction readiness');
+        // Readiness probes are bounded by their own deadline. Care monitoring does
+        // not need the model, so it starts immediately; document leasing stays closed.
+        readiness = waitForHermesExtraction({
+          url: config.HERMES_URL, token: config.HERMES_SERVICE_TOKEN, model: config.EXTRACTION_MODEL,
+        }, startupStop.signal).then((ready) => {
+          extractionReady = ready;
+          if (ready) log('Hermes extraction ready; document queue enabled');
+        }).catch(() => {
+          // One bounded startup attempt, not an infinite retry loop. Keep the
+          // deterministic monitor alive and require an operator restart to retry.
+          log('Hermes extraction unavailable; document queue disabled until restart; care monitoring remains active');
+        });
+      }
+    } catch (error) {
+      await pool.end();
+      throw error;
+    }
     log('worker started', {
       concurrency: config.WORKER_CONCURRENCY,
       extractionProvider: startupProvider.name,
@@ -247,6 +253,7 @@ export function createRuntime(config: WorkerConfig): WorkerRuntime {
     });
     const active = new Set<Promise<void>>();
     let pauseLogged = false;
+    let lastCareCheck = 0;
 
     while (running) {
       try {
@@ -266,7 +273,18 @@ export function createRuntime(config: WorkerConfig): WorkerRuntime {
           pauseLogged = false;
         }
 
-        while (running && active.size < config.WORKER_CONCURRENCY) {
+        if (Date.now() - lastCareCheck >= 5_000) {
+          lastCareCheck = Date.now();
+          try {
+            const changed = await tx((client) => monitorCareBatch(client));
+            if (changed) log('care monitoring reconciled', {workspacesChanged: changed});
+          } catch {
+            // Do not log workspace contents or let a monitoring failure starve document jobs.
+            log('care monitoring batch failed');
+          }
+        }
+
+        while (running && extractionReady && active.size < config.WORKER_CONCURRENCY) {
           const job = await tx(async (client) => {
             await recoverExpiredLeases(client);
             return leaseJob(client);
@@ -285,6 +303,8 @@ export function createRuntime(config: WorkerConfig): WorkerRuntime {
       await new Promise((resolve) => setTimeout(resolve, active.size > 0 ? BUSY_SLEEP_MS : IDLE_SLEEP_MS));
     }
 
+    startupStop.abort();
+    await readiness;
     await Promise.allSettled([...active]);
     await pool.end();
     log('worker stopped');
@@ -295,6 +315,7 @@ export function createRuntime(config: WorkerConfig): WorkerRuntime {
     storage,
     stop: () => {
       running = false;
+      startupStop.abort();
     },
     run,
   };
@@ -318,5 +339,10 @@ const invokedDirectly =
   process.argv[1] !== undefined && /(main|worker)\.(ts|mjs|js)$/.test(process.argv[1]);
 
 if (invokedDirectly) {
-  void main();
+  void main().catch((error: unknown) => {
+    console.error(JSON.stringify({
+      level: 'error', message: error instanceof Error ? error.message : 'Worker startup failed.',
+    }));
+    process.exitCode = 1;
+  });
 }

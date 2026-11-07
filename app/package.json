@@ -36,7 +36,10 @@
     "evaluate:live-rehearsal": "tsx scripts/evaluate-live-rehearsal.ts",
     "verify:built-worker": "tsx scripts/verify-built-worker.ts",
     "verify:live-worker": "tsx scripts/verify-live-worker.ts",
-    "lint:ui": "lintapple http://127.0.0.1:5173 --ready '[data-app-ready]'"
+    "lint:ui": "lintapple http://127.0.0.1:5173 --ready 'main'",
+    "simulate:india": "tsx scripts/simulate-india-care.ts",
+    "stress:care:local": "tsx scripts/stress-care-api.ts",
+    "test:india": "vitest run apps/api/src/care/india-simulation.test.ts apps/api/src/care/transfer.test.ts apps/api/src/care/bed-transfer.test.ts tests/integration/care-background.test.ts tests/integration/care-skill-rollback.test.ts"
   },
   "devDependencies": {
     "@glucoflow/contracts": "workspace:*",

@@ -1,0 +1,150 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Result closure":
+      - /url: /clinic/results
+      - generic: Result closure
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Current patient
+  - paragraph: Asha Rao (synthetic)
+  - paragraph: P0482
+  - navigation "Patient record sections":
+    - link "Visit overview":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/overview
+      - generic: Visit overview
+    - link "Progression":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/progression
+      - generic: Progression
+    - link "Documents":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - generic: Documents
+    - link "Home reports" [active]:
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/master
+      - generic: Home reports
+    - link "Record history":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/history
+      - generic: Record history
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - heading "Asha Rao (synthetic)" [level=1]
+  - generic: P0482
+  - generic: ·
+  - generic: Approval revision 10
+  - generic: 2 documents awaiting review
+  - generic: ·
+  - generic: Latest recorded result 03 October 2026
+  - generic: Search this patient's records
+  - textbox "Search this patient's records":
+    - /placeholder: Search records
+  - button "Search this patient's records":
+    - generic: Search
+  - heading "Home reports" [level=1]
+  - generic: Synthetic demo
+  - heading "Screening tracking" [level=2]
+  - text: Review
+  - combobox "Review":
+    - generic: Retinal screening
+  - combobox
+  - text: Last completed date
+  - textbox "Last completed date"
+  - text: Configured interval (days)
+  - spinbutton "Configured interval (days)"
+  - button "Save tracking rule"
+  - heading "20/80 operational categories" [level=2]
+  - paragraph: "Proposed framework: 80% routine maintenance and 20% higher-supervision cases. These proportions are illustrative, not a measured clinic distribution."
+  - text: Clinician-assigned category
+  - combobox "Clinician-assigned category":
+    - generic: Not assigned
+  - paragraph: The category organizes review. It does not decide access to care.
+  - link "Open uploaded reports":
+    - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+  - generic "Synthetic example history"
+  - heading "Configured tracking" [level=2]
+  - paragraph: Retinal screening
+  - paragraph: No date entered · Staff-configured 365-day interval
+  - generic: No recorded date
+  - paragraph: Renal monitoring
+  - paragraph: No date entered
+  - generic: No tracking rule configured
+  - paragraph: Foot / neuropathy review
+  - paragraph: No date entered
+  - generic: No tracking rule configured
+  - paragraph: Cardiovascular review
+  - paragraph: No date entered
+  - generic: No tracking rule configured
+  - paragraph: Pending means the staff-configured administrative interval elapsed; it is not a clinical screening recommendation. No recorded date does not establish whether a test was performed.
+  - heading "Home telemetry & patient-reported events" [level=2]
+  - application:
+    - generic: 10/4/2026
+    - generic: 10/12/2026
+    - generic: 10/20/2026
+    - generic: 10/28/2026
+    - generic: 11/4/2026
+    - generic: 0 mg/dL
+    - generic: 35 mg/dL
+    - generic: 70 mg/dL
+    - generic: 105mg/dL
+    - generic: 140mg/dL
+  - list:
+    - paragraph: 118 mg/dL · fasting
+    - paragraph: Patient reported · 11/4/2026, 2:00:00 AM
+    - paragraph: △ QA audit test symptom · mild
+    - paragraph: Patient reported · 11/4/2026, 2:00:00 AM
+    - paragraph: 118 mg/dL · fasting
+    - paragraph: Patient reported · 11/4/2026, 2:00:00 AM
+    - paragraph: △ Synthetic audit test only — no actual symptom. · mild
+    - paragraph: Patient reported · 10/4/2026, 12:06:00 AM
+    - paragraph: 123 mg/dL · fasting
+    - paragraph: Patient reported · 10/4/2026, 12:06:00 AM · Synthetic deployment audit — 4 October 2026
+  - heading "Emergency snapshot inbox" [level=2]
+  - paragraph: Freezes medication history, approved records, reported problems and baseline telemetry for the demo clinic desk. This demo does not contact emergency responders or replace emergency medical care.
+  - list:
+    - generic: 11/4/2026, 2:00:58 AM · Delivered to demo clinic desk
+    - button "Inspect snapshot"
+    - button "Download JSON"
+    - button "Acknowledge"
+    - generic: 11/4/2026, 2:00:37 AM · Delivered to demo clinic desk
+    - button "Inspect snapshot"
+    - button "Download JSON"
+    - button "Acknowledge"
+    - generic: 10/4/2026, 12:06:55 AM · Acknowledged by clinic
+    - button "Inspect snapshot"
+    - button "Download JSON"
+  - paragraph: Objective technical tracking. Clinical interpretation remains with the licensed physician. The supplied five-year scenario is illustrative; home reports remain patient reported. Saved events are append-only in the application. Database administrators retain technical control.
+- region "Notifications"
+- generic: "0"

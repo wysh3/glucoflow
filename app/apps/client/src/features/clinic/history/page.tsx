@@ -16,9 +16,7 @@ export function HistoryPage(): React.ReactElement {
   return (
     <div className="space-y-4">
       <SystemPageHeader
-        index="07"
-        label="Patient record / History"
-        title="History"
+          title="History"
         meta="Clinic-only record of changes, approvals and corrections"
       />
       <QueryState

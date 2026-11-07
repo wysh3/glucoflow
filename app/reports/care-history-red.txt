@@ -1,0 +1,29 @@
+
+ RUN  v5.0.3 /Users/wysh/coding/thon/iitb-health/app
+
+Queue pause lock held for this run (key 8274119); a running worker will not lease jobs.
+ ❯ tests/integration/care-history.test.ts (1 test | 1 failed) 63ms
+   × keeps source-bearing initial and background revisions atomically and prevents audit rewrites 12ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/care-history.test.ts > keeps source-bearing initial and background revisions atomically and prevents audit rewrites
+error: relation "sutra.care_workspace_history" does not exist
+ ❯ node_modules/.pnpm/pg@8.23.1/node_modules/pg/lib/client.js:694:17
+ ❯ tests/integration/care-history.test.ts:10:69
+      8| it('keeps source-bearing initial and background revisions atomically a…
+      9|   const state = await db.asActor(fixture.clinicianId, c => createWorks…
+     10|   const history = () => db.asActor(fixture.clinicianId, async c => (aw…
+       |                                                                     ^
+     11|   expect(await history()).toEqual([{ revision: state.revision, state }…
+     12|   const at = new Date(Date.now() + 2 * 86400000).toISOString();
+ ❯ withTransaction packages/data/src/pool.ts:97:20
+ ❯ tests/integration/care-history.test.ts:11:10
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  19:37:25
+   Duration  863ms (import 69%, transform 21%, tests 10%)

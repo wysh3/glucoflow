@@ -13,13 +13,13 @@
  * Light mode only for this MVP; dark mode is deferred.
  */
 @theme {
-  --color-canvas: #f5f8f5;
+  --color-canvas: #faf9f7;
   --color-surface: #ffffff;
-  --color-ink: #203b38;
-  --color-ink-soft: #5b706b;
-  --color-primary: #26796e;
-  --color-primary-hover: #1b5c53;
-  --color-line: #dce7e1;
+  --color-ink: #262724;
+  --color-ink-soft: #646762;
+  --color-primary: #3f7067;
+  --color-primary-hover: #31594f;
+  --color-line: #e5e5df;
   --color-review: #a85b00;
   --color-review-bg: #fff4e5;
   --color-danger: #b42318;
@@ -28,7 +28,7 @@
   --color-success-bg: #ecf8f1;
 
   --radius-control: 10px;
-  --radius-panel: 18px;
+  --radius-panel: 14px;
 
   --font-sans: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
@@ -105,7 +105,6 @@ body {
 
 /* Comfortable touch targets and stable mobile forms. */
 html { scroll-padding-top: 88px; }
-body { background-image: radial-gradient(ellipse at top right, #e9f3ec 0, transparent 48%); }
 ::selection { background: #cce9de; color: #203b38; }
 button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 640px) {
@@ -115,38 +114,14 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 
 /* Landing padding must add safe-area insets instead of replacing page spacing. */
 .welcome-page { display:flex; min-height:100svh; align-items:center; justify-content:center; padding:calc(32px + env(safe-area-inset-top)) 24px calc(32px + env(safe-area-inset-bottom)); }
-.welcome-orb { display:flex; align-items:center; justify-content:center; gap:10px; width:88px; height:88px; border-radius:50%; background:#b9ddcc; box-shadow:0 8px 24px #26796e15; }
-.welcome-orb span { width:7px; height:19px; border-radius:8px; background:#26796e; }
 @media(max-width:640px) { .welcome-page {padding-left:16px; padding-right:16px;} .welcome-page main {padding-bottom:0;} }
 
-.gluco-launcher {position:fixed;z-index:30;right:max(22px,env(safe-area-inset-right));bottom:calc(24px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:9px;border:0;background:transparent;border-radius:50%;cursor:pointer;}
-.gluco-orb {position:relative;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 30% 22%,#edfef9 0%,#a9ead7 35%,#4fac98 80%);box-shadow:inset -4px -5px 10px #347b7040,0 6px 20px #347b7030;border:1px solid #fff9;animation:gluco-breathe 5s ease-in-out infinite;}
-.gluco-eyes {display:flex;gap:10px;transition:transform .16s ease-out;}
-.gluco-eyes i {height:10px;width:5px;border-radius:50%;background:#235c51;box-shadow:0 1px 0 #ffffff80;}
-.gluco-caption {order:-1;border:1px solid #d9e8e2;background:#ffffff;border-radius:14px;padding:8px 12px;color:#46625a;font-size:12px;box-shadow:0 3px 10px #347b7010;}
+.gluco-launcher {position:fixed;z-index:30;right:24px;bottom:24px;display:flex;align-items:center;gap:8px;min-height:44px;padding:10px 14px;border:1px solid var(--color-line);background:white;border-radius:10px;color:var(--color-primary);cursor:pointer;}
+.gluco-caption {font-size:14px;font-weight:500;}
 .gluco-panel {border-radius:20px;top:auto;left:auto;bottom:calc(24px + env(safe-area-inset-bottom));right:24px;transform:none;translate:none;width:min(420px,calc(100vw - 32px));height:min(640px,calc(100dvh - 48px));max-height:calc(100dvh - 48px);}
-@keyframes gluco-breathe {0%,100%{filter:saturate(.95);box-shadow:inset -4px -5px 10px #347b7040,0 6px 20px #347b7030;}50%{filter:saturate(1.1);box-shadow:inset -4px -5px 10px #347b7040,0 6px 26px #347b7040;}}
 @media(min-width:1024px){.gluco-launcher[data-desktop-hidden="true"]{display:none;}}
-@media(max-width:639px){.gluco-launcher{right:16px;bottom:calc(84px + env(safe-area-inset-bottom));}.gluco-caption{display:none;}.gluco-orb{width:48px;height:48px;}.welcome-page~.gluco-launcher{bottom:20px;}.gluco-panel{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));}}
-@media(prefers-reduced-motion:reduce){.gluco-orb{animation:none;}.gluco-eyes{transition:none;}}
 
-/* Gluco's original expressive face uses only lightweight SVG and CSS. */
-.gluco-orb {animation:gluco-float 5s ease-in-out infinite;isolation:isolate;}
-.gluco-orb::before {content:'';position:absolute;inset:5px 8px auto 9px;height:20%;border-radius:50%;background:#ffffff55;filter:blur(3px);}
-.gluco-face {width:100%;height:100%;transform:translateX(var(--look-x,0px));transition:transform .18s ease-out;}
-.gluco-eye-pair {transform-origin:32px 29px;animation:gluco-blink 6s infinite;}
-.gluco-orbit {position:absolute;inset:-5px;border:1px solid #9fcebd50;border-radius:50%;}
-.gluco-orb-small {width:44px;height:44px;flex-shrink:0;}
-.gluco-orb[data-mood="listening"] {animation:gluco-attend 1.8s ease-in-out infinite;}
-.gluco-orb[data-mood="thinking"] {animation:gluco-think 2s ease-in-out infinite;}
-.gluco-orb[data-mood="thinking"] .gluco-orbit {border-top:2px solid #4f9c86;animation:gluco-spin 1.7s linear infinite;}
-.gluco-orb[data-mood="replying"] {animation:gluco-hello .75s ease-in-out 2;}
-.gluco-orb[data-mood="replying"] .gluco-mouth {animation:gluco-talk .4s ease-in-out 5;transform-origin:32px 40px;}
-.gluco-orb[data-mood="error"] {animation:none;transform:rotate(-7deg);}
-.gluco-thinking-stars {position:absolute;right:-3px;top:0;display:flex;gap:2px;}
-.gluco-thinking-stars i,.gluco-typing i {display:inline-block;width:4px;height:4px;border-radius:50%;background:#5a9b87;animation:gluco-dot 1.2s ease-in-out infinite;}
-.gluco-thinking-stars i:nth-child(2),.gluco-typing i:nth-child(2) {animation-delay:.15s;}
-.gluco-thinking-stars i:nth-child(3),.gluco-typing i:nth-child(3) {animation-delay:.3s;}
+/* Record assistant: stable surfaces and explicit loading text. */
 .gluco-typing {display:inline-flex;gap:4px;align-items:center;margin-right:6px;}
 .gluco-panel {width:min(480px,calc(100vw - 32px));height:min(760px,calc(100dvh - 48px));padding:20px;background:#fcfefb;box-shadow:0 24px 80px #254b3f25;}
 .gluco-panel>div:first-child>div {flex:1;min-width:0;}
@@ -157,55 +132,9 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 .gluco-composer {width:100%;min-width:0;resize:none;min-height:68px;max-height:140px;border:1px solid #cddfd3;border-radius:14px;padding:12px;font:inherit;font-size:14px;line-height:1.5;background:#fff;outline:none;}
 .gluco-composer:focus {border-color:#5b9279;box-shadow:0 0 0 3px #5b927920;}.gluco-composer:disabled {opacity:.65;}
 .gluco-suggestions {scrollbar-width:thin;}.gluco-panel form {align-items:center;flex-shrink:0;}
-@keyframes gluco-float {0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-5px) rotate(2deg);}}
-@keyframes gluco-blink {0%,43%,47%,100%{transform:scaleY(1);}45%{transform:scaleY(.08);}}
-@keyframes gluco-attend {0%,100%{transform:scale(1) rotate(-4deg);}50%{transform:scale(1.05) rotate(2deg);}}
-@keyframes gluco-think {0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-3px) rotate(5deg);}}
-@keyframes gluco-hello {0%,100%{transform:translateY(0) scale(1);}35%{transform:translateY(-6px) scale(1.05,.98);}65%{transform:translateY(0) scale(.98,1.03);}}
-@keyframes gluco-talk {0%,100%{transform:scaleY(1);}50%{transform:scaleY(.65);}}
-@keyframes gluco-spin {to{transform:rotate(360deg);}}
-@keyframes gluco-dot {0%,70%,100%{opacity:.4;transform:translateY(0);}35%{opacity:1;transform:translateY(-3px);}}
-@media(max-width:639px){.gluco-panel{padding:16px;height:min(760px,calc(100dvh - 32px));max-height:calc(100dvh - 32px);}.gluco-composer{font-size:16px;}.gluco-orb-small{width:42px;height:42px;}}
-@media(prefers-reduced-motion:reduce){.gluco-orb,.gluco-orb *, .gluco-typing i {animation:none!important;transition:none!important;}.gluco-orb{transform:none!important;}}
 .gluco-chat-header>div {flex-wrap:nowrap;margin-bottom:0;align-items:center;gap:6px;}
 .gluco-chat-header>div>div:first-child {flex:1;min-width:0;}
 .gluco-chat-header>div>div:last-child {flex-shrink:0;gap:0;}
-
-/* Interactive record body map. The figure is SVG; the stage adds a small 3D tilt. */
-.body-map-stage { width: 100%; transform-style: preserve-3d; transition: transform .2s ease-out; will-change: transform; }
-.body-map-svg { display: block; width: 100%; max-height: 720px; margin: 0 auto; overflow: visible; }
-.body-marker { cursor: pointer; outline: none; }
-.body-marker:focus-visible { outline: 3px solid #26796e; outline-offset: 4px; border-radius: 12px; }
-.body-marker.is-active { filter: url(#body-glow); }
-.body-marker text { pointer-events: none; }
-.body-scan-line { animation: body-scan 6.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
-@keyframes body-scan { 0%, 100% { transform: translateY(0); opacity: .08; } 45% { transform: translateY(600px); opacity: .38; } 55% { transform: translateY(600px); opacity: .38; } }
-@media (max-width: 640px) { .body-map-svg { max-height: 520px; } }
-@media (prefers-reduced-motion: reduce) { .body-map-stage { transition: none; } .body-scan-line { animation: none; opacity: .16; } }
-.body-marker .body-marker-halo { transform-box: fill-box; transform-origin: center; }
-.body-marker.is-active .body-marker-halo { animation: body-halo 2.4s ease-out infinite; }
-@keyframes body-halo { 0% { transform: scale(.7); opacity: .45; } 70% { transform: scale(1.15); opacity: 0; } 100% { transform: scale(1.15); opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .body-marker.is-active .body-marker-halo { animation: none; opacity: .2; } }
-
-/* Nine-dot system mark, adapted from the portfolio's system-chrome idea. */
-.system-glyph { display: inline-grid; grid-template-columns: repeat(3, 3px); gap: 3px; align-items: center; justify-items: center; }
-.system-glyph i { width: 3px; height: 3px; border-radius: 999px; background: currentColor; opacity: .45; animation: system-dot 3.2s ease-in-out infinite; }
-.system-glyph i:nth-child(3n + 2) { animation-delay: .18s; }
-.system-glyph i:nth-child(3n) { animation-delay: .36s; }
-@keyframes system-dot { 0%, 100% { opacity: .28; transform: scale(.8); } 42% { opacity: .9; transform: scale(1); } 68% { opacity: .46; transform: scale(.9); } }
-.rule-reveal { transform-origin: left; animation: rule-reveal 560ms cubic-bezier(.22, 1, .36, 1) both; }
-@keyframes rule-reveal { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.dotted-rule { border-top: 1px dotted var(--color-line); }
-@media (prefers-reduced-motion: reduce) { .system-glyph i, .rule-reveal { animation: none; } .system-glyph i { opacity: .55; } }
-
-/* Quiet dotted field behind the public hero. Purely visual, never content. */
-.hero-dots { background-image: radial-gradient(rgba(167,216,200,.11) 1px, transparent 1px); background-size: 22px 22px; }
-.reveal-up { animation: reveal-up .7s cubic-bezier(.22, 1, .36, 1) both; }
-.reveal-up-1 { animation-delay: .08s; }
-.reveal-up-2 { animation-delay: .16s; }
-.reveal-up-3 { animation-delay: .24s; }
-@keyframes reveal-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-@media (prefers-reduced-motion: reduce) { .reveal-up { animation: none; } }
 
 @media print {
   .no-print { display: none !important; }
@@ -215,3 +144,35 @@ button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
   .print-area th, .print-area td { padding: 3px 4px; }
   @page { size: A4 landscape; margin: 8mm; }
 }
+
+@media(max-width:639px){.gluco-launcher{right:16px;bottom:calc(20px + env(safe-area-inset-bottom));}.gluco-panel{right:16px;bottom:calc(16px + env(safe-area-inset-bottom));padding:16px;height:min(760px,calc(100dvh - 32px));max-height:calc(100dvh - 32px);}.gluco-composer{font-size:16px;}}
+@media(prefers-reduced-motion:reduce){.gluco-typing i{animation:none!important;}}
+
+/* Desktop records use one compact evidence row; narrow screens retain two lines. */
+@media(min-width:900px) {
+ .record-measurement-row { grid-template-columns:minmax(0,1fr) minmax(8rem,.6fr) minmax(9rem,.7fr) auto; gap:1rem; padding-block:.75rem; }
+ .record-measurement-row > p:nth-child(2) { grid-column:3; grid-row:1; font-size:1rem; }
+ .record-measurement-row > p:nth-child(3) { grid-column:2; grid-row:1; margin-top:0; }
+ .record-measurement-row > button { grid-column:4; grid-row:1; }
+}
+
+.loading-orb { display:inline-block; flex:none; overflow:visible; vertical-align:middle; }
+.loading-orb-body { transform-origin:114.27px 114.27px; animation:orb-sway 2.6s ease-in-out infinite; }
+.loading-orb-eyes { transform-origin:114.27px 114.27px; animation:orb-blink 3.8s ease-in-out infinite; }
+@keyframes orb-sway { 0%,100% { transform:translateY(0) rotate(-2deg); } 50% { transform:translateY(-5px) rotate(2deg); } }
+@keyframes orb-blink { 0%,42%,48%,100% { transform:scaleY(1); } 45% { transform:scaleY(.12); } }
+@media(prefers-reduced-motion:reduce) { .loading-orb-body,.loading-orb-eyes { animation:none; } }
+
+/* Shared disclosure treatment: plain controls, never native triangle markers. */
+summary { list-style:none; cursor:pointer; border-radius:6px; }
+summary::-webkit-details-marker { display:none; }
+summary::marker { content:''; }
+summary:hover { color:var(--color-ink); background-color:color-mix(in srgb,var(--color-ink) 4%,transparent); }
+summary:focus-visible { outline:2px solid var(--color-primary); outline-offset:3px; }
+details[open] > summary { color:var(--color-ink); }
+
+.loading-orb-still .loading-orb-body,.loading-orb-still .loading-orb-eyes { animation:none; }
+.loading-orb-gaze { transition:transform 110ms ease-out; }
+@media(prefers-reduced-motion:reduce) { .loading-orb-gaze { transition:none; transform:none!important; } }
+
+@media (hover:hover) and (prefers-reduced-motion:no-preference) { .loading-orb:hover .loading-orb-body { animation:orb-sway 1.1s ease-in-out infinite; } }

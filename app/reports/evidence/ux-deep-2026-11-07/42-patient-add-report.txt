@@ -1,0 +1,62 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Records":
+      - /url: /patient/records
+      - generic: Records
+    - link "Home readings":
+      - /url: /patient/master
+      - generic: Home readings
+    - link "Add report" [active]:
+      - /url: /patient/add-report
+      - generic: Add report
+    - link "Visit notes":
+      - /url: /patient/visit-notes
+      - generic: Visit notes
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Asha Rao (synthetic)
+  - paragraph: Patient
+- separator "Resize sidebar"
+- generic "Patient workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - heading "Add a report" [level=1]
+  - generic: Upload a PDF, a photo or a JPEG/PNG image of your report
+  - button "Choose a report"
+  - heading "Upload status" [level=2]
+  - list:
+    - generic: Upload incomplete · synthetic-hermes-proof-74378ac4-ced0-489f-922e-8068d7326430.pdf · 2 KB
+    - button "Finish upload"
+    - button "Cancel"
+  - paragraph: If the operating system stops the app, an unsent photo or form cannot be recovered. Uploads that already reached the server can be resumed after sign-in.
+  - heading "Selected clinic" [level=2]
+  - paragraph: Your report goes to the clinic linked to your record.
+  - paragraph: Patient identity · Asha Rao (synthetic)
+  - paragraph: Clinic · Glucoflow Demo Clinic (synthetic)
+- region "Notifications"
+- generic: "6.51"

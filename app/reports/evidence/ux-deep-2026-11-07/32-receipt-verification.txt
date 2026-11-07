@@ -1,0 +1,38 @@
+- main:
+  - link "glucoflow":
+    - /url: /
+    - generic: glucoflow
+  - link "Back":
+    - /url: /
+    - text: Back
+  - paragraph: Patient receipt check
+  - heading "What happened to this result?" [level=1]
+  - paragraph: A receipt code shows the recorded administrative stage and whether the clinic's event chain is intact. It does not show a patient name, test value, diagnosis or clinical decision.
+  - textbox "Receipt code":
+    - /placeholder: GLF-XXXXXXXXXX
+    - text: GLF-A008B69C6D
+  - button "Check receipt":
+    - text: Check receipt
+  - paragraph: Receipt created
+  - paragraph: Receipt GLF-A008B69C6D
+  - paragraph: The clinic recorded that the report arrived. It has not recorded a clinician value echo yet.
+  - paragraph: Recorded stage
+  - generic: Chain intact
+  - list:
+    - generic: Report received
+    - generic: Current
+    - generic: "2"
+    - generic: Clinician value echo
+    - generic: "3"
+    - generic: Patient contacted
+    - generic: "4"
+    - generic: Next step completed
+    - generic: "5"
+    - generic: Receipt closed
+  - paragraph:
+    - text: The check confirms the recorded administrative stage and the clinic's event chain. It does not prove that a diagnosis or treatment was correct, and it is not a clinical outcome.
+  - paragraph: The code is printed on the patient receipt slip and the hospital closure certificate. No login is needed. If the code is lost, ask the clinic that sent the report.
+  - link "Open the clinic workspace":
+    - /url: /sign-in
+    - text: Open the clinic workspace
+- region "Notifications"

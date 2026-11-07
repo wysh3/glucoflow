@@ -8,7 +8,9 @@ import {
 import type { AppContext } from '../context';
 import { parseBody, requireActor, withActorTx } from '../routes/helpers';
 import { ApiError } from '../errors';
-import { createGuideService, createGuideBudget } from './service';
+import { createGuideService } from './service';
+import { createGuideBudget } from './planner';
+import { readHermesBridgeConfig } from '../hermes/bridge';
 import { createConversationService } from './conversation';
 import { getPatientSummary, loadTimelinePage } from '@glucoflow/data';
 import { assertPatientAccess } from '../auth';
@@ -18,10 +20,9 @@ export function registerGuideRoutes(
 ): void {
   const config = {
     mode: ctx.config.GUIDE_MODE,
-    apiKey: ctx.config.GUIDE_API_KEY,
-    baseUrl: ctx.config.GUIDE_BASE_URL,
+    hermes: readHermesBridgeConfig(),
     hourlyLimit: ctx.config.GUIDE_MAX_CALLS_PER_HOUR,
-    timeoutMs: 15000,
+    timeoutMs: 35_000,
     maxConcurrent: 2,
     budget: createGuideBudget(ctx.config.GUIDE_MAX_CALLS_PER_HOUR, 2),
   };

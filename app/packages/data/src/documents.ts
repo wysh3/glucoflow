@@ -275,14 +275,7 @@ export async function listQueue(
     error_message: string | null;
     retry_allowed: boolean;
   }>(
-    `with latest_job as (
-       select distinct on (j.target_id)
-         j.id, j.target_id, j.state, j.stage, j.attempt, j.error_code, j.error_message, j.run_number
-       from sutra.jobs j
-       where j.kind = 'process_document'
-       order by j.target_id, j.run_number desc, j.created_at desc
-     )
-     select
+    `select
        d.id as document_id,
        d.patient_id,
        p.display_name as patient_name,
@@ -301,10 +294,25 @@ export async function listQueue(
        lj.error_message,
        (lj.state = 'failed') as retry_allowed
      from sutra.documents d
-     join sutra.patients p on p.id = d.patient_id
-     join sutra.app_users u on u.id = d.uploader_id
-     left join sutra.document_versions v on v.id = d.current_version_id
-     left join latest_job lj on lj.target_id = d.id
+     -- Bound each lookup by ID before evaluating row security. The state filter
+     -- can underestimate the queue size and otherwise rescan whole tables per row.
+     join lateral (
+       select display_name, clinic_identifier from sutra.patients where id = d.patient_id limit 1
+     ) p on true
+     join lateral (
+       select display_name from sutra.app_users where id = d.uploader_id limit 1
+     ) u on true
+     left join lateral (
+       select source_manifest_json, source_kind from sutra.document_versions
+       where id = d.current_version_id limit 1
+     ) v on true
+     left join lateral (
+       select j.id, j.state, j.stage, j.attempt, j.error_code, j.error_message
+       from sutra.jobs j
+       where j.target_id = d.id and j.kind = 'process_document'
+       order by j.run_number desc, j.created_at desc
+       limit 1
+     ) lj on true
      where d.clinic_id = $1
        and ($2 = 'all' or ${DOCUMENT_STATE_SQL} = $2)
      -- Newest first: with a bounded page, a reviewer must see the upload that just

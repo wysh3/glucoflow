@@ -1,14 +1,10 @@
 import { test, expect } from '@playwright/test';
-import { signIn } from './helpers';
-test('Gluco has expressive accessible states, factual follow-ups and clear chat', async ({
+import { openDemoPatient, signIn } from './helpers';
+test('Record assistant supports factual follow-ups and clear chat', async ({
   page,
 }) => {
   await signIn(page, 'clinician');
-  await page
-    .getByRole('link', { name: 'Open patient', exact: true })
-    .first()
-    .click();
-  await page.getByRole('link', { name: 'Visit overview', exact: true }).first().click();
+  await openDemoPatient(page, 'Visit overview');
   await page
     .getByRole('button', { name: 'Ask Gluco', exact: true })
     .click();
@@ -16,10 +12,7 @@ test('Gluco has expressive accessible states, factual follow-ups and clear chat'
   await expect(chat.getByTestId('guide-patient')).toContainText('Asha');
   const input = chat.getByRole('textbox', { name: 'Ask Gluco', exact: true });
   await input.fill('What is the latest HbA1c?');
-  await expect(chat.getByTestId('gluco-face')).toHaveAttribute(
-    'data-mood',
-    'listening',
-  );
+  await expect(input).toHaveValue('What is the latest HbA1c?');
   await input.press('Enter');
   await expect(
     chat.getByText('latest precisely dated', { exact: false }),
@@ -55,7 +48,7 @@ test('Gluco has expressive accessible states, factual follow-ups and clear chat'
     page.viewportSize()!.height,
   );
 });
-test('patient chat opens only their own context and reduced motion stops the orb', async ({
+test('patient chat opens only their own context without ornamental animation', async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -66,11 +59,7 @@ test('patient chat opens only their own context and reduced motion stops the orb
   const chat = page.getByRole('dialog', { name: 'Gluco guide', exact: true });
   await expect(chat.getByTestId('guide-patient')).toContainText('Your records');
   await expect(chat.getByRole('combobox')).toHaveCount(0);
-  expect(
-    await page.evaluate(
-      'getComputedStyle(document.querySelector(\'[role="dialog"] [data-testid="gluco-face"]\')).animationName',
-    ),
-  ).toBe('none');
+  await expect(chat.locator('.gluco-orb')).toHaveCount(0);
   const input = chat.getByRole('textbox', { name: 'Ask Gluco', exact: true });
   await input.fill('What notes were reported?');
   await input.press('Shift+Enter');
@@ -98,7 +87,7 @@ test('changing patient scope clears conversation and draft', async ({
     .fill('PRIVATE SYNTHETIC DRAFT');
   await chat.getByRole('button', { name: 'Close guide' }).click();
   await page
-    .getByRole('link', { name: 'Patients', exact: true })
+    .getByRole('link', { name: 'Patient records', exact: true })
     .first()
     .click();
   await page
@@ -114,11 +103,7 @@ test('Gluco recovers from a failed request and opens original evidence', async (
   page,
 }) => {
   await signIn(page, 'clinician');
-  await page
-    .getByRole('link', { name: 'Open patient', exact: true })
-    .first()
-    .click();
-  await page.getByRole('link', { name: 'Visit overview', exact: true }).first().click();
+  await openDemoPatient(page, 'Visit overview');
   await page
     .getByRole('button', { name: 'Ask Gluco', exact: true })
     .click();
@@ -142,10 +127,7 @@ test('Gluco recovers from a failed request and opens original evidence', async (
   const input = chat.getByRole('textbox', { name: 'Ask Gluco' });
   await input.fill('latest HbA1c');
   await input.press('Enter');
-  await expect(chat.getByTestId('gluco-face')).toHaveAttribute(
-    'data-mood',
-    'thinking',
-  );
+  await expect(chat.getByText('Looking through the records…', { exact: true })).toBeVisible();
   await expect(chat.getByText('latest HbA1c', { exact: true })).toBeVisible({
     timeout: 3000,
   });
@@ -154,10 +136,7 @@ test('Gluco recovers from a failed request and opens original evidence', async (
     'Synthetic temporary error',
   );
   await expect(input).toHaveValue('latest HbA1c');
-  await expect(chat.getByTestId('gluco-face')).toHaveAttribute(
-    'data-mood',
-    'error',
-  );
+  await expect(chat.getByRole('button', { name: 'Send message' })).toBeEnabled();
   await page.unroute('**/api/v1/guide/chat');
   await input.press('Enter');
   await expect(chat.getByRole('alert')).toHaveCount(0);

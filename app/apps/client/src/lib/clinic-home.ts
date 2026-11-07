@@ -6,15 +6,11 @@ type ClinicRoleContext = {
   quality?: boolean;
 };
 
-/** The first screen a clinic user should land on, chosen by their strongest role. */
+export const CARE_HOME = '/clinic/care';
+
+/** The synthetic workspace is available to signed-in clinic members. */
 export function clinicHome(contexts: ClinicRoleContext[]): string {
-  const clinic = contexts.find((context) => context.kind === 'clinic');
-  if (!clinic) return '/account';
-  if (clinic.clinician) return '/clinic/line';
-  if (clinic.desk) return '/clinic/intake';
-  if (clinic.nurse) return '/clinic/calls';
-  if (clinic.quality) return '/clinic/register';
-  return '/clinic/results';
+  return contexts.some((context) => context.kind === 'clinic') ? CARE_HOME : '/account';
 }
 
 export function roleHome(contexts: ClinicRoleContext[]): string {

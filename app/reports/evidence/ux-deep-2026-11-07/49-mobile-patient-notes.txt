@@ -1,0 +1,60 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- button "Open navigation":
+- generic "Patient workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+- button "Switch account"
+- generic: Demo
+- main:
+  - heading "Visit notes" [level=1]
+  - generic: Notes you write stay patient-reported
+  - heading "New note" [level=2]
+  - text: Category
+  - combobox "Category":
+    - generic: Diet / activity
+  - text: Event date (optional)
+  - textbox "Event date (optional)"
+  - text: Note
+  - textbox "Note":
+    - /placeholder: "For example: took the evening tablet most days, walked after dinner."
+  - button "Voice input":
+    - text: Voice input
+  - paragraph: 0 of 1000 characters. The submission date is recorded separately from the event date.
+  - button "Review and send" [disabled]
+  - paragraph: A note is never converted into a measured result, and it does not change your record.
+  - heading "Sent notes" [level=2]
+  - status: Loading
+- navigation "Main":
+  - link "Records":
+    - /url: /patient/records
+    - text: Records
+  - link "Home readings":
+    - /url: /patient/master
+    - text: Home readings
+  - link "Add report":
+    - /url: /patient/add-report
+    - text: Add report
+  - link "Visit notes":
+    - /url: /patient/visit-notes
+    - text: Visit notes
+  - link "Account":
+    - /url: /account
+    - text: Account
+- region "Notifications"

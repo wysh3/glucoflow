@@ -17,3 +17,6 @@ export * from './delta';
 
 export * from "./master";
 export * from './guide';
+export * from './care';
+
+export * from './speech';

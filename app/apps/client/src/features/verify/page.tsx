@@ -108,6 +108,7 @@ export function VerifyReceiptPage(): React.ReactElement {
   const copy = proof ? STAGE_COPY[proof.stage] : null;
   const current = proof ? progressIndex(proof.stage) : -1;
   const valid = proof?.valid ?? false;
+  const unreachable = proof?.stage === 'closed_unreachable';
 
   return (
     <main className="min-h-screen bg-canvas">
@@ -179,14 +180,18 @@ export function VerifyReceiptPage(): React.ReactElement {
                   </div>
                   <ol className="mt-3 space-y-2">
                     {PROGRESS.map((item, index) => {
-                      const done = index <= current;
+                      const notConfirmed = unreachable && (item.stage === 'patient_contacted' || item.stage === 'next_step_completed');
+                      const done = index <= current && !notConfirmed;
                       const isCurrent = index === current;
+                      const label = notConfirmed
+                        ? item.stage === 'patient_contacted' ? 'Patient contact not confirmed' : 'Next step not confirmed'
+                        : item.label;
                       return (
                         <li key={item.stage} className="flex items-center gap-3 text-sm">
                           <span className={`flex size-5 shrink-0 items-center justify-center rounded-full border text-[11px] ${done ? 'border-primary bg-primary text-canvas' : 'border-line bg-surface text-ink-soft'}`}>
                             {done ? <Check size={11} aria-hidden /> : index + 1}
                           </span>
-                          <span className={isCurrent ? 'font-medium text-ink' : done ? 'text-ink' : 'text-ink-soft'}>{item.label}</span>
+                          <span className={isCurrent ? 'font-medium text-ink' : done ? 'text-ink' : 'text-ink-soft'}>{label}</span>
                           {isCurrent ? <span className="ml-auto text-[11px] font-medium uppercase tracking-[0.1em] text-primary">Current</span> : null}
                         </li>
                       );

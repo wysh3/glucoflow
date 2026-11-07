@@ -1,0 +1,10 @@
+WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+test_expands_verified_local_source_and_marks_provenance (test_source_bundle.SourceBundleTests.test_expands_verified_local_source_and_marks_provenance) ... ok
+test_preserves_existing_local_changes (test_source_bundle.SourceBundleTests.test_preserves_existing_local_changes) ... ok
+test_refuses_changed_source_before_extraction (test_source_bundle.SourceBundleTests.test_refuses_changed_source_before_extraction) ... ok
+test_refuses_unexpected_archive_root (test_source_bundle.SourceBundleTests.test_refuses_unexpected_archive_root) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.021s
+
+OK

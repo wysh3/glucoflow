@@ -13,11 +13,8 @@ import {
 } from '../types';
 
 /**
- * Live multimodal extraction adapter (OpenAI-compatible chat completions).
- *
- * This adapter is not exercised in the local environment: no model provider
- * credentials or budget exist. It refuses to start without them, and it never
- * falls back to the fixture adapter.
+ * Live multimodal extraction adapter with a shared batching and budget boundary.
+ * The Hermes transport forwards one batch to the private, one-call agent runtime.
  * Source: docs/mvp/04-extraction-engine.md "Provider interface", "Budget".
  */
 
@@ -32,6 +29,7 @@ export type LiveProviderConfig = {
   maxDocumentCostUsd: number;
   requestTimeoutMs: number;
   pagesPerRequest: number;
+  transport?: 'openai-compatible' | 'hermes';
   promptVersion?: string;
 };
 
@@ -39,12 +37,30 @@ import { loadPromptTemplate } from './prompt';
 
 export { loadPromptTemplate };
 
+export const HERMES_EXTRACTION_RUNTIME_VERSION = '0.23.0';
+const maxHermesRequestBytes = 24 * 1024 * 1024;
+
+export function parseHermesServiceOrigin(value: string): URL {
+  let url: URL;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error('HERMES_URL must be an HTTP service origin.');
+  }
+  if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password ||
+      url.search || url.hash || url.pathname !== '/') {
+    throw new Error('HERMES_URL must be an HTTP service origin.');
+  }
+  return url;
+}
+
 export class LiveExtractionProvider implements ExtractionProvider {
-  readonly name = 'openai-compatible';
+  readonly name: 'openai-compatible' | 'hermes';
   readonly model: string;
   readonly mode = 'live' as const;
   readonly promptHash: string;
   private readonly prompt: string;
+  private readonly endpoint: string;
   private committedTokens = 0;
   private committedCostUsd = 0;
 
@@ -52,14 +68,20 @@ export class LiveExtractionProvider implements ExtractionProvider {
     private readonly config: LiveProviderConfig,
     private readonly budget: ProviderBudget,
   ) {
+    this.name = config.transport ?? 'openai-compatible';
+    this.endpoint = this.name === 'hermes'
+      ? new URL('/extract', parseHermesServiceOrigin(config.baseUrl)).href
+      : `${config.baseUrl.replace(/\/$/, '')}/chat/completions`;
     this.model = config.model;
     this.prompt = loadPromptTemplate();
     this.promptHash = createHash('sha256')
       .update(`${this.prompt}::schema-v1::${config.model}`)
+      .update(this.name === 'hermes' ? `::hermes-${HERMES_EXTRACTION_RUNTIME_VERSION}::extract` : '')
       .digest('hex')
       .slice(0, 32);
-    if (!config.apiKey)
-      throw new Error('EXTRACTION_API_KEY is required for live extraction');
+    if (this.name === 'hermes' && config.apiKey.length < 24)
+      throw new Error('HERMES_SERVICE_TOKEN must contain at least 24 characters.');
+    if (!config.apiKey) throw new Error('EXTRACTION_API_KEY is required for live extraction');
     if (
       !(config.maxDocumentCostUsd > 0) ||
       !(config.maxRunTokens > 0) ||
@@ -341,6 +363,7 @@ export class LiveExtractionProvider implements ExtractionProvider {
     );
     const onAbort = (): void => controller.abort();
     signal.addEventListener('abort', onAbort);
+    if (signal.aborted) controller.abort();
 
     const content: Record<string, unknown>[] = [
       {
@@ -372,45 +395,55 @@ export class LiveExtractionProvider implements ExtractionProvider {
           .join('\n\n'),
       },
     ];
-    for (const page of batch) {
-      if (!page.imagePath) continue;
-      const { readFile } = await import('node:fs/promises');
-      const bytes = await readFile(page.imagePath);
-      content.push({
-        type: 'image_url',
-        image_url: { url: `data:image/png;base64,${bytes.toString('base64')}` },
-      });
-    }
-
     try {
-      const response = await fetch(
-        `${this.config.baseUrl.replace(/\/$/, '')}/chat/completions`,
-        {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',
-            authorization: `Bearer ${this.config.apiKey}`,
-          },
-          body: JSON.stringify({
-            model: this.config.model,
-            ...(this.config.model === 'gpt-6-luna' || this.config.model.startsWith('gpt-6-luna-')
-              ? { reasoning_effort: 'low', max_completion_tokens: maxOutputTokens }
-              : { temperature: 0, max_tokens: maxOutputTokens }),
-            response_format: { type: 'json_object' },
-            messages: [
-              { role: 'system', content: this.prompt },
-              { role: 'user', content },
-            ],
-          }),
-          signal: controller.signal,
+      for (const page of batch) {
+        if (!page.imagePath) continue;
+        const { readFile } = await import('node:fs/promises');
+        const bytes = await readFile(page.imagePath);
+        content.push({
+          type: 'image_url',
+          image_url: { url: `data:image/png;base64,${bytes.toString('base64')}` },
+        });
+      }
+      const hermes = this.name === 'hermes';
+      const parameters = hermes
+        ? { max_completion_tokens: maxOutputTokens }
+        : this.config.model === 'gpt-6-luna' || this.config.model.startsWith('gpt-6-luna-')
+          ? { reasoning_effort: 'low', max_completion_tokens: maxOutputTokens }
+          : { temperature: 0, max_tokens: maxOutputTokens };
+      const body = JSON.stringify({
+        model: this.config.model,
+        ...parameters,
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: this.prompt },
+          { role: 'user', content },
+        ],
+      });
+      if (hermes && Buffer.byteLength(body) > maxHermesRequestBytes) {
+        throw new ProviderRequestError({
+          category: 'budget', retryable: false, message: 'Prepared pages exceed the Hermes extraction request size limit.',
+        });
+      }
+      const response = await fetch(this.endpoint, {
+        method: 'POST',
+        ...(hermes ? { redirect: 'error' as const } : {}),
+        headers: {
+          'content-type': 'application/json',
+          authorization: `Bearer ${this.config.apiKey}`,
         },
-      );
+        body,
+        signal: controller.signal,
+      });
       if (!response.ok) {
         const retryAfter = Number(response.headers.get('retry-after') ?? '0');
         const retryable = response.status === 429 || response.status >= 500;
+        await response.body?.cancel().catch(() => undefined);
         throw new ProviderRequestError({
           category:
-            response.status === 429
+            hermes && response.status === 504 ? 'timeout'
+              : hermes && (response.status === 401 || response.status === 403) ? 'auth'
+              : response.status === 429
               ? 'rate_limit'
               : response.status >= 500
                 ? 'server'
@@ -423,9 +456,18 @@ export class LiveExtractionProvider implements ExtractionProvider {
         });
       }
       const payload = (await response.json()) as {
+        engine?: string;
+        runtimeVersion?: string;
+        model?: string;
         choices?: { message?: { content?: string } }[];
-        usage?: { prompt_tokens?: number; completion_tokens?: number };
+        usage?: { prompt_tokens?: number | null; completion_tokens?: number | null } | null;
       };
+      if (hermes && (payload?.engine !== 'hermes' || payload.runtimeVersion !== HERMES_EXTRACTION_RUNTIME_VERSION ||
+          payload.model !== this.config.model || payload.choices?.length !== 1)) {
+        throw new ProviderRequestError({
+          category: 'invalid_response', retryable: false, message: 'Hermes did not return a verified extraction response.',
+        });
+      }
       const text = payload.choices?.[0]?.message?.content ?? '';
       let json: unknown;
       try {
@@ -441,11 +483,11 @@ export class LiveExtractionProvider implements ExtractionProvider {
         json,
         // Usage comes from provider metadata and local timing, never from model JSON.
         inputTokens:
-          typeof payload.usage?.prompt_tokens === 'number'
+          typeof payload.usage?.prompt_tokens === 'number' && Number.isSafeInteger(payload.usage.prompt_tokens) && payload.usage.prompt_tokens >= 0
             ? payload.usage.prompt_tokens
             : null,
         outputTokens:
-          typeof payload.usage?.completion_tokens === 'number'
+          typeof payload.usage?.completion_tokens === 'number' && Number.isSafeInteger(payload.usage.completion_tokens) && payload.usage.completion_tokens >= 0
             ? payload.usage.completion_tokens
             : null,
       };
@@ -462,7 +504,8 @@ export class LiveExtractionProvider implements ExtractionProvider {
         category: 'unknown',
         retryable: true,
         message:
-          error instanceof Error ? error.message : 'provider call failed',
+          this.name === 'hermes' ? 'Hermes extraction service could not be reached.'
+            : error instanceof Error ? error.message : 'provider call failed',
       });
     } finally {
       clearTimeout(timer);

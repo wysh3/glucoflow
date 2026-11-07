@@ -186,12 +186,12 @@ function ClosureHero({ stats, critical, onOpen }: { stats: ReturnType<typeof use
     <Card className="overflow-hidden border-ink/10 bg-ink text-canvas">
       <div className="grid gap-5 p-5 sm:p-6 lg:grid-cols-[1.2fr_.8fr]">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-canvas/60">The patient side of the result</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-canvas/60">Result closure</p>
           <h2 className="mt-2 max-w-[24ch] text-[28px] font-semibold leading-tight tracking-tight sm:text-[32px]">
-            The lab calls the doctor. Nobody calls the patient.
+            Patient contact and closure
           </h2>
           <p className="mt-2 max-w-[54ch] text-sm leading-6 text-canvas/70">
-            Every lab-flagged abnormal or critical diabetes result gets a named owner, a value echo, a contact attempt and a recorded next step. Unreachable is a disposition, not a false “informed”.
+            Review the recorded owner, clinician value echo, contact attempts and next step for each lab-flagged result.
           </p>
           <div className="mt-5 flex flex-wrap items-end gap-6">
             <div>
@@ -200,7 +200,7 @@ function ClosureHero({ stats, critical, onOpen }: { stats: ReturnType<typeof use
             </div>
             <div>
               <p className="text-[32px] font-semibold tabular-nums leading-none">{stats?.openLastMile ?? 0}</p>
-              <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-canvas/60">Still in the last mile</p>
+              <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-canvas/60">Open contact tasks</p>
             </div>
             <div>
               <p className="text-[32px] font-semibold tabular-nums leading-none text-[#ffb4a8]">{stats?.unreachable ?? 0}</p>
@@ -335,10 +335,8 @@ export function ResultsPage(): React.ReactElement {
   return (
     <div className="space-y-5">
       <SystemPageHeader
-        index="01"
-        label="Clinic / Diabetes result closure"
-        title="The last mile"
-        meta="A lab result is not closed when a doctor clicks. It is closed when the patient is reached or the attempts are documented. The lab flag is the source; this ledger does not interpret it."
+          title="Result ledger"
+        meta="Track lab flags, assigned owners, patient contact and recorded outcomes."
         actions={
           <>
             {config?.demoLabel ? (
@@ -378,6 +376,9 @@ export function ResultsPage(): React.ReactElement {
       {importCount ? <Alert tone="success" title="Lab feed imported">{importCount} receipt{importCount === 1 ? '' : 's'} created. Unmatched rows wait for a human.</Alert> : null}
 
       <ClosureHero stats={stats.data} critical={critical} onOpen={setSelected} />
+      <Link className="inline-flex min-h-11 items-center gap-1 text-sm font-medium text-primary hover:underline" to="/clinic/replay">
+        View the synthetic cohort replay <ArrowRight size={14} aria-hidden />
+      </Link>
 
       <Card className="px-4 py-4 sm:px-6">
         <div className="grid grid-cols-2 gap-y-4 sm:grid-cols-4 sm:gap-0">

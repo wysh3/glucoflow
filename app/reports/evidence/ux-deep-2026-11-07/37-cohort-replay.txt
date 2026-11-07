@@ -1,0 +1,93 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Result closure":
+      - /url: /clinic/results
+      - generic: Result closure
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - navigation "Result closure sections":
+    - link "Result ledger":
+      - /url: /clinic/results
+    - link "Clinician review":
+      - /url: /clinic/line
+    - link "Patient calls":
+      - /url: /clinic/calls
+    - link "Lab intake":
+      - /url: /clinic/intake
+    - link "Closure register":
+      - /url: /clinic/register
+  - heading "Cohort replay" [level=1]
+  - generic: A retrospective baseline and a deterministic queue simulation on the same cohort. It is not a controlled trial.
+  - generic: Synthetic cohort, not a measurement
+  - paragraph: Closed within SLA
+  - paragraph: 86.7%
+  - paragraph: Baseline 37.7%
+  - paragraph: +49.0 points from the baseline
+  - paragraph: Median handoff
+  - paragraph: 10 min
+  - paragraph: Baseline 68 min
+  - paragraph: "Modeled: 4 min desk + 6 min review"
+  - paragraph: Critical unacknowledged
+  - paragraph: 43.8%
+  - paragraph: "Baseline: no documented clinician acknowledgement"
+  - paragraph: Baseline against the closure loop
+  - generic: "Baseline: closed within SLA"
+  - generic: 37.7%
+  - generic: "With the loop: closed within SLA"
+  - generic: 86.7%
+  - generic: "With the loop: exception, not informed"
+  - generic: 13.3%
+  - paragraph: The closed share tracks the 86% reachability assumption. It is not an independent measurement.
+  - paragraph: Cohort 300 reports over 30 days. Baseline unacknowledged 32.7%, uninformed 60.0%, outpatient unacknowledged 41.8%, critical unacknowledged 43.8%.
+  - paragraph: Method and assumptions
+  - list:
+    - generic: Baseline is the recorded acknowledgement and communication on the cohort.
+    - generic: Intervention is a deterministic queue simulation, not a controlled trial.
+    - generic: Desk accepts custody in 4 minutes; clinician review adds 6 minutes.
+    - generic: One nurse, 4 minutes per call, 86% reachability, two attempts before an exception.
+    - generic: Critical SLA is 60 minutes; abnormal SLA is 24 hours.
+  - paragraph: This cohort is synthetic. The baseline is an assumption, not a measurement. Replace it with 100 to 300 consecutive reports from one clinic before quoting any number.
+  - paragraph:
+    - text: Regenerate with
+    - code: pnpm exec tsx scripts/replay.ts
+    - text: or pass
+    - code: "--input cohort.csv"
+    - text: for a real audit.
+- region "Notifications"

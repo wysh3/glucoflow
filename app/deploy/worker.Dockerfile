@@ -33,6 +33,7 @@ RUN apt-get update \
 COPY tsconfig.base.json tsconfig.node.json ./
 COPY packages ./packages
 COPY apps/worker ./apps/worker
+COPY apps/api/src ./apps/api/src
 COPY scripts ./scripts
 RUN pnpm --filter @glucoflow/worker build
 COPY deploy/supabase-ca.crt /app/supabase-ca.crt

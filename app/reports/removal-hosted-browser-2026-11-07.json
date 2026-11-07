@@ -1,0 +1,24 @@
+[
+  {
+    "viewport": "desktop",
+    "retiredRoute": true,
+    "preSigninHindi": true,
+    "patientRoleBoundary": true,
+    "stt": "saaras:v4",
+    "tts": "bulbul:v4-flash",
+    "providerDispatches": 0,
+    "overflow": false,
+    "pageErrors": 0
+  },
+  {
+    "viewport": "mobile",
+    "retiredRoute": true,
+    "preSigninHindi": true,
+    "patientRoleBoundary": true,
+    "stt": "saaras:v4",
+    "tts": "bulbul:v4-flash",
+    "providerDispatches": 0,
+    "overflow": false,
+    "pageErrors": 0
+  }
+]

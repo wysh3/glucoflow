@@ -11,9 +11,9 @@ test.describe('diabetes result closure ledger', () => {
     await page.goto('/clinic/results');
   });
 
-  test('opens on the last mile, not a dashboard table', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'The last mile' })).toBeVisible();
-    await expect(page.getByText('The lab calls the doctor. Nobody calls the patient.')).toBeVisible();
+  test('opens the ledger with patient contact and closure', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Result ledger' })).toBeVisible();
+    await expect(page.getByText('Patient contact and closure')).toBeVisible();
     await expect(page.getByText('Closed with patient within 7 days')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Import lab feed' })).toBeVisible();
     await expect(page.locator('[data-testid="result-row"]:visible').filter({ hasText: 'Sodium' }).first()).toBeVisible();

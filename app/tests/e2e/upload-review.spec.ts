@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, test } from '@playwright/test';
 import { buildSyntheticReport, smokerunDate } from '../../scripts/lib/synthetic-report';
-import { signIn, switchAccount } from './helpers';
+import { openDemoPatient, signIn, switchAccount } from './helpers';
 
 /**
  * The full demonstration path: a patient uploads a synthetic report, the worker
@@ -87,9 +87,7 @@ test.describe('upload to approval', () => {
     await expect(page.getByText(filename).locator('visible=true').first()).toBeVisible({
       timeout: 30_000,
     });
-    await page.goto('/clinic/patients');
-    await page.getByRole('link', { name: 'Open patient' }).first().click();
-    await page.getByRole('link', {name:'Progression',exact:true}).click();
+    await openDemoPatient(page);
     await expect(page.getByRole('heading', { name: 'Progression' })).toBeVisible();
     // The table lists every recorded value, including the one just approved.
     await page.getByRole('button', { name: 'Table' }).click();

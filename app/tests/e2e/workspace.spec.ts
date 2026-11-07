@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { signIn } from './helpers';
+import { openDemoPatient, signIn } from './helpers';
 
 test('landing is inset and primary roles fit the viewport without scrolling', async ({
   page,
@@ -49,11 +49,7 @@ test('doctor overview consolidates approved facts and source links', async ({
   page,
 }) => {
   await signIn(page, 'clinician');
-  await page
-    .getByRole('link', { name: 'Open patient', exact: true })
-    .first()
-    .click();
-  await page.getByRole('link', { name: 'Visit overview', exact: true }).first().click();
+  await openDemoPatient(page, 'Visit overview');
   await expect(
     page.getByRole('heading', { name: 'Visit overview', exact: true }),
   ).toBeVisible({ timeout: 5000 });
@@ -74,6 +70,7 @@ test('doctor overview consolidates approved facts and source links', async ({
   ).toBeVisible();
   await page
     .getByRole('button', { name: 'Open source for HbA1c', exact: true })
+    .first()
     .click();
   await expect(
     page.getByRole('dialog', { name: 'Source document', exact: true }),
@@ -90,7 +87,7 @@ test('doctor overview consolidates approved facts and source links', async ({
     page.getByRole('heading', { name: 'Progression', exact: true }),
   ).toBeVisible();
 });
-test('orb guide helps navigate without providing clinical advice', async ({
+test('record guide helps navigate without providing clinical advice', async ({
   page,
 }) => {
   await signIn(page, 'patient');
@@ -141,6 +138,6 @@ test('orb guide helps navigate without providing clinical advice', async ({
 });
 
 test('screening menu preserves implicit option values', async ({page}) => {
- await signIn(page,'clinician');await page.getByRole('link',{name:'Open patient',exact:true}).first().click();await page.getByRole('link',{name:'Home reports',exact:true}).click();
+ await signIn(page,'clinician');await openDemoPatient(page, 'Visit overview');await page.getByRole('navigation', {name:'Patient record sections', exact:true}).getByRole('link',{name:'Home reports',exact:true}).click();
  const menu=page.getByRole('combobox',{name:'Review',exact:true});await expect(menu).toContainText('Retinal screening');await menu.click();await expect(page.getByRole('option')).toHaveCount(4);await page.getByRole('option',{name:'Renal monitoring',exact:true}).click();await expect(menu).toContainText('Renal monitoring');
 });

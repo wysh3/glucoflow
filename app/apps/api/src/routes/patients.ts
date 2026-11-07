@@ -40,7 +40,7 @@ import {
   withActorTx,
 } from './helpers';
 import { withIdempotency } from './idempotency';
-import type { AppContext } from '../context';
+import { extractionLabel, extractionMode, type AppContext } from '../context';
 
 const patientListQuery = z.object({
   search: z.string().max(120).optional(),
@@ -77,13 +77,10 @@ export function registerPatientRoutes(app: FastifyInstance, ctx: AppContext): vo
       capabilities: actor.capabilities,
       appEnv: ctx.config.APP_ENV,
       extraction: {
-        mode: ctx.config.EXTRACTION_PROVIDER === 'fixture' ? 'fixture' : 'live',
+        mode: extractionMode(ctx.config),
         provider: ctx.config.EXTRACTION_PROVIDER,
         model: ctx.config.EXTRACTION_MODEL,
-        label:
-          ctx.config.EXTRACTION_PROVIDER === 'fixture'
-            ? 'Fixture data: deterministic rule engine, not an AI model'
-            : `Live extraction model: ${ctx.config.EXTRACTION_MODEL}`,
+        label: extractionLabel(ctx.config),
       },
       storage: { mode: ctx.config.STORAGE_MODE },
       serverTime: new Date().toISOString(),

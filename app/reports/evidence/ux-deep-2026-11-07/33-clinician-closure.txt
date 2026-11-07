@@ -1,0 +1,108 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Result closure":
+      - /url: /clinic/results
+      - generic: Result closure
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - navigation "Result closure sections":
+    - link "Result ledger":
+      - /url: /clinic/results
+    - link "Clinician review" [active]:
+      - /url: /clinic/line
+    - link "Patient calls":
+      - /url: /clinic/calls
+    - link "Lab intake":
+      - /url: /clinic/intake
+    - link "Closure register":
+      - /url: /clinic/register
+  - heading "Clinician review" [level=1]
+  - generic: Review incoming results and open their source evidence.
+  - paragraph: Potassium 5.9mmol/L
+  - paragraph: flagged 06:33 PM · Breached 4084 min ago
+  - paragraph:
+    - text: Asha Rao
+    - generic: · P0482
+    - generic: · SRL Diagnostics
+  - generic: Critical, lab flagged
+  - button "Seen"
+  - button "Correct value"
+  - button "Source"
+  - paragraph: ALT 44U/L
+  - paragraph: flagged 11:18 AM · Breached 4084 min ago
+  - paragraph:
+    - text: Fatima Khan
+    - generic: · P0589
+    - generic: · SRL Diagnostics
+  - generic: Abnormal, lab flagged
+  - button "Seen"
+  - button "Correct value"
+  - button "Source"
+  - paragraph: Fasting glucose 154mg/dL
+  - paragraph: flagged 01:18 PM · Breached 4084 min ago
+  - paragraph:
+    - text: Kavita Joshi
+    - generic: · P0546
+    - generic: · SRL Diagnostics
+  - generic: Abnormal, lab flagged
+  - button "Seen"
+  - button "Correct value"
+  - button "Source"
+  - paragraph: HbA1c 7.9%
+  - paragraph: flagged 03:18 PM · Breached 4084 min ago
+  - paragraph:
+    - text: Sunita More
+    - generic: · P0520
+    - generic: · SRL Diagnostics
+  - generic: Abnormal, lab flagged
+  - button "Seen"
+  - button "Correct value"
+  - button "Source"
+  - paragraph: Sodium 131mmol/L
+  - paragraph: flagged 05:18 PM · Breached 4084 min ago
+  - paragraph:
+    - text: Asha Rao (synthetic)
+    - generic: · P0482
+    - generic: · SRL Diagnostics
+  - generic: Abnormal, lab flagged
+  - button "Seen"
+  - button "Correct value"
+  - button "Source"
+- region "Notifications"

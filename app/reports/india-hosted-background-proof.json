@@ -1,0 +1,98 @@
+{
+  "synthetic": true,
+  "apiReadsAfterApproval": 0,
+  "proof": "Read-only DB observation; only deployed worker can reconcile after approval",
+  "passed": true,
+  "samples": [
+    {
+      "elapsedSeconds": 0,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "-Infinity"
+    },
+    {
+      "elapsedSeconds": 5,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:13:50 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 10,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:13:50 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 15,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:13:50 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 20,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:14:06 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 25,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:14:06 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 30,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:14:06 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 35,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:14:22 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 40,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:14:22 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 45,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:14:22 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 50,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:14:38 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 55,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:14:38 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 60,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:14:38 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 65,
+      "status": "monitoring",
+      "revision": 3,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:14:38 GMT+0530 (India Standard Time)"
+    },
+    {
+      "elapsedSeconds": 70,
+      "status": "expired",
+      "revision": 4,
+      "monitorCheckedAt": "Sat Nov 07 2026 19:14:54 GMT+0530 (India Standard Time)"
+    }
+  ]
+}

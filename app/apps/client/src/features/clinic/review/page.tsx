@@ -204,7 +204,7 @@ export function ReviewPage(): React.ReactElement {
                     >
                       {data.extractionMode === 'fixture'
                         ? 'Fixture processing: rule engine (this document)'
-                        : `Live extraction: ${data.extractionModel} (this document)`}
+                        : `${data.extractionProvider === 'hermes' ? 'Gluco extraction' : 'Live extraction'}: ${data.extractionModel} (this document)`}
                     </Badge>
                   </span>
                 }

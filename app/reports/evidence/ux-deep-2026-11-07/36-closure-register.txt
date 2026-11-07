@@ -1,0 +1,407 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Result closure":
+      - /url: /clinic/results
+      - generic: Result closure
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - navigation "Result closure sections":
+    - link "Result ledger":
+      - /url: /clinic/results
+    - link "Clinician review":
+      - /url: /clinic/line
+    - link "Patient calls":
+      - /url: /clinic/calls
+    - link "Lab intake":
+      - /url: /clinic/intake
+    - link "Closure register" [active]:
+      - /url: /clinic/register
+  - heading "Closure register" [level=1]
+  - generic: Review or print recorded outcomes and unresolved exceptions.
+  - generic: View
+  - button "Register"
+  - button "Exceptions"
+  - generic: From
+  - textbox "From": 2026-08-09
+  - generic: To
+  - textbox "To": 2026-11-08
+  - button "Print A4 register"
+  - paragraph: Rows
+  - paragraph: "21"
+  - paragraph: Open
+  - paragraph: "17"
+  - paragraph: Closed
+  - paragraph: "3"
+  - paragraph: Exceptions
+  - paragraph: "1"
+  - paragraph: Result closure register
+  - paragraph: 2026-08-09 to 2026-11-08 · administrative receipt, not a clinical opinion · the lab flag is reproduced, not interpreted
+  - table:
+    - rowgroup:
+      - row "Received Patient Test Value Flag Clinician Seen Informed Status Action":
+        - columnheader "Received"
+        - columnheader "Patient"
+        - columnheader "Test"
+        - columnheader "Value"
+        - columnheader "Flag"
+        - columnheader "Clinician"
+        - columnheader "Seen"
+        - columnheader "Informed"
+        - columnheader "Status"
+        - columnheader "Action"
+    - rowgroup:
+      - row "Nov 4, 2026, 6:28 PM Asha Rao · P0482 Potassium 5.9 mmol/L Critical Dr Meera Nair (synthetic) No Not recorded With clinician":
+        - cell "Nov 4, 2026, 6:28 PM"
+        - cell "Asha Rao · P0482":
+          - text: Asha Rao
+          - generic: · P0482
+        - cell "Potassium"
+        - cell "5.9 mmol/L"
+        - cell "Critical":
+          - generic: Critical
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "With clinician":
+          - generic: With clinician
+        - cell
+      - row "Nov 4, 2026, 5:08 PM Asha Rao (synthetic) · P0482 Sodium 131 mmol/L Abnormal Dr Meera Nair (synthetic) No Not recorded With clinician":
+        - cell "Nov 4, 2026, 5:08 PM"
+        - cell "Asha Rao (synthetic) · P0482":
+          - text: Asha Rao (synthetic)
+          - generic: · P0482
+        - cell "Sodium"
+        - cell "131 mmol/L"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "With clinician":
+          - generic: With clinician
+        - cell
+      - row "Nov 4, 2026, 4:08 PM Ramesh Patil · P0511 eGFR 52 mL/min/1.73m2 Abnormal Clinician Arun Das (synthetic) No Not recorded With clinician":
+        - cell "Nov 4, 2026, 4:08 PM"
+        - cell "Ramesh Patil · P0511":
+          - text: Ramesh Patil
+          - generic: · P0511
+        - cell "eGFR"
+        - cell "52 mL/min/1.73m2"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Clinician Arun Das (synthetic)"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "With clinician":
+          - generic: With clinician
+        - cell
+      - row "Nov 4, 2026, 4:08 PM Ramesh Patil · P0511 HbA1c 8.7 % Abnormal Dr Meera Nair (synthetic) Yes Not recorded Awaiting contact":
+        - cell "Nov 4, 2026, 4:08 PM"
+        - cell "Ramesh Patil · P0511":
+          - text: Ramesh Patil
+          - generic: · P0511
+        - cell "HbA1c"
+        - cell "8.7 %"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Yes"
+        - cell "Not recorded"
+        - cell "Awaiting contact":
+          - generic: Awaiting contact
+        - cell
+      - row "Nov 4, 2026, 3:08 PM Sunita More · P0520 HbA1c 7.9 % Abnormal Dr Meera Nair (synthetic) No Not recorded With clinician":
+        - cell "Nov 4, 2026, 3:08 PM"
+        - cell "Sunita More · P0520":
+          - text: Sunita More
+          - generic: · P0520
+        - cell "HbA1c"
+        - cell "7.9 %"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "With clinician":
+          - generic: With clinician
+        - cell
+      - row "Nov 4, 2026, 2:13 PM Asha Rao (synthetic) · P0482 Potassium 6.4 mmol/L Critical Unassigned No Not recorded In intake":
+        - cell "Nov 4, 2026, 2:13 PM"
+        - cell "Asha Rao (synthetic) · P0482":
+          - text: Asha Rao (synthetic)
+          - generic: · P0482
+        - cell "Potassium"
+        - cell "6.4 mmol/L"
+        - cell "Critical":
+          - generic: Critical
+        - cell "Unassigned"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "In intake":
+          - generic: In intake
+        - cell
+      - row "Nov 4, 2026, 2:08 PM Sunita More · P0520 eGFR 48 mL/min/1.73m2 Abnormal Unassigned No Not recorded In intake":
+        - cell "Nov 4, 2026, 2:08 PM"
+        - cell "Sunita More · P0520":
+          - text: Sunita More
+          - generic: · P0520
+        - cell "eGFR"
+        - cell "48 mL/min/1.73m2"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Unassigned"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "In intake":
+          - generic: In intake
+        - cell
+      - row "Nov 4, 2026, 2:08 PM Imran Shaikh · P0534 Chloride 112 mmol/L Abnormal Clinician Arun Das (synthetic) No Not recorded With clinician":
+        - cell "Nov 4, 2026, 2:08 PM"
+        - cell "Imran Shaikh · P0534":
+          - text: Imran Shaikh
+          - generic: · P0534
+        - cell "Chloride"
+        - cell "112 mmol/L"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Clinician Arun Das (synthetic)"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "With clinician":
+          - generic: With clinician
+        - cell
+      - row "Nov 4, 2026, 1:08 PM Imran Shaikh · P0534 Sodium 128 mmol/L Critical Unassigned No Not recorded In intake":
+        - cell "Nov 4, 2026, 1:08 PM"
+        - cell "Imran Shaikh · P0534":
+          - text: Imran Shaikh
+          - generic: · P0534
+        - cell "Sodium"
+        - cell "128 mmol/L"
+        - cell "Critical":
+          - generic: Critical
+        - cell "Unassigned"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "In intake":
+          - generic: In intake
+        - cell
+      - row "Nov 4, 2026, 1:08 PM Fatima Khan · P0589 Fasting glucose 142 mg/dL Abnormal Dr Meera Nair (synthetic) Yes Not recorded Awaiting contact":
+        - cell "Nov 4, 2026, 1:08 PM"
+        - cell "Fatima Khan · P0589":
+          - text: Fatima Khan
+          - generic: · P0589
+        - cell "Fasting glucose"
+        - cell "142 mg/dL"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Yes"
+        - cell "Not recorded"
+        - cell "Awaiting contact":
+          - generic: Awaiting contact
+        - cell
+      - row "Nov 4, 2026, 1:08 PM Kavita Joshi · P0546 Fasting glucose 154 mg/dL Abnormal Dr Meera Nair (synthetic) No Not recorded With clinician":
+        - cell "Nov 4, 2026, 1:08 PM"
+        - cell "Kavita Joshi · P0546":
+          - text: Kavita Joshi
+          - generic: · P0546
+        - cell "Fasting glucose"
+        - cell "154 mg/dL"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "With clinician":
+          - generic: With clinician
+        - cell
+      - row "Nov 4, 2026, 12:08 PM Arjun Nair · P0577 Creatinine 1.4 mg/dL Abnormal Clinician Arun Das (synthetic) No Not recorded With clinician":
+        - cell "Nov 4, 2026, 12:08 PM"
+        - cell "Arjun Nair · P0577":
+          - text: Arjun Nair
+          - generic: · P0577
+        - cell "Creatinine"
+        - cell "1.4 mg/dL"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Clinician Arun Das (synthetic)"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "With clinician":
+          - generic: With clinician
+        - cell
+      - row "Nov 4, 2026, 11:08 AM Fatima Khan · P0589 ALT 44 U/L Abnormal Dr Meera Nair (synthetic) No Not recorded With clinician":
+        - cell "Nov 4, 2026, 11:08 AM"
+        - cell "Fatima Khan · P0589":
+          - text: Fatima Khan
+          - generic: · P0589
+        - cell "ALT"
+        - cell "44 U/L"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "With clinician":
+          - generic: With clinician
+        - cell
+      - row "Nov 4, 2026, 10:08 AM Sanjay Gupta · P0594 HbA1c 8.1 % Abnormal Clinician Arun Das (synthetic) No Not recorded With clinician":
+        - cell "Nov 4, 2026, 10:08 AM"
+        - cell "Sanjay Gupta · P0594":
+          - text: Sanjay Gupta
+          - generic: · P0594
+        - cell "HbA1c"
+        - cell "8.1 %"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Clinician Arun Das (synthetic)"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "With clinician":
+          - generic: With clinician
+        - cell
+      - row "Nov 4, 2026, 9:08 AM Sanjay Gupta · P0594 ALT 68 U/L Abnormal Unassigned No Not recorded In intake":
+        - cell "Nov 4, 2026, 9:08 AM"
+        - cell "Sanjay Gupta · P0594":
+          - text: Sanjay Gupta
+          - generic: · P0594
+        - cell "ALT"
+        - cell "68 U/L"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Unassigned"
+        - cell "No"
+        - cell "Not recorded"
+        - cell "In intake":
+          - generic: In intake
+        - cell
+      - row "Nov 3, 2026, 5:08 PM Kavita Joshi · P0546 HbA1c 9.2 % Abnormal Dr Meera Nair (synthetic) Yes 11/4/26, 2:08 PM Informed Close":
+        - cell "Nov 3, 2026, 5:08 PM"
+        - cell "Kavita Joshi · P0546":
+          - text: Kavita Joshi
+          - generic: · P0546
+        - cell "HbA1c"
+        - cell "9.2 %"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Yes"
+        - cell "11/4/26, 2:08 PM"
+        - cell "Informed":
+          - generic: Informed
+        - cell "Close":
+          - button "Close"
+      - row "Nov 2, 2026, 7:08 PM Ramesh Patil · P0511 Potassium 5.6 mmol/L Abnormal Dr Meera Nair (synthetic) Yes 11/3/26, 7:08 PM Closed":
+        - cell "Nov 2, 2026, 7:08 PM"
+        - cell "Ramesh Patil · P0511":
+          - text: Ramesh Patil
+          - generic: · P0511
+        - cell "Potassium"
+        - cell "5.6 mmol/L"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Yes"
+        - cell "11/3/26, 7:08 PM"
+        - cell "Closed":
+          - generic: Closed
+        - cell
+      - row "Nov 2, 2026, 7:08 PM Arjun Nair · P0577 Urine albumin/creatinine ratio 42 mg/g Abnormal Dr Meera Nair (synthetic) Yes 11/3/26, 7:08 PM Informed Close":
+        - cell "Nov 2, 2026, 7:08 PM"
+        - cell "Arjun Nair · P0577":
+          - text: Arjun Nair
+          - generic: · P0577
+        - cell "Urine albumin/creatinine ratio"
+        - cell "42 mg/g"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Yes"
+        - cell "11/3/26, 7:08 PM"
+        - cell "Informed":
+          - generic: Informed
+        - cell "Close":
+          - button "Close"
+      - row "Nov 1, 2026, 7:08 PM Deepak Verma · P0558 Creatinine 1.8 mg/dL Abnormal Dr Meera Nair (synthetic) Yes 11/2/26, 7:08 PM Closed":
+        - cell "Nov 1, 2026, 7:08 PM"
+        - cell "Deepak Verma · P0558":
+          - text: Deepak Verma
+          - generic: · P0558
+        - cell "Creatinine"
+        - cell "1.8 mg/dL"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Yes"
+        - cell "11/2/26, 7:08 PM"
+        - cell "Closed":
+          - generic: Closed
+        - cell
+      - row "Oct 31, 2026, 7:08 PM Meena Kulkarni · P0563 Potassium 6.2 mmol/L Critical Dr Meera Nair (synthetic) Yes Not recorded Not informed":
+        - cell "Oct 31, 2026, 7:08 PM"
+        - cell "Meena Kulkarni · P0563":
+          - text: Meena Kulkarni
+          - generic: · P0563
+        - cell "Potassium"
+        - cell "6.2 mmol/L"
+        - cell "Critical":
+          - generic: Critical
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Yes"
+        - cell "Not recorded"
+        - cell "Not informed":
+          - generic: Not informed
+        - cell
+      - row "Oct 30, 2026, 7:08 PM Asha Rao · P0482 eGFR 52 mL/min/1.73m2 Abnormal Dr Meera Nair (synthetic) Yes 10/31/26, 7:08 PM Closed":
+        - cell "Oct 30, 2026, 7:08 PM"
+        - cell "Asha Rao · P0482":
+          - text: Asha Rao
+          - generic: · P0482
+        - cell "eGFR"
+        - cell "52 mL/min/1.73m2"
+        - cell "Abnormal":
+          - generic: Abnormal
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Yes"
+        - cell "10/31/26, 7:08 PM"
+        - cell "Closed":
+          - generic: Closed
+        - cell
+- region "Notifications"

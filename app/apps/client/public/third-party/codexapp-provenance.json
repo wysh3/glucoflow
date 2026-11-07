@@ -1,0 +1,15 @@
+{
+  "package": "@brutalstrikedevs/codexapp",
+  "version": "0.1.91",
+  "license": "MIT",
+  "upstream": "https://github.com/friuns2/codexui",
+  "distribution": "https://registry.npmjs.org/@brutalstrikedevs/codexapp/-/codexapp-0.1.91.tgz",
+  "integrity": "sha512-+WF45YAxseuuHjpUFP0J3JtpAs4/fApFPxVD1an0dfbY27k8lSjTL4yID8MKz8chTWcyJajRErZFRHZ/tYxLjg==",
+  "adaptation": "Upstream UI component structure and scoped styles ported to React with GlucoFlow content and authorization; Codex server and launcher are excluded.",
+  "source_files": {
+    "dist/assets/ThreadConversation-DeDMyTtO.css": "fdfeeb475798a8af50c2166dcf5607e9a3bda5978c9be2219bd3697e333c4a37",
+    "dist/assets/index-8Y1vSwLj.css": "31048213b215db0b69871130d3d03971bae6d1db72790b78193dd7cba1424a52",
+    "dist/assets/ThreadConversation-BpumRxvo.js": "1ff738f40b1b913745c029640bc6efa3782e8fa40543d1de87e84746dea9ea23",
+    "dist/assets/index-DaFfIKeO.js": "0919b22342d66a37117874ba938c2caaf842da28e91f6f84202df160d2a435a1"
+  }
+}

@@ -1,11 +1,11 @@
-import { HeartPulse, ArrowUpRight, Stethoscope, User, ClipboardCheck, Users } from 'lucide-react';
+import { ArrowRight, FileText, Users, Check, ArrowUpRight } from 'lucide-react';
 import {demoAccounts,demoEnabled,type DemoAccount} from '../../auth/demo';
 import * as React from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Card, CardBody, Input, Label, ScreenTitle } from '@glucoflow/ui';
+import { Link, Navigate, useLocation } from 'react-router-dom';
+import { Button, Card, CardBody, Input, Label, Spinner, LoadingOrb } from '@glucoflow/ui';
 import { useSession } from '../../auth/session';
-import { SystemGlyph } from '../../components/system-glyph';
-import { clinicHome } from '../../lib/clinic-home';
+
+import { roleHome } from '../../lib/clinic-home';
 
 /**
  * Sign-in. Invalid credentials are explained without revealing whether an account
@@ -13,83 +13,87 @@ import { clinicHome } from '../../lib/clinic-home';
  * the configured identity provider).
  */
 export function SignInPage(): React.ReactElement {
-  const { status, signIn, config, me } = useSession();
-  const navigate = useNavigate();
+  const { status, signIn, config, me, error: sessionError } = useSession();
   const location = useLocation();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
+  const [showRoles, setShowRoles] = React.useState(false);
+
+  const from = (location.state as { from?: string } | null)?.from;
+  const target = from?.startsWith('/') && !from.startsWith('//') ? from : null;
 
   if (status === 'signed-in' && me) {
-    const target = (location.state as { from?: string } | null)?.from;
-    if (target && !demoEnabled) return <Navigate to={target} replace />;
-    const clinic = me.contexts.some((context) => context.kind === 'clinic');
-    const patient = me.contexts.some((context) => context.kind === 'patient');
-    return <Navigate to={clinic && !patient ? clinicHome(me.contexts) : patient ? (demoEnabled ? '/patient/master' : '/patient/records') : '/account'} replace />;
+    if (target) return <Navigate to={target} replace />;
+    return <Navigate to={roleHome(me.contexts)} replace />;
   }
 
-  const submit = async (event: React.FormEvent): Promise<void> => {
-    event.preventDefault();
-    setBusy(true);
-    setError(null);
-    try {
-      await signIn(email.trim(), password);
-      navigate('/account', { replace: true });
-    } catch (caught) {
-      setError(caught instanceof Error ? caught.message : 'Sign-in did not complete.');
-    } finally {
-      setBusy(false);
-    }
+  const authenticate = async (email: string, password: string): Promise<void> => {
+    if (busy) return;
+    setBusy(true); setError(null);
+    try { await signIn(email, password); }
+    catch (caught) { setError(caught instanceof Error ? caught.message : 'Sign-in did not complete.'); }
+    finally { setBusy(false); }
   };
-
-  const enterDemo=async(account:DemoAccount):Promise<void>=>{
-    setBusy(true);setError(null);
-    try{await signIn(account.email,account.password);navigate(account.key.includes('patient')?'/patient/master':'/clinic/line',{replace:true});}
-    catch(caught){setError(caught instanceof Error?caught.message:'Could not open this demo role.');}
-    finally{setBusy(false);}
+  const submit = (event: React.FormEvent): void => {
+    event.preventDefault(); void authenticate(email.trim(), password);
   };
+  const enterDemo = (account: DemoAccount) => authenticate(account.email, account.password);
   if(demoEnabled)return (
-    <main className="welcome-page">
-      <section data-testid="welcome-panel" className="relative mx-auto w-full max-w-[980px] overflow-hidden rounded-[28px] border border-line bg-surface p-5 shadow-[0_16px_70px_rgba(32,59,56,0.06)] sm:p-8 lg:p-10">
-        <header className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5"><HeartPulse size={24} className="text-primary" aria-hidden/><p className="text-xl font-semibold tracking-tight text-primary">glucoflow</p></div>
-          <span className="rounded-full bg-primary/7 px-3 py-1.5 text-[11px] text-primary">Interactive demo</span>
-        </header>
-        <div className="rule-reveal mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 border-y border-line py-2.5 text-[11px] font-medium uppercase tracking-[0.12em] text-ink-soft">
-          <SystemGlyph className="mr-1 text-primary" />
-          <span>Access</span><span aria-hidden>·</span><span>Synthetic workspaces</span><span aria-hidden>·</span><span>04 roles</span><span aria-hidden>·</span><span>One click</span>
-        </div>
-        <div className="my-6 grid items-center gap-5 sm:my-8 lg:grid-cols-[1fr_auto]">
-          <div><p className="mb-2 text-xs font-medium tracking-wide text-primary">Demo access</p>
-            <h1 className="reveal-up reveal-up-1 max-w-lg text-[28px] font-semibold leading-tight tracking-tight text-ink sm:text-[40px]">Choose a workspace.</h1>
-            <p className="mt-3 max-w-md text-sm leading-6 text-ink-soft">Four roles. One click. Each card prefills a synthetic account and signs you in automatically. Access is enforced by the API.</p>
+    <SignInFrame>
+    <main className="flex flex-1 items-center px-5 py-7 sm:px-10 sm:py-8">
+      <section data-testid="welcome-panel" lang="en-IN" dir="ltr" className="mx-auto w-full max-w-6xl">
+        <div className="grid items-center gap-8 lg:grid-cols-[0.95fr_1.15fr] lg:gap-12">
+        <div className="mx-auto max-w-2xl text-center lg:text-left">
+          <p className="mb-4 text-sm font-medium text-[#34776b]">Meet Gluco · For diabetes care teams</p>
+          <h1 className="text-[40px] font-semibold leading-[1.08] tracking-[-0.045em] text-[#263f3b] sm:text-[48px] lg:text-[48px]">Your care team,<br className="hidden sm:block" /> a little more connected.</h1>
+          <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-[#58665e] lg:mx-0">Less chasing lab updates. Clearer handovers. One place to ask what’s pending, check the evidence, and prepare the next step.</p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+            {demoAccounts.filter(account=>account.key==='clinic').map(account=><button type="button" key={account.key} data-testid="demo-card-clinic" disabled={busy||status==='loading'||status==='unavailable'} onClick={()=>void enterDemo(account)} className="inline-flex min-h-12 items-center gap-5 rounded-full bg-[#286e64] px-6 text-sm font-semibold text-white shadow-[0_6px_18px_-8px_rgba(40,110,100,0.5)] transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34776b] focus-visible:ring-offset-4 disabled:opacity-50">Explore the clinic <ArrowRight size={17} aria-hidden /></button>)}
+            {demoAccounts.filter(account=>account.key==='patient').map(account=><button type="button" key={account.key} data-testid="demo-card-patient" disabled={busy||status==='loading'||status==='unavailable'} onClick={()=>void enterDemo(account)} className="inline-flex min-h-12 items-center gap-1.5 rounded-full px-4 text-sm font-medium text-[#58665e] transition hover:text-[#263f3b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34776b] disabled:opacity-50">Patient view <ArrowUpRight size={15} aria-hidden /></button>)}
           </div>
-          <div className="hidden h-28 w-28 items-center justify-center rounded-full bg-[#edf5ef] lg:flex" aria-hidden><span className="welcome-orb"><span/><span/></span></div>
+          <p className="mt-3 text-xs leading-5 text-[#58665e]">No account setup · Shared demo accounts · Fictional records only</p>
+          {status === 'loading' ? <div className="mt-3 flex justify-center"><Spinner label="Connecting securely…" /></div> : null}
+          {status === 'unavailable' ? <div role="alert" className="mt-3 text-sm text-danger"><p>{sessionError ?? 'Connection could not complete.'}</p><Button type="button" size="sm" onClick={() => window.location.reload()}>Reconnect</Button></div> : null}
+          {busy ? <p role="status" className="mt-2 text-xs text-[#34776b]">Opening workspace…</p> : null}
+          {error ? <p role="alert" className="mt-2 text-xs text-danger">{error}</p> : null}
         </div>
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">{demoAccounts.filter(account=>!account.key.startsWith('other-')).map((account, index)=>(
-          <button key={account.key} data-testid={`demo-card-${account.key}`} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)}
-            className="group relative flex flex-col items-start justify-start min-h-[116px] rounded-2xl border border-line bg-canvas/65 p-3.5 text-left transition hover:border-primary/50 hover:bg-primary/5 disabled:opacity-50 sm:min-h-[160px] sm:p-4">
-            <span className="mb-2 flex h-8 w-8 items-center justify-center rounded-xl bg-surface text-primary">{account.key.includes('patient') ? <User size={18} aria-hidden/> : account.key==='clinician' ? <Stethoscope size={18} aria-hidden/> : account.key==='reviewer' ? <ClipboardCheck size={18} aria-hidden/> : <Users size={18} aria-hidden/>}</span>
-            <span aria-hidden="true" className="absolute right-3.5 top-4 flex items-center gap-1.5 text-[11px] tabular-nums text-ink-soft"><span>0{index + 1}</span><ArrowUpRight size={15} aria-hidden/></span><span className="block text-sm font-semibold text-ink">{account.label}</span>
-            <span className="mt-1.5 block text-[11px] leading-4 text-ink-soft sm:text-xs sm:leading-5">{account.description}</span>
-          </button>
-        ))}</div>
-        <footer className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4 text-[11px] text-ink-soft">
-          <p>All demo patient records are synthetic. Access is enforced by the API.</p>
-          <details className="relative"><summary className="min-h-8 cursor-pointer px-2 py-2 text-primary">Test access separation</summary><div className="absolute bottom-full left-0 z-10 mb-2 w-60 max-w-[calc(100vw-2rem)] rounded-xl border border-line bg-surface p-2 shadow-lg sm:left-auto sm:right-0">{demoAccounts.filter(account=>account.key.startsWith('other-')).map(account=><button key={account.key} data-testid={`demo-card-${account.key}`} disabled={busy||status==='loading'} onClick={()=>void enterDemo(account)} className="block min-h-11 w-full rounded-lg px-3 text-left text-sm hover:bg-canvas">{account.label}<span className="sr-only"> {account.description}</span></button>)}</div></details>
-        </footer>
-        {busy?<p role="status" className="mt-2 text-xs text-primary">Opening workspace…</p>:null}
-        {error?<p role="alert" className="mt-2 text-xs text-danger">{error}</p>:null}
+        <figure className="mx-auto w-full max-w-2xl">
+          <div className="overflow-hidden rounded-[28px] bg-[#faeee4]">
+            <img src="/brand/gluco-care-hero.webp" alt="Gluco, a pearlescent care companion with a small medical cap, connecting a record, a handover and an acknowledgement."
+              width={1536} height={1024} fetchPriority="high" decoding="async"
+              className="pointer-events-none block h-auto w-full select-none" />
+          </div>
+          <figcaption className="mt-3 text-center text-xs leading-5 text-[#58665e]">A companion for the team. The decisions stay with you.</figcaption>
+        </figure>
+        </div>
+
+        <div className="mt-8 overflow-hidden rounded-2xl border border-[#e8ddd2] bg-[#fffbf7]/80 shadow-[0_8px_30px_-20px_rgba(96,66,44,0.18)] sm:mt-10" role="region" aria-label="Illustrative workflow preview">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#e8ddd2] px-5 py-3">
+            <p className="text-sm font-medium text-[#263f3b]">“What’s still waiting for a handover?”</p>
+            <span className="text-[11px] text-[#58665e]">Illustrative workflow · Dev Mehta, fictional</span>
+          </div>
+          <div className="grid gap-5 px-5 py-5 sm:grid-cols-3 sm:gap-8">
+            <div className="flex items-start gap-3"><FileText size={18} className="mt-0.5 shrink-0 text-[#34776b]" aria-hidden /><div><p className="text-sm font-medium text-[#263f3b]">Start with the source</p><p className="mt-1 text-xs leading-5 text-[#58665e]">Collection is recorded. Lab receipt is still unconfirmed.</p></div></div>
+            <div className="flex items-start gap-3"><Users size={18} className="mt-0.5 shrink-0 text-[#34776b]" aria-hidden /><div><p className="text-sm font-medium text-[#263f3b]">Keep the owner in view</p><p className="mt-1 text-xs leading-5 text-[#58665e]">Prepare a handover for the lab team, with its supporting events.</p></div></div>
+            <div className="flex items-start gap-3"><Check size={18} className="mt-0.5 shrink-0 text-[#34776b]" aria-hidden /><div><p className="text-sm font-medium text-[#263f3b]">You make the call</p><p className="mt-1 text-xs leading-5 text-[#58665e]">Review the proposed action. Keep its source and approval history.</p></div></div>
+          </div>
+        </div>
+        <div className="mt-3 text-center text-xs text-[#58665e]">
+          <button type="button" aria-expanded={showRoles} aria-controls={showRoles ? 'demo-roles' : undefined} onClick={() => setShowRoles(value => !value)} className="min-h-11 rounded-lg px-3 py-2 hover:text-[#263f3b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34776b]">{showRoles ? 'Hide team roles' : 'Explore another team role'}</button>
+          {showRoles ? <div id="demo-roles" className="mt-1 flex flex-wrap justify-center gap-2">{demoAccounts.filter(account=>account.key!=='clinic'&&account.key!=='patient').map(account=><button type="button" key={account.key} data-testid={`demo-card-${account.key}`} disabled={busy||status==='loading'||status==='unavailable'} onClick={()=>void enterDemo(account)} className="min-h-11 rounded-full border border-[#d9e5de] bg-[#f2f8f3] px-4 hover:bg-[#e4f0e9] disabled:opacity-50">{account.label}</button>)}</div> : null}
+        </div>
       </section>
     </main>
+    </SignInFrame>
   );
 
   return (
-    <div className="safe-top flex min-h-screen items-center justify-center bg-canvas px-4 py-10">
+    <SignInFrame>
+    <main className="codexapp-main-scroll flex min-h-0 flex-1 items-center justify-center px-4 py-10">
       <div className="w-full max-w-[420px] space-y-4">
-        <ScreenTitle title="glucoflow" />
-        <Card>
+        <Card lang="en-IN" dir="ltr">
           <CardBody className="pt-6">
             <form onSubmit={submit} className="space-y-4" noValidate>
               <div className="space-y-1">
@@ -127,12 +131,31 @@ export function SignInPage(): React.ReactElement {
             </form>
           </CardBody>
         </Card>
-        <p className="text-[12px] text-ink-soft">
+        <p lang="en-IN" dir="ltr" className="text-[12px] text-[#58665e]">
           {config?.authMode === 'supabase'
             ? 'Sign-in is handled by the configured identity provider.'
             : 'Local development sign-in. Accounts were created by the seed command; no public sign-up exists.'}
         </p>
       </div>
-    </div>
+    </main>
+    </SignInFrame>
   );
+}
+
+
+function SignInFrame({children}: {children: React.ReactNode}) {
+  return <div className="gluco-landing flex min-h-dvh flex-col bg-[#fcf2e9] text-[#263f3b]">
+    <header className="flex items-center justify-between gap-3 px-5 py-3 sm:px-8">
+      <span className="flex items-center gap-2 text-base font-semibold text-[#34776b]"><LoadingOrb size={34} /> glucoflow</span>
+
+    </header>
+
+    {children}
+    <footer className="flex flex-wrap justify-center gap-x-6 px-5 py-4 text-xs text-[#58665e]">
+      <span className="inline-flex min-h-11 items-center">Workflow assistance · No diagnosis or prescribing</span>
+      <Link to="/showcase" className="inline-flex min-h-11 items-center">Walkthrough</Link>
+      <Link to="/privacy" className="inline-flex min-h-11 items-center">Privacy and data use</Link>
+      <Link to="/verify" className="inline-flex min-h-11 items-center">Verify a receipt</Link>
+    </footer>
+  </div>;
 }

@@ -1,0 +1,94 @@
+- link:
+  - /url: "#main-content"
+  - text: Skip to content
+- complementary:
+  - button [expanded]:
+  - generic: glucoflow
+  - navigation:
+    - link:
+      - /url: /clinic/care
+      - generic: Care
+    - link:
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link:
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator
+- generic: Clinic workspace
+- generic: Language
+- combobox
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button: Switch account
+- generic: Care simulation
+- main:
+  - heading [level=1]: Care workspace
+  - tablist:
+    - tab:
+      - text: Chat
+    - tab [selected]:
+      - text: Worklist
+    - tab:
+      - text: Encounters
+  - generic: ⋯
+  - region:
+    - tabpanel:
+      - heading [level=2]: Worklist
+      - button:
+        - text: New task
+      - heading [level=2]: Needs attention
+      - generic: "1"
+      - list:
+        - text: Dev Mehta · Awaiting lab receipt
+        - generic: · 1 h 10 min
+      - generic: Filter tasks
+      - paragraph:
+        - text: 3 tasks
+      - paragraph: Asha Shah · Confirm specimen receipt
+      - generic: Awaiting approval
+      - generic: Lab team
+      - button:
+        - text: Review task
+      - paragraph: Dev Mehta · Confirm specimen receipt
+      - generic: Monitoring
+      - generic: Lab team
+      - button:
+        - text: View task
+      - paragraph: Sara Khan · Confirm clinician acknowledgement
+      - generic: Monitoring
+      - generic: Dr Anil Sen
+      - button:
+        - text: View task
+- dialog "Confirm specimen receipt":
+  - heading "Confirm specimen receipt" [level=2]
+  - paragraph: Asha Shah · Basic metabolic panel
+  - button "Close" [active]:
+  - generic: Awaiting approval
+  - generic: Playbook v1
+  - link "View episode":
+    - /url: /clinic/care?view=worklist&encounter=74980677-c996-4c4c-96a5-e64954163a83
+    - text: View episode
+  - term: Owner
+  - definition: Lab team
+  - term: Evidence
+  - definition: LIS · Specimen receipt
+  - term:
+    - text: Last status change
+  - definition: Pending approval
+  - term:
+    - text: Expires
+  - definition:
+    - time: Nov 7, 2026, 5:32 PM
+  - heading "Source history" [level=3]:
+    - text: Source history
+  - list:
+    - button "HIS · Order placed":
+      - generic: HIS · Order placed
+    - time: 4:22 PM
+  - generic: Task action
+  - combobox "Task action":
+    - generic: Choose an action
+  - combobox
+  - button "Confirm action" [disabled]

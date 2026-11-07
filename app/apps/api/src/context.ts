@@ -39,6 +39,7 @@ export function extractionMode(config: ApiConfig): 'fixture' | 'live' {
 }
 
 export function extractionLabel(config: ApiConfig): string {
+  if (config.EXTRACTION_PROVIDER === 'hermes') return `Hermes extraction: ${config.EXTRACTION_MODEL}`;
   return config.EXTRACTION_PROVIDER === 'fixture'
     ? 'Fixture data: deterministic rule engine, not an AI model'
     : `Live extraction model: ${config.EXTRACTION_MODEL}`;

@@ -5,10 +5,12 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   createExtractionProvider,
   ProviderRequestError,
+  processDocumentJob,
   runExtractionPipeline,
   type ProviderBudget,
 } from '@glucoflow/extraction';
-import { appRoot } from '../../scripts/lib/env';
+import { appRoot, localRoot } from '../../scripts/lib/env';
+import { createFixture, createTestContext, jobState, leaseTargetJob, removeClinic, stageFixtureUpload } from './harness';
 
 /**
  * Live extraction adapter, verified against a local protocol stub.
@@ -25,6 +27,9 @@ import { appRoot } from '../../scripts/lib/env';
 
 type StubBehaviour =
   | { kind: 'valid' }
+  | { kind: 'hermes_valid' }
+  | { kind: 'hermes_repair' }
+  | { kind: 'hermes_unattested' }
   | { kind: 'schema_error_then_valid' }
   | { kind: 'always_schema_error' }
   | { kind: 'status'; status: number }
@@ -34,7 +39,7 @@ type StubBehaviour =
 let server: Server;
 let baseUrl = '';
 let behaviour: StubBehaviour = { kind: 'valid' };
-let requests: { body: Record<string, unknown>; authorization: string | null }[] = [];
+let requests: { body: Record<string, unknown>; authorization: string | null; url: string | undefined }[] = [];
 
 const validPayload = {
   documentIdentity: { nameRaw: 'Asha Rao', identifierRaw: 'P0482' },
@@ -107,7 +112,7 @@ beforeAll(async () => {
       } catch {
         body = {};
       }
-      requests.push({ body, authorization: request.headers.authorization ?? null });
+      requests.push({ body, authorization: request.headers.authorization ?? null, url: request.url });
 
       const reply = (status: number, payload: unknown): void => {
         response.writeHead(status, { 'content-type': 'application/json' });
@@ -115,6 +120,19 @@ beforeAll(async () => {
       };
 
       switch (behaviour.kind) {
+        case 'hermes_valid':
+        case 'hermes_repair':
+        case 'hermes_unattested': {
+          const content = behaviour.kind === 'hermes_repair' && requests.length === 1
+            ? { facts: 'not-an-array' }
+            : validPayload;
+          reply(200, {
+            ...(behaviour.kind === 'hermes_unattested' ? {} : { engine: 'hermes', runtimeVersion: '0.23.0', model: body.model }),
+            choices: [{ message: { content: JSON.stringify(content) } }],
+            usage: { prompt_tokens: 120, completion_tokens: 40 },
+          });
+          return;
+        }
         case 'status':
           reply(behaviour.status, { error: { message: 'stub failure' } });
           return;
@@ -351,4 +369,118 @@ describe('live provider adapter (protocol stub, not a real model)', () => {
     expect(error).toBeInstanceOf(ProviderRequestError);
     expect((error as ProviderRequestError).detail.retryable).toBe(true);
   }, 30_000);
+});
+
+describe('Hermes extraction bridge (protocol stub)', () => {
+  const token = 'synthetic-hermes-worker-token';
+
+  function select(overrides: Partial<Parameters<typeof createExtractionProvider>[0]> = {}) {
+    return {
+      provider: 'hermes',
+      model: 'gpt-6-luna',
+      hermesUrl: new URL(baseUrl).origin,
+      hermesServiceToken: token,
+      maxCalls: 12,
+      maxDocumentCostUsd: 1,
+      maxRunTokens: 100_000,
+      usdPerMillionInputTokens: 1,
+      usdPerMillionOutputTokens: 2,
+      requestTimeoutMs: 5_000,
+      ...overrides,
+    } as const;
+  }
+
+  it('reserves once before sending a prepared PDF batch and counts one verified agent response', async () => {
+    reset({ kind: 'hermes_valid' });
+    const reservations: number[] = [];
+    const charges: number[] = [];
+    const provider = createExtractionProvider(select(), budget({
+      reserve: async (request) => {
+        expect(requests).toHaveLength(0);
+        expect(request?.tokens).toBeGreaterThan(0);
+        reservations.push(1);
+        return { allowed: true, ordinal: 1 };
+      },
+      reconcile: async (ordinal, usage) => {
+        expect(usage).toMatchObject({ state: 'succeeded', inputTokens: 120, outputTokens: 40, tokens: 160 });
+        charges.push(ordinal);
+      },
+    }));
+    const result = await runPipeline(provider);
+    expect(result.provider).toMatchObject({ name: 'hermes', model: 'gpt-6-luna', mode: 'live' });
+    expect(result.usage).toMatchObject({ calls: 1, inputTokens: 120, outputTokens: 40 });
+    expect(reservations).toEqual([1]);
+    expect(charges).toEqual([1]);
+    expect(requests).toHaveLength(1);
+    expect(requests[0]).toMatchObject({ url: '/extract', authorization: `Bearer ${token}` });
+    expect(Object.keys(requests[0]!.body).sort()).toEqual(['max_completion_tokens', 'messages', 'model', 'response_format']);
+    const [, user] = requests[0]!.body.messages as Array<{ content: Array<{ type: string; text?: string; image_url?: { url: string } }> }>;
+    expect(user?.content[0]?.text).toContain('EVIDENCE LINES');
+    expect(user?.content[1]?.image_url?.url).toMatch(/^data:image\/png;base64,/);
+  });
+
+  it('charges each bounded schema repair as its own dispatch', async () => {
+    reset({ kind: 'hermes_repair' });
+    let ordinal = 0;
+    const provider = createExtractionProvider(select(), budget({
+      reserve: async () => {
+        expect(requests).toHaveLength(ordinal);
+        ordinal += 1;
+        return { allowed: true, ordinal };
+      },
+    }));
+    const result = await runPipeline(provider);
+    expect(result.usage.calls).toBe(2);
+    expect(ordinal).toBe(2);
+    expect(JSON.stringify(requests[1]?.body.messages)).toContain('Correction needed');
+  });
+
+  it('rejects unverified and unavailable Hermes without a fixture fallback', async () => {
+    reset({ kind: 'hermes_unattested' });
+    await expect(runPipeline(createExtractionProvider(select(), budget()))).rejects.toMatchObject({
+      detail: { category: 'invalid_response', retryable: false },
+    });
+    expect(requests).toHaveLength(1);
+    reset({ kind: 'status', status: 503 });
+    let reservations = 0;
+    await expect(runPipeline(createExtractionProvider(select(), budget({
+      reserve: async () => {
+        reservations += 1;
+        return reservations === 1 ? { allowed: true, ordinal: 1 } : { allowed: false, ordinal: null };
+      },
+    })))).rejects.toMatchObject({ detail: { category: 'budget', retryable: false } });
+    expect(requests).toHaveLength(1);
+    const unconfigured = createExtractionProvider(select({ hermesServiceToken: '' }), budget());
+    expect(unconfigured.mode).toBe('live');
+    await expect(runPipeline(unconfigured)).rejects.toMatchObject({ detail: { category: 'auth' } });
+    expect(requests).toHaveLength(1);
+  });
+
+  it('records a terminal authentication failure under the durable job lease', async () => {
+    reset({ kind: 'status', status: 401 });
+    const ctx = await createTestContext();
+    const fixture = await createFixture(ctx, 'hermes-extract-auth');
+    try {
+      const upload = await stageFixtureUpload(ctx, fixture, { filename: '2026-09-14_lab_report.pdf' });
+      const lease = await leaseTargetJob(ctx, upload.jobId);
+      expect(lease).not.toBeNull();
+      await processDocumentJob({
+        tx: ctx.asWorker, storage: ctx.storage, sourceBucket: ctx.sourceBucket,
+        tmpRoot: join(localRoot, 'tmp', 'hermes-extract-auth'), enableOcr: false, renderPages: false,
+        maxPages: 10, maxCalls: 12, createProvider: (reservation) => createExtractionProvider(select(), reservation),
+        heartbeat: () => undefined, log: () => undefined,
+      }, lease!);
+      expect(await jobState(ctx, upload.jobId)).toMatchObject({ state: 'failed', error_code: 'provider_auth', attempt: 1 });
+      expect(requests).toHaveLength(1);
+      const result = await ctx.owner((client) => client.query(
+        'select provider, state, error_code, call_count from sutra.extraction_runs where job_id = $1', [upload.jobId],
+      ));
+      expect(result.rows).toEqual([{ provider: 'hermes', state: 'failed', error_code: 'provider_auth', call_count: 1 }]);
+    } finally {
+      await removeClinic(ctx, fixture.clinicId);
+      await removeClinic(ctx, fixture.otherClinicId);
+      await ctx.close();
+    }
+  });
+
 });

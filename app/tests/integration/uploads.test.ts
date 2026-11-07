@@ -1,6 +1,9 @@
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { UPLOAD_MAX_BYTES } from '@glucoflow/contracts';
+import { UPLOAD_MAX_BYTES, type UploadSessionDto } from '@glucoflow/contracts';
+import { signLocalToken } from '../../apps/api/src/auth';
+import { createAppContext } from '../../apps/api/src/context';
+import { buildServer } from '../../apps/api/src/server';
 import {
   createFixture,
   createTestContext,
@@ -20,16 +23,77 @@ import {
 
 let context: TestContext;
 let fixture: TestFixture;
+let api: Awaited<ReturnType<typeof createAppContext>>;
+let app: Awaited<ReturnType<typeof buildServer>>;
+let authorization: string;
 
 beforeAll(async () => {
   context = await createTestContext();
   fixture = await createFixture(context, 'uploads');
+  api = await createAppContext();
+  app = await buildServer(api);
+  const { accessToken } = await signLocalToken(api.config, { userId: fixture.patientUserId, email: 'synthetic@test.local' });
+  authorization = `Bearer ${accessToken}`;
 });
 
 afterAll(async () => {
+  await app?.close();
+  await api?.pool.end();
   await removeClinic(context, fixture.clinicId);
   await removeClinic(context, fixture.otherClinicId);
   await context.close();
+});
+
+const pdfBytes = Buffer.from('%PDF-1.4 synthetic upload checks');
+const videoBytes = Buffer.from('\u0000\u0000\u0000\u0018ftypisom');
+
+function createViaApi(kind: 'file' | 'photos', filename: string, contentType: string, byteCount: number) {
+  return app.inject({
+    method: 'POST', url: '/api/v1/uploads', headers: { authorization, 'idempotency-key': randomUUID() },
+    payload: { patientId: fixture.patientId, kind, files: [{ filename, contentType, byteCount }] },
+  });
+}
+
+it('rejects declared video uploads before issuing a storage link', async () => {
+  const response = await createViaApi('file', 'report.mp4', 'video/mp4', videoBytes.length);
+  expect(response.statusCode).toBe(422);
+  expect(response.json().error.fields['files.0.contentType']).toBeDefined();
+});
+
+it.each([
+  { title: 'bytes that differ from the declared size', kind: 'file', filename: 'report.pdf', contentType: 'application/pdf', bytes: pdfBytes, byteCount: pdfBytes.length - 1 },
+  { title: 'a PDF declared as a photo', kind: 'photos', filename: 'report.jpg', contentType: 'image/jpeg', bytes: pdfBytes, byteCount: pdfBytes.length },
+  { title: 'video bytes declared as a PDF', kind: 'file', filename: 'report.pdf', contentType: 'application/pdf', bytes: videoBytes, byteCount: videoBytes.length },
+] as const)('rejects $title when finishing the upload', async ({ kind, filename, contentType, bytes, byteCount }) => {
+  const created = await createViaApi(kind, filename, contentType, byteCount);
+  expect(created.statusCode).toBe(201);
+  const upload = created.json<UploadSessionDto>();
+  await context.storage.putObject(context.sourceBucket, upload.items[0]!.objectPath, bytes, contentType);
+  const response = await app.inject({ method: 'POST', url: `/api/v1/uploads/${upload.sessionId}/complete`, headers: { authorization } });
+  expect(response.statusCode).toBe(422);
+  expect(response.json().error.fields).toHaveProperty('files');
+  const session = await app.inject({ method: 'GET', url: `/api/v1/uploads/${upload.sessionId}`, headers: { authorization } });
+  expect(session.json().state).toBe('created');
+});
+
+it('lets an incomplete session finish after its stored bytes arrive and reuses that completion', async () => {
+  const created = await createViaApi('file', 'report.pdf', 'application/pdf', pdfBytes.length);
+  expect(created.statusCode).toBe(201);
+  const upload = created.json<UploadSessionDto>();
+  const complete = () => app.inject({ method: 'POST', url: `/api/v1/uploads/${upload.sessionId}/complete`, headers: { authorization } });
+  const incomplete = await complete();
+  expect(incomplete.statusCode).toBe(422);
+  expect(incomplete.json().error.fields.files).toContain('is missing');
+
+  await context.storage.putObject(context.sourceBucket, upload.items[0]!.objectPath, pdfBytes, 'application/pdf');
+  const accepted = await complete();
+  const replay = await complete();
+  expect(accepted.statusCode).toBe(202);
+  expect(replay.statusCode).toBe(202);
+  expect(accepted.json()).toMatchObject({ state: 'queued', documentId: expect.any(String), jobId: expect.any(String) });
+  expect(replay.json()).toMatchObject({
+    state: 'completed', documentId: accepted.json().documentId, jobId: accepted.json().jobId,
+  });
 });
 
 describe('upload sessions', () => {

@@ -83,16 +83,14 @@ export function DialogHeader({
   actions?: React.ReactNode;
 }): React.ReactElement {
   return (
-    <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-      <div>
-        <DialogPrimitive.Title className="text-[18px] font-semibold text-ink">{title}</DialogPrimitive.Title>
-        {description ? (
-          <DialogPrimitive.Description className="mt-1 text-sm text-ink-soft">
-            {description}
-          </DialogPrimitive.Description>
-        ) : null}
-      </div>
-      <div className="flex items-center gap-2">{actions}</div>
+    <div data-dialog-header className="mb-4 grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 gap-y-1">
+      <DialogPrimitive.Title className="min-w-0 break-words pt-2 text-[18px] font-semibold leading-7 text-ink">{title}</DialogPrimitive.Title>
+      {actions ? <div data-dialog-actions className="col-start-2 row-start-1 flex shrink-0 items-center justify-end gap-2">{actions}</div> : null}
+      {description ? (
+        <DialogPrimitive.Description className="col-span-2 min-w-0 break-words text-sm leading-relaxed text-ink-soft">
+          {description}
+        </DialogPrimitive.Description>
+      ) : null}
     </div>
   );
 }

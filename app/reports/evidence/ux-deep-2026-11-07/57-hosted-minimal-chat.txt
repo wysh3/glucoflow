@@ -1,0 +1,69 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Switch account"
+- generic: Care simulation
+- main:
+  - heading "Care workspace" [level=1]
+  - tablist "Care workspace areas":
+    - tab "Chat" [selected]:
+      - text: Chat
+    - tab "Worklist":
+      - text: Worklist
+    - tab "Encounters":
+      - text: Encounters
+  - generic "Workspace menu": ⋯
+  - tabpanel "Chat":
+    - region "Ask GlucoFlow":
+      - heading "Ask GlucoFlow" [level=2]
+      - paragraph: Check a handoff, review the shift, or prepare a monitoring request.
+      - generic "Suggested questions":
+        - button "Shift overview":
+          - text: Shift overview
+        - button "Monitor acknowledgement":
+          - text: Monitor acknowledgement
+        - button "Draft handover":
+          - text: Draft handover
+      - status: Hermes 0.23.0 connected · gpt-6-luna
+      - generic: Message GlucoFlow
+      - textbox "Message GlucoFlow":
+        - /placeholder: Ask about an encounter or pending handoff…
+      - combobox "Assistant mode":
+        - generic: Hermes live
+      - combobox
+      - button "Voice input":
+      - button "Send" [disabled]:
+- region "Notifications"

@@ -1,0 +1,99 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Result closure":
+      - /url: /clinic/results
+      - generic: Result closure
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - navigation "Result closure sections":
+    - link "Result ledger":
+      - /url: /clinic/results
+    - link "Clinician review":
+      - /url: /clinic/line
+    - link "Patient calls":
+      - /url: /clinic/calls
+    - link "Lab intake" [active]:
+      - /url: /clinic/intake
+    - link "Closure register":
+      - /url: /clinic/register
+  - heading "Lab intake" [level=1]
+  - generic: Accept reports, confirm patient identity and assign a clinician. Unmatched reports wait for review.
+  - paragraph: ALT 68U/L
+  - paragraph: Nov 04, 2026, 09:08 AM
+  - paragraph:
+    - text: Sanjay Gupta
+    - generic: · P0594
+    - generic: · Metropolis Healthcare
+  - paragraph: "Custody: received"
+  - generic: Abnormal, lab flagged
+  - button "Accept custody"
+  - button "Source"
+  - paragraph: Sodium 128mmol/L
+  - paragraph: Nov 04, 2026, 01:08 PM
+  - paragraph:
+    - text: Imran Shaikh
+    - generic: · P0534
+    - generic: · Apex Labs
+  - paragraph: "Custody: received"
+  - generic: Critical, lab flagged
+  - button "Match patient"
+  - button "Accept custody"
+  - button "Source"
+  - paragraph: eGFR 48mL/min/1.73m2
+  - paragraph: Nov 04, 2026, 02:08 PM
+  - paragraph:
+    - text: Sunita More
+    - generic: · P0520
+    - generic: · Dr Lal PathLabs
+  - paragraph: "Custody: received"
+  - generic: Abnormal, lab flagged
+  - button "Accept custody"
+  - button "Source"
+  - paragraph: Potassium 6.4mmol/L
+  - paragraph: Nov 04, 2026, 02:13 PM
+  - paragraph:
+    - text: Asha Rao (synthetic)
+    - generic: · P0482
+    - generic: · SRL Diagnostics
+  - paragraph: "Custody: received"
+  - generic: Critical, lab flagged
+  - button "Accept custody"
+  - button "Source"
+- region "Notifications"

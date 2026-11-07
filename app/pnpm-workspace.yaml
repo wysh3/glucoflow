@@ -6,6 +6,7 @@ packages:
 # their install scripts to fetch prebuilt native binaries or build tool binaries.
 # Everything else is intentionally left blocked.
 allowBuilds:
+  '@openuidev/lang-core': false
   esbuild: true
   tesseract.js: true
   sharp: true

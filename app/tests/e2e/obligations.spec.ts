@@ -12,7 +12,7 @@ test.describe('role-separated obligation workspace', () => {
 
   test('the clinician sees one line and closes a review with one tap', async ({ page }) => {
     await page.goto('/clinic/line');
-    await expect(page.getByRole('heading', { name: 'Before patient one' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Clinician review' })).toBeVisible();
 
     const seen = page.getByRole('button', { name: 'Seen' });
     await expect(seen.first()).toBeVisible();
@@ -25,7 +25,7 @@ test.describe('role-separated obligation workspace', () => {
 
   test('the nurse records a contact and the call leaves the queue', async ({ page }) => {
     await page.goto('/clinic/calls');
-    await expect(page.getByRole('heading', { name: 'The calls' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Patient calls' })).toBeVisible();
 
     const recordButtons = page.getByRole('button', { name: 'Record contact' });
     await expect(recordButtons.first()).toBeVisible();
@@ -41,7 +41,7 @@ test.describe('role-separated obligation workspace', () => {
 
   test('the register renders and offers a print', async ({ page }) => {
     await page.goto('/clinic/register');
-    await expect(page.getByRole('heading', { name: 'The register' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Closure register' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Print A4 register' })).toBeVisible();
     await expect(page.getByText('Result closure register')).toBeVisible();
     await expect(page.locator('tbody tr').first()).toBeVisible();
@@ -49,15 +49,15 @@ test.describe('role-separated obligation workspace', () => {
 
   test('the showcase and the replay state what they are', async ({ page }) => {
     await page.goto('/showcase');
-    await expect(page.getByRole('heading', { name: 'The 4-minute showcase' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Care workspace walkthrough' })).toBeVisible();
     await page.goto('/clinic/replay');
-    await expect(page.getByRole('heading', { name: 'The replay' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Cohort replay' })).toBeVisible();
     await expect(page.getByText('Synthetic cohort, not a measurement')).toBeVisible();
   });
 
   test('intake offers custody and identity actions', async ({ page }) => {
     await page.goto('/clinic/intake');
-    await expect(page.getByRole('heading', { name: 'Intake' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Lab intake' })).toBeVisible();
     await expect(
       page.getByRole('button', { name: /Accept custody|Match patient/ }).first(),
     ).toBeVisible();

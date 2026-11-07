@@ -1,0 +1,317 @@
+{
+  "runId": "89f47036-a399-411c-a3e1-7ed2d7077b72",
+  "startedAt": "2026-11-07T13:42:04.288Z",
+  "finishedAt": "2026-11-07T13:42:04.605Z",
+  "baseUrl": "http://127.0.0.1:8787",
+  "command": "cd app && pnpm exec tsx scripts/stress-care-api.ts",
+  "synthetic": true,
+  "requestCount": 157,
+  "fatal": null,
+  "stages": [
+    {
+      "name": "same-workspace reads",
+      "concurrency": 1,
+      "requests": 30,
+      "elapsedMs": 105,
+      "requestsPerSecond": 285.43,
+      "p50Ms": 3.38,
+      "p95Ms": 4.32,
+      "statusCounts": {
+        "200": 30
+      },
+      "errorCodes": {},
+      "conflicts409": 0,
+      "throttled429": 0,
+      "server5xx": 0,
+      "transportFailures": 0
+    },
+    {
+      "name": "distinct keys competing at same revision",
+      "concurrency": 1,
+      "requests": 1,
+      "elapsedMs": 7,
+      "requestsPerSecond": 150.45,
+      "p50Ms": 6.61,
+      "p95Ms": 6.61,
+      "statusCounts": {
+        "200": 1
+      },
+      "errorCodes": {},
+      "conflicts409": 0,
+      "throttled429": 0,
+      "server5xx": 0,
+      "transportFailures": 0
+    },
+    {
+      "name": "same-key concurrent replay",
+      "concurrency": 1,
+      "requests": 1,
+      "elapsedMs": 5,
+      "requestsPerSecond": 205.79,
+      "p50Ms": 4.82,
+      "p95Ms": 4.82,
+      "statusCounts": {
+        "200": 1
+      },
+      "errorCodes": {},
+      "conflicts409": 0,
+      "throttled429": 0,
+      "server5xx": 0,
+      "transportFailures": 0
+    },
+    {
+      "name": "offline chat shared-workspace contention and actor throttle",
+      "concurrency": 1,
+      "requests": 1,
+      "elapsedMs": 6,
+      "requestsPerSecond": 177.91,
+      "p50Ms": 5.6,
+      "p95Ms": 5.6,
+      "statusCounts": {
+        "200": 1
+      },
+      "errorCodes": {},
+      "conflicts409": 0,
+      "throttled429": 0,
+      "server5xx": 0,
+      "transportFailures": 0
+    },
+    {
+      "name": "same-workspace reads",
+      "concurrency": 5,
+      "requests": 30,
+      "elapsedMs": 27,
+      "requestsPerSecond": 1130.26,
+      "p50Ms": 3.49,
+      "p95Ms": 11.69,
+      "statusCounts": {
+        "200": 30
+      },
+      "errorCodes": {},
+      "conflicts409": 0,
+      "throttled429": 0,
+      "server5xx": 0,
+      "transportFailures": 0
+    },
+    {
+      "name": "distinct keys competing at same revision",
+      "concurrency": 5,
+      "requests": 5,
+      "elapsedMs": 7,
+      "requestsPerSecond": 746.42,
+      "p50Ms": 5.81,
+      "p95Ms": 6.52,
+      "statusCounts": {
+        "200": 1,
+        "409": 4
+      },
+      "errorCodes": {
+        "stale_revision": 4
+      },
+      "conflicts409": 4,
+      "throttled429": 0,
+      "server5xx": 0,
+      "transportFailures": 0
+    },
+    {
+      "name": "same-key concurrent replay",
+      "concurrency": 5,
+      "requests": 5,
+      "elapsedMs": 5,
+      "requestsPerSecond": 1075.27,
+      "p50Ms": 3.88,
+      "p95Ms": 4.5,
+      "statusCounts": {
+        "200": 5
+      },
+      "errorCodes": {},
+      "conflicts409": 0,
+      "throttled429": 0,
+      "server5xx": 0,
+      "transportFailures": 0
+    },
+    {
+      "name": "offline chat shared-workspace contention and actor throttle",
+      "concurrency": 5,
+      "requests": 5,
+      "elapsedMs": 6,
+      "requestsPerSecond": 854.03,
+      "p50Ms": 5.28,
+      "p95Ms": 5.72,
+      "statusCounts": {
+        "200": 1,
+        "409": 4
+      },
+      "errorCodes": {
+        "stale_revision": 4
+      },
+      "conflicts409": 4,
+      "throttled429": 0,
+      "server5xx": 0,
+      "transportFailures": 0
+    },
+    {
+      "name": "same-workspace reads",
+      "concurrency": 10,
+      "requests": 30,
+      "elapsedMs": 19,
+      "requestsPerSecond": 1600.65,
+      "p50Ms": 4.66,
+      "p95Ms": 11.19,
+      "statusCounts": {
+        "200": 30
+      },
+      "errorCodes": {},
+      "conflicts409": 0,
+      "throttled429": 0,
+      "server5xx": 0,
+      "transportFailures": 0
+    },
+    {
+      "name": "distinct keys competing at same revision",
+      "concurrency": 10,
+      "requests": 10,
+      "elapsedMs": 10,
+      "requestsPerSecond": 1014.93,
+      "p50Ms": 8.12,
+      "p95Ms": 9.62,
+      "statusCounts": {
+        "200": 1,
+        "409": 9
+      },
+      "errorCodes": {
+        "stale_revision": 9
+      },
+      "conflicts409": 9,
+      "throttled429": 0,
+      "server5xx": 0,
+      "transportFailures": 0
+    },
+    {
+      "name": "same-key concurrent replay",
+      "concurrency": 10,
+      "requests": 10,
+      "elapsedMs": 7,
+      "requestsPerSecond": 1360.38,
+      "p50Ms": 5.28,
+      "p95Ms": 7.09,
+      "statusCounts": {
+        "200": 10
+      },
+      "errorCodes": {},
+      "conflicts409": 0,
+      "throttled429": 0,
+      "server5xx": 0,
+      "transportFailures": 0
+    },
+    {
+      "name": "offline chat shared-workspace contention and actor throttle",
+      "concurrency": 10,
+      "requests": 10,
+      "elapsedMs": 9,
+      "requestsPerSecond": 1174.21,
+      "p50Ms": 7.73,
+      "p95Ms": 8.36,
+      "statusCounts": {
+        "200": 1,
+        "409": 5,
+        "429": 4
+      },
+      "errorCodes": {
+        "stale_revision": 5,
+        "rate_limited": 4
+      },
+      "conflicts409": 5,
+      "throttled429": 4,
+      "server5xx": 0,
+      "transportFailures": 0
+    }
+  ],
+  "assertions": [
+    {
+      "name": "read wave c1: all HTTP 200",
+      "passed": true
+    },
+    {
+      "name": "contention c1: one winner and stale-revision conflicts",
+      "passed": true
+    },
+    {
+      "name": "replay c1: all 200 and exactly one encounter added",
+      "passed": true
+    },
+    {
+      "name": "replay c1: changed payload rejected",
+      "passed": true
+    },
+    {
+      "name": "offline chat c1: success, revision conflict or explicit throttle only",
+      "passed": true
+    },
+    {
+      "name": "offline chat baseline: at least one successful reply",
+      "passed": true
+    },
+    {
+      "name": "offline chat c1: successful responses identify offline engine",
+      "passed": true
+    },
+    {
+      "name": "read wave c5: all HTTP 200",
+      "passed": true
+    },
+    {
+      "name": "contention c5: one winner and stale-revision conflicts",
+      "passed": true
+    },
+    {
+      "name": "replay c5: all 200 and exactly one encounter added",
+      "passed": true
+    },
+    {
+      "name": "replay c5: changed payload rejected",
+      "passed": true
+    },
+    {
+      "name": "offline chat c5: success, revision conflict or explicit throttle only",
+      "passed": true
+    },
+    {
+      "name": "offline chat c5: successful responses identify offline engine",
+      "passed": true
+    },
+    {
+      "name": "read wave c10: all HTTP 200",
+      "passed": true
+    },
+    {
+      "name": "contention c10: one winner and stale-revision conflicts",
+      "passed": true
+    },
+    {
+      "name": "replay c10: all 200 and exactly one encounter added",
+      "passed": true
+    },
+    {
+      "name": "replay c10: changed payload rejected",
+      "passed": true
+    },
+    {
+      "name": "offline chat c10: success, revision conflict or explicit throttle only",
+      "passed": true
+    },
+    {
+      "name": "offline chat c10: successful responses identify offline engine",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "Synthetic HTTP requests from one local process and one clinic identity; not human testers or independent user sessions.",
+    "Concurrency 1/5/10 is a bounded smoke load, not capacity certification; only 30 reads per level.",
+    "Read throughput targets one workspace and includes its database row lock; not a production deployment benchmark.",
+    "Offline deterministic chat only; no Hermes/provider call, paid inference, or clinical-quality evaluation.",
+    "Chat has a 12 requests/minute actor limit; 429 is reported separately from expected optimistic conflicts and server errors.",
+    "Creates nine persistent disposable synthetic workspaces; does not reset database or modify prior workspaces.",
+    "No browser/Android rendering, upload, worker throughput, long soak, or distributed multi-host traffic tested."
+  ]
+}

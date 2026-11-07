@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   Send,
   X,
-  Sparkles,
+  MessageCircle,
   RotateCcw,
   FileText,
   ShieldCheck,
@@ -17,22 +17,22 @@ import type {
 } from '@glucoflow/contracts';
 import { useSession, describeApiError } from '../../auth/session';
 import { usePatient } from '../../lib/queries';
+import { normalizePathname } from '../../lib/route-path';
 import { useSourcePane } from '../../components/source-pane';
-import { GlucoOrb, type GlucoMood } from './gluco-orb';
 
 const intro: GuideAnswer = {
   message:
-    'Hi, I’m Gluco. Let’s make this a little easier. I can help you find your way around, try a sample and follow the review steps. Open a patient to chat about their recorded information.',
+    'Find records, open source documents, or get help with review steps. Open a patient record to ask about their documented information.',
   actions: [],
   mode: 'local',
 };
 export function GlucoGuide(): React.ReactElement | null {
   const { me, status } = useSession();
-  const location = useLocation();
-  if (location.pathname === '/' || location.pathname.startsWith('/demo')) return null;
+  const pathname = normalizePathname(useLocation().pathname);
+  if (status !== 'signed-in' || pathname === '/' || pathname.startsWith('/demo')) return null;
   const clinic = me?.contexts.some((c) => c.kind === 'clinic');
   const id = clinic
-    ? location.pathname.match(/\/clinic\/patients\/([^/]+)/)?.[1]
+    ? pathname.match(/\/clinic\/patients\/([^/]+)/)?.[1]
     : me?.contexts.find((c) => c.kind === 'patient')?.patientId;
   return (
     <GuideSession
@@ -42,7 +42,7 @@ export function GlucoGuide(): React.ReactElement | null {
 }
 function GuideSession(): React.ReactElement {
   const { me, api } = useSession();
-  const location = useLocation();
+  const pathname = normalizePathname(useLocation().pathname);
   const [open, setOpen] = React.useState(false),
     [draft, setDraft] = React.useState(''),
     [busy, setBusy] = React.useState(false),
@@ -50,14 +50,9 @@ function GuideSession(): React.ReactElement {
   const [pendingQuestion, setPendingQuestion] = React.useState<string | null>(
     null,
   );
-  const [replying, setReplying] = React.useState(false);
-  const [focused, setFocused] = React.useState(false);
-  const replyTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const [messages, setMessages] = React.useState<
     { question?: string; answer: GuideAnswer | GuideChatAnswer }[]
   >([{ answer: intro }]);
-  const onDelta = location.pathname.endsWith('/delta');
-  const onBodyMap = location.pathname.endsWith('/bodymap');
   React.useEffect(() => {
     const open = (): void => setOpen(true);
     window.addEventListener('gluco:open', open);
@@ -68,7 +63,6 @@ function GuideSession(): React.ReactElement {
   React.useEffect(
     () => () => {
       abort.current?.abort();
-      if (replyTimer.current) clearTimeout(replyTimer.current);
     },
     [],
   );
@@ -89,7 +83,7 @@ function GuideSession(): React.ReactElement {
   const patient = me?.contexts.find((c) => c.kind === 'patient');
   const clinic = me?.contexts.some((c) => c.kind === 'clinic');
   const patientId = clinic
-    ? location.pathname.match(/\/clinic\/patients\/([^/]+)/)?.[1]
+    ? pathname.match(/\/clinic\/patients\/([^/]+)/)?.[1]
     : patient?.patientId;
   const mayChat = Boolean(
     patientId &&
@@ -112,47 +106,36 @@ function GuideSession(): React.ReactElement {
             'Try a sample report',
             'How do I open a source?',
           ];
-  const mood: GlucoMood = error
-    ? 'error'
-    : busy
-      ? 'thinking'
-      : replying
-        ? 'replying'
-        : focused && draft
-          ? 'listening'
-          : 'idle';
   const clear = () => {
     abort.current?.abort();
     setBusy(false);
     setPendingQuestion(null);
     setDraft('');
     setError(null);
-    setReplying(false);
-    if (replyTimer.current) clearTimeout(replyTimer.current);
     setMessages([{ answer: intro }]);
   };
-  const screen: GuideScreen = location.pathname.includes('/sign-in')
+  const screen: GuideScreen = pathname.includes('/sign-in')
     ? 'landing'
-    : location.pathname.includes('/add-report')
+    : pathname.includes('/add-report')
       ? 'upload'
-      : location.pathname.includes('/visit-notes')
+      : pathname.includes('/visit-notes')
         ? 'notes'
-        : location.pathname.includes('/queue') ||
-            location.pathname.includes('/review/')
+        : pathname.includes('/queue') ||
+            pathname.includes('/review/')
           ? 'review'
-          : location.pathname.endsWith('/master')
+          : pathname.endsWith('/master')
             ? 'home'
-            : location.pathname.endsWith('/overview')
+            : pathname.endsWith('/overview')
               ? 'overview'
-              : location.pathname.endsWith('/progression')
+              : pathname.endsWith('/progression')
                 ? 'progression'
-                : location.pathname.endsWith('/documents')
+                : pathname.endsWith('/documents')
                   ? 'documents'
-                  : location.pathname.endsWith('/history')
+                  : pathname.endsWith('/history')
                     ? 'history'
-                    : location.pathname.endsWith('/records')
+                    : pathname.endsWith('/records')
                       ? 'records'
-                      : location.pathname.endsWith('/account')
+                      : pathname.endsWith('/account')
                         ? 'account'
                         : 'patients';
   const href = (id: GuideActionId): string | null => {
@@ -215,10 +198,7 @@ function GuideSession(): React.ReactElement {
           };
       if (!controller.signal.aborted) {
         setMessages((old) => [...old, { question, answer }].slice(-12));
-        setReplying(true);
-        if (replyTimer.current) clearTimeout(replyTimer.current);
-        replyTimer.current = setTimeout(() => setReplying(false), 2200);
-      }
+        }
     } catch (e) {
       if (!controller.signal.aborted) {
         setDraft(question);
@@ -237,7 +217,7 @@ function GuideSession(): React.ReactElement {
         <button
           data-desktop-hidden={screen === 'landing' ? undefined : 'true'}
           aria-label={screen === 'landing' ? 'Need a hand? Open the Gluco guide' : 'Gluco guide'}
-          title="Gluco · your record companion"
+          title="Record assistant"
           aria-expanded={open}
           onClick={() => setOpen(true)}
           style={
@@ -251,7 +231,7 @@ function GuideSession(): React.ReactElement {
               : 'gluco-launcher focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/30'
           }
         >
-          <GlucoOrb mood={mood} />
+          <MessageCircle size={20} aria-hidden />
           <span className="gluco-caption">
             {screen === 'landing' ? 'Need a hand?' : 'Gluco'}
           </span>
@@ -264,7 +244,7 @@ function GuideSession(): React.ReactElement {
           aria-describedby="guide-description"
         >
           <div className="gluco-chat-header flex items-center gap-3 mb-3 shrink-0">
-            <GlucoOrb mood={mood} small />
+            <MessageCircle size={22} className="shrink-0 text-primary" aria-hidden />
             <DialogHeader
               title="Gluco guide"
               description={
@@ -272,10 +252,8 @@ function GuideSession(): React.ReactElement {
                   {busy
                     ? 'Looking through the records…'
                     : last?.mode === 'live'
-                      ? 'AI · GPT-6 Luna · grounded in app records'
-                      : replying
-                        ? 'Here’s what I found.'
-                        : 'Your little record companion.'}
+                      ? 'Gluco · Record planning'
+                      : 'Deterministic record guide'}
                 </span>
               }
               actions={
@@ -378,8 +356,8 @@ function GuideSession(): React.ReactElement {
                   {m.question ? (
                     <p className="mt-2 text-[11px] text-ink-soft">
                       {m.answer.mode === 'live'
-                        ? 'GPT‑6 Luna · grounded in app records'
-                        : 'Record companion · no model call for this answer'}
+                        ? 'Gluco plan · Application-verified records'
+                        : 'Deterministic record guide'}
                     </p>
                   ) : null}
                   {'scopeNote' in m.answer ? (
@@ -431,9 +409,9 @@ function GuideSession(): React.ReactElement {
                 key={q}
                 disabled={busy}
                 onClick={() => void send(q)}
-                className="max-w-full min-h-10 whitespace-normal rounded-xl border border-line bg-surface px-3 py-2 text-left text-xs text-ink-soft disabled:opacity-50"
+                className="max-w-full min-h-11 whitespace-normal rounded-xl border border-line bg-surface px-3 py-2 text-left text-xs text-ink-soft disabled:opacity-50"
               >
-                <Sparkles size={12} className="mr-1 inline" aria-hidden />
+
                 {q}
               </button>
             ))}
@@ -462,8 +440,6 @@ function GuideSession(): React.ReactElement {
               rows={2}
               maxLength={600}
               className="gluco-composer"
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={(e) => {
                 if (

@@ -1,0 +1,61 @@
+# India operational skills and bounded agent audit
+
+Date: 7 November 2026. Scope: code inspection of care skills, playbooks, typed contracts, Hermes policy/runtime, and fresh synthetic tests. No paid provider calls, deployment, clinical validation or real patient records. This report distinguishes current behavior from a proposed roadmap.
+
+## Finding
+
+The current application has **governed reuse of two fixed operational patterns**, not a self-evolving healthcare skill engine. `apps/api/src/care/skills.ts` fixes specimen receipt and result acknowledgement, including a 30-minute proposal window. Capturing a completed task saves origin evidence, author and version; it does not learn a new procedure or fit parameters. `playbooks.ts` permits only owner-first/source-first handover presentation. Hermes selects typed intents and can load the trusted source-handoff skill; it cannot persist arbitrary skill files or execute arbitrary tools. These are useful safety boundaries and must stay explicit in product claims.
+
+The captured case proves a source-confirmed operational completion. It does not prove the template caused the completion, reduced delay, or improves patient outcomes. A version number is governance history, not evidence of learned performance.
+
+## Verified boundaries and gaps
+
+| Area | Current evidence | Remaining gap |
+| --- | --- | --- |
+| Cross-patient reuse | Target encounter/order must match; proposal binds target source event, never reuses origin patient facts. Clinic member review and tenant checks are server enforced. Bridge rejects another encounter's citations for a skill proposal. | Real connector identity matching and revoked-access races require connector-specific tests; synthetic IDs do not establish hospital identity fidelity. |
+| Prompt injection | Strict command schemas reject extra rule fields; runtime has read/respond tools and renders authoritative text from typed intents. Notes remain attributed quotations. Native skills are allowlisted. | No exhaustive adversarial multilingual evaluation. English clinical-request regex is a defense layer, not complete clinical intent detection. Model chooses intent within a restricted action set; prompt instructions alone do not guarantee it chose the user's intended action. |
+| Stale evidence | Application eligibility requires fresh HIS and LIS, pending matching stage, no cancellation, no already-covered task. Corrections reopen acknowledgement against the current result version. Human attestation cannot seed a skill. | Five embedded sandbox cases test disconnected feed, but do not independently test every stale-time boundary, correction ordering, revoked approval, duplicate application race or policy migration. External integration tests provide some of this coverage. |
+| Publication | Draft → tests → clinician approval; advisory pattern lock serializes version publication, newer approved version prevents older draft publication. Applying a skill creates an approval request. | Stored tests are booleans without execution timestamp, fixture digest, policy hash or runner version. Historic approval does not establish compatibility after deployed pattern changes. |
+| Rollback | A new version preserves origin/history; active restoration retry is idempotent. **This audit fixed restoration to run the current sandbox before superseding active approval.** A failing current sandbox now rejects without writes. | Pattern behavior is still read from deployed code. Rollback restores approval lineage, not historical executable semantics. Immutable artifact hashing and migration policy remain required before richer learned procedures. Existing idempotent restoration does not re-run tests because it publishes nothing new. |
+| Autonomy | Agent tool output cannot approve tasks, create source events, notify external recipients or change treatment. Persistent commands remain server-authorized. | Live hospital operation, connector signing, durable distributed model budgets, production isolation and clinical review are separate gates. A background reconciliation worker, where enabled, is deterministic monitoring rather than autonomous clinical judgment. |
+
+## Prioritized India diabetes operations catalogue
+
+These are implementation proposals, not newly shipped features or medical recommendations. Every clinical order, referral, timing interval, test selection and care priority must already be recorded by authorized staff. National NP-NCD materials describe referral linkages, follow-up and recordkeeping across facilities; they support the operational setting, not automated referral decisions. See [MoHFW NP-NCD operational guidelines](https://www.mohfw.gov.in/sites/default/files/NP-NCD%20Operational%20Guidelines.pdf). Structured request/specimen/report references are informed by the [NRCeS ABDM FHIR guide](https://www.nrces.in/ndhm/fhir/r4/); this is a future mapping reference, not an ABDM certification or live integration claim.
+
+| Priority / proposed skill | Required evidence and proposed action | Completion and hard stop |
+| --- | --- | --- |
+| P0: collection-to-lab receipt | Existing staff order, collection event, specimen identifier and clinic-defined transport target; propose receipt follow-up. Current fixed pattern provides a base. | Matching LIS receipt; cancellation; stale/disconnected feed → unknown; expiry remains explicit. No inference of specimen suitability. |
+| P0: current result acknowledgement | Latest validated/corrected report and named accountable clinician; propose acknowledgement tracking. Current fixed pattern provides a base. | Acknowledgement references the current report version; correction invalidates prior closure. No interpretation of glucose or other result values. |
+| P0: shift ownership acceptance | Open operational task and explicit outgoing/incoming role; prepare handover request and evidence packet. Existing transfer workflow provides a base. | Receiving authorized staff accepts; previous owner retains responsibility until acceptance; task closure withdraws pending request. No acuity-based reassignment. |
+| P1: configured diabetes visit preparation | Staff-configured appointment/checklist and approved records; list missing documents and draft a source-indexed visit packet. | Staff marks packet reviewed; unavailable records remain missing. Never infer screening deadlines or order examinations. |
+| P1: clinician-ordered referral closure | Existing signed referral, destination and appointment request; propose booking/receipt follow-up to designated staff. | Destination receipt and staff-recorded attendance/outcome are separate events; cancellation and consent withdrawal stop follow-up. Never decide referral eligibility, specialty or urgency. |
+| P1: discharge document receipt | Clinician-approved discharge package and receiving clinic/caregiver authorization; draft delivery and read-back checklist. | Actual recipient receipt and human read-back record, distinct from dispatch. No new discharge advice, medication changes or assumed understanding. |
+| P1: prescribed supply logistics | Existing prescription and authorized pharmacy request; track availability/dispensing records and unresolved stock issue. | Pharmacy-confirmed fulfillment or explicit exception. No substitution, dose inference, adherence scoring or automatic reorder. |
+| P1: language and callback preference | Patient-recorded preferred language/contact channel, explicit consent and staff-approved message template; draft accessible callback text. | Human-approved communication plus actual outcome; revoke/suppress on consent changes. Translation requires review and preserves names, units and identifiers. No family disclosure by default. |
+| P2: reconciled home-entry intake | Patient-submitted readings/symptoms plus original timestamp/device attribution; organize pending review. | Staff acknowledgement of the exact entries, with duplicates/corrections visible. No anomaly interpretation, triage, imputation or treatment causation. |
+| P2: clinic register preparation | Approved record events and an explicit reporting period; prepare a completeness queue and export for staff review. | Human sign-off, reconciliation to source counts and explicit missingness. No fabricated ABHA IDs, screening completion or reporting submission. |
+
+Generalizable adjacencies are the same event/accountability contracts: hypertension follow-up paperwork, tuberculosis referral receipt, renal clinic appointment logistics, specimen transport, pharmacy fulfillment and rehabilitation handover. Reuse infrastructure and typed operational stages, never transfer disease-specific clinical rules or patient facts. Each adjacency needs local workflow authorization and fresh fixtures before activation.
+
+## What genuine governed evolution would require
+
+1. Capture an explicitly reviewed operational trace: triggering event types, approved action, stop conditions, exceptions and source-confirmed outcome. Strip patient identifiers before any reusable artifact; keep restricted evidence pointers separately.
+2. Generate a **draft declarative procedure** within an allowlisted action grammar. Store immutable content digest, policy/schema/runtime versions, author, originating trace and change rationale. Do not generate runnable arbitrary Python, shell, network access or new permissions.
+3. Compare candidate against a frozen baseline on independent synthetic holdout cases: wrong tenant, wrong encounter, corrected report, stale feed, missing source, duplicate delivery, out-of-order events, prompt injection, multilingual ambiguity, cancellation and revoked membership. Record each actual result and test-corpus digest. Successful case memorization is not generalization.
+4. Require authorized clinician/operations approval of the concrete diff, permitted scope and staff-configured timing. Shadow evaluation first; publish only in the approved clinic scope. Separate proposing, testing and approving identities when real deployment policy requires it.
+5. Measure false proposals, reviewer rejection/correction, missed eligible operational cases, duplicate tasks, stale-source refusals, and time-to-source-confirmation without claiming causality. Define stop thresholds with the clinic before a bounded pilot.
+6. Revalidate on policy/connector/runtime changes; retire incompatible artifacts. Rollback publishes a fresh version of a validated immutable artifact and never rewrites prior task evidence. Revocation blocks new application while preserving historical audit.
+
+Minimum permission envelope: read authorized snapshot → propose bounded draft → run isolated deterministic tests → seek explicit human publication/operational approval → platform executes approved operation. Autonomous clinical decisions, source fabrication, silent cross-tenant sharing, arbitrary runtime skill installation and external communication without authorization remain excluded.
+
+## Fresh verification
+
+| Command | Actual result |
+| --- | --- |
+| `python3 -m unittest discover -s app/hermes/tests -p test_policy.py -v` | 14 passed; DB-free policy tests, no provider calls. |
+| Initial `pnpm exec vitest run tests/integration/care-skill-rollback.test.ts` | 2 failed as expected before fix: historical passing results restored despite a deliberately broken current sandbox; current sandbox never ran. |
+| `pnpm exec vitest run tests/integration/care-skill-rollback.test.ts tests/integration/care-hermes-bridge.test.ts tests/integration/care.test.ts` | 23 passed across 3 files after fix; queue pause lock coordinated with other workers. New rollback tests use a mock DB and actual sandbox evaluator; care integration uses local synthetic DB. |
+| `pnpm exec tsc -p tsconfig.node.json --noEmit` | Passed after change. |
+
+No new live Hermes quality claim follows from these results. Tests establish bounded policy/reference behavior and rollback gating; they do not establish clinical safety, provider reasoning quality, live connector reliability or India-wide language coverage. Acceptance mapping: original R02 authorization, R09 reviewed publication, R13 source evidence/history, R14 bounded processing and R15 error handling; care-specific governance is additional November scope, not a replacement for physical Android/device and hosted release gates.

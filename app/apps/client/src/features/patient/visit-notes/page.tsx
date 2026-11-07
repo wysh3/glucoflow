@@ -12,12 +12,13 @@ import {
   Label,
   Select,
   Textarea,
-  formatDateOnly,
 } from '@glucoflow/ui';
 import { useApi, useSession, describeApiError } from '../../../auth/session';
 import { useNotes } from '../../../lib/queries';
 import { QueryState } from '../../../components/state-views';
 import { SystemPageHeader } from '../../../components/system-page-header';
+import { ReadAloud, SpeechDraftInput } from '../../speech';
+import { noteCategoryKey, useI18n } from '../../../i18n';
 import { useQueryClient } from '@tanstack/react-query';
 
 /**
@@ -26,6 +27,7 @@ import { useQueryClient } from '@tanstack/react-query';
  */
 export function PatientVisitNotesPage(): React.ReactElement {
   const { me } = useSession();
+  const { locale, t, dateOnly } = useI18n();
   const api = useApi();
   const queryClient = useQueryClient();
   const patientId = me?.contexts.find((context) => context.kind === 'patient')?.patientId;
@@ -38,10 +40,15 @@ export function PatientVisitNotesPage(): React.ReactElement {
   const [error, setError] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
 
+  const categoryLabel = (key: string) => {
+    const localized = noteCategoryKey(key);
+    return localized ? t(localized) : NOTE_CATEGORY_LABELS[key] ?? key;
+  };
+
   if (!patientId) {
     return (
-      <Alert tone="neutral" title="No patient record is linked to this account">
-        Ask the clinic to link your account before sending a note.
+      <Alert tone="neutral" title={t('records.unlinked')}>
+        {t('notes.linkClinic')}
       </Alert>
     );
   }
@@ -75,31 +82,31 @@ export function PatientVisitNotesPage(): React.ReactElement {
 
   return (
     <div className="space-y-4">
-      <SystemPageHeader index="04" label="Patient / Visit notes" title="Visit notes" meta="Notes you write stay patient-reported" />
+      <SystemPageHeader title={t('nav.notes')} meta={t('notes.reportedMeta')} />
 
       <Card>
         <CardHeader>
-          <CardTitle>{correction ? 'Correct your note' : 'New note'}</CardTitle>
-          {correction ? <Button variant="quiet" size="sm" onClick={() => {setCorrection(null);setBody('');setEventDate('');setReviewing(false);setError(null);}}>Cancel correction</Button> : null}
+          <CardTitle>{t(correction ? 'notes.correct' : 'notes.new')}</CardTitle>
+          {correction ? <Button variant="quiet" size="sm" onClick={() => {setCorrection(null);setBody('');setEventDate('');setReviewing(false);setError(null);}}>{t('notes.cancelCorrection')}</Button> : null}
         </CardHeader>
         <CardBody className="space-y-3">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <Label htmlFor="note-category">Category</Label>
+              <Label htmlFor="note-category">{t('notes.category')}</Label>
               <Select
                 id="note-category"
                 value={category}
                 onChange={(event) => setCategory(event.target.value)}
               >
-                {Object.entries(NOTE_CATEGORY_LABELS).map(([value, label]) => (
+                {Object.keys(NOTE_CATEGORY_LABELS).map((value) => (
                   <option key={value} value={value}>
-                    {label}
+                    {categoryLabel(value)}
                   </option>
                 ))}
               </Select>
             </div>
             <div>
-              <Label htmlFor="note-date">Event date (optional)</Label>
+              <Label htmlFor="note-date">{t('notes.eventDateOptional')}</Label>
               <Input
                 id="note-date"
                 type="date"
@@ -109,41 +116,50 @@ export function PatientVisitNotesPage(): React.ReactElement {
             </div>
           </div>
           <div>
-            <Label htmlFor="note-body">Note</Label>
+            <Label htmlFor="note-body">{t('notes.note')}</Label>
             <Textarea
+              dir="auto"
               id="note-body"
               rows={4}
               maxLength={NOTE_MAX_CHARS}
               value={body}
               onChange={(event) => setBody(event.target.value)}
-              placeholder="For example: took the evening tablet most days, walked after dinner."
+              placeholder={t('notes.placeholder')}
               aria-invalid={invalid && body.length > 0}
               aria-describedby="note-help"
             />
+            {!reviewing ? (
+              <SpeechDraftInput languageCode={locale.tag} disabled={busy || body.length >= NOTE_MAX_CHARS}
+                onInsert={(text) => {
+                  setBody((draft) => [draft.trimEnd(), text.trim()].filter(Boolean).join(' ')
+                    .slice(0, NOTE_MAX_CHARS).replace(/[\ud800-\udbff]$/u, ''));
+                  document.getElementById('note-body')?.focus();
+                }} />
+            ) : null}
             <p id="note-help" className="mt-1 text-[12px] text-ink-soft">
-              {trimmed.length} of {NOTE_MAX_CHARS} characters. The submission date is recorded
-              separately from the event date.
+              {t('notes.characters', { count: trimmed.length, max: NOTE_MAX_CHARS })}
             </p>
           </div>
 
-          {error ? <Alert tone="error" title="The note was not sent">{error}</Alert> : null}
+          {error ? <Alert tone="error" title={t('notes.sendFailed')}>{error}</Alert> : null}
 
           {reviewing ? (
             <div className="space-y-2 rounded-[12px] border border-line bg-canvas px-4 py-3">
               <p className="text-[12px] font-medium uppercase tracking-wide text-ink-soft">
-                Review before sending
+                {t('notes.review')}
               </p>
-              <p className="text-sm text-ink">{trimmed}</p>
+              <p className="text-sm text-ink" dir="auto">{trimmed}</p>
+              <ReadAloud text={trimmed} languageCode={locale.tag} />
               <p className="text-[12px] text-ink-soft">
-                {NOTE_CATEGORY_LABELS[category]}
-                {eventDate ? ` · event date ${eventDate}` : ' · no event date'}
+                {categoryLabel(category)}
+                 · {eventDate ? t('notes.eventDate', { date: dateOnly(eventDate) }) : t('notes.noEventDate')}
               </p>
               <div className="flex flex-wrap gap-2">
                 <Button variant="primary" disabled={busy || invalid} onClick={() => void send()}>
-                  {busy ? 'Sending' : correction ? 'Send correction' : 'Send note'}
+                  {t(busy ? 'notes.sending' : correction ? 'notes.sendCorrection' : 'notes.send')}
                 </Button>
                 <Button variant="quiet" onClick={() => setReviewing(false)}>
-                  Edit
+                  {t('notes.edit')}
                 </Button>
               </div>
             </div>
@@ -152,52 +168,52 @@ export function PatientVisitNotesPage(): React.ReactElement {
               variant="primary"
               disabled={invalid}
               onClick={() => setReviewing(true)}
-              title={invalid ? 'Enter between 1 and 1,000 characters.' : undefined}
+              title={invalid ? t('notes.invalid') : undefined}
             >
-              Review and send
+              {t('notes.reviewSend')}
             </Button>
           )}
           <p className="text-[12px] text-ink-soft">
-            A note is never converted into a measured result, and it does not change your record.
+            {t('notes.notMeasurement')}
           </p>
         </CardBody>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Sent notes</CardTitle>
+          <CardTitle>{t('notes.sent')}</CardTitle>
         </CardHeader>
         <CardBody>
           <QueryState
             isLoading={notes.isLoading}
             error={notes.error}
             isEmpty={notes.data?.items.length === 0}
-            emptyTitle="No notes sent yet"
-            emptyDescription="Your sent notes appear here with their submission time."
+            emptyTitle={t('notes.noSent')}
+            emptyDescription={t('notes.sentDescription')}
             onRetry={() => void notes.refetch()}
           >
             <ul className="space-y-3">
               {notes.data?.items.map((note) => (
                 <li key={note.noteId} className="rounded-[12px] border border-line px-4 py-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <Badge tone="neutral">{NOTE_CATEGORY_LABELS[note.category] ?? note.category}</Badge>
+                    <Badge tone="neutral">{categoryLabel(note.category)}</Badge>
                     <span className="text-[12px] text-ink-soft">
-                      submitted {formatDateOnly(note.submittedAt)} · version {note.version}
+                      {t('notes.submittedVersion', { date: dateOnly(note.submittedAt), version: note.version })}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm text-ink">{note.body}</p>
+                  <p className="mt-2 text-sm text-ink" dir="auto">{note.body}</p>
                   <div className="mt-2 flex flex-wrap items-center gap-2 text-[12px] text-ink-soft">
                     <span>
                       {note.eventDate
-                        ? `Event date ${formatDateOnly(note.eventDate)}`
-                        : 'No event date given'}
+                        ? t('notes.eventDate', { date: dateOnly(note.eventDate) })
+                        : t('notes.noEventDate')}
                     </span>
                     <span>·</span>
-                    <span>Patient-reported</span>
+                    <span>{t('notes.patientReported')}</span>
                     {note.seenBy ? (
                       <>
                         <span>·</span>
-                        <span>Seen by clinic {note.seenBy}</span>
+                        <span>{t('notes.seenBy', { name: note.seenBy })}</span>
                       </>
                     ) : null}
                   </div>
@@ -214,11 +230,11 @@ export function PatientVisitNotesPage(): React.ReactElement {
                         document.getElementById('note-body')?.focus();
                       }}
                     >
-                      Send a corrected version
+                      {t('notes.correctedVersion')}
                     </Button>
                   ) : (
                     <p className="mt-2 text-[12px] text-ink-soft">
-                      Superseded by a later version. The earlier text stays in history.
+                      {t('notes.superseded')}
                     </p>
                   )}
                 </li>

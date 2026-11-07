@@ -1,0 +1,24 @@
+[
+  {
+    "viewport": "desktop",
+    "privacy": true,
+    "care": true,
+    "episode": true,
+    "skills": true,
+    "recovery": true,
+    "patientBoundary": true,
+    "overflow": false,
+    "pageErrors": 0
+  },
+  {
+    "viewport": "mobile",
+    "privacy": true,
+    "care": true,
+    "episode": true,
+    "skills": true,
+    "recovery": true,
+    "patientBoundary": true,
+    "overflow": false,
+    "pageErrors": 0
+  }
+]

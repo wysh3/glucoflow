@@ -1,0 +1,414 @@
+- link:
+  - /url: "#main-content"
+  - text: Skip to content
+- complementary:
+  - button [expanded]:
+  - generic: glucoflow
+  - navigation:
+    - link:
+      - /url: /clinic/care
+      - generic: Care
+    - link:
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link:
+      - /url: /clinic/results
+      - generic: Result closure
+    - link:
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator
+- generic: Clinic workspace
+- generic: Language
+- combobox
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button:
+  - generic: Ask Gluco
+- button: Switch account
+- generic: Synthetic demo
+- main:
+  - navigation:
+    - link:
+      - /url: /clinic/results
+      - text: Result ledger
+    - link:
+      - /url: /clinic/line
+      - text: Clinician review
+    - link:
+      - /url: /clinic/calls
+      - text: Patient calls
+    - link:
+      - /url: /clinic/intake
+      - text: Lab intake
+    - link:
+      - /url: /clinic/register
+      - text: Closure register
+  - heading [level=1]: Result ledger
+  - generic: Track lab flags, assigned owners, patient contact and recorded outcomes.
+  - button:
+    - text: Import lab feed
+  - button:
+    - text: Export register
+  - button:
+    - text: Check overdue
+  - button:
+    - text: Refresh
+  - paragraph: Result closure
+  - heading [level=2]: Patient contact and closure
+  - paragraph: Review the recorded owner, clinician value echo, contact attempts and next step for each lab-flagged result.
+  - paragraph: 24%
+  - paragraph: Closed with patient within 7 days
+  - paragraph: "17"
+  - paragraph: Open contact tasks
+  - paragraph: "1"
+  - paragraph: Documented unreachable
+  - paragraph: Oldest critical receipt
+  - paragraph: Imran Shaikh
+  - paragraph:
+    - text: Sodium
+    - generic: 128 mmol/L
+  - paragraph: Apex Labs · 3d ago · No owner
+  - paragraph: Lab flagged critical. The due clock starts at lab release.
+  - button:
+    - text: Open the receipt
+  - link:
+    - /url: /clinic/replay
+    - text: View the synthetic cohort replay
+  - paragraph: 23.9h
+  - paragraph: Median contact
+  - paragraph: Lab release to patient contact
+  - paragraph: 60%
+  - paragraph: Next step completed
+  - paragraph: 3 completed of 5 contacted
+  - paragraph: 100%
+  - paragraph: Teach-back
+  - paragraph: Patient repeated the next step
+  - paragraph: "3"
+  - paragraph: Monitoring open
+  - paragraph: Clinician-set protocol receipts
+  - button [pressed]: Open
+  - button: Critical
+  - button: Monitoring
+  - button: Overdue
+  - button: Unowned
+  - button: Closed
+  - button: All
+  - generic: 17 results
+  - table:
+    - rowgroup:
+      - row:
+        - columnheader: Patient and source
+        - columnheader: Report
+        - columnheader: Owner
+        - columnheader: Clock
+        - columnheader: Last mile
+        - columnheader:
+          - generic: Open
+    - rowgroup:
+      - row:
+        - cell:
+          - paragraph: Imran Shaikh
+          - paragraph: P0534 · Apex Labs · 3d ago
+        - cell:
+          - generic: Sodium
+          - generic: Critical, lab flagged
+          - paragraph: 128 mmol/L
+        - cell: No owner
+        - cell: Overdue 75h
+        - cell:
+          - generic: Needs patient match
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Asha Rao (synthetic)
+          - paragraph: P0482 · SRL Diagnostics · 3d ago
+        - cell:
+          - generic: Potassium
+          - generic: Critical, lab flagged
+          - generic: Monitoring
+          - paragraph: 5.9 mmol/L
+          - paragraph: "ACE inhibitor or ARB start: potassium and eGFR at 2 to 4 weeks"
+        - cell: Dr Meera Nair (synthetic)
+        - cell: Overdue 69h
+        - cell:
+          - generic: Owned
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Asha Rao (synthetic)
+          - paragraph: P0482 · SRL Diagnostics · 3d ago
+        - cell:
+          - generic: Potassium
+          - generic: Critical, lab flagged
+          - paragraph: 6.4 mmol/L
+        - cell: No owner
+        - cell: No clock
+        - cell:
+          - generic: Ready to assign
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Arjun Nair
+          - paragraph: P0577 · SRL Diagnostics · 5d ago
+        - cell:
+          - generic: Urine albumin/creatinine ratio
+          - generic: Abnormal, lab flagged
+          - generic: Monitoring
+          - paragraph: 42 mg/g
+          - paragraph: Annual urine albumin-to-creatinine ratio and eGFR
+        - cell: Dr Meera Nair (synthetic)
+        - cell: Patient contacted
+        - cell:
+          - generic: Patient contacted
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Ramesh Patil
+          - paragraph: P0511 · Metropolis Healthcare · 3d ago
+        - cell:
+          - generic: HbA1c
+          - generic: Abnormal, lab flagged
+          - paragraph: 8.7 %
+        - cell: Dr Meera Nair (synthetic)
+        - cell: Overdue 72h
+        - cell:
+          - generic: Acknowledged
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Sanjay Gupta
+          - paragraph: P0594 · SRL Diagnostics · 3d ago
+        - cell:
+          - generic: HbA1c
+          - generic: Abnormal, lab flagged
+          - paragraph: 8.1 %
+        - cell: Clinician Arun Das (synthetic)
+        - cell: Overdue 68h
+        - cell:
+          - generic: Owned
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Fatima Khan
+          - paragraph: P0589 · SRL Diagnostics · 3d ago
+        - cell:
+          - generic: ALT
+          - generic: Abnormal, lab flagged
+          - paragraph: 44 U/L
+        - cell: Dr Meera Nair (synthetic)
+        - cell: Overdue 68h
+        - cell:
+          - generic: Owned
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Arjun Nair
+          - paragraph: P0577 · SRL Diagnostics · 3d ago
+        - cell:
+          - generic: Creatinine
+          - generic: Abnormal, lab flagged
+          - paragraph: 1.4 mg/dL
+        - cell: Clinician Arun Das (synthetic)
+        - cell: Overdue 68h
+        - cell:
+          - generic: Owned
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Kavita Joshi
+          - paragraph: P0546 · SRL Diagnostics · 3d ago
+        - cell:
+          - generic: Fasting glucose
+          - generic: Abnormal, lab flagged
+          - paragraph: 154 mg/dL
+        - cell: Dr Meera Nair (synthetic)
+        - cell: Overdue 68h
+        - cell:
+          - generic: Owned
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Imran Shaikh
+          - paragraph: P0534 · SRL Diagnostics · 3d ago
+        - cell:
+          - generic: Chloride
+          - generic: Abnormal, lab flagged
+          - paragraph: 112 mmol/L
+        - cell: Clinician Arun Das (synthetic)
+        - cell: Overdue 68h
+        - cell:
+          - generic: Owned
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Sunita More
+          - paragraph: P0520 · SRL Diagnostics · 3d ago
+        - cell:
+          - generic: HbA1c
+          - generic: Abnormal, lab flagged
+          - paragraph: 7.9 %
+        - cell: Dr Meera Nair (synthetic)
+        - cell: Overdue 68h
+        - cell:
+          - generic: Owned
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Ramesh Patil
+          - paragraph: P0511 · SRL Diagnostics · 3d ago
+        - cell:
+          - generic: eGFR
+          - generic: Abnormal, lab flagged
+          - paragraph: 52 mL/min/1.73m2
+        - cell: Clinician Arun Das (synthetic)
+        - cell: Overdue 68h
+        - cell:
+          - generic: Owned
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Asha Rao (synthetic)
+          - paragraph: P0482 · SRL Diagnostics · 3d ago
+        - cell:
+          - generic: Sodium
+          - generic: Abnormal, lab flagged
+          - paragraph: 131 mmol/L
+        - cell: Dr Meera Nair (synthetic)
+        - cell: Overdue 68h
+        - cell:
+          - generic: Owned
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Sanjay Gupta
+          - paragraph: P0594 · Metropolis Healthcare · 3d ago
+        - cell:
+          - generic: ALT
+          - generic: Abnormal, lab flagged
+          - paragraph: 68 U/L
+        - cell: No owner
+        - cell: Overdue 55h
+        - cell:
+          - generic: Ready to assign
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Fatima Khan
+          - paragraph: P0589 · Apex Labs · 3d ago
+        - cell:
+          - generic: Fasting glucose
+          - generic: Abnormal, lab flagged
+          - paragraph: 142 mg/dL
+        - cell: Dr Meera Nair (synthetic)
+        - cell: Overdue 51h
+        - cell:
+          - generic: Acknowledged
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Sunita More
+          - paragraph: P0520 · Dr Lal PathLabs · 3d ago
+        - cell:
+          - generic: eGFR
+          - generic: Abnormal, lab flagged
+          - generic: Monitoring
+          - paragraph: 48 mL/min/1.73m2
+          - paragraph: Annual urine albumin-to-creatinine ratio and eGFR
+        - cell: No owner
+        - cell: Overdue 50h
+        - cell:
+          - generic: Ready to assign
+        - cell:
+          - button:
+            - text: Open
+      - row:
+        - cell:
+          - paragraph: Kavita Joshi
+          - paragraph: P0546 · SRL Diagnostics · 4d ago
+        - cell:
+          - generic: HbA1c
+          - generic: Abnormal, lab flagged
+          - paragraph: 9.2 %
+        - cell: Dr Meera Nair (synthetic)
+        - cell: Patient contacted
+        - cell:
+          - generic: Patient contacted
+        - cell:
+          - button:
+            - text: Open
+- generic: "0"
+- dialog "Sodium" [active]:
+  - heading "Sodium" [level=2]
+  - paragraph: Imran Shaikh
+  - button "Close"
+  - generic: Critical, lab flagged
+  - generic: Needs patient match
+  - paragraph: 128mmol/L
+  - paragraph: The lab supplied this flag and value. This ledger does not interpret either.
+  - paragraph: Match this report to a patient
+  - paragraph: A name alone is not enough. The clinic ID and the printed name have to agree. Ambiguity is held, not guessed.
+  - status: Scoring patient candidates
+  - combobox "Patient":
+    - generic: Or choose from the patient list
+  - button "Match selected" [disabled]
+  - paragraph: Lab release
+  - paragraph: Nov 04, 2026, 01:13 PM
+  - paragraph: 3d ago
+  - paragraph: Owner
+  - paragraph: No owner assigned
+  - paragraph: "Clock: Nov 04, 2026, 01:28 PM"
+  - paragraph: Lab / notifier
+  - paragraph: Apex Labs
+  - paragraph: Notifier not recorded
+  - paragraph: Source
+  - paragraph: Incoming report
+  - paragraph: No source document is attached.
+  - paragraph:
+    - text: Receipt actions
+  - button "Escalate manually":
+    - text: Escalate manually
+  - paragraph:
+    - text: Audit trail
+  - list:
+    - paragraph: received · Dr Meera Nair (synthetic)
+    - paragraph: Nov 04, 2026, 01:08 PM
+  - paragraph:
+    - text: Receipt evidence
+  - generic: Checking chain
+  - link "GLF-A008B69C6D":
+    - /url: /verify/GLF-A008B69C6D
+    - text: GLF-A008B69C6D
+  - paragraph:
+    - text: This is an administrative receipt. It does not diagnose, risk-score or recommend treatment. The clinician remains responsible for the clinical decision.

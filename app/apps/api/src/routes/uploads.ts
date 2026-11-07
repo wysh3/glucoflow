@@ -37,6 +37,12 @@ export function detectFileKind(bytes: Buffer): 'pdf' | 'jpeg' | 'png' | null {
   return null;
 }
 
+const contentTypeByFileKind = {
+  pdf: 'application/pdf',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+} as const;
+
 export function isEncryptedPdf(bytes: Buffer): boolean {
   // An /Encrypt entry in the trailer indicates an encrypted document.
   const text = bytes.subarray(0, Math.min(bytes.length, 4_000_000)).toString('latin1');
@@ -191,12 +197,22 @@ export function registerUploadRoutes(app: FastifyInstance, ctx: AppContext): voi
           ctx.config.STORAGE_BUCKET_SOURCES,
           item.objectPath,
         );
+        if (bytes.length !== item.byteCount) {
+          throw ApiError.validation(`${item.filename} does not match the declared file size.`, {
+            files: `${item.filename} has an unexpected byte count`,
+          });
+        }
         const kind = detectFileKind(bytes);
         if (!kind) {
           throw ApiError.validation(
             `${item.filename} is not a PDF, JPEG or PNG file. Upload a supported document.`,
             { files: `${item.filename} failed the file signature check` },
           );
+        }
+        if (contentTypeByFileKind[kind] !== item.contentType || (session.kind === 'photos' && kind === 'pdf')) {
+          throw ApiError.validation(`${item.filename} does not match the declared file type.`, {
+            files: `${item.filename} has an unexpected file type`,
+          });
         }
         if (kind === 'pdf' && isEncryptedPdf(bytes)) {
           throw ApiError.validation(

@@ -51,8 +51,8 @@ test.describe('patient workflows', () => {
   test('the account screen states how the session is stored', async ({ page }) => {
     await page.goto('/account');
     await expect(page.getByText('Signed-in identity')).toBeVisible();
-    await expect(page.getByText('Active authorized role: Patient')).toBeVisible();
-    await expect(page.getByText('Session storage:', { exact: false })).toBeVisible();
+    await expect(page.getByText('Authorized access · Patient', { exact: true })).toBeVisible();
+    await expect(page.getByText(/^Session storage[ ·:]/)).toBeVisible();
     const credentials = demoCredentials();
     expect(credentials.patientId).toBeTruthy();
   });

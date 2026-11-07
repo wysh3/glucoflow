@@ -6,7 +6,7 @@ import { randomIdempotencyKey } from '../../../lib/api';
 import { useNavigate } from 'react-router-dom';
 import { useApi } from '../../../auth/session';
 import { UploadWizard } from '../../upload/upload-wizard';
-import { PROCESS_LOSS_NOTICE } from '../../../components/state-views';
+import { useI18n } from '../../../i18n';
 import type { PendingUploadDto } from '@glucoflow/contracts';
 
 /**
@@ -16,6 +16,7 @@ import type { PendingUploadDto } from '@glucoflow/contracts';
  */
 export function PatientAddReportPage(): React.ReactElement {
   const { me } = useSession();
+  const { t } = useI18n();
   const api = useApi();
   const navigate = useNavigate();
   const [busy, setBusy] = React.useState<string | null>(null);
@@ -44,8 +45,8 @@ export function PatientAddReportPage(): React.ReactElement {
 
   if (!patientId) {
     return (
-      <Alert tone="neutral" title="No patient record is linked to this account">
-        Ask the clinic to link your account before uploading a report.
+      <Alert tone="neutral" title={t('records.unlinked')}>
+        {t('records.linkClinic')}
       </Alert>
     );
   }
@@ -53,30 +54,27 @@ export function PatientAddReportPage(): React.ReactElement {
   return (
     <div className="space-y-4">
       <SystemPageHeader
-        index="03"
-        label="Patient / Add report"
-        title="Add a report"
-        meta="Upload a PDF, a photo or a JPEG/PNG image of your report"
+          title={t('upload.title')}
+        meta={t('upload.description')}
         actions={
           <Button variant="primary" onClick={() => setOpen(true)}>
-            Choose a report
+            {t('upload.choose')}
           </Button>
         }
       />
 
-      {error ? <Alert tone="error" title="The upload did not start">{error}</Alert> : null}
+      {error ? <Alert tone="error" title={t('upload.failed')}>{error}</Alert> : null}
 
       <Card>
         <CardHeader>
-          <CardTitle>Upload status</CardTitle>
+          <CardTitle>{t('upload.status')}</CardTitle>
         </CardHeader>
         <CardBody className="space-y-2 text-sm">
           {loadingPending ? (
-            <p className="text-ink-soft">Checking for unfinished uploads.</p>
+            <p className="text-ink-soft">{t('upload.checking')}</p>
           ) : pending.length === 0 ? (
             <p className="text-ink-soft">
-              No unfinished upload is stored on the server. Uploads that already reached the server
-              can be finished after you sign in again. If the file did not reach the server, choose it again.
+              {t('upload.noPending')}
             </p>
           ) : (
             <ul className="space-y-2">
@@ -86,7 +84,7 @@ export function PatientAddReportPage(): React.ReactElement {
                   className="flex flex-wrap items-center justify-between gap-2 rounded-[10px] border border-review/30 bg-review-bg px-3 py-2"
                 >
                   <span className="text-review">
-                    Upload incomplete · {session.fileNames.join(', ') || 'no files'} ·{' '}
+                    {t('upload.incomplete')} · {session.fileNames.join(', ') || t('upload.noFiles')} ·{' '}
                     {formatBytes(session.declaredBytes)}
                   </span>
                   <span className="flex gap-2">
@@ -96,7 +94,7 @@ export function PatientAddReportPage(): React.ReactElement {
                         await api.request(`/api/v1/uploads/${session.sessionId}/complete`, {method: 'POST', idempotencyKey: randomIdempotencyKey()});
                         await loadPending(); navigate('/patient/records');
                       } catch (caught) {setError(describeApiError(caught));} finally {setBusy(null);}
-                    }}>Finish upload</Button>
+                    }}>{t('upload.finish')}</Button>
                     <Button
                       size="sm"
                       variant="secondary"
@@ -105,31 +103,31 @@ export function PatientAddReportPage(): React.ReactElement {
                         await loadPending();
                       }}
                     >
-                      Cancel
+                      {t('ui.cancel')}
                     </Button>
                   </span>
                 </li>
               ))}
             </ul>
           )}
-          <p className="text-[12px] text-ink-soft">{PROCESS_LOSS_NOTICE}</p>
+          <p className="text-[12px] text-ink-soft">{t('upload.processLoss')}</p>
         </CardBody>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Selected clinic</CardTitle>
+          <CardTitle>{t('upload.selectedClinic')}</CardTitle>
         </CardHeader>
         <CardBody className="text-sm text-ink-soft">
-          <p>Your report goes to the clinic linked to your record.</p>
-          <p className="mt-1">Patient identity: {me?.actor.displayName}</p>
-          <p>Clinic: {patientContext?.clinicName ?? 'Linked clinic'}</p>
+          <p>{t('upload.clinicExplanation')}</p>
+          <p className="mt-1">{t('upload.identity')} · {me?.actor.displayName}</p>
+          <p>{t('upload.clinic')} · {patientContext?.clinicName ?? t('upload.linkedClinic')}</p>
         </CardBody>
       </Card>
 
       <UploadWizard
         patientId={patientId}
-        patientLabel={`${me?.actor.displayName ?? 'your record'}`}
+        patientLabel={me?.actor.displayName ?? t('upload.yourRecord')}
         open={open}
         onOpenChange={(next) => {
           setOpen(next);

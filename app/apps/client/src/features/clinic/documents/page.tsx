@@ -143,9 +143,7 @@ export function DocumentsPage(): React.ReactElement {
   return (
     <div className="space-y-4">
       <SystemPageHeader
-        index="05"
-        label="Patient record / Documents"
-        title="Documents"
+          title="Documents"
         meta={`${documents.data?.items.length ?? 0} reports loaded`}
         actions={
           canUpload ? (

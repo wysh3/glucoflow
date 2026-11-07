@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { IssueCode } from '@glucoflow/contracts';
 import {
@@ -21,8 +21,18 @@ import {
 import type { StorageAdapter } from '@glucoflow/data/storage';
 import { runExtractionPipeline, ExtractionError } from './pipeline';
 import { scanIdentityMentions } from './providers/rules';
-import type { ExtractionProvider, ProviderBudget } from './types';
+import { ProviderRequestError, type ExtractionProvider, type ProviderBudget, type ProviderError } from './types';
 import { detectFormat } from './prepare';
+
+const providerFailureMessage: Record<ProviderError['category'], string> = {
+  timeout: 'The extraction provider timed out.',
+  rate_limit: 'The extraction provider is temporarily busy.',
+  server: 'The extraction provider is temporarily unavailable.',
+  invalid_response: 'The extraction response could not be verified.',
+  budget: 'The document extraction budget was reached.',
+  auth: 'The extraction service could not be authenticated.',
+  unknown: 'The extraction provider could not complete this document.',
+};
 
 /**
  * One document processing job: verify the file, prepare pages, propose facts,
@@ -214,9 +224,6 @@ export async function processDocumentJob(deps: DocumentJobDeps, job: LeasedJob):
   for (const item of context.items) {
     sources.push({ bytes: item === primary ? bytes : await deps.storage.getObject(deps.sourceBucket, item.objectPath), filename: item.filename, contentType: item.contentType });
   }
-  const workDir = join(deps.tmpRoot, job.jobId);
-  await mkdir(workDir, { recursive: true });
-
   const existingObservations = await deps.tx(async (client) => {
     const rows = await client.query<{
       test_code: string | null;
@@ -297,6 +304,10 @@ export async function processDocumentJob(deps: DocumentJobDeps, job: LeasedJob):
     ),
   );
 
+  await mkdir(deps.tmpRoot, { recursive: true });
+  // Each attempt owns its own directory, including when another lease retries
+  // the same job before the earlier worker has finished shutting down.
+  const workDir = await mkdtemp(join(deps.tmpRoot, 'glucoflow-doc-'));
   let pipelineResult;
   try {
     pipelineResult = await runExtractionPipeline(
@@ -325,22 +336,32 @@ export async function processDocumentJob(deps: DocumentJobDeps, job: LeasedJob):
       },
     );
   } catch (error) {
-    if (error instanceof ExtractionError) {
-      await deps.tx(async (client) => {
+    const failure = error instanceof ExtractionError
+      ? { code: error.code, message: error.message, retryable: error.retryable }
+      : error instanceof ProviderRequestError
+        ? {
+            code: `provider_${error.detail.category}`,
+            message: providerFailureMessage[error.detail.category],
+            retryable: error.detail.retryable,
+            ...(error.detail.retryAfterSeconds ? { retryAfterSeconds: Math.min(error.detail.retryAfterSeconds, 60) } : {}),
+          }
+        : null;
+    if (!failure) throw error;
+    await deps.tx(async (client) => {
+      const failed = await failJob(client, job.jobId, job.leaseToken, failure);
+      if (failed.state === 'failed') {
         await client.query(
           `update sutra.extraction_runs set state = 'failed', error_code = $2, finished_at = now()
             where id = $1`,
-          [runId, error.code],
+          [runId, failure.code],
         );
-        await failJob(client, job.jobId, job.leaseToken, {
-          code: error.code,
-          message: error.message,
-          retryable: error.retryable,
-        });
-      });
-      return;
-    }
-    throw error;
+      }
+    });
+    return;
+  } finally {
+    await rm(workDir, { recursive: true, force: true }).catch(() => {
+      deps.log('document scratch cleanup failed', { jobId: job.jobId });
+    });
   }
 
   deps.heartbeat();

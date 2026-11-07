@@ -1,0 +1,11 @@
+WARNING: The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested
+test_cancel_releases_admission_but_retains_reserved_call_budget (test_cancellation.CancellationTests.test_cancel_releases_admission_but_retains_reserved_call_budget) ... ok
+test_cancelled_child_is_reaped_promptly (test_cancellation.CancellationTests.test_cancelled_child_is_reaped_promptly) ... ok
+test_deadline_reaps_child (test_cancellation.CancellationTests.test_deadline_reaps_child) ... ok
+test_pre_cancelled_turn_does_not_spawn (test_cancellation.CancellationTests.test_pre_cancelled_turn_does_not_spawn) ... ok
+test_wait_drains_output_larger_than_pipe (test_cancellation.CancellationTests.test_wait_drains_output_larger_than_pipe) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 1.212s
+
+OK

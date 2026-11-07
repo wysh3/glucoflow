@@ -1,5 +1,9 @@
 # Product scope and decisions
 
+> **7 November scope update:** The user adopted the inpatient coordination PDF and explicitly authorized Hermes reuse, GPT-6.1 implementation agents, Azure deployment, and OpenUI interactive answers. The active [care plan](../superpowers/plans/2026-11-07-hermes-care.md) adds these journeys while retaining the authorization, source evidence, human approval, patient-record and web/Android requirements below. The historical “Deferred” list does not prohibit the newly authorized synthetic care workspace. Live hospital APIs and clinical decisions remain outside this implementation.
+
+> **7 November web audit clarification:** The user further requested a complete web/navigation review, governed operational skill reuse, current public-skill/model research, and actual native Hermes execution for cognitive workflows including document processing. Follow the [web coherence plan](../superpowers/plans/2026-11-07-web-coherence-audit.md). Hermes is the agent execution engine; deterministic source preparation/validation, durable job leases, storage and server authorization remain platform services. A model may propose record facts but never publish them. The supported report intake remains PDF/JPEG/PNG until an explicit video output contract and capable provider are validated; native upstream video-tool availability alone is not a shipped feature. No existing records, job history or secrets are removed in this consolidation.
+
 ## Purpose
 
 Prepare a diabetes follow-up history from records the clinic and patient already possess, preserve reviewed facts between visits, and make the supporting evidence easy to open. The primary measurable outcome is combined staff and doctor task time for a return visit, with final-record accuracy checked independently.
@@ -72,3 +76,32 @@ The supplied three-minute/30-second claims are unmeasured context, not accepted 
 ## Fixed delivery scope
 
 The client starts in light mode. Dark mode is deferred. Reviewer and clinician permissions are distinct; the seeded clinic demonstration account has both. The patient demonstration account has only its self-link. No role can change the active patient without a visible identity update. The product and feature scope in this document is the authority for the build. Detailed contracts in document 09 implement this scope and do not expand it.
+
+## 7 November hackathon guardrail clarification
+
+The user supplied six official FAQ screenshots and explicitly asked to enforce them. This supersedes the October dashboard's derived clinical review flags and diagnostic reference panels: remove low-glucose triggers, eGFR decline interpretation and generic diagnostic ranges. Keep source values, patient reports, manually assigned operational categories, explicitly configured administrative intervals, human review and audit trails. No interval is filled automatically. Synthetic-only demo remains mandatory. Static UI localization and bounded Sarvam transcription/read-aloud are newly authorized; transcription is an editable draft, never a clinical assertion or automatic action. Caregiver access requires an actual delegated identity/consent model and is not implemented by sharing a patient password.
+
+For the current inpatient coordination submission, the proposed primary operational KPI is median verified collection-to-laboratory-receipt lag. Return-visit preparation time remains a secondary record-workspace measure. The [FAQ scope audit](../../app/reports/hackathon-scope-audit-2026-11-07.md) defines the denominator, missing receipts and proposed 60–90 day evaluation; no pilot outcome is claimed.
+
+## 7 November continuous workspace UI
+
+The user explicitly requested reusing the referenced Codex web UI around GlucoFlow. The pinned MIT CodexApp 0.1.91 presentation is adapted into React, with original scoped styles and attribution. This supersedes the earlier page/header/tab placement constraints where needed for one persistent application shell and conversation beside working content. Role authorization, patient context, source evidence, human approval, synthetic labels, light default and supported web/Android contracts remain. The original Codex app-server, coding tools and desktop launcher are not part of GlucoFlow. See the [canvas design](../superpowers/specs/2026-11-07-canvas-workspace-design.md).
+
+## 7 November direct speech and minimal navigation clarification
+
+The user's latest explicit instructions supersede the expanded speech-review forms and permanently visible workspace toolbars. A mic click starts recording; stopping requests transcription into an editable draft, without sending that draft. A speaker click explicitly requests synthesis/playback; stopping cancels it. No extra review checkbox is required for these speech operations. Clinical-record publication and operational task approval remain human actions. Care defaults to chat with a compact Worklist/Encounters switch; operational tools, learning and simulation are contextual. Existing route permissions, data and direct links remain intact.
+
+## 7 November welcome correction
+
+The user's rejection of the bare account-picker entry supersedes the root-to-sign-in redirect. The root is a focused product welcome with a clearly labelled illustrative operational handover, dominant clinic demo action and secondary patient entry. `/sign-in` remains a legacy alias to the same entry, preserving protected destination state. Demo roles are progressively disclosed; permissions and fictional-data requirements remain unchanged.
+
+## 7 November DKA/HHS demo context
+
+The user supplied handwritten clinical-context notes. DKA remains the blueprint's primary operational demonstration; HHS is an optional fictional transfer-handover preset. Documented diagnoses remain context, never inferred conclusions. No mortality claims, dosing, correction targets or clinical decision rules are added. New chat starts a separate saved simulation, explicitly preserving the old workspace. See `app/reports/dka-hhs-demo-2026-11-07.md` for the demonstrated scope.
+
+## 7 November reference-inspired workspace home
+
+The user supplied a Treasury-style sidebar/dashboard/composer reference. Apply its quiet visual hierarchy to GlucoFlow's existing workspace. The empty conversation home shows current operational task counts, recent source events and handover owners, then the same chat composer. Values derive from saved synthetic state; no invented trends, clinical scores or outcome metrics. Primary destinations appear once in the desktop sidebar or mobile bottom navigation. Existing clinical authorization and evidence controls remain unchanged.
+
+## 7 November light canvas and loader clarification
+The user explicitly requested a single-screen desktop overview, no stacked top bars or heavy status bars, consistent neutral styling and no browser disclosure triangles. Desktop account/language controls move to the sidebar; mobile keeps access. Native disclosure semantics, clinical approval, source evidence and synthetic labels remain. Grok orb MIT vector artwork is adapted for loading only, with reduced-motion support and attribution.

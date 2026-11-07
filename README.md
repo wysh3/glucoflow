@@ -1,58 +1,38 @@
-# Glucoflow
+# GlucoFlow
 
-The closure ledger for abnormal lab results. Every critical or abnormal report becomes an obligation with a named owner, a stage clock and a tamper-evident receipt. The doctor sees one line and taps once. The nurse records the read-back. The quality head prints the register the surveyor asks for.
+A care coordination companion for diabetes teams. Gluco helps staff see what is pending, find its source, prepare a handover, and keep responsibility visible across departments.
 
-The repository also carries the earlier patient and clinic record workspace. The closure ledger is the current direction.
+**[Explore the demo](https://glucoflow.vercel.app/)** · [Local setup](app/docs/SETUP.md) · [Agent and deployment setup](app/docs/CARE_SETUP.md) · [Demo walkthrough](app/docs/CARE_DEMO.md) · [Shipping checklist](app/docs/SHIP_CHECKLIST.md)
 
-**[Open the hosted demo](https://glucoflow.vercel.app)** · [Setup guide](app/docs/SETUP.md) · [Demo walkthrough](app/docs/DEMO.md) · [Android APK](https://github.com/wysh3/glucoflow/releases/download/demo-2026-11-04-closure/Glucoflow_Android.apk)
+![GlucoFlow landing page](app/reports/completion-evidence/gluco-landing-desktop.png)
 
-![Glucoflow clinic workspace](app/reports/evidence/workspace-guide-2026-10-04/doctor-desktop.png)
+## What the product does
 
-## The closure ledger
+Start with the care desk or ask Gluco a question. Responses bring relevant encounter cards, owners and source evidence into the conversation. Staff can inspect the evidence and approve a bounded operational action without hunting through disconnected screens.
 
-| Screen | Role | What it does |
-| --- | --- | --- |
-| `/clinic/line` | Clinician | One card per pending result. One tap **Seen**. A correction path with a reason. |
-| `/clinic/calls` | Nurse | Read-back, teach-back, outcome and next step. **Close as unreachable** after two attempts. |
-| `/clinic/intake` | Desk | Accept custody, match a candidate with evidence, assign a clinician. An unmatched report cannot be assigned. |
-| `/clinic/register` | Quality | Date range, exceptions, A4 print. The page the surveyor files. |
-| `/clinic/replay` | Evidence | Baseline against the closure loop. The shipped cohort is synthetic and labelled. |
+- **Shared work:** follow orders, specimen receipt, result acknowledgement and handovers across synthetic encounters. Missing evidence stays unverified.
+- **Useful conversations:** live action progress, concise responses, evidence drawers, Enter to send, Shift+Enter for a newline, cancellation, microphone input and read-aloud controls. Speech requires a configured Sarvam service.
+- **Human control:** actions require authorization and approval. Viewing a result does not silently acknowledge it. Source events and human attestations remain distinguishable.
+- **Care routines:** versioned operational templates with evaluation, clinician approval and rollback. Applying a routine uses the target encounter's own evidence. This is bounded workflow reuse, not autonomous medical learning.
+- **Continuity:** saved workspaces, durable source-bearing revision history, explicit same-clinic team membership, and read-only archives linked to fresh simulations.
+- **Patient records:** upload and review workflows, source-linked records, patient notes and exports. The web client also supplies the Capacitor Android shell.
 
-The obligation is one state machine, not four queues. The ten procedures in `app/supabase/migrations/035_obligation_lifecycle.sql` are the only writers for the new phase columns, and the API role holds select only on them. The older ledger routes still write the legacy `status` column until they are retired. `036` makes the breach clock follow the active stage. `037` refuses assignment before the patient is matched.
+The public demo uses shared accounts and fictional records only. Select **Explore the clinic** or **Patient view** on the landing page. Do not upload real patient information.
 
-The working review packet is `docs/research/2026-11-04-final/REVIEW-PACKET-R2.md`. The screenshots are in `docs/research/2026-11-04-final/evidence/`.
+## Scope and readiness
 
-## The record workspace (earlier surface)
+GlucoFlow assists operational work. It does not diagnose, prescribe, calculate clinical risk, decide ICU admission, or replace clinical judgment. DKA/HHS provides the coordination context; treatment protocols are not executable agent skills.
 
-- **Patient workspace:** try built-in synthetic samples, upload PDFs or ordered photos, open original reports, view approved records, add patient-reported notes, and export a visit summary.
-- **Gluco record companion:** an expressive animated orb with bounded GPT‑6 Luna conversation planning, patient-scoped record summaries, follow-up questions and original source links. Recorded facts stay separate from patient-reported entries; clinical advice remains out of scope.
-- **Clinic workspace:** consolidated visit overview, source-backed latest measurements, prescriptions, examinations and patient notes; review extracted drafts beside source evidence, correct fields before publication, explore progression, search records, and retain amendment history.
-- **Synthetic Master dashboard:** illustrative multi-year measurements and medication phases, home glucose/symptom entries, clinician-configured screening tracking, manual care categories, and an append-only demo SOS snapshot inbox.
-- **Shared web and Android experience:** one React client packaged with Capacitor, with separate patient and clinic permissions enforced on the server and in PostgreSQL.
-- **Two extraction modes:** a labelled deterministic fixture engine for local demos and an optional live model adapter with explicit call/token/cost limits. Model output remains a draft until human approval.
-
-The live demo includes the warm clinical interface, desktop/mobile navigation, editable note corrections and a built-in synthetic sample library. Choose **Clinic team → Try a sample report → Upload lab sample** to start without finding a document. Demo SOS creates a snapshot for the synthetic clinic inbox; it does not dispatch emergency services. Configured flags and categories are for human review. Glucoflow does not diagnose, recommend treatment, infer missing measurements, or integrate live ABHA/ABDM.
-
-## Stack
-
-| Layer | Implementation |
-| --- | --- |
-| Web and Android | Vite, React, TypeScript, Tailwind, Radix/shadcn primitives, Capacitor |
-| API | Fastify with authenticated, tenant-scoped routes |
-| Processing | Separate Node worker, durable jobs, PDF/image preparation and OCR |
-| Data | PostgreSQL with row-level security, Supabase Auth and private Storage |
-| Hosted demo | Vercel frontend; Azure Container Apps API/worker; Supabase database/auth/storage |
-| Verification | Vitest, SQL isolation checks, Playwright desktop/mobile workflows |
+The deployed demonstration is not a certified hospital production system. Live HIS/LIS connectors, ABHA/ABDM registration, hospital security and privacy review, reviewed regional language coverage, physical Android regression, and a real clinic pilot remain separate release gates. Simulated usage is not clinical validation. See the [release report](app/reports/completion-release-2026-11-07.md) and [PDF scope audit](app/reports/pdf-compliance-audit-2026-11-07.md).
 
 ## Run locally
 
-Prerequisites: **Node.js 22.12–22.x**, **pnpm 12.5.1**, and **PostgreSQL 16** binaries on your PATH. The local database helper also discovers Homebrew PostgreSQL. Android builds additionally need JDK 21 and Android SDK 36.
+Requires Node 22.12–22.x, pnpm 12.5.1 and PostgreSQL 16. From a new checkout:
 
-```bash
-git clone https://github.com/wysh3/glucoflow.git
-cd glucoflow/app
-pnpm install --frozen-lockfile
-cp .env.example .env
+```sh
+cd app
+pnpm install
+cp .env.example .env # only if .env does not already exist
 pnpm db:start
 pnpm db:migrate
 pnpm fixtures:generate
@@ -61,53 +41,44 @@ pnpm seed:demo -- --clinic demo --confirm-demo
 pnpm dev
 ```
 
-Open **http://127.0.0.1:5173**. The API runs at **http://127.0.0.1:8787**. Local demo credentials are generated in `app/.local/demo-credentials.json`; the dev server can use these to show role-entry buttons. This file and `.env` are ignored by Git. The default local extraction mode uses labelled synthetic fixtures and requires no model key.
+Open http://127.0.0.1:5173. The API runs on port 8787. Local generated demo credentials are saved in ignored `.local/demo-credentials.json`. Run seed/reset commands only against a disposable local demo database.
 
-For the closure demo, open `/showcase` for the eight-step path, or sign in with the **Clinic team** card and open `/clinic/line`. The demo account holds every clinic role, so the navigation shows every home. Regenerate the replay with `pnpm exec tsx scripts/replay.ts`, or pass `--input cohort.csv` for a real audit.
+The [setup guide](app/docs/SETUP.md) covers prerequisites and document processing. The [care setup guide](app/docs/CARE_SETUP.md) adds the Gluco runtime and provider credentials. Without a provider, the explicitly labelled deterministic helper supports model-free exploration; it is not presented as live AI.
 
-Use these database and seed commands only with the local development database. They are not the hosted bootstrap procedure. See the [full setup guide](app/docs/SETUP.md) for database roles, signing and model configuration, and [hosted operations](app/docs/HOSTED.md) for deployment details.
+## Architecture and deployment
 
-## Verify
+| Layer | Implementation |
+| --- | --- |
+| Interface | React, TypeScript, Vite; Capacitor Android shell |
+| API | Fastify, server-side authorization, bounded streamed progress |
+| Data | PostgreSQL, migrations, durable jobs, source evidence and audit history |
+| Processing | Separate worker for documents and exports |
+| Gluco runtime | Pinned, bundled agent source plus application-specific tools and validation |
+| Hosted demo | Vercel web; Azure Container Apps API, worker and private runtime sidecars; Supabase services |
 
-Run from `app/` after setting up the local database and demo accounts:
+Application code lives in [`app/`](app/README.md). Container definitions, Compose configuration, example environment files and deployment scripts are included. The runtime source archive, checksum, license and provenance are committed: building it does **not** clone an upstream agent repository. Package installation, base images and configured AI/speech providers still require network access; this is not an air-gapped bundle.
 
-```bash
+Follow [CARE_SETUP.md](app/docs/CARE_SETUP.md) for local containers and Azure/Vercel deployment. Existing compatibility environment names and upstream module identifiers are retained where needed; never rename them independently of their consumers. Keep all credentials server-side and out of source control.
+
+## Verification
+
+The 7 November completion run passed **357 tests across 64 files**. Runtime and source-bundle checks are recorded separately in the [release report](app/reports/completion-release-2026-11-07.md). Typechecking, client builds and desktop/mobile landing checks accompany the UI release.
+
+One hosted synthetic handover produced its first progress event in **339 ms** and its final result in **9.626 seconds**. That is a single observation, not a latency guarantee or a load-test percentile. See the [timing trace](app/reports/gluco-hosted-progress-2026-11-07.json).
+
+```sh
+cd app
 pnpm typecheck
 pnpm test
-pnpm db:test
 pnpm build
-pnpm e2e
-pnpm smoke
+pnpm db:test
+pnpm lint:ui --json
 ```
 
-The API and worker must be running for `pnpm smoke`. Playwright starts or reuses local services. Integration and browser tests create synthetic records; avoid pointing them at a real patient database.
+Each command has its own environment requirements; database and browser checks need running services. Historical reports are dated evidence, not proof that every current route has been retested.
 
-The 4 October 2026 record-companion pass verified both TypeScript projects, **180 tests across 29 files**, **12 SQL isolation/constraint checks**, **88 desktop/mobile browser checks**, and production builds. Eight focused chat checks additionally verify the final message visibility, readable reply scrolling, motion accessibility, patient scope, error recovery and source opening. See the [record chat verification report](app/reports/record-chat-2026-10-04.md) and [assistant capabilities and limits](app/docs/APP_GUIDE.md). The build currently reports a large frontend bundle warning.
+## Product documents and credits
 
-The earlier [hosted deployment report](app/reports/hosted-deployment-2026-10-03.md) documents a synthetic upload → live extraction → review → approval → export flow. It is historical evidence for that deployed revision, not a clinical accuracy claim or verification of every subsequent edit.
+Active scope: [product specification](docs/mvp/01-product.md), [build plan](docs/mvp/06-build-plan.md), [acceptance mapping](docs/mvp/10-acceptance-checklist.md), and [completion plan](app/docs/COMPLETION_PLAN.md). Archived handoffs remain historical references.
 
-## Repository layout
-
-```text
-app/
-  apps/client/         Shared web UI and Capacitor Android project
-  apps/api/            Authentication, records, uploads, review and exports
-  apps/worker/         Document processing and export jobs
-  packages/            Contracts, domain rules, data, extraction and UI
-  supabase/            Additive migrations and SQL checks
-  scripts/             Local setup, seed, evaluation and verification
-  tests/               Integration and browser workflows
-  docs/                Setup, demo, deployment and decisions
-  reports/             Measured results and screenshots
-docs/mvp/              Original scope, architecture and acceptance baseline
-docs/superpowers/      Revised dashboard implementation plan
-deliverables/          Android APK, pitch decks and submission drafts
-```
-
-## Status and limitations
-
-This is a hackathon prototype using synthetic records. Hosted authentication, private source access and live processing have dated verification evidence. Physical-device camera/session/export checks, phone OTP, independent extraction validation and clinical/productivity outcomes remain pending. The included signed APK contains the current shared client. Physical-device behavior still needs independent verification. Submission decks and answers are drafts; their claims require reconciliation with the dated evidence before external submission.
-
-For detailed context, see the [acceptance mapping](app/reports/acceptance.md), [product specification](docs/mvp/01-product.md), [revised dashboard plan](docs/superpowers/plans/2026-10-03-pdf-demo.md), and [implementation decisions](app/docs/DECISIONS.md).
-
-No license has been selected for this repository.
+GlucoFlow draws interaction inspiration from OpenAI Dots and Codex, and builds on the Hermes Agent runtime. Upstream licenses and provenance are preserved with the bundled source. The orb adapts the credited grok-bot-emoji vectors; no affiliation or endorsement is implied. The new landing illustration was generated for this project; its [source prompt and assets](app/apps/client/public/brand/README.md) are included.

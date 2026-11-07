@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { signIn } from './helpers';
+import { demoCredentials, openDemoPatient, signIn } from './helpers';
+import { buildSyntheticReport, smokerunDate } from '../../scripts/lib/synthetic-report';
 
 test('home reading and problem timestamps are independent', async ({ page }) => {
   await signIn(page, 'patient');
@@ -41,10 +42,9 @@ test('demo samples are available without choosing a local file', async ({ page }
 
 test('published reviews show success and lock further draft actions', async ({ page }) => {
   await signIn(page, 'clinic');
-  await page.goto('/clinic/patients');
-  await page.getByRole('link', { name: 'Open patient' }).first().click();
-  const response = page.waitForResponse(r => new URL(r.url()).pathname.startsWith('/api/v1/patients/') && new URL(r.url()).pathname.endsWith('/documents') && r.request().method() === 'GET' && r.status() === 200);
-  await page.getByRole('link', { name: 'Documents', exact: true }).click();
+  const path = `/api/v1/patients/${demoCredentials().patientId}/documents`;
+  const response = page.waitForResponse(r => new URL(r.url()).pathname === path && r.request().method() === 'GET' && r.status() === 200);
+  await openDemoPatient(page, 'Documents');
   const documents = await (await response).json();
   const row = page.locator('[data-document-row]:visible').filter({ hasText: 'Approved' }).first();
   await expect(row).toBeVisible();
@@ -59,9 +59,7 @@ test('published reviews show success and lock further draft actions', async ({ p
 
 test('sample upload leads to an available review even on a repeated run', async ({ page }) => {
   await signIn(page, 'clinic');
-  await page.goto('/clinic/patients');
-  await page.getByRole('link', { name: 'Open patient' }).first().click();
-  await page.getByRole('link', { name: 'Documents', exact: true }).click();
+  await openDemoPatient(page, 'Documents');
   for (let run = 0; run < 2; run++) {
   await page.getByRole('button', { name: 'Upload report', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: 'Upload a report' });
@@ -72,6 +70,32 @@ test('sample upload leads to an available review even on a repeated run', async 
   await expect(page.locator('li:visible').filter({hasText:'HbA1c'}).first()).toBeVisible();
   await page.getByRole('link', {name:'Back', exact:true}).click();
   }
+});
+
+test('a quarantined upload does not offer a draft review', async ({ page }) => {
+  const filename = `e2e-wrong-patient-${Date.now()}.pdf`;
+  const buffer = await buildSyntheticReport({
+    filename, identifier: 'P9999', patientName: 'Unmatched synthetic example',
+    collectedOn: smokerunDate().printed, hba1c: '7.1',
+  });
+  await signIn(page, 'clinic');
+  await openDemoPatient(page, 'Documents');
+  await page.getByRole('button', { name: 'Upload report', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'Upload a report' });
+  await dialog.locator('input[type="file"]').setInputFiles({ name: filename, mimeType: 'application/pdf', buffer });
+  const document = page.waitForResponse(response =>
+    /\/api\/v1\/documents\/[0-9a-f-]+$/.test(new URL(response.url()).pathname) &&
+    response.request().method() === 'GET' && response.ok(),
+  );
+  await dialog.getByRole('button', { name: 'Upload report', exact: true }).click();
+  expect((await (await document).json()).state).toBe('quarantined');
+  await expect(dialog.getByText('Patient details need checking', { exact: true })).toBeVisible({ timeout: 10_000 });
+  await expect(dialog.getByRole('link', { name: 'Review this report' })).toHaveCount(0);
+  await dialog.getByRole('link', { name: 'View documents', exact: true }).click();
+  await expect(page).toHaveURL(`/clinic/patients/${demoCredentials().patientId}/documents`);
+  const row = page.locator('[data-document-row]:visible').filter({ hasText: filename });
+  await expect(row).toContainText('Patient details need checking');
+  await expect(row.getByRole('link', { name: 'Review', exact: true })).toHaveCount(0);
 });
 
 test('a saved SOS snapshot downloads JSON without leaving the workspace', async ({ page }) => {
@@ -98,8 +122,6 @@ test('clinic note submission dates use the same local calendar day as patient no
   await page.goto('/account');
   await page.getByRole('button',{name:'Sign out',exact:true}).first().click();
   await signIn(page,'clinic');
-  await page.goto('/clinic/patients');
-  await page.getByRole('link',{name:'Open patient'}).first().click();
-  await page.getByRole('link',{name:'Progression',exact:true}).click();
+  await openDemoPatient(page);
   await expect(page.getByText(body,{exact:true}).locator('..')).toContainText(`submitted ${day}`);
 });

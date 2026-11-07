@@ -1,0 +1,55 @@
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - text: glucoflow
+  - navigation "Public":
+    - link "Home":
+      - /url: /
+      - generic: Home
+    - link "Walkthrough":
+      - /url: /showcase
+      - generic: Walkthrough
+  - paragraph:
+    - text: Shared demo accounts.
+    - text: Fictional records only.
+- separator "Resize sidebar"
+- generic "glucoflow"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- main:
+  - paragraph: Demo access
+  - heading "Choose a demo account" [level=1]
+  - paragraph: Open a synthetic clinic or patient workspace. Clinic accounts open Care with their own record permissions.
+  - button "Doctor Open Care with clinician record access.":
+    - generic: Doctor
+    - generic: Open Care with clinician record access.
+  - button "Clinic team Open Care with clinic review, call and intake access.":
+    - generic: Clinic team
+    - generic: Open Care with clinic review, call and intake access.
+  - button "Reviewer Open Care with report review access.":
+    - generic: Reviewer
+    - generic: Open Care with report review access.
+  - button "Patient Open your records, report readings and prepare notes.":
+    - generic: Patient
+    - generic: Open your records, report readings and prepare notes.
+  - paragraph: Shared demo accounts · Fictional records only.
+  - link "Privacy and data use":
+    - /url: /privacy
+  - generic "Test access separation"
+- button "Need a hand? Open the Gluco guide":
+  - generic: Need a hand?
+- region "Notifications"

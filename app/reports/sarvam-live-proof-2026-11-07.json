@@ -1,0 +1,17 @@
+{
+  "synthetic": true,
+  "tts": {
+    "status": 200,
+    "milliseconds": 1508,
+    "characters": 65
+  },
+  "stt": {
+    "status": 200,
+    "milliseconds": 455,
+    "audioSeconds": 4.075125
+  },
+  "syntheticTranscript": "यह केवल एक काल्पनिक प्रदर्शन है। रिपोर्ट समीक्षा के लिए तैयार है।",
+  "reportWordPreserved": true,
+  "providerCalls": 2,
+  "noAutomaticRecordSubmission": true
+}

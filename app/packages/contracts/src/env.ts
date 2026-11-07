@@ -6,6 +6,7 @@ import { z } from 'zod';
  */
 
 const nonEmpty = z.string().min(1);
+const extractionProvider = z.enum(['fixture', 'openai-compatible', 'hermes']).default('fixture');
 
 export const appEnvSchema = z.enum(['development', 'test', 'production']);
 export type AppEnv = z.infer<typeof appEnvSchema>;
@@ -40,13 +41,15 @@ export const apiEnvSchema = z
     UPLOAD_MAX_BYTES: z.coerce.number().int().positive().default(15_728_640),
     UPLOAD_MAX_PAGES: z.coerce.number().int().positive().default(10),
 
-    EXTRACTION_PROVIDER: z.enum(['fixture', 'openai-compatible']).default('fixture'),
+    EXTRACTION_PROVIDER: extractionProvider,
     EXTRACTION_MODEL: z.string().default('deterministic-rules-v1'),
 
     GUIDE_MODE: z.enum(['local', 'live']).default('local'),
-    GUIDE_API_KEY: z.string().min(8).optional(),
-    GUIDE_BASE_URL: z.string().url().default('https://api.openai.com/v1'),
     GUIDE_MAX_CALLS_PER_HOUR: z.coerce.number().int().min(1).max(1000).default(60),
+
+    SARVAM_API_KEY: z.string().trim().max(512).default(''),
+    SARVAM_STT_MAX_SECONDS: z.coerce.number().int().min(0).max(1_000_000).default(0),
+    SARVAM_TTS_MAX_CHARACTERS: z.coerce.number().int().min(0).max(1_000_000).default(0),
 
     DEMO_LABEL: z.string().default('Synthetic demo'),
     RATE_LIMIT_UPLOADS_PER_MINUTE: z.coerce.number().int().positive().default(10),
@@ -128,10 +131,12 @@ export const workerEnvSchema = z
     STORAGE_BUCKET_SOURCES: z.string().default('sutra-sources'),
     STORAGE_BUCKET_EXPORTS: z.string().default('sutra-exports'),
 
-    EXTRACTION_PROVIDER: z.enum(['fixture', 'openai-compatible']).default('fixture'),
+    EXTRACTION_PROVIDER: extractionProvider,
     EXTRACTION_MODEL: z.string().default('deterministic-rules-v1'),
     EXTRACTION_BASE_URL: z.string().url().optional(),
     EXTRACTION_API_KEY: z.string().min(8).optional(),
+    HERMES_URL: z.string().url().optional(),
+    HERMES_SERVICE_TOKEN: z.string().min(24).optional(),
     MAX_DOCUMENT_MODEL_CALLS: z.coerce.number().int().positive().max(50).default(12),
     /** Mandatory positive values before any live model call can be dispatched. */
     MAX_DOCUMENT_COST_USD: z.coerce.number().positive().optional(),
@@ -157,22 +162,26 @@ export const workerEnvSchema = z
       });
     }
     if (env.EXTRACTION_PROVIDER !== 'fixture') {
-      const required: [keyof typeof env, string][] = [
-        ['EXTRACTION_API_KEY', 'EXTRACTION_API_KEY'],
-        ['EXTRACTION_BASE_URL', 'EXTRACTION_BASE_URL'],
-        ['MAX_DOCUMENT_COST_USD', 'MAX_DOCUMENT_COST_USD'],
-        ['MAX_RUN_TOKENS', 'MAX_RUN_TOKENS'],
-        ['MAX_DOCUMENT_USD_PER_MTOK_INPUT', 'MAX_DOCUMENT_USD_PER_MTOK_INPUT'],
-        ['MAX_DOCUMENT_USD_PER_MTOK_OUTPUT', 'MAX_DOCUMENT_USD_PER_MTOK_OUTPUT'],
+      const required: (keyof typeof env)[] = [
+        ...(env.EXTRACTION_PROVIDER === 'hermes'
+          ? ['HERMES_URL', 'HERMES_SERVICE_TOKEN'] as const
+          : ['EXTRACTION_API_KEY', 'EXTRACTION_BASE_URL'] as const),
+        'MAX_DOCUMENT_COST_USD',
+        'MAX_RUN_TOKENS',
+        'MAX_DOCUMENT_USD_PER_MTOK_INPUT',
+        'MAX_DOCUMENT_USD_PER_MTOK_OUTPUT',
       ];
-      for (const [key, name] of required) {
+      for (const key of required) {
         if (env[key] === undefined || env[key] === null) {
           ctx.addIssue({
             code: 'custom',
-            path: [name],
-            message: `${name} is required for live extraction. Fixture development works without it.`,
+            path: [key],
+            message: `${key} is required for the selected extraction provider.`,
           });
         }
+      }
+      if (env.EXTRACTION_PROVIDER === 'hermes' && (!env.EXTRACTION_MODEL.trim() || env.EXTRACTION_MODEL === 'deterministic-rules-v1')) {
+        ctx.addIssue({ code: 'custom', path: ['EXTRACTION_MODEL'], message: 'Set the model configured in the Hermes extraction runtime.' });
       }
     }
   });

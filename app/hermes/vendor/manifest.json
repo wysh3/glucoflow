@@ -1,0 +1,11 @@
+{
+  "name": "Gluco runtime source foundation",
+  "upstream": "https://github.com/NousResearch/hermes-agent",
+  "version": "0.23.0",
+  "commit": "2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19",
+  "archive": "gluco-runtime-source.tar.gz",
+  "sha256": "c863835bdba04434f8ac8cbb58935923c1d4f8f1f0a82d01bf391b848383a28d",
+  "license": "MIT",
+  "creation": "git archive --format=tar --prefix=hermes-agent/ 2bd378ed1b8d6bf2192cb26e0a55ff3091e6bd19 | gzip -n",
+  "scope": "Complete tracked release source; no Git database, local environment, installed dependencies or runtime state. Gluco application adapters, policy and care routines are maintained outside this immutable archive."
+}

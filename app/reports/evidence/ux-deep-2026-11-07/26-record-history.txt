@@ -1,0 +1,430 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Result closure":
+      - /url: /clinic/results
+      - generic: Result closure
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Current patient
+  - paragraph: Asha Rao (synthetic)
+  - paragraph: P0482
+  - navigation "Patient record sections":
+    - link "Visit overview":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/overview
+      - generic: Visit overview
+    - link "Progression":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/progression
+      - generic: Progression
+    - link "Documents":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/documents
+      - generic: Documents
+    - link "Home reports":
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/master
+      - generic: Home reports
+    - link "Record history" [active]:
+      - /url: /clinic/patients/743bab7f-960a-4319-bcfb-bdd5443e6061/history
+      - generic: Record history
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - heading "Asha Rao (synthetic)" [level=1]
+  - generic: P0482
+  - generic: ·
+  - generic: Approval revision 10
+  - generic: 2 documents awaiting review
+  - generic: ·
+  - generic: Latest recorded result 03 October 2026
+  - generic: Search this patient's records
+  - textbox "Search this patient's records":
+    - /placeholder: Search records
+  - button "Search this patient's records":
+    - generic: Search
+  - heading "History" [level=1]
+  - generic: Clinic-only record of changes, approvals and corrections
+  - article:
+    - paragraph: Nov 07, 2026, 01:44 PM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Upload completed
+    - paragraph: document
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 07, 2026, 01:44 PM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Upload started
+    - paragraph: upload_session
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 07, 2026, 01:34 PM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Upload completed
+    - paragraph: document
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 07, 2026, 01:34 PM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Upload started
+    - paragraph: upload_session
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 07, 2026, 01:33 PM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Upload started
+    - paragraph: upload_session
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 04, 2026, 03:56 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Reviewed entries approved
+    - paragraph: approval_batch
+    - paragraph: "10"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 04, 2026, 03:52 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Review updated
+    - paragraph: review_batch
+    - paragraph: "1"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 04, 2026, 03:50 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Correction draft created
+    - paragraph: review_batch
+    - paragraph: —
+    - paragraph: QA check of correction review after batch and revision fix
+  - article:
+    - paragraph: Nov 04, 2026, 03:23 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Correction draft created
+    - paragraph: review_batch
+    - paragraph: —
+    - paragraph: QA check of review recovery
+  - article:
+    - paragraph: Nov 04, 2026, 02:01 AM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Patient note submitted
+    - paragraph: patient_note
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 04, 2026, 01:56 AM
+    - paragraph: System · System
+    - paragraph: source quarantined
+    - paragraph: document
+    - paragraph: —
+    - paragraph: The source identifier differs from the assigned patient record.
+  - article:
+    - paragraph: Nov 04, 2026, 01:56 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload completed
+    - paragraph: document
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 04, 2026, 01:56 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload started
+    - paragraph: upload_session
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 04, 2026, 01:55 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Correction draft created
+    - paragraph: review_batch
+    - paragraph: —
+    - paragraph: QA audit review 5
+  - article:
+    - paragraph: Nov 04, 2026, 01:55 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Correction draft created
+    - paragraph: review_batch
+    - paragraph: —
+    - paragraph: QA audit review 4
+  - article:
+    - paragraph: Nov 04, 2026, 01:54 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Correction draft created
+    - paragraph: review_batch
+    - paragraph: —
+    - paragraph: QA audit review 3
+  - article:
+    - paragraph: Nov 04, 2026, 01:54 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Correction draft created
+    - paragraph: review_batch
+    - paragraph: —
+    - paragraph: QA audit - review dialog check
+  - article:
+    - paragraph: Nov 04, 2026, 01:53 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Correction draft created
+    - paragraph: review_batch
+    - paragraph: —
+    - paragraph: QA audit - verifying correction review flow
+  - article:
+    - paragraph: Nov 04, 2026, 01:49 AM
+    - paragraph: System · System
+    - paragraph: duplicate detected
+    - paragraph: document
+    - paragraph: —
+    - paragraph: This is the same file as an earlier upload for this patient.
+  - article:
+    - paragraph: Nov 04, 2026, 01:49 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload completed
+    - paragraph: document
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 04, 2026, 01:49 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload started
+    - paragraph: upload_session
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 04, 2026, 01:48 AM
+    - paragraph: System · System
+    - paragraph: duplicate detected
+    - paragraph: document
+    - paragraph: —
+    - paragraph: This is the same file as an earlier upload for this patient.
+  - article:
+    - paragraph: Nov 04, 2026, 01:48 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload completed
+    - paragraph: document
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 04, 2026, 01:48 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload started
+    - paragraph: upload_session
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 04, 2026, 01:48 AM
+    - paragraph: System · System
+    - paragraph: duplicate detected
+    - paragraph: document
+    - paragraph: —
+    - paragraph: This is the same file as an earlier upload for this patient.
+  - article:
+    - paragraph: Nov 04, 2026, 01:48 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload completed
+    - paragraph: document
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Nov 04, 2026, 01:48 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload started
+    - paragraph: upload_session
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 21, 2026, 02:06 PM
+    - paragraph: System · System
+    - paragraph: Summary export ready
+    - paragraph: export
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 21, 2026, 02:06 PM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Summary export requested
+    - paragraph: export
+    - paragraph: "9"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 21, 2026, 01:45 PM
+    - paragraph: System · System
+    - paragraph: duplicate detected
+    - paragraph: document
+    - paragraph: —
+    - paragraph: This is the same file as an earlier upload for this patient.
+  - article:
+    - paragraph: Oct 21, 2026, 01:44 PM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Upload completed
+    - paragraph: document
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 21, 2026, 01:44 PM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Upload started
+    - paragraph: upload_session
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 03:19 AM
+    - paragraph: System · System
+    - paragraph: duplicate detected
+    - paragraph: document
+    - paragraph: —
+    - paragraph: This is the same file as an earlier upload for this patient.
+  - article:
+    - paragraph: Oct 04, 2026, 03:18 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload completed
+    - paragraph: document
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 03:18 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload started
+    - paragraph: upload_session
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 02:49 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Reviewed entries approved
+    - paragraph: approval_batch
+    - paragraph: "9"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 02:44 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Review updated
+    - paragraph: review_batch
+    - paragraph: "5"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 02:44 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Review updated
+    - paragraph: review_batch
+    - paragraph: "4"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 02:44 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Review updated
+    - paragraph: review_batch
+    - paragraph: "3"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 02:44 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Review updated
+    - paragraph: review_batch
+    - paragraph: "2"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 02:44 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Review updated
+    - paragraph: review_batch
+    - paragraph: "1"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 02:40 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload completed
+    - paragraph: document
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 02:40 AM
+    - paragraph: Dr Meera Nair (synthetic) · Reviewer
+    - paragraph: Upload started
+    - paragraph: upload_session
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 12:13 AM
+    - paragraph: Reviewer Sana Iqbal (synthetic) · Patient
+    - paragraph: Reviewed entries approved
+    - paragraph: approval_batch
+    - paragraph: "8"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 12:13 AM
+    - paragraph: Reviewer Sana Iqbal (synthetic) · Patient
+    - paragraph: Review updated
+    - paragraph: review_batch
+    - paragraph: "1"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 12:11 AM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Upload completed
+    - paragraph: document
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 12:11 AM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Upload started
+    - paragraph: upload_session
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 12:10 AM
+    - paragraph: Clinician Arun Das (synthetic) · Patient
+    - paragraph: Patient note acknowledged
+    - paragraph: patient_note
+    - paragraph: —
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 12:07 AM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Patient note corrected
+    - paragraph: patient_note
+    - paragraph: "2"
+    - generic: No reason recorded
+  - article:
+    - paragraph: Oct 04, 2026, 12:07 AM
+    - paragraph: Asha Rao (synthetic) · Patient
+    - paragraph: Patient note submitted
+    - paragraph: patient_note
+    - paragraph: —
+    - generic: No reason recorded
+  - button "Load more"
+  - paragraph: Patient accounts never see this clinic-only view. Asha Rao (synthetic)'s record history is retained with each approved revision.
+- region "Notifications"

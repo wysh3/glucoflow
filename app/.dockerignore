@@ -3,6 +3,15 @@
 .env.*
 !.env.example
 .local
+**/.local
+**/.env
+**/.env.*
+!/.env.example
+**/.git
+**/.vercel
+**/.venv
+**/__pycache__
+**/.pytest_cache
 **/node_modules
 **/dist
 **/build
@@ -15,6 +24,9 @@ playwright-report
 **/*.jks
 **/*.keystore
 **/*.pem
+**/*.key
+**/*.p12
+**/keystores
 **/keystore.properties
 **/local.properties
 apps/client/android

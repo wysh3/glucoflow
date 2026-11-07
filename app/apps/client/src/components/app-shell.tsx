@@ -1,19 +1,16 @@
-import {demoEnabled} from '../auth/demo';
+import { ClinicNavigation } from './clinic-navigation';
+import { demoEnabled } from '../auth/demo';
 import * as React from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
-import { ArrowLeftIcon, CircleCheckIcon, FileTextIcon, HeartPulseIcon, FilePenLineIcon, UploadIcon, UserIcon, UsersIcon } from 'lucide-animated';
+import { Link, NavLink, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
+import { ArrowLeftIcon, FileTextIcon, HeartPulseIcon, FilePenLineIcon, UploadIcon, UserIcon, UsersIcon } from 'lucide-animated';
 import { Alert, Button, cn, useAnimatedIcon } from '@glucoflow/ui';
 import { useSession } from '../auth/session';
-import {usePatient} from '../lib/queries';
-import {Activity,History,Inbox,NotebookPen,ScanLine,Sparkles,Timer} from 'lucide-react';
+import { ClipboardList, History, Inbox, NotebookPen, MessageCircle, TrendingUp, Home, Users, FolderOpen } from 'lucide-react';
 import { installBackHandler } from '../platform/back';
-import { SystemGlyph } from './system-glyph';
-
-/**
- * Application shell: left rail on desktop, bottom navigation on mobile.
- * A single compact page title lives inside each screen's toolbar. No slogan,
- * greeting banner or promotional subtitle appears anywhere.
- */
+import { CARE_HOME } from '../lib/clinic-home';
+import { LanguageNotice, LanguagePicker, useI18n } from '../i18n';
+import { normalizePathname } from '../lib/route-path';
+import { CodexDesktopLayout, CodexSidebarRow } from '../vendor/codexapp/desktop-layout';
 
 export function useOnlineStatus(): boolean {
   const [online, setOnline] = React.useState(
@@ -43,174 +40,197 @@ export function DemoLabel(): React.ReactElement | null {
   );
 }
 
-function railLinkClass({ isActive }: { isActive: boolean }): string {
-  return cn(
-    'flex min-h-11 items-center gap-3 rounded-[10px] px-3 text-sm font-medium transition-colors',
-    isActive ? 'bg-primary/10 text-primary' : 'text-ink-soft hover:bg-canvas hover:text-ink',
-  );
-}
-
 export function AppShell({ children }: { children: React.ReactNode }): React.ReactElement {
   const { me, signOut } = useSession();
+  const { locale, t } = useI18n();
   const online = useOnlineStatus();
   const location = useLocation();
-  const [backReady, setBackReady] = React.useState(false);
-
+  const action = useNavigationType();
   React.useEffect(() => {
     let dispose: (() => void) | undefined;
+    let cancelled = false;
     void installBackHandler().then((cleanup) => {
-      dispose = cleanup;
-      setBackReady(true);
+      if (cancelled) cleanup();
+      else dispose = cleanup;
     });
     return () => {
+      cancelled = true;
       dispose?.();
     };
   }, []);
 
+  const navigate = useNavigate();
+  const [switching, setSwitching] = React.useState(false);
   const clinicContexts = me?.contexts.filter((context) => context.kind === 'clinic') ?? [];
   const patientContexts = me?.contexts.filter((context) => context.kind === 'patient') ?? [];
-  const isClinicView = location.pathname.startsWith('/clinic');
-  const isPatientView = location.pathname.startsWith('/patient');
+  const path = normalizePathname(location.pathname);
+  const isClinicView = path.startsWith('/clinic');
+  const isPatientView = path.startsWith('/patient');
+  const isCareView = path === CARE_HOME;
+  const main = React.useRef<HTMLElement>(null);
+  const lastPath = React.useRef(path);
+  const scrollPositions = React.useRef(new Map<string, number>());
 
-  const activePatientId = location.pathname.match(/^\/clinic\/patients\/([0-9a-f-]{36})(?:\/|$)/)?.[1];
-  const activePatient = usePatient(activePatientId);
-  const patientSections = [{path:'delta',label:'Delta',icon:Timer,index:'01'},{path:'bodymap',label:'Body map',icon:ScanLine,index:'02'},{path:'overview',label:'Visit overview',icon:NotebookPen,index:'03'},{path:'progression',label:'Progression',icon:Activity,index:'04'},{path:'documents',label:'Documents',icon:FileTextIcon,index:'05'},{path:'master',label:'Home reports',icon:HeartPulseIcon,index:'06'},{path:'history',label:'History',icon:History,index:'07'}];
-  const clinicLinks = [
-    ...(me?.capabilities.canClinician ? [{ to: '/clinic/line', label: 'Line', icon: Inbox, index: '01' }] : []),
-    ...(me?.capabilities.canNurse ? [{ to: '/clinic/calls', label: 'Calls', icon: CircleCheckIcon, index: '02' }] : []),
-    ...(me?.capabilities.canDesk ? [{ to: '/clinic/intake', label: 'Intake', icon: UsersIcon, index: '03' }] : []),
-    ...(me?.capabilities.canQuality ? [{ to: '/clinic/register', label: 'Register', icon: FileTextIcon, index: '04' }] : []),
-    { to: '/clinic/replay', label: 'Replay', icon: Activity, index: '05' },
-    { to: '/clinic/results', label: 'Ledger', icon: Inbox, index: '06' },
-    { to: '/clinic/patients', label: 'Patients', icon: UsersIcon, index: '07' },
-    ...(me?.capabilities.canReview ? [{ to: '/clinic/queue', label: 'Review queue', icon: CircleCheckIcon, index: '08' }] : []),
+  React.useLayoutEffect(() => {
+    const element = main.current;
+    if (!element) return;
+    if (lastPath.current !== path) {
+      lastPath.current = path;
+      element.scrollTop = action === 'POP' ? scrollPositions.current.get(location.key) ?? 0 : 0;
+    } else {
+      scrollPositions.current.set(location.key, element.scrollTop);
+    }
+  }, [action, location.key, path]);
+  const clinicNav = isClinicView || (!isPatientView && clinicContexts.length > 0);
+  const closurePages = [
+    { to: '/clinic/results', label: t('nav.resultLedger') },
+    ...(me?.capabilities.canClinician ? [{ to: '/clinic/line', label: t('nav.clinicianReview') }] : []),
+    ...(me?.capabilities.canNurse ? [{ to: '/clinic/calls', label: t('nav.patientCalls') }] : []),
+    ...(me?.capabilities.canDesk ? [{ to: '/clinic/intake', label: t('nav.labIntake') }] : []),
+    ...(me?.capabilities.canQuality ? [{ to: '/clinic/register', label: t('nav.closureRegister') }] : []),
   ];
-  const patientLinks = [
-    { to: '/patient/master', label: 'Home', icon: HeartPulseIcon, index: '01' },
-    { to: '/patient/records', label: 'Records', icon: FileTextIcon, index: '02' },
-    { to: '/patient/add-report', label: 'Add report', icon: UploadIcon, index: '03' },
-    { to: '/patient/visit-notes', label: 'Visit notes', icon: FilePenLineIcon, index: '04' },
-  ];
-  const links = isClinicView ? clinicLinks : isPatientView ? patientLinks : clinicContexts.length > 0 ? clinicLinks : patientContexts.length > 0 ? patientLinks : [];
+  const closureActive = path === '/clinic/replay' || closurePages.some((page) => path === page.to);
+  const recordsActive = path.startsWith('/clinic/patients') || path === '/clinic/queue' || path.startsWith('/clinic/review/');
+  const account = { to: '/account', label: t('nav.account'), icon: UserIcon, active: path === '/account' };
+  const links = clinicNav ? [
+    { to: CARE_HOME, label: 'Home & chat', icon: Home, active: path === CARE_HOME && !new URLSearchParams(location.search).get('view') },
+    { to: CARE_HOME+'?view=worklist', label: 'Worklist', icon: ClipboardList, active: path === CARE_HOME && new URLSearchParams(location.search).get('view') === 'worklist' },
+    { to: CARE_HOME+'?view=teams', label: 'Encounters', icon: Users, active: path === CARE_HOME && new URLSearchParams(location.search).get('view') === 'teams' },
+    { to: '/clinic/patients', label: 'Records', icon: FolderOpen, active: recordsActive },
+    account,
+  ] : patientContexts.length ? [
+    { to: '/patient/records', label: t('nav.records'), icon: FileTextIcon, active: path === '/patient/records' || path === '/patient/add-report' },
+    { to: '/patient/master', label: t('nav.homeReadings'), icon: HeartPulseIcon, active: path === '/patient/master' || path === '/patient/visit-notes' },
+    account,
+  ] : [account];
+
+  async function switchAccount() {
+    setSwitching(true);
+    try {
+      await signOut();
+      navigate('/sign-in', { replace: true, state: null });
+    } finally {
+      setSwitching(false);
+    }
+  }
+
+  const workspaceLabel = t(isClinicView ? 'nav.clinicWorkspace' : isPatientView ? 'nav.patientWorkspace' : 'nav.account');
+
+  const workspaceControls = (
+        <>
+          <LanguagePicker className="max-sm:[&_select]:max-w-[4.75rem] max-sm:[&_svg]:hidden" />
+          {(isPatientView || /^\/clinic\/patients\/[0-9a-f-]{36}(?:\/|$)/.test(path)) ? (
+            <Button type="button" variant="quiet" size="sm" className="min-h-11 px-2.5"
+              aria-label={t('nav.askGluco')} title={t('nav.askGluco')}
+              onClick={() => window.dispatchEvent(new Event('gluco:open'))}>
+              <MessageCircle size={16} aria-hidden />
+              <span className="hidden sm:inline">{t('nav.askGluco')}</span>
+            </Button>
+          ) : null}
+          {demoEnabled ? (
+            <Button type="button" variant="quiet" size="sm" className="min-h-11 px-2 sm:px-3"
+              disabled={switching} onClick={() => void switchAccount()}>{t('ui.switchAccount')}</Button>
+          ) : null}
+          {isCareView
+            ? <span className="hidden rounded-full border border-line bg-canvas px-2.5 py-1 text-[11px] font-medium text-ink-soft sm:inline-flex">{t('nav.careSimulation')}</span>
+            : <DemoLabel />}
+        </>
+  );
 
   return (
-    <div className="min-h-screen bg-canvas">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col lg:flex-row">
-        <aside className="no-print sticky top-0 hidden h-screen w-[240px] shrink-0 overflow-y-auto border-r border-line bg-surface/90 px-4 pb-6 pt-[calc(24px+env(safe-area-inset-top))] lg:block">
-          <div className="mb-6 px-2">
-            <HeartPulseIcon size={28} className="mb-3 text-primary" aria-hidden />
-            <p className="text-[20px] font-semibold tracking-tight text-primary">glucoflow</p>
-            <p className="mt-1 text-[12px] text-ink-soft">
-              {isClinicView ? 'Clinic workspace' : isPatientView ? 'Patient workspace' : 'Account'}
-            </p>
-          </div>
-          <nav className="flex flex-col gap-1" aria-label="Main">
+    <CodexDesktopLayout
+      title={workspaceLabel}
+      sidebarLabel={t('ui.mainNav')}
+      compactToolbar
+      sidebarHeading={(
+        <div className="flex min-w-0 items-center gap-2 text-primary">
+          <HeartPulseIcon size={21} className="shrink-0" aria-hidden />
+          <span className="truncate text-sm font-semibold tracking-tight">glucoflow</span>
+        </div>
+      )}
+      sidebar={(close) => (
+        <>
+          <nav aria-label={t('ui.mainNav')} className="flex flex-col gap-0.5">
             {links.map((link) => (
-              <NavLink key={link.to} to={link.to} className={railLinkClass}>
-                <link.icon size={20} aria-hidden />
-                <span>{link.label}</span>
-                <span aria-hidden="true" className="ml-auto text-[11px] tabular-nums text-ink-soft">{link.index}</span>
-              </NavLink>
+              <CodexSidebarRow key={link.to} to={link.to} active={link.active} onClick={close}
+                icon={<link.icon size={16} aria-hidden />}>{link.label}</CodexSidebarRow>
             ))}
-            <NavLink to="/account" className={railLinkClass}>
-              <UserIcon size={20} aria-hidden />
-              <span>Account</span>
-              <span aria-hidden="true" className="ml-auto text-[11px] tabular-nums text-ink-soft">08</span>
-            </NavLink>
           </nav>
-          {activePatientId ? <section className="mt-6 border-t border-dotted border-line pt-4"><p className="px-3 text-[11px] font-semibold uppercase tracking-wider text-ink-soft">Current patient</p><p className="mt-2 px-3 text-sm font-medium text-ink">{activePatient.data?.displayName ?? 'Loading patient…'}</p><p className="mt-1 px-3 text-xs text-ink-soft">{activePatient.data?.clinicIdentifier}</p><nav aria-label="Patient record sections" className="mt-3 flex flex-col gap-1">{patientSections.map(section=><NavLink key={section.path} to={`/clinic/patients/${activePatientId}/${section.path}`} className={railLinkClass}><section.icon size={18} aria-hidden/><span>{section.label}</span><span aria-hidden="true" className="ml-auto text-[11px] tabular-nums text-ink-soft">{section.index}</span></NavLink>)}</nav></section> : null}
-          {me ? (
-            <div className="mt-6 border-t border-dotted border-line pt-4 text-[12px] text-ink-soft">
-              <p className="font-medium text-ink">{me.actor.displayName}</p>
-              <p className="mt-0.5">{describeRoles(me)}</p>
-              <button
-                type="button"
-                onClick={() => void signOut()}
-                className="mt-3 min-h-9 rounded-[10px] border border-line px-3 text-[12px] text-ink hover:bg-canvas"
-              >
-                Sign out
-              </button>
+          {clinicNav && (recordsActive || closureActive) ? (
+            <div className="record-tools mt-3 border-t border-line pt-2">
+              <nav aria-label="Record tools">
+                <CodexSidebarRow to="/clinic/results" active={closureActive} onClick={close} icon={<Inbox size={16} aria-hidden />}>{t('nav.resultClosure')}</CodexSidebarRow>
+              </nav>
             </div>
           ) : null}
-        </aside>
 
-        <div className="flex min-w-0 flex-1 flex-col">
-          <header className="safe-top sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur">
-            <div className="flex items-center justify-between gap-3 px-4 py-2.5 lg:px-6">
-              <div className="flex items-center gap-2 lg:hidden">
-                <span className="text-[20px] font-semibold tracking-tight text-primary">glucoflow</span>
-              </div>
-              <div className="hidden items-center gap-3 text-[12px] text-ink-soft lg:flex">
-                <span>{me?.actor.email}</span>
-                <span>·</span>
-                <span>{describeRoles(me)}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="min-h-9 px-2 sm:px-3"
-                  aria-label="Ask Gluco"
-                  title="Ask Gluco"
-                  onClick={() => window.dispatchEvent(new Event('gluco:open'))}
-                >
-                  <Sparkles size={14} aria-hidden />
-                  <span className="hidden sm:inline">Ask Gluco</span>
-                </Button>
-                {demoEnabled?<Button variant="secondary" className="whitespace-nowrap px-2 text-[12px] sm:px-4 sm:text-sm" onClick={()=>void signOut()}><span className="hidden sm:inline">Switch role</span><span className="sm:hidden">Switch</span></Button>:null}
-                <DemoLabel />
-                {backReady ? null : null}
-              </div>
-            </div>
-          </header>
-
+        </>
+      )}
+      sidebarFooter={me ? (
+        <div className="px-2 py-1 text-xs text-ink-soft">
+          <div className="sidebar-workspace-controls">{workspaceControls}</div>
+          <p className="break-words font-medium text-ink">{me.actor.displayName}</p>
+          <p className="mt-0.5">{describeRoles(me)}</p>
+        </div>
+      ) : undefined}
+      toolbar={workspaceControls}
+      toolbarFooter={(
+        <>
+          <LanguageNotice className="no-print border-t border-line px-3 py-1.5" />
           {!online ? (
-            <div className="px-4 pt-4 lg:px-6">
-              <Alert tone="review" title="You are offline. Reconnect to upload.">
-                Recorded data already on this screen stays visible. Uploads and reviews need a
-                connection.
+            <div className="no-print px-3 py-2">
+              <Alert tone="review" title={t(isCareView ? 'ui.offline' : 'ui.uploadOffline')}>
+                {t(isCareView ? 'ui.careOfflineBody' : 'ui.recordOfflineBody')}
               </Alert>
             </div>
           ) : null}
-
-          <main className="flex-1 px-4 pb-[160px] pt-4 lg:px-8 lg:pb-10 lg:pt-6">{children}</main>
-        </div>
-      </div>
-
-      {links.length > 0 ? (
-        <nav
-          className="no-print safe-bottom fixed bottom-0 left-0 right-0 z-30 flex border-t border-line bg-surface/95 shadow-[0_-4px_24px_rgba(24,76,68,0.05)] backdrop-blur lg:hidden"
-          aria-label="Main"
-        >
+        </>
+      )}
+      mobileFooter={(
+        <nav className="flex border-t border-line bg-surface" aria-label={t('ui.mainNav')}>
           {links.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) =>
-                cn(
-                  'flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1.5 px-1 text-[11px] font-medium sm:text-[11px]',
-                  isActive ? 'bg-primary/8 text-primary' : 'text-ink-soft hover:bg-canvas',
-                )
-              }
-            >
-              <link.icon size={20} aria-hidden />
-              {link.label}
-            </NavLink>
+            <Link key={link.to} to={link.to} aria-current={link.active ? 'page' : undefined}
+              className={cn(
+                'flex min-h-14 min-w-0 flex-1 flex-col items-center justify-center gap-1 break-words px-1 text-center text-[11px] font-medium leading-tight',
+                link.active ? 'bg-zinc-100 text-ink' : 'text-ink-soft hover:bg-canvas',
+              )}>
+              <link.icon size={19} className="shrink-0" aria-hidden /> {link.label}
+            </Link>
           ))}
-          <NavLink
-            to="/account"
-            className={({ isActive }) =>
-              cn(
-                'flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1.5 px-1 text-[11px] font-medium sm:text-[11px]',
-                isActive ? 'bg-primary/8 text-primary' : 'text-ink-soft hover:bg-canvas',
-              )
-            }
-          >
-            <UserIcon size={20} aria-hidden /> Account
-          </NavLink>
         </nav>
-      ) : null}
-    </div>
+      )}
+      skipLink={(
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300] focus:rounded-lg focus:bg-surface focus:p-3 focus:text-primary focus:ring-2 focus:ring-primary">
+          {t('ui.skip')}
+        </a>
+      )}
+    >
+      {isClinicView && !isCareView ? <ClinicNavigation /> : null}
+      <main ref={main} id="main-content" tabIndex={-1} className="codexapp-main-scroll"
+        data-care={isCareView || undefined}
+        onScroll={(event) => scrollPositions.current.set(location.key, event.currentTarget.scrollTop)}>
+        {isCareView ? (
+          <div lang="en-IN" dir="ltr" className="flex min-h-0 min-w-0 flex-1 flex-col">{children}</div>
+        ) : (
+          <div className="mx-auto max-w-[84rem] px-4 pb-12 pt-4 sm:px-6 lg:px-8">
+            {closureActive ? (
+              <nav className="no-print mb-4 flex flex-wrap gap-1.5 rounded-xl border border-line p-1.5" aria-label={t('nav.resultSections')}>
+                {closurePages.map((page) => (
+                  <NavLink key={page.to} to={page.to} className={({ isActive }) =>
+                    cn('inline-flex min-h-11 items-center rounded-lg px-2.5 text-xs font-medium sm:text-sm',
+                      isActive ? 'bg-primary/10 text-primary' : 'text-ink-soft hover:bg-canvas')}>
+                    {page.label}
+                  </NavLink>
+                ))}
+              </nav>
+            ) : null}
+            {isClinicView || path === '/patient/master' ? (
+              <div lang="en-IN" dir="ltr">{children}</div>
+            ) : <div lang={locale.tag} dir={locale.direction}>{children}</div>}
+          </div>
+        )}
+      </main>
+    </CodexDesktopLayout>
   );
 }
 

@@ -1,0 +1,381 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Result closure" [active]:
+      - /url: /clinic/results
+      - generic: Result closure
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Ask Gluco":
+  - generic: Ask Gluco
+- button "Switch account"
+- generic: Synthetic demo
+- main:
+  - navigation "Result closure sections":
+    - link "Result ledger":
+      - /url: /clinic/results
+    - link "Clinician review":
+      - /url: /clinic/line
+    - link "Patient calls":
+      - /url: /clinic/calls
+    - link "Lab intake":
+      - /url: /clinic/intake
+    - link "Closure register":
+      - /url: /clinic/register
+  - heading "Result ledger" [level=1]
+  - generic: Track lab flags, assigned owners, patient contact and recorded outcomes.
+  - button "Import lab feed":
+    - text: Import lab feed
+  - button "Export register":
+    - text: Export register
+  - button "Check overdue":
+    - text: Check overdue
+  - button "Refresh result ledger":
+    - text: Refresh
+  - paragraph: Result closure
+  - heading "Patient contact and closure" [level=2]
+  - paragraph: Review the recorded owner, clinician value echo, contact attempts and next step for each lab-flagged result.
+  - paragraph: 24%
+  - paragraph: Closed with patient within 7 days
+  - paragraph: "17"
+  - paragraph: Open contact tasks
+  - paragraph: "1"
+  - paragraph: Documented unreachable
+  - paragraph: Oldest critical receipt
+  - paragraph: Imran Shaikh
+  - paragraph:
+    - text: Sodium
+    - generic: 128 mmol/L
+  - paragraph: Apex Labs · 3d ago · No owner
+  - paragraph: Lab flagged critical. The due clock starts at lab release.
+  - button "Open the receipt":
+    - text: Open the receipt
+  - link "View the synthetic cohort replay":
+    - /url: /clinic/replay
+    - text: View the synthetic cohort replay
+  - paragraph: 23.9h
+  - paragraph: Median contact
+  - paragraph: Lab release to patient contact
+  - paragraph: 60%
+  - paragraph: Next step completed
+  - paragraph: 3 completed of 5 contacted
+  - paragraph: 100%
+  - paragraph: Teach-back
+  - paragraph: Patient repeated the next step
+  - paragraph: "3"
+  - paragraph: Monitoring open
+  - paragraph: Clinician-set protocol receipts
+  - group "Filter results":
+    - button "Open" [pressed]
+    - button "Critical"
+    - button "Monitoring"
+    - button "Overdue"
+    - button "Unowned"
+    - button "Closed"
+    - button "All"
+    - generic: 17 results
+  - table:
+    - rowgroup:
+      - row "Patient and source Report Owner Clock Last mile Open":
+        - columnheader "Patient and source"
+        - columnheader "Report"
+        - columnheader "Owner"
+        - columnheader "Clock"
+        - columnheader "Last mile"
+        - columnheader "Open":
+          - generic: Open
+    - rowgroup:
+      - row "Imran Shaikh P0534 · Apex Labs · 3d ago Sodium Critical, lab flagged 128 mmol/L No owner Overdue 75h Needs patient match Open Sodium result":
+        - cell "Imran Shaikh P0534 · Apex Labs · 3d ago":
+          - paragraph: Imran Shaikh
+          - paragraph: P0534 · Apex Labs · 3d ago
+        - cell "Sodium Critical, lab flagged 128 mmol/L":
+          - generic: Sodium
+          - generic: Critical, lab flagged
+          - paragraph: 128 mmol/L
+        - cell "No owner"
+        - cell "Overdue 75h"
+        - cell "Needs patient match":
+          - generic: Needs patient match
+        - cell "Open Sodium result":
+          - button "Open Sodium result":
+            - text: Open
+      - 'row "Asha Rao (synthetic) P0482 · SRL Diagnostics · 3d ago Potassium Critical, lab flagged Monitoring 5.9 mmol/L ACE inhibitor or ARB start: potassium and eGFR at 2 to 4 weeks Dr Meera Nair (synthetic) Overdue 69h Owned Open Potassium result"':
+        - cell "Asha Rao (synthetic) P0482 · SRL Diagnostics · 3d ago":
+          - paragraph: Asha Rao (synthetic)
+          - paragraph: P0482 · SRL Diagnostics · 3d ago
+        - 'cell "Potassium Critical, lab flagged Monitoring 5.9 mmol/L ACE inhibitor or ARB start: potassium and eGFR at 2 to 4 weeks"':
+          - generic: Potassium
+          - generic: Critical, lab flagged
+          - generic: Monitoring
+          - paragraph: 5.9 mmol/L
+          - paragraph: "ACE inhibitor or ARB start: potassium and eGFR at 2 to 4 weeks"
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Overdue 69h"
+        - cell "Owned":
+          - generic: Owned
+        - cell "Open Potassium result":
+          - button "Open Potassium result":
+            - text: Open
+      - row "Asha Rao (synthetic) P0482 · SRL Diagnostics · 3d ago Potassium Critical, lab flagged 6.4 mmol/L No owner No clock Ready to assign Open Potassium result":
+        - cell "Asha Rao (synthetic) P0482 · SRL Diagnostics · 3d ago":
+          - paragraph: Asha Rao (synthetic)
+          - paragraph: P0482 · SRL Diagnostics · 3d ago
+        - cell "Potassium Critical, lab flagged 6.4 mmol/L":
+          - generic: Potassium
+          - generic: Critical, lab flagged
+          - paragraph: 6.4 mmol/L
+        - cell "No owner"
+        - cell "No clock"
+        - cell "Ready to assign":
+          - generic: Ready to assign
+        - cell "Open Potassium result":
+          - button "Open Potassium result":
+            - text: Open
+      - row "Arjun Nair P0577 · SRL Diagnostics · 5d ago Urine albumin/creatinine ratio Abnormal, lab flagged Monitoring 42 mg/g Annual urine albumin-to-creatinine ratio and eGFR Dr Meera Nair (synthetic) Patient contacted Patient contacted Open Urine albumin/creatinine ratio result":
+        - cell "Arjun Nair P0577 · SRL Diagnostics · 5d ago":
+          - paragraph: Arjun Nair
+          - paragraph: P0577 · SRL Diagnostics · 5d ago
+        - cell "Urine albumin/creatinine ratio Abnormal, lab flagged Monitoring 42 mg/g Annual urine albumin-to-creatinine ratio and eGFR":
+          - generic: Urine albumin/creatinine ratio
+          - generic: Abnormal, lab flagged
+          - generic: Monitoring
+          - paragraph: 42 mg/g
+          - paragraph: Annual urine albumin-to-creatinine ratio and eGFR
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Patient contacted"
+        - cell "Patient contacted":
+          - generic: Patient contacted
+        - cell "Open Urine albumin/creatinine ratio result":
+          - button "Open Urine albumin/creatinine ratio result":
+            - text: Open
+      - row "Ramesh Patil P0511 · Metropolis Healthcare · 3d ago HbA1c Abnormal, lab flagged 8.7 % Dr Meera Nair (synthetic) Overdue 72h Acknowledged Open HbA1c result":
+        - cell "Ramesh Patil P0511 · Metropolis Healthcare · 3d ago":
+          - paragraph: Ramesh Patil
+          - paragraph: P0511 · Metropolis Healthcare · 3d ago
+        - cell "HbA1c Abnormal, lab flagged 8.7 %":
+          - generic: HbA1c
+          - generic: Abnormal, lab flagged
+          - paragraph: 8.7 %
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Overdue 72h"
+        - cell "Acknowledged":
+          - generic: Acknowledged
+        - cell "Open HbA1c result":
+          - button "Open HbA1c result":
+            - text: Open
+      - row "Sanjay Gupta P0594 · SRL Diagnostics · 3d ago HbA1c Abnormal, lab flagged 8.1 % Clinician Arun Das (synthetic) Overdue 68h Owned Open HbA1c result":
+        - cell "Sanjay Gupta P0594 · SRL Diagnostics · 3d ago":
+          - paragraph: Sanjay Gupta
+          - paragraph: P0594 · SRL Diagnostics · 3d ago
+        - cell "HbA1c Abnormal, lab flagged 8.1 %":
+          - generic: HbA1c
+          - generic: Abnormal, lab flagged
+          - paragraph: 8.1 %
+        - cell "Clinician Arun Das (synthetic)"
+        - cell "Overdue 68h"
+        - cell "Owned":
+          - generic: Owned
+        - cell "Open HbA1c result":
+          - button "Open HbA1c result":
+            - text: Open
+      - row "Fatima Khan P0589 · SRL Diagnostics · 3d ago ALT Abnormal, lab flagged 44 U/L Dr Meera Nair (synthetic) Overdue 68h Owned Open ALT result":
+        - cell "Fatima Khan P0589 · SRL Diagnostics · 3d ago":
+          - paragraph: Fatima Khan
+          - paragraph: P0589 · SRL Diagnostics · 3d ago
+        - cell "ALT Abnormal, lab flagged 44 U/L":
+          - generic: ALT
+          - generic: Abnormal, lab flagged
+          - paragraph: 44 U/L
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Overdue 68h"
+        - cell "Owned":
+          - generic: Owned
+        - cell "Open ALT result":
+          - button "Open ALT result":
+            - text: Open
+      - row "Arjun Nair P0577 · SRL Diagnostics · 3d ago Creatinine Abnormal, lab flagged 1.4 mg/dL Clinician Arun Das (synthetic) Overdue 68h Owned Open Creatinine result":
+        - cell "Arjun Nair P0577 · SRL Diagnostics · 3d ago":
+          - paragraph: Arjun Nair
+          - paragraph: P0577 · SRL Diagnostics · 3d ago
+        - cell "Creatinine Abnormal, lab flagged 1.4 mg/dL":
+          - generic: Creatinine
+          - generic: Abnormal, lab flagged
+          - paragraph: 1.4 mg/dL
+        - cell "Clinician Arun Das (synthetic)"
+        - cell "Overdue 68h"
+        - cell "Owned":
+          - generic: Owned
+        - cell "Open Creatinine result":
+          - button "Open Creatinine result":
+            - text: Open
+      - row "Kavita Joshi P0546 · SRL Diagnostics · 3d ago Fasting glucose Abnormal, lab flagged 154 mg/dL Dr Meera Nair (synthetic) Overdue 68h Owned Open Fasting glucose result":
+        - cell "Kavita Joshi P0546 · SRL Diagnostics · 3d ago":
+          - paragraph: Kavita Joshi
+          - paragraph: P0546 · SRL Diagnostics · 3d ago
+        - cell "Fasting glucose Abnormal, lab flagged 154 mg/dL":
+          - generic: Fasting glucose
+          - generic: Abnormal, lab flagged
+          - paragraph: 154 mg/dL
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Overdue 68h"
+        - cell "Owned":
+          - generic: Owned
+        - cell "Open Fasting glucose result":
+          - button "Open Fasting glucose result":
+            - text: Open
+      - row "Imran Shaikh P0534 · SRL Diagnostics · 3d ago Chloride Abnormal, lab flagged 112 mmol/L Clinician Arun Das (synthetic) Overdue 68h Owned Open Chloride result":
+        - cell "Imran Shaikh P0534 · SRL Diagnostics · 3d ago":
+          - paragraph: Imran Shaikh
+          - paragraph: P0534 · SRL Diagnostics · 3d ago
+        - cell "Chloride Abnormal, lab flagged 112 mmol/L":
+          - generic: Chloride
+          - generic: Abnormal, lab flagged
+          - paragraph: 112 mmol/L
+        - cell "Clinician Arun Das (synthetic)"
+        - cell "Overdue 68h"
+        - cell "Owned":
+          - generic: Owned
+        - cell "Open Chloride result":
+          - button "Open Chloride result":
+            - text: Open
+      - row "Sunita More P0520 · SRL Diagnostics · 3d ago HbA1c Abnormal, lab flagged 7.9 % Dr Meera Nair (synthetic) Overdue 68h Owned Open HbA1c result":
+        - cell "Sunita More P0520 · SRL Diagnostics · 3d ago":
+          - paragraph: Sunita More
+          - paragraph: P0520 · SRL Diagnostics · 3d ago
+        - cell "HbA1c Abnormal, lab flagged 7.9 %":
+          - generic: HbA1c
+          - generic: Abnormal, lab flagged
+          - paragraph: 7.9 %
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Overdue 68h"
+        - cell "Owned":
+          - generic: Owned
+        - cell "Open HbA1c result":
+          - button "Open HbA1c result":
+            - text: Open
+      - row "Ramesh Patil P0511 · SRL Diagnostics · 3d ago eGFR Abnormal, lab flagged 52 mL/min/1.73m2 Clinician Arun Das (synthetic) Overdue 68h Owned Open eGFR result":
+        - cell "Ramesh Patil P0511 · SRL Diagnostics · 3d ago":
+          - paragraph: Ramesh Patil
+          - paragraph: P0511 · SRL Diagnostics · 3d ago
+        - cell "eGFR Abnormal, lab flagged 52 mL/min/1.73m2":
+          - generic: eGFR
+          - generic: Abnormal, lab flagged
+          - paragraph: 52 mL/min/1.73m2
+        - cell "Clinician Arun Das (synthetic)"
+        - cell "Overdue 68h"
+        - cell "Owned":
+          - generic: Owned
+        - cell "Open eGFR result":
+          - button "Open eGFR result":
+            - text: Open
+      - row "Asha Rao (synthetic) P0482 · SRL Diagnostics · 3d ago Sodium Abnormal, lab flagged 131 mmol/L Dr Meera Nair (synthetic) Overdue 68h Owned Open Sodium result":
+        - cell "Asha Rao (synthetic) P0482 · SRL Diagnostics · 3d ago":
+          - paragraph: Asha Rao (synthetic)
+          - paragraph: P0482 · SRL Diagnostics · 3d ago
+        - cell "Sodium Abnormal, lab flagged 131 mmol/L":
+          - generic: Sodium
+          - generic: Abnormal, lab flagged
+          - paragraph: 131 mmol/L
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Overdue 68h"
+        - cell "Owned":
+          - generic: Owned
+        - cell "Open Sodium result":
+          - button "Open Sodium result":
+            - text: Open
+      - row "Sanjay Gupta P0594 · Metropolis Healthcare · 3d ago ALT Abnormal, lab flagged 68 U/L No owner Overdue 55h Ready to assign Open ALT result":
+        - cell "Sanjay Gupta P0594 · Metropolis Healthcare · 3d ago":
+          - paragraph: Sanjay Gupta
+          - paragraph: P0594 · Metropolis Healthcare · 3d ago
+        - cell "ALT Abnormal, lab flagged 68 U/L":
+          - generic: ALT
+          - generic: Abnormal, lab flagged
+          - paragraph: 68 U/L
+        - cell "No owner"
+        - cell "Overdue 55h"
+        - cell "Ready to assign":
+          - generic: Ready to assign
+        - cell "Open ALT result":
+          - button "Open ALT result":
+            - text: Open
+      - row "Fatima Khan P0589 · Apex Labs · 3d ago Fasting glucose Abnormal, lab flagged 142 mg/dL Dr Meera Nair (synthetic) Overdue 51h Acknowledged Open Fasting glucose result":
+        - cell "Fatima Khan P0589 · Apex Labs · 3d ago":
+          - paragraph: Fatima Khan
+          - paragraph: P0589 · Apex Labs · 3d ago
+        - cell "Fasting glucose Abnormal, lab flagged 142 mg/dL":
+          - generic: Fasting glucose
+          - generic: Abnormal, lab flagged
+          - paragraph: 142 mg/dL
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Overdue 51h"
+        - cell "Acknowledged":
+          - generic: Acknowledged
+        - cell "Open Fasting glucose result":
+          - button "Open Fasting glucose result":
+            - text: Open
+      - row "Sunita More P0520 · Dr Lal PathLabs · 3d ago eGFR Abnormal, lab flagged Monitoring 48 mL/min/1.73m2 Annual urine albumin-to-creatinine ratio and eGFR No owner Overdue 50h Ready to assign Open eGFR result":
+        - cell "Sunita More P0520 · Dr Lal PathLabs · 3d ago":
+          - paragraph: Sunita More
+          - paragraph: P0520 · Dr Lal PathLabs · 3d ago
+        - cell "eGFR Abnormal, lab flagged Monitoring 48 mL/min/1.73m2 Annual urine albumin-to-creatinine ratio and eGFR":
+          - generic: eGFR
+          - generic: Abnormal, lab flagged
+          - generic: Monitoring
+          - paragraph: 48 mL/min/1.73m2
+          - paragraph: Annual urine albumin-to-creatinine ratio and eGFR
+        - cell "No owner"
+        - cell "Overdue 50h"
+        - cell "Ready to assign":
+          - generic: Ready to assign
+        - cell "Open eGFR result":
+          - button "Open eGFR result":
+            - text: Open
+      - row "Kavita Joshi P0546 · SRL Diagnostics · 4d ago HbA1c Abnormal, lab flagged 9.2 % Dr Meera Nair (synthetic) Patient contacted Patient contacted Open HbA1c result":
+        - cell "Kavita Joshi P0546 · SRL Diagnostics · 4d ago":
+          - paragraph: Kavita Joshi
+          - paragraph: P0546 · SRL Diagnostics · 4d ago
+        - cell "HbA1c Abnormal, lab flagged 9.2 %":
+          - generic: HbA1c
+          - generic: Abnormal, lab flagged
+          - paragraph: 9.2 %
+        - cell "Dr Meera Nair (synthetic)"
+        - cell "Patient contacted"
+        - cell "Patient contacted":
+          - generic: Patient contacted
+        - cell "Open HbA1c result":
+          - button "Open HbA1c result":
+            - text: Open
+- region "Notifications"
+- generic: "0"

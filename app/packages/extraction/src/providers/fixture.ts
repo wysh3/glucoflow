@@ -42,12 +42,13 @@ export class UnavailableProvider implements ExtractionProvider {
   readonly mode = 'live' as const;
   readonly promptHash = 'none';
 
+  constructor(private readonly reason = 'Live extraction is not configured. Check provider credentials and budget limits.') {}
+
   async extract(_input: ExtractionInput, _signal: AbortSignal): Promise<ProviderExtraction> {
     throw new ProviderRequestError({
       category: 'auth',
       retryable: false,
-      message:
-        'Live extraction is not configured. Set EXTRACTION_PROVIDER, EXTRACTION_API_KEY, EXTRACTION_BASE_URL and the budget limits to enable it.',
+      message: this.reason,
     });
   }
 }

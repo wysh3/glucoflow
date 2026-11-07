@@ -3,10 +3,12 @@ import { LiveExtractionProvider, type LiveProviderConfig } from './openai-compat
 import type { ExtractionProvider, ProviderBudget } from '../types';
 
 export type ProviderSelection = {
-  provider: 'fixture' | 'openai-compatible';
+  provider: 'fixture' | 'openai-compatible' | 'hermes';
   model: string;
   baseUrl?: string;
   apiKey?: string;
+  hermesUrl?: string;
+  hermesServiceToken?: string;
   maxCalls: number;
   maxDocumentCostUsd?: number;
   maxRunTokens?: number;
@@ -19,9 +21,8 @@ export type ProviderSelection = {
 
 /**
  * Provider selection. `fixture` is the deterministic rule engine used for local
- * development and the labelled demo. `openai-compatible` requires real credentials
- * and positive budget limits; when they are missing the worker refuses to process
- * instead of substituting fixture output.
+ * development and the labelled demo. Live transports require credentials and
+ * positive budget limits and fail explicitly if they are unavailable.
  */
 export function createExtractionProvider(
   selection: ProviderSelection,
@@ -30,20 +31,24 @@ export function createExtractionProvider(
   if (selection.provider === 'fixture') {
     return new FixtureProvider(selection.model, selection.ocrTolerance ?? true);
   }
+  const useHermes = selection.provider === 'hermes';
+  const apiKey = useHermes ? selection.hermesServiceToken : selection.apiKey;
+  const baseUrl = useHermes ? selection.hermesUrl : selection.baseUrl;
   const required = {
-    apiKey: selection.apiKey,
-    baseUrl: selection.baseUrl,
+    apiKey,
+    baseUrl,
     maxDocumentCostUsd: selection.maxDocumentCostUsd,
     maxRunTokens: selection.maxRunTokens,
     usdPerMillionInputTokens: selection.usdPerMillionInputTokens,
     usdPerMillionOutputTokens: selection.usdPerMillionOutputTokens,
   };
   if (Object.values(required).some((value) => value === undefined || value === null || value === '')) {
-    return new UnavailableProvider();
+    return new UnavailableProvider(useHermes ? 'Hermes extraction requires HERMES_URL, HERMES_SERVICE_TOKEN and positive budget limits.' : undefined);
   }
   const config: LiveProviderConfig = {
-    baseUrl: selection.baseUrl!,
-    apiKey: selection.apiKey!,
+    baseUrl: baseUrl!,
+    apiKey: apiKey!,
+    transport: useHermes ? 'hermes' : 'openai-compatible',
     model: selection.model,
     maxCalls: selection.maxCalls,
     maxDocumentCostUsd: selection.maxDocumentCostUsd!,
@@ -57,4 +62,5 @@ export function createExtractionProvider(
 }
 
 export { FixtureProvider, UnavailableProvider, LiveExtractionProvider };
+export { HERMES_EXTRACTION_RUNTIME_VERSION, parseHermesServiceOrigin } from './openai-compatible';
 export type { ExtractionProvider, ProviderBudget, LiveProviderConfig };

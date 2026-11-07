@@ -1,0 +1,156 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- complementary:
+  - button "Collapse navigation" [expanded]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Care":
+      - /url: /clinic/care
+      - generic: Care
+    - link "Patient records":
+      - /url: /clinic/patients
+      - generic: Patient records
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Dr Meera Nair (synthetic)
+  - paragraph: Reviewer, Clinician, Desk, Nurse, Quality
+- separator "Resize sidebar"
+- generic "Clinic workspace"
+- generic: Language
+- combobox "Language":
+  - option "English" [selected]
+  - option "हिन्दी"
+  - option "অসমীয়া · Preview"
+  - option "বাংলা · Preview"
+  - option "ગુજરાતી · Preview"
+  - option "ಕನ್ನಡ · Preview"
+  - option "മലയാളം · Preview"
+  - option "मराठी · Preview"
+  - option "नेपाली · Preview"
+  - option "ଓଡ଼ିଆ · Preview"
+  - option "ਪੰਜਾਬੀ · Preview"
+  - option "தமிழ் · Preview"
+  - option "తెలుగు · Preview"
+  - option "اردو · Preview"
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button "Switch account"
+- generic: Care simulation
+- main:
+  - heading "Care workspace" [level=1]:
+    - text: Care workspace
+  - generic: Synthetic data
+  - generic "Workspace actions":
+    - button "Saved workspaces":
+      - generic: Saved workspaces
+    - button "New workspace":
+      - generic: New workspace
+    - button "Export JSON":
+      - generic: Export JSON
+  - tablist "Care workspace areas":
+    - tab "Ask GlucoFlow":
+      - text: Ask GlucoFlow
+    - tab "My Worklist" [active] [selected]:
+      - text: My Worklist
+    - tab "Encounters":
+      - text: Encounters
+  - button "Workflow learning":
+    - generic: Workflow learning
+  - region "Working panel":
+    - button "Show conversation"
+    - button "Activity"
+    - button "Back to conversation":
+      - text: Back to conversation
+    - tabpanel "My Worklist":
+      - heading "My Worklist" [level=2]
+      - paragraph: Handoffs and monitoring requests across the synthetic ward.
+      - button "New monitoring task":
+        - text: New monitoring task
+      - heading "Operational exceptions" [level=2]
+      - generic: "1"
+      - list:
+        - paragraph: Awaiting lab receipt
+        - generic: Past demo target
+        - paragraph: Dev Mehta · Venous blood gas
+        - term: Owner
+        - definition: Lab team
+        - term: Elapsed
+        - definition: 1 h 10 min
+        - term: Demo target
+        - definition: 60 min
+        - button "HIS · Specimen collected":
+          - generic: HIS · Specimen collected
+        - text: LIS last sync
+        - time: 4:23 PM
+      - generic: Find a task
+      - textbox "Find a task":
+        - /placeholder: Patient, task, test or owner
+      - generic: Status
+      - combobox "Status":
+        - generic: Open tasks
+      - generic: Sort by age
+      - combobox "Sort by age":
+        - generic: Oldest first
+      - paragraph:
+        - text: 3 tasks
+      - heading "Confirm specimen receipt" [level=3]
+      - generic: Awaiting approval
+      - paragraph: Asha Shah · ICU 04 · Basic metabolic panel
+      - term: Owner
+      - definition: Lab team
+      - term: Expected evidence
+      - definition: LIS · Specimen received
+      - term: Created
+      - definition:
+        - time: Nov 7, 2026, 4:21 PM
+      - term: Expires
+      - definition:
+        - time: Nov 7, 2026, 5:21 PM
+      - text: LIS last sync
+      - time: 4:23 PM
+      - button "Review task":
+        - text: Review task
+      - heading "Confirm specimen receipt" [level=3]
+      - generic: Monitoring
+      - paragraph: Dev Mehta · ICU 07 · Venous blood gas
+      - term: Owner
+      - definition: Lab team
+      - term: Expected evidence
+      - definition: LIS · Specimen received
+      - term: Created
+      - definition:
+        - time: Nov 7, 2026, 4:21 PM
+      - term: Expires
+      - definition:
+        - time: Nov 7, 2026, 5:21 PM
+      - text: LIS last sync
+      - time: 4:23 PM
+      - button "Task details":
+        - text: Task details
+      - heading "Confirm clinician acknowledgement" [level=3]
+      - generic: Monitoring
+      - paragraph: Sara Khan · Ward 12 · Serum beta-hydroxybutyrate
+      - term: Owner
+      - definition: Dr Anil Sen
+      - term: Expected evidence
+      - definition: HIS · Result acknowledged
+      - term: Created
+      - definition:
+        - time: Nov 7, 2026, 4:21 PM
+      - term: Expires
+      - definition:
+        - time: Nov 7, 2026, 5:21 PM
+      - text: HIS last sync
+      - time: 4:23 PM
+      - button "Task details":
+        - text: Task details
+  - generic "Hospital simulator Synthetic":
+    - generic: Hospital simulator
+    - generic: Synthetic
+  - generic: HIS Connected
+  - text: Last sync
+  - time: 4:23 PM
+  - generic: LIS Connected
+  - text: Last sync
+  - time: 4:23 PM
+- region "Notifications"

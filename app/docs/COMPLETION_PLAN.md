@@ -6,7 +6,11 @@ Keep Vite/React/TypeScript, Capacitor, Fastify and PostgreSQL; deploy with Supab
 
 For each task: reproduce the specific failure, add a meaningful regression test, implement the minimum correction, run the relevant gate and update evidence. Keep migrations additive and authorization narrow. Start version control with existing secrets/build outputs excluded before application changes; do not reset or purge the database as a shortcut.
 
-## Live local status
+## Current November shipping ledger
+
+The active November web/runtime implementation and remaining gates are tracked in [SHIP_CHECKLIST.md](SHIP_CHECKLIST.md). Fresh evidence is in [completion release](../reports/completion-release-2026-11-07.md). Azure API/worker and Vercel web deployment supersede the historical Railway/deferred-hosting notes below. The original acceptance requirements still apply; older dated passes do not establish final Android or hospital readiness.
+
+## Historical local status
 
 GPT-6 Luna is configured locally and verified on the production worker, synthetic observation evaluation and API smoke flow. See [current evidence](../reports/key-cleanup-and-luna-2026-10-03.md). Independent holdout, human review measurements, hosted services and latest device walkthrough remain gates.
 
@@ -108,3 +112,7 @@ Gate: actual device evidence, replayable hosted demo and every submission claim 
 ## Release criteria
 
 No unresolved blocker in tasks 1–6; both roles usable on web and Android; every displayed released fact can reach its correct original source; no silently incomplete progression; human publication and immutable history preserved; real provider budget enforced. Verify typecheck, relevant unit/integration and SQL policy tests, smoke, both-viewport browser flows, production build/containers and device checks. Do not report earlier counts as fresh results. Phone OTP remains an explicit unresolved specification deviation until implemented or the user authorizes changing that requirement.
+
+## 7 November India-context simulation and hardening
+
+[Fresh evidence and remaining gates](../reports/india-readiness-2026-11-07.md) supersede older monitoring-only-on-read descriptions for the new deployed synthetic worker. One minimum worker replica supports bounded background reconciliation independently of Hermes readiness. The passing engineering simulation is not a completed 90-day pilot. Continuous hospital storage, real shared staff authorization, verified connectors, sustained model performance and site governance remain required before customer patient-data use.

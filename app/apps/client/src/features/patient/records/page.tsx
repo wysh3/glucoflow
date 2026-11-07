@@ -10,9 +10,9 @@ import {
   CardHeader,
   CardTitle,
   Select,
-  formatDateOnly,
   numeric,
 } from '@glucoflow/ui';
+import { noteCategoryKey, useI18n } from '../../../i18n';
 import { useSession } from '../../../auth/session';
 import {
   useDocuments,
@@ -31,6 +31,7 @@ import { buildSeries } from '@glucoflow/domain';
 
 export function PatientRecordsPage(): React.ReactElement {
   const { me } = useSession();
+  const { t, dateOnly } = useI18n();
   const patientId = me?.contexts.find(
     (context) => context.kind === 'patient',
   )?.patientId;
@@ -59,16 +60,14 @@ export function PatientRecordsPage(): React.ReactElement {
   }, [codes, testCode]);
   if (!patientId)
     return (
-      <Alert tone="neutral" title="No patient record is linked to this account">
-        Ask the clinic to link your account before uploading reports.
+      <Alert tone="neutral" title={t('records.unlinked')}>
+        {t('records.linkClinic')}
       </Alert>
     );
   return (
     <div className="space-y-5">
       <SystemPageHeader
-        index="02"
-        label="Patient / Records"
-        title="My records"
+          title={t('records.title')}
         actions={
           <div className="flex flex-wrap gap-2">
             <ExportSummary
@@ -76,7 +75,7 @@ export function PatientRecordsPage(): React.ReactElement {
               revision={patient.data?.approvalRevision ?? 0}
             />
             <Button asChild variant="primary">
-              <Link to="/patient/add-report">Add report</Link>
+              <Link to="/patient/add-report">{t('nav.addReport')}</Link>
             </Button>
           </div>
         }
@@ -85,7 +84,7 @@ export function PatientRecordsPage(): React.ReactElement {
         <PatientSearch patientId={patientId} />
         <div className="flex gap-2">
           <Select
-            aria-label="Test"
+            aria-label={t('records.test')}
             value={testCode}
             onChange={(event) => setTestCode(event.target.value)}
           >
@@ -96,12 +95,12 @@ export function PatientRecordsPage(): React.ReactElement {
             ))}
           </Select>
           <Select
-            aria-label="Range"
+            aria-label={t('records.range')}
             value={range}
             onChange={(event) => setRange(event.target.value)}
           >
-            <option value="all">All dates</option>
-            <option value="12m">Last 12 months</option>
+            <option value="all">{t('records.allDates')}</option>
+            <option value="12m">{t('records.lastYear')}</option>
           </Select>
         </div>
       </div>
@@ -111,9 +110,8 @@ export function PatientRecordsPage(): React.ReactElement {
         onRetry={() => void timeline.refetch()}
       >
         {timeline.data && !timeline.data.observationsComplete ? (
-          <Alert tone="review" title="Choose a shorter date range">
-            This history exceeds the display limit. A partial progression is not
-            plotted.
+          <Alert tone="review" title={t('records.shorterRange')}>
+            {t('records.displayLimit')}
           </Alert>
         ) : series.length ? (
           <Card>
@@ -125,16 +123,16 @@ export function PatientRecordsPage(): React.ReactElement {
             </CardBody>
           </Card>
         ) : (
-          <Alert tone="neutral" title="No approved results yet">
-            Results appear after your clinic reviews the report.
+          <Alert tone="neutral" title={t('records.noResults')}>
+            {t('records.resultsAfterReview')}
           </Alert>
         )}
         {observations.length ? (
           <Card>
             <CardHeader>
-              <CardTitle>Recorded results</CardTitle>
+              <CardTitle>{t('records.recordedResults')}</CardTitle>
               <span className="text-xs text-ink-soft">
-                {observations.length} shown · approved records
+                {t('records.approvedCount', { count: observations.length })}
               </span>
             </CardHeader>
             <CardBody>
@@ -154,10 +152,10 @@ export function PatientRecordsPage(): React.ReactElement {
                       </span>
                       <p className="mt-1 text-xs text-ink-soft">
                         {item.date
-                          ? formatDateOnly(item.date)
-                          : 'Date not recorded'}
-                        {item.dateKind === 'report' ? ' · report date' : ''}
-                        {!item.plotEligible ? ' · source only' : ''}
+                          ? dateOnly(item.date, item.datePrecision)
+                          : t('records.dateMissing')}
+                        {item.dateKind === 'report' ? ` · ${t('records.reportDate')}` : ''}
+                        {!item.plotEligible ? ` · ${t('records.sourceOnly')}` : ''}
                       </p>
                     </div>
                     <Button
@@ -173,7 +171,7 @@ export function PatientRecordsPage(): React.ReactElement {
                         })
                       }
                     >
-                      Open source
+                      {t('records.openSource')}
                     </Button>
                   </li>
                 ))}
@@ -185,15 +183,15 @@ export function PatientRecordsPage(): React.ReactElement {
       <div className="grid items-start gap-5 xl:grid-cols-[1.35fr_1fr]">
         <Card>
           <CardHeader>
-            <CardTitle>Reports</CardTitle>
+            <CardTitle>{t('records.reports')}</CardTitle>
           </CardHeader>
           <CardBody>
             <QueryState
               isLoading={documents.isLoading}
               error={documents.error}
               isEmpty={documents.data?.items.length === 0}
-              emptyTitle="No reports yet"
-              emptyDescription="Upload your first report or ask the clinic to add it."
+              emptyTitle={t('records.noReports')}
+              emptyDescription={t('records.addFirst')}
               onRetry={() => void documents.refetch()}
             >
               <ul className="divide-y divide-line">
@@ -217,8 +215,7 @@ export function PatientRecordsPage(): React.ReactElement {
                     </div>
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs text-ink-soft">
-                        Uploaded{' '}
-                        {formatDateOnly(document.uploadedAt)}
+                        {t('records.uploaded', { date: dateOnly(document.uploadedAt) })}
                       </span>
                       {document.currentVersion ? (
                         <Button
@@ -233,7 +230,7 @@ export function PatientRecordsPage(): React.ReactElement {
                             })
                           }
                         >
-                          Open source
+                          {t('records.openSource')}
                         </Button>
                       ) : null}
                     </div>
@@ -246,36 +243,34 @@ export function PatientRecordsPage(): React.ReactElement {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Recent visit notes</CardTitle>
+            <CardTitle>{t('records.recentNotes')}</CardTitle>
             <Button asChild size="sm" variant="quiet">
-              <Link to="/patient/visit-notes">Write a note</Link>
+              <Link to="/patient/visit-notes">{t('records.writeNote')}</Link>
             </Button>
           </CardHeader>
           <CardBody className="space-y-3">
             {notes.error ? (
-              <Alert tone="error" title="Notes could not be loaded">
-                Try again from Visit notes.
+              <Alert tone="error" title={t('records.notesFailed')}>
+                {t('records.retryNotes')}
               </Alert>
             ) : notes.data?.items.length ? (
-              notes.data.items.slice(0, 3).map((note) => (
-                <div
+              notes.data.items.slice(0, 3).map((note) => {
+                const category = noteCategoryKey(note.category);
+                return <div
                   key={note.noteId}
                   className="border-b border-line pb-3 last:border-0"
                 >
-                  <p className="text-sm leading-relaxed">{note.body}</p>
+                  <p className="text-sm leading-relaxed" dir="auto">{note.body}</p>
                   <p className="mt-2 text-xs text-ink-soft">
-                    {NOTE_CATEGORY_LABELS[
-                      note.category as keyof typeof NOTE_CATEGORY_LABELS
-                    ] ?? 'Note'}{' '}
-                    · patient-reported ·{' '}
-                    {formatDateOnly(note.submittedAt)}
-                    {note.seenAt ? ' · read by clinic' : ''}
+                    {category ? t(category) : NOTE_CATEGORY_LABELS[note.category] ?? t('notes.note')}
+                    {' · '}{t('notes.patientReported')}{' · '}{dateOnly(note.submittedAt)}
+                    {note.seenAt ? ` · ${t('records.clinicRead')}` : ''}
                   </p>
-                </div>
-              ))
+                </div>;
+              })
             ) : (
               <p className="text-sm text-ink-soft">
-                Share a short note before your next visit.
+                {t('records.shareNote')}
               </p>
             )}
           </CardBody>

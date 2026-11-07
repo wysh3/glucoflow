@@ -1,0 +1,89 @@
+- link:
+  - /url: "#main-content"
+  - text: Skip to content
+- button [expanded]:
+- generic: Patient workspace
+- generic: Language
+- combobox
+- generic: Patient screens use the selected language where available. Other screens and source records may be in English.
+- button:
+- button: Switch account
+- generic: Demo
+- main:
+  - heading [level=1]: Visit notes
+  - generic: Notes you write stay patient-reported
+  - heading [level=2]: New note
+  - text: Category
+  - combobox:
+    - generic: Diet / activity
+  - text: Event date (optional)
+  - textbox
+  - text: Note
+  - textbox:
+    - /placeholder: "For example: took the evening tablet most days, walked after dinner."
+  - button:
+    - text: Voice input
+  - paragraph: 0 of 1000 characters. The submission date is recorded separately from the event date.
+  - button [disabled]: Review and send
+  - paragraph: A note is never converted into a measured result, and it does not change your record.
+  - heading [level=2]: Sent notes
+  - list:
+    - generic: Diet / activity
+    - generic: submitted 04 November 2026 · version 1
+    - paragraph: "QA audit note: felt fine after walking."
+    - generic: No event date given
+    - generic: ·
+    - generic: Patient-reported
+    - button: Send a corrected version
+    - generic: Diet / activity
+    - generic: submitted 04 October 2026 · version 2
+    - paragraph: Walked 30 minutes after dinner on most days this month; reduced sweet tea to one cup a day.
+    - generic: No event date given
+    - generic: ·
+    - generic: Patient-reported
+    - button: Send a corrected version
+    - generic: Diet / activity
+    - generic: submitted 03 October 2026 · version 1
+    - paragraph: Walked 30 minutes after dinner on most days this month; reduced sweet tea to one cup a day.
+    - generic: Event date 10 September 2026
+    - generic: ·
+    - generic: Patient-reported
+    - button: Send a corrected version
+- navigation:
+  - link:
+    - /url: /patient/records
+    - text: Records
+  - link:
+    - /url: /patient/master
+    - text: Home readings
+  - link:
+    - /url: /patient/add-report
+    - text: Add report
+  - link:
+    - /url: /patient/visit-notes
+    - text: Visit notes
+  - link:
+    - /url: /account
+    - text: Account
+- dialog "Main":
+  - heading "Main" [level=2]
+  - button "Close navigation" [active]:
+  - generic: glucoflow
+  - navigation "Main":
+    - link "Records":
+      - /url: /patient/records
+      - generic: Records
+    - link "Home readings":
+      - /url: /patient/master
+      - generic: Home readings
+    - link "Add report":
+      - /url: /patient/add-report
+      - generic: Add report
+    - link "Visit notes":
+      - /url: /patient/visit-notes
+      - generic: Visit notes
+    - link "Account":
+      - /url: /account
+      - generic: Account
+  - paragraph: Asha Rao (synthetic)
+  - paragraph: Patient

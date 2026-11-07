@@ -1,0 +1,80 @@
+- main:
+  - link "Back to the ledger":
+    - /url: /clinic/results
+    - text: Back to the ledger
+  - button "Print or save PDF":
+    - text: Print or save PDF
+  - paragraph: Closure certificate
+  - heading "Glucoflow Demo Clinic (synthetic)" [level=1]
+  - paragraph: Administrative result-closure record. Confidential. Not a diagnosis or a clinical outcome.
+  - img "Receipt verification QR code"
+  - paragraph: GLF-A008B69C6D
+  - paragraph: Patient
+  - paragraph: Imran Shaikh
+  - paragraph: P0534
+  - paragraph: Report
+  - paragraph:
+    - text: Sodium
+    - generic: 128 mmol/L
+  - paragraph: Apex Labs · Critical, lab flagged
+  - paragraph: Lab release
+  - paragraph: Nov 04, 2026, 01:13 PM
+  - paragraph: Receipt status
+  - paragraph: Needs patient match
+  - heading "Evidence present" [level=2]
+  - table:
+    - rowgroup:
+      - row "Control Evidence What it records":
+        - columnheader "Control"
+        - columnheader "Evidence"
+        - columnheader "What it records"
+    - rowgroup:
+      - row "Lab release time and source Present The clock starts at the lab release time, not when a PDF reached a phone.":
+        - cell "Lab release time and source"
+        - cell "Present":
+          - generic: Present
+        - cell "The clock starts at the lab release time, not when a PDF reached a phone."
+      - row "Value echoed by the acknowledging clinician Missing The acknowledger entered the printed value and selected the printed flag.":
+        - cell "Value echoed by the acknowledging clinician"
+        - cell "Missing":
+          - generic: Missing
+        - cell "The acknowledger entered the printed value and selected the printed flag."
+      - row "Lab to clinician read-back Missing The notifier and the value read back were recorded.":
+        - cell "Lab to clinician read-back"
+        - cell "Missing":
+          - generic: Missing
+        - cell "The notifier and the value read back were recorded."
+      - row "Patient or caregiver contact, or documented attempts Missing Unreachable is a recorded outcome, never an inference.":
+        - cell "Patient or caregiver contact, or documented attempts"
+        - cell "Missing":
+          - generic: Missing
+        - cell "Unreachable is a recorded outcome, never an inference."
+      - row "Next administrative step recorded Missing The next step is recorded; completion is tracked separately.":
+        - cell "Next administrative step recorded"
+        - cell "Missing":
+          - generic: Missing
+        - cell "The next step is recorded; completion is tracked separately."
+      - row "Anchored audit chain Present SHA-256 event chain with a stored count and head; the assessor decides what it proves.":
+        - cell "Anchored audit chain"
+        - cell "Present":
+          - generic: Present
+        - cell "SHA-256 event chain with a stored count and head; the assessor decides what it proves."
+  - heading "Clinician acknowledgement" [level=2]
+  - paragraph: No clinician value echo is recorded.
+  - paragraph: No lab notifier is recorded.
+  - heading "Patient-side last mile" [level=2]
+  - paragraph: No patient contact outcome recorded.
+  - paragraph: No next step recorded. Teach-back was not recorded.
+  - paragraph: Completion is not recorded.
+  - heading "Event timeline" [level=2]
+  - list:
+    - generic: Nov 04, 2026, 01:08 PM
+    - generic: received
+    - generic: · Dr Meera Nair (synthetic)
+  - heading "Draft certificate under section 63(4), Bharatiya Sakshya Adhiniyam, 2023" [level=2]
+  - paragraph: This computer output is produced from the electronic record maintained by Glucoflow Demo Clinic (synthetic) in the ordinary course of its activities. The event chain head is 7c9d13995ac7f12c2a2906409bd60f8a19fd0c686361761b5f02ecbed6c99489, checked at Nov 07, 2026, 04:12 PM. The record is complete for the receipt on this page to the extent of the evidence shown.
+  - paragraph: "Person in charge: Dr Meera Nair (synthetic) · Signature: ____________________ · Date: Nov 07, 2026, 04:12 PM"
+  - paragraph: Draft for signature. This is not a legal opinion or a certification that the record meets every statutory requirement. The chain is tamper-evident inside this database; it is not externally anchored yet.
+  - generic: Generated from the clinic result ledger. Evidence present is not a compliance verdict.
+  - generic: GLF-A008B69C6D
+- region "Notifications"
