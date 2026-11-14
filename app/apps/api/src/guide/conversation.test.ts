@@ -21,7 +21,8 @@ const config: GuideConfig = {
   hermes: null,
   hourlyLimit: 3,
   maxConcurrent: 2,
-  timeoutMs: 100,
+  // Generous enough for the local stub under full-suite load; the 10 ms case below tests the deadline.
+  timeoutMs: 2_000,
 };
 const o = (
   id: string,

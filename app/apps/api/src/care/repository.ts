@@ -6,7 +6,7 @@ import { ApiError } from '../errors';
 import { executeCareCommand } from './commands';
 import { limits } from './events';
 import { reconcileCareWorkspace } from './monitor';
-import { seedCareWorkspace, createDemoStaff } from './seed';
+import { seedCareWorkspace, createDemoStaff, type CarePreset } from './seed';
 import { applySkillProposal } from './skills';
 import { resolveCareAccess, auditTeamCommand } from './team';
 
@@ -33,8 +33,8 @@ export async function listWorkspaces(client: DbClient, ownerId: string, cursor?:
   return { workspaces, nextCursor: rows.length > recoveryPageSize && last ? `${last.updatedAt}~${last.id}` : null };
 }
 
-export async function createWorkspace(client: DbClient, ownerId: string, clinicId: string): Promise<CareWorkspace> {
-  const state = seedCareWorkspace(new Date());
+export async function createWorkspace(client: DbClient, ownerId: string, clinicId: string, preset: CarePreset = 'classic'): Promise<CareWorkspace> {
+  const state = seedCareWorkspace(new Date(), preset);
   await client.query(
     'insert into sutra.care_workspaces (id, owner_id, clinic_id, state) values ($1, $2, $3, $4::jsonb)',
     [state.id, ownerId, clinicId, JSON.stringify(state)],

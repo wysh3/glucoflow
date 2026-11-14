@@ -168,7 +168,7 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
           </>
         ) : (
           <div className="care-home-scroll">
-            <CareHome shared={state.team.data?.access.shared} openCoordination={openCoordination} workspace={workspace} openView={openView} openSource={openSource} openTask={openExistingTask} />
+            <CareHome state={state} shared={state.team.data?.access.shared} openCoordination={openCoordination} workspace={workspace} openView={openView} openSource={openSource} openTask={openExistingTask} />
           </div>
         )}
       </section>
@@ -208,7 +208,7 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
             </div>
           ) : null}
         </div>
-        <form onSubmit={(event) => { event.preventDefault(); void submit(); }} className="thread-composer" {...composerScope}>
+        <form data-tour="composer" onSubmit={(event) => { event.preventDefault(); void submit(); }} className="thread-composer" {...composerScope}>
           <div className="thread-composer-shell" {...composerScope}>
             <div className="thread-composer-input-wrap" {...composerScope}>
               <Label htmlFor="care-prompt" className="sr-only">Message Gluco</Label>

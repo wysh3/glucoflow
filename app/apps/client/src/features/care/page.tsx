@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import {
   Activity, ArrowLeft, ArrowRight, ClipboardList, Download, GitPullRequest,
-  History, Hospital, MessageCircle, Plus, RefreshCw, Users, X, type LucideIcon,
+  History, Hospital, MessageCircle, Plus, RefreshCw, Sparkles, Users, X, type LucideIcon,
 } from 'lucide-react';
 import { Alert, Badge, Button, Card, Spinner } from '@glucoflow/ui';
 import type { CareEvent, CareProposal } from '@glucoflow/contracts';
@@ -28,6 +28,8 @@ import { FeedStatus, Simulator } from './simulator';
 import { TaskDialog, type TaskDraft } from './task-dialog';
 import { TeamsPanel } from './teams';
 import { useCareWorkspace, type ChatMode } from './use-care-workspace';
+import { GuidedTour } from './tour';
+import { DOCTOR_TOUR_QUESTION, doctorTourSteps } from './doctor-tour';
 import { ActivityPanel, TaskDetails, WorklistPanel } from './worklist';
 import '../../vendor/codexapp/conversation.css';
 import './workspace-canvas.css';
@@ -84,6 +86,28 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
   const [playbookDraft, setPlaybookDraft] = useState<Pick<CareProposal, 'title' | 'body'> | null>(null);
   const workspace = state.workspace;
   const workspaceId = workspace?.id;
+  const [tourOpen, setTourOpen] = useState(false);
+  const start = params.get('start');
+  const autoStarted = useRef(false);
+  // Landing links (?start=tour|explore) open a ready showcase workspace instead of an empty card.
+  useEffect(() => {
+    if ((start !== 'tour' && start !== 'explore') || autoStarted.current) return;
+    if (workspace) {
+      autoStarted.current = true;
+      const next = new URLSearchParams(params);
+      next.delete('start');
+      setParams(next, { replace: true, preventScrollReset: true });
+      if (start === 'tour') setTourOpen(true);
+    } else if (!state.loading && !state.loadError && !state.busy) {
+      autoStarted.current = true;
+      void state.create().then((created) => {
+        const next = new URLSearchParams(params);
+        next.delete('start');
+        setParams(next, { replace: true, preventScrollReset: true });
+        if (created && start === 'tour') setTourOpen(true);
+      });
+    }
+  }, [start, workspace, state, params, setParams]);
   const modeStorageKey = workspaceId ? `glucoflow.care.mode.${actorId}.${workspaceId}` : null;
   const mode = modeChoice && modeChoice.workspaceId === workspaceId ? modeChoice.mode : savedMode(modeStorageKey);
   const setMode = (next: ChatMode) => {
@@ -184,13 +208,16 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
       {!workspace && !state.loading && !state.loadError ? (
         <Card className="mx-4 my-auto w-auto max-w-xl border-line bg-surface p-5 sm:mx-auto sm:p-6">
           <IconBox icon={Hospital} className="bg-white shadow-sm" />
-          <h2 className="mt-4 text-2xl font-semibold tracking-tight">Explore the DKA handover demo</h2>
+          <h2 className="mt-4 text-2xl font-semibold tracking-tight">Run a diabetes unit shift</h2>
           <p className="mt-2 max-w-lg text-sm leading-relaxed text-ink-soft">
-            Three fictional DKA encounters: a specimen awaiting receipt, a documented renal-team handover, and a result awaiting acknowledgement. Inspect the evidence, approve an operational task, then draft the handover. Shared demo accounts; fictional information only.
+            Nine fictional inpatients: DKA, HHS, ward hypoglycaemia, a post-operative transfer, a diabetic foot wound, a corrected lab result and an antenatal glucose test. See what is stuck, let the simulated lab close work with evidence, then hand over. Shared demo accounts; fictional information only.
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
             <Button type="button" variant="primary" disabled={busy} onClick={() => void state.create()}>
               {state.busy === 'create' ? 'Creating workspace…' : 'Create workspace'} <ArrowRight size={16} aria-hidden />
+            </Button>
+            <Button type="button" disabled={busy} onClick={() => void state.create().then((created) => { if (created) setTourOpen(true); })}>
+              <Sparkles size={16} aria-hidden /> Start guided tour
             </Button>
             <Button type="button" disabled={busy} onClick={openSaved}><History size={16} aria-hidden /> Saved workspaces</Button>
           </div>
@@ -212,7 +239,8 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
           <div className="content-body care-tabs" data-v-705e1c85="">
             <ClinicNavigation>
               <DemoPersonSwitcher workspace={workspace} state={state} />
-              <Button type="button" variant="quiet" size="sm" onClick={() => setPipelineOpen(true)}>Pipeline</Button>
+              <Button type="button" variant="quiet" size="sm" data-tour="pipeline-button" onClick={() => setPipelineOpen(true)}>Pipeline</Button>
+              {workspace.role === 'doctor' && !workspace.archivedAt ? <Button type="button" variant="quiet" size="sm" onClick={() => { openView('ask'); setTourOpen(true); }} aria-label="Start the guided tour"><Sparkles size={15} aria-hidden /><span className="hidden sm:inline">Tour</span></Button> : null}
               <Button type="button" variant="quiet" size="sm" onClick={() => setTeamOpen(true)}><Users size={16} aria-hidden /> Team</Button>
               <Button type="button" variant="quiet" size="sm" aria-label="New chat" title="New chat with a fresh simulation; this workspace stays saved" disabled={busy} onClick={() => setResetOpen(true)} className="min-h-11 shrink-0 gap-1.5 px-2">
                 <Plus size={17} aria-hidden /><span className="hidden sm:inline">New chat</span>
@@ -304,6 +332,13 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
       {preview && workspace ? <CareDialog open onOpenChange={open => { if (!open) setPreview(null); }} title={preview === 'appointment' ? 'Appointment message' : 'Unit workload preview'} description="Synthetic preview only. No external action is performed.">
         {preview === 'appointment' ? <AppointmentPreview key={workspace.id} workspace={workspace} /> : <SupervisorPreview />}
       </CareDialog> : null}
+      <GuidedTour label="Doctor tour" open={tourOpen && !!workspace && !workspace.archivedAt} onClose={(finished) => {
+        setTourOpen(false);
+        try { localStorage.setItem('glucoflow.tour.doctor', finished ? 'finished' : 'closed'); } catch { /* Tour can be reopened from the header. */ }
+      }} steps={doctorTourSteps({
+        askQuestion: () => { openView('ask'); setChatDraft(DOCTOR_TOUR_QUESTION); window.setTimeout(() => document.getElementById('care-prompt')?.focus(), 50); },
+        openEncounters: () => { setTourOpen(false); openView('teams'); },
+      })} />
       {teamOpen ? <WorkspaceTeamPanel state={state} close={() => setTeamOpen(false)} /> : null}
       {historyOpen && workspaceId ? <WorkspaceHistory workspaceId={workspaceId} close={() => setHistoryOpen(false)} /> : null}
       <CareDialog title="Open a saved workspace" description="Choose a simulation from this account."

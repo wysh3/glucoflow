@@ -13,5 +13,6 @@ test('the demo role cards sign in without a password', async ({ page }) => {
   await page.goto('/sign-in');
   await page.getByTestId('demo-card-clinic').click();
   await expect(page).toHaveURL(/\/clinic\/care$/);
-  await expect(page.getByRole('button', { name: 'Create workspace' })).toBeVisible();
+  // Exploring opens a ready showcase workspace instead of an empty creation card.
+  await expect(page.getByRole('region', { name: 'Unit board' })).toBeVisible();
 });

@@ -175,7 +175,7 @@ export function useCareWorkspace(actorId: string, clinicId?: string) {
   };
 
   const create = () => run('create', async () => {
-    activate(await request<CareWorkspace>(`${base}/workspaces`, { method: 'POST', body: clinicId ? { clinicId } : {} }));
+    activate(await request<CareWorkspace>(`${base}/workspaces`, { method: 'POST', body: { ...(clinicId ? { clinicId } : {}), preset: 'showcase' } }));
     void queryClient.invalidateQueries({ queryKey: ['care-workspaces', actorId] });
   });
 

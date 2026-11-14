@@ -47,7 +47,8 @@ export function CarePipeline({ workspace, close, openEpisode, openSource, encoun
     && followup.some(task => task.id === item.taskId)) ?? [];
   const fit = () => {
     if (!viewport.current) return;
-    setZoom(Math.max(0.45, Math.min(1, (viewport.current.clientWidth - 28) / WIDTH, (viewport.current.clientHeight - 28) / HEIGHT)));
+    // Fit to width so stage labels stay readable; taller boards scroll vertically.
+    setZoom(Math.max(0.6, Math.min(1, (viewport.current.clientWidth - 28) / WIDTH)));
     viewport.current.scrollTo({ left: 0, top: 0 });
   };
   useEffect(() => {

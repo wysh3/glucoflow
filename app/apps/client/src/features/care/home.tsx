@@ -6,9 +6,12 @@ import { useSession } from '../../auth/session';
 import { When, roleLabels } from './shared';
 import { homeWork } from './home-work';
 import { handoverReviewParams } from './handover-inbox';
+import { UnitBoard } from './unit-board-view';
+import type { CareWorkspaceState } from './use-care-workspace';
 
-export function CareHome({workspace, shared, openView, openSource, openTask, openCoordination}: {
+export function CareHome({workspace, state, shared, openView, openSource, openTask, openCoordination}: {
   workspace: CareWorkspace;
+  state: CareWorkspaceState;
   shared?: boolean;
   openView: (view: 'teams' | 'activity' | 'worklist') => void;
   openSource: (event: CareEvent) => void;
@@ -39,6 +42,7 @@ export function CareHome({workspace, shared, openView, openSource, openTask, ope
       <h2 id="care-ask-title">{roleLabels[workspace.role]} care desk</h2>
       <span>{person ? `${person.name} · ${person.team}. ` : ''}Pending work across {workspace.encounters.length} fictional encounters.</span>
     </header>
+    <UnitBoard workspace={workspace} state={state} shared={shared} openSource={openSource} />
     <div className="care-home-grid">
       <section className="care-home-card" aria-label="Work for this role">
         <h3>{incomingCount ? `${incomingCount} awaiting your response` : 'Work for this role'}</h3>

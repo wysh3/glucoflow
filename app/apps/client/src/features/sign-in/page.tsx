@@ -1,11 +1,11 @@
-import { ArrowRight, FileText, Users, Check, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, FileText, Users, Check, ArrowUpRight, Sparkles, Database, ShieldCheck, FlaskConical } from 'lucide-react';
 import {demoAccounts,demoEnabled,type DemoAccount} from '../../auth/demo';
 import * as React from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { Button, Card, CardBody, Input, Label, Spinner, LoadingOrb } from '@glucoflow/ui';
 import { useSession } from '../../auth/session';
 
-import { roleHome } from '../../lib/clinic-home';
+import { CARE_HOME, roleHome } from '../../lib/clinic-home';
 
 /**
  * Sign-in. Invalid credentials are explained without revealing whether an account
@@ -20,13 +20,15 @@ export function SignInPage(): React.ReactElement {
   const [error, setError] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
   const [showRoles, setShowRoles] = React.useState(false);
+  const [intent, setIntent] = React.useState<'tour' | 'explore' | null>(null);
 
   const from = (location.state as { from?: string } | null)?.from;
   const target = from?.startsWith('/') && !from.startsWith('//') ? from : null;
 
   if (status === 'signed-in' && me) {
     if (target) return <Navigate to={target} replace />;
-    return <Navigate to={roleHome(me.contexts)} replace />;
+    const home = roleHome(me.contexts);
+    return <Navigate to={intent && home === CARE_HOME ? `${home}?start=${intent}` : home} replace />;
   }
 
   const authenticate = async (email: string, password: string): Promise<void> => {
@@ -39,7 +41,7 @@ export function SignInPage(): React.ReactElement {
   const submit = (event: React.FormEvent): void => {
     event.preventDefault(); void authenticate(email.trim(), password);
   };
-  const enterDemo = (account: DemoAccount) => authenticate(account.email, account.password);
+  const enterDemo = (account: DemoAccount, start: 'tour' | 'explore' | null = null) => { setIntent(start); return authenticate(account.email, account.password); };
   if(demoEnabled)return (
     <SignInFrame>
     <main className="flex flex-1 items-center px-5 py-7 sm:px-10 sm:py-8">
@@ -50,10 +52,13 @@ export function SignInPage(): React.ReactElement {
           <h1 className="text-[40px] font-semibold leading-[1.08] tracking-[-0.045em] text-[#263f3b] sm:text-[48px] lg:text-[48px]">Your care team,<br className="hidden sm:block" /> a little more connected.</h1>
           <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-[#58665e] lg:mx-0">Less chasing lab updates. Clearer handovers. One place to ask what’s pending, check the evidence, and prepare the next step.</p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-            {demoAccounts.filter(account=>account.key==='clinic').map(account=><button type="button" key={account.key} data-testid="demo-card-clinic" disabled={busy||status==='loading'||status==='unavailable'} onClick={()=>void enterDemo(account)} className="inline-flex min-h-12 items-center gap-5 rounded-full bg-[#286e64] px-6 text-sm font-semibold text-white shadow-[0_6px_18px_-8px_rgba(40,110,100,0.5)] transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34776b] focus-visible:ring-offset-4 disabled:opacity-50">Explore the clinic <ArrowRight size={17} aria-hidden /></button>)}
+            {demoAccounts.filter(account=>account.key==='clinic').map(account=><React.Fragment key={account.key}>
+              <button type="button" data-testid="demo-tour" disabled={busy||status==='loading'||status==='unavailable'} onClick={()=>void enterDemo(account,'tour')} className="inline-flex min-h-12 items-center gap-3 rounded-full bg-[#286e64] px-6 text-sm font-semibold text-white shadow-[0_6px_18px_-8px_rgba(40,110,100,0.5)] transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34776b] focus-visible:ring-offset-4 disabled:opacity-50"><Sparkles size={17} aria-hidden /> Take the 3-minute tour <ArrowRight size={17} aria-hidden /></button>
+              <button type="button" data-testid="demo-card-clinic" disabled={busy||status==='loading'||status==='unavailable'} onClick={()=>void enterDemo(account,'explore')} className="inline-flex min-h-12 items-center gap-2 rounded-full border border-[#cfe0d8] bg-white/70 px-5 text-sm font-semibold text-[#286e64] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34776b] disabled:opacity-50">Explore the clinic <ArrowRight size={16} aria-hidden /></button>
+            </React.Fragment>)}
             {demoAccounts.filter(account=>account.key==='patient').map(account=><button type="button" key={account.key} data-testid="demo-card-patient" disabled={busy||status==='loading'||status==='unavailable'} onClick={()=>void enterDemo(account)} className="inline-flex min-h-12 items-center gap-1.5 rounded-full px-4 text-sm font-medium text-[#58665e] transition hover:text-[#263f3b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34776b] disabled:opacity-50">Patient view <ArrowUpRight size={15} aria-hidden /></button>)}
           </div>
-          <p className="mt-3 text-xs leading-5 text-[#58665e]">No account setup · Shared demo accounts · Fictional records only</p>
+          <p className="mt-3 text-xs leading-5 text-[#58665e]">No account setup · Nine fictional inpatients · Works on phone and desktop</p>
           {status === 'loading' ? <div className="mt-3 flex justify-center"><Spinner label="Connecting securely…" /></div> : null}
           {status === 'unavailable' ? <div role="alert" className="mt-3 text-sm text-danger"><p>{sessionError ?? 'Connection could not complete.'}</p><Button type="button" size="sm" onClick={() => window.location.reload()}>Reconnect</Button></div> : null}
           {busy ? <p role="status" className="mt-2 text-xs text-[#34776b]">Opening workspace…</p> : null}
@@ -79,6 +84,11 @@ export function SignInPage(): React.ReactElement {
             <div className="flex items-start gap-3"><Users size={18} className="mt-0.5 shrink-0 text-[#34776b]" aria-hidden /><div><p className="text-sm font-medium text-[#263f3b]">Keep the owner in view</p><p className="mt-1 text-xs leading-5 text-[#58665e]">Prepare a handover for the lab team, with its supporting events.</p></div></div>
             <div className="flex items-start gap-3"><Check size={18} className="mt-0.5 shrink-0 text-[#34776b]" aria-hidden /><div><p className="text-sm font-medium text-[#263f3b]">You make the call</p><p className="mt-1 text-xs leading-5 text-[#58665e]">Review the proposed action. Keep its source and approval history.</p></div></div>
           </div>
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-3" aria-label="What is real in this demo">
+          <div className="flex items-start gap-3 rounded-2xl bg-white/60 px-4 py-3"><Database size={17} className="mt-0.5 shrink-0 text-[#34776b]" aria-hidden /><p className="text-xs leading-5 text-[#58665e]"><span className="font-semibold text-[#263f3b]">Real software.</span> Live web app, API, database, role checks and audit trail.</p></div>
+          <div className="flex items-start gap-3 rounded-2xl bg-white/60 px-4 py-3"><FlaskConical size={17} className="mt-0.5 shrink-0 text-[#34776b]" aria-hidden /><p className="text-xs leading-5 text-[#58665e]"><span className="font-semibold text-[#263f3b]">Simulated hospital.</span> HIS and lab feeds and every patient are fictional. You can play the lab yourself.</p></div>
+          <div className="flex items-start gap-3 rounded-2xl bg-white/60 px-4 py-3"><ShieldCheck size={17} className="mt-0.5 shrink-0 text-[#34776b]" aria-hidden /><p className="text-xs leading-5 text-[#58665e]"><span className="font-semibold text-[#263f3b]">Human in charge.</span> No diagnosis, prescribing or risk scores. Actions need approval.</p></div>
         </div>
         <div className="mt-3 text-center text-xs text-[#58665e]">
           <button type="button" aria-expanded={showRoles} aria-controls={showRoles ? 'demo-roles' : undefined} onClick={() => setShowRoles(value => !value)} className="min-h-11 rounded-lg px-3 py-2 hover:text-[#263f3b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#34776b]">{showRoles ? 'Hide team roles' : 'Explore another team role'}</button>
@@ -153,7 +163,7 @@ function SignInFrame({children}: {children: React.ReactNode}) {
     {children}
     <footer className="flex flex-wrap justify-center gap-x-6 px-5 py-4 text-xs text-[#58665e]">
       <span className="inline-flex min-h-11 items-center">Workflow assistance · No diagnosis or prescribing</span>
-      <Link to="/showcase" className="inline-flex min-h-11 items-center">Walkthrough</Link>
+      <Link to="/how-it-works" className="inline-flex min-h-11 items-center">How it works</Link>
       <Link to="/privacy" className="inline-flex min-h-11 items-center">Privacy and data use</Link>
       <Link to="/verify" className="inline-flex min-h-11 items-center">Verify a receipt</Link>
     </footer>

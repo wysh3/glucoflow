@@ -16,7 +16,7 @@ export function DemoPersonSwitcher({workspace,state}:{workspace:CareWorkspace;st
  const active=workspace.coordination?.staff.find(person=>person.id===workspace.demoStaffId);
  const shared=state.team.data?.access.shared;
  return <>
-  <Button size="sm" variant="quiet" disabled={!state.team.isSuccess||!!state.busy} onClick={()=>setOpen(true)} aria-label={shared?'View assigned role':'Switch demo person'}>
+  <Button data-tour="persona" size="sm" variant="quiet" disabled={!state.team.isSuccess||!!state.busy} onClick={()=>setOpen(true)} aria-label={shared?'View assigned role':'Switch demo person'}>
    <Users size={15} aria-hidden/><span className="max-w-36 truncate">{shared?roleLabels[workspace.role]:active?.name??'Demo person'}</span>
   </Button>
   <CareDialog open={open} onOpenChange={setOpen} title={shared?'Your workspace role':'Try another perspective'} description={shared?'Authority comes from your authenticated account.':'Fictional staff share this simulation. Switching people keeps all encounters and work.'}>

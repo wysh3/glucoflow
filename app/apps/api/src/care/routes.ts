@@ -44,7 +44,7 @@ export function registerCareRoutes(app: FastifyInstance, ctx: AppContext): void 
 
   app.post(`${base}/workspaces`, { ...routeLimit(30), bodyLimit: 1024 }, async (request, reply) => {
     const actor = await careActor(ctx, request);
-    const { clinicId } = parseBody(z.strictObject({ clinicId: z.uuid().optional() }), request.body);
+    const { clinicId, preset } = parseBody(z.strictObject({ clinicId: z.uuid().optional(), preset: z.enum(['classic', 'showcase']).optional() }), request.body);
     const state = await withActorTx(ctx, request, async (client) => {
       const hospitals = await listMyHospitals(client);
       const managed = clinicId
@@ -54,7 +54,7 @@ export function registerCareRoutes(app: FastifyInstance, ctx: AppContext): void 
       if (!target || (managed ? !managed.careRole : !actor.capabilities.clinicIds.includes(target))) {
         throw ApiError.forbidden('An assigned staff role is required in this clinic.');
       }
-      const workspace = await createWorkspace(client, actor.profile.userId, target);
+      const workspace = await createWorkspace(client, actor.profile.userId, target, preset);
       return managed ? readWorkspace(client, workspace.id, actor.profile.userId) : workspace;
     });
     reply.code(201);

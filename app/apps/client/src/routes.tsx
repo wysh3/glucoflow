@@ -46,6 +46,7 @@ const VisitOverviewPage = React.lazy(() => import('./features/clinic/overview/pa
 const AccountPage = React.lazy(() => import('./features/account/page').then(module => ({ default: module.AccountPage })));
 const HospitalTeamPage = React.lazy(() => import('./features/hospital/page').then(module => ({ default: module.HospitalTeamPage })));
 const ClinicPatientsPage = React.lazy(() => import('./features/clinic/patients/page').then(module => ({ default: module.ClinicPatientsPage })));
+const HowItWorksPage = React.lazy(() => import('./features/how-it-works/page').then(module => ({ default: module.HowItWorksPage })));
 const ShowcasePage = React.lazy(() => import('./features/showcase/page').then(module => ({ default: module.ShowcasePage })));
 const ClinicQueuePage = React.lazy(() => import('./features/clinic/queue/page').then(module => ({ default: module.ClinicQueuePage })));
 const ClinicPatientLayout = React.lazy(() => import('./features/clinic/patient-layout').then(module => ({ default: module.ClinicPatientLayout })));
@@ -92,6 +93,7 @@ export function AppRoutes(): React.ReactElement {
         <Route path="/sign-in" element={<EntryRedirect />} />
         <Route path="/demo/delta" element={<Navigate to="/showcase" replace />} />
         <Route path="/showcase" element={<ShowcasePage />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/verify/:code?" element={<VerifyReceiptPage />} />
         <Route path="/clinic/results/:resultId/survey-pack" element={<ClinicGate><ClosureCertificatePage /></ClinicGate>} />
@@ -148,6 +150,7 @@ const titles: Record<string, string> = {
   '/': 'Inpatient diabetes care',
   '/sign-in': 'Sign in',
   '/showcase': 'Walkthrough',
+  '/how-it-works': 'How it works',
   '/privacy': 'Privacy and data use',
   '/account': 'Account',
   [hospitalTeamPath]: 'Hospital team',

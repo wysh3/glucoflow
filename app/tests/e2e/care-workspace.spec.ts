@@ -81,7 +81,7 @@ test('saved workspaces recover after a failed reopen without mixing conversation
     }
   });
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Explore the DKA handover demo', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Run a diabetes unit shift', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Saved workspaces', exact: true }).click();
   await revealSavedWorkspace(recovery, firstRow);
   await firstRow.getByRole('button', { name: /Reopen workspace created/ }).click();
@@ -129,7 +129,9 @@ async function commandResult(page: Page, action: () => Promise<unknown>) {
 test('source-confirmed monitoring becomes a reviewed skill and proposes a new task with target evidence', async ({ page }) => {
   await openWorkspace(page);
   await page.goto('/clinic/care?view=worklist');
-  await page.getByRole('button', { name: 'Review task', exact: true }).click();
+  // The showcase seed has two tasks awaiting approval; review Asha Shah's.
+  await page.locator('div.border-b').filter({ hasText: 'Asha Shah · Confirm specimen receipt' })
+    .getByRole('button', { name: 'Review task', exact: true }).click();
   const task = page.getByRole('dialog', { name: 'Confirm specimen receipt', exact: true });
   await choose(page, 'Task action', 'Approve monitoring');
   const approved = await commandResult(page, () => task.getByRole('button', { name: 'Approve monitoring', exact: true }).click());
