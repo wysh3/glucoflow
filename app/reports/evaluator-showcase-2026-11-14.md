@@ -62,3 +62,34 @@ Screenshots: `reports/completion-evidence/showcase-*-1440.png` and `-390.png`.
 ## Limits
 
 Simulated feeds and fictional patients only. No new hospital, ABDM, model-accuracy, Android-device or clinical-outcome claim. The "Simulate" control is a demo affordance that plays the external system; real deployments receive these events from HIS/LIS.
+
+## Round 2 — full A–Z tour (15 November 2026)
+
+- **Global tour system** (`features/tour/`):
+  - It persists across pages in session storage and navigates between routes.
+  - It drives the care workspace through a registered bridge: views, pipeline, episode, task, shift monitoring and history dialogs, Gluco questions, and demo persona switches.
+  - Steps whose target is inside a modal dialog show their card within that dialog, so it stays reachable inside the focus trap.
+- **Quick tour (9 steps)** from the landing button. It ends by offering to continue into the full tour.
+- **Full A–Z tour (27 steps, 9 chapters, jump to any chapter)**, opened from the header Tour button:
+  1. Shift at a glance
+  2. Ask Gluco: sends a real question and waits for the reply
+  3. Follow one patient: pipeline and episode
+  4. Nothing runs unapproved: worklist, task approval, shift monitoring
+  5. Handover with receipt
+  6. Every role, its own work: switches to the nurse's My Shift and the lab queue, then back
+  7. Learning, governed: care routines, activity, history
+  8. Patient records: list, visit overview, progression, review queue
+  9. Under the hood: the How it works page
+- **Audit of every live screen** at desktop and phone sizes, as clinic and patient. No console errors. Fixes:
+  - Retired and superseded care routines are folded under "Earlier and retired versions".
+  - Patients with records are listed first.
+  - Seeded encounters say "Simulation seed (fictional HIS record)" instead of "Unknown".
+- **Verification:**
+  - Typecheck, 424 / 424 unit tests (79 files) and the build all pass.
+  - 43 / 43 desktop care, landing, progression and review browser tests pass.
+  - The tour specs pass 6 / 6 locally on desktop and mobile.
+  - On production (Vercel `dpl_7RL3nhqEA6wjtXXV28y9UzgvF5ba`), the tour and landing specs pass **10 / 10** on desktop and mobile.
+  - The API is unchanged from round 1.
+- **Not done:**
+  - Android APK not rebuilt. The Android SDK is no longer installed on this machine (`~/Library/Android/sdk` is missing), so the November 7 APK still bundles the earlier interface.
+  - Hosted demo data was not cleaned. Earlier test uploads and notes remain visible in the review queue and the patient notes.
