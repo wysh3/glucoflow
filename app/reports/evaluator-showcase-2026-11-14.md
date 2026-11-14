@@ -38,15 +38,26 @@ Branch `dev`. `main` (submission snapshot `9460864`) is unchanged. Plan: `docs/s
 | `pnpm test` | **424 / 424 passed, 79 files** (adds 4 showcase-seed tests) |
 | New browser test `evaluator-tour.spec.ts` | 4 / 4 passed, desktop 1440×900 and mobile 390×844 |
 | `landing.spec.ts` (updated for the ready workspace) | 2 / 2 passed, desktop |
-| Existing care browser specs | PENDING |
-| `pnpm build` | PENDING |
+| Existing care browser specs (9 files) | 29 passed, 2 failed on old expectations (empty-card heading; a second task awaiting approval). Both tests were updated and the affected spec passes 5 / 5 on desktop and 5 / 5 on mobile |
+| `pnpm build` | Pass (client, API, worker) |
 | `pnpm db:test` | 12 / 12 earlier today; no migrations in this release |
 
 Screenshots: `reports/completion-evidence/showcase-*-1440.png` and `-390.png`.
 
 ## Deployment
 
-PENDING.
+- **API:** Azure revision `glucoflow-service--dev-showcase-1`, image `glucoflow-api@sha256:5f488f621ad4d734392ae494d979cd8f147553d1670a7dc60f0bbe820c72fd50`.
+  - Deployed with `az containerapp update --container-name api` so only the API image changed. The runtime sidecar, secrets, scale and environment are preserved.
+  - Healthy, `/health/ready` reports the database reachable.
+  - Hosted smoke (`deploy-care-smoke.ts --offline-only`): all checks passed.
+- **Worker and runtime:** unchanged (the worker reuses the unchanged reconciliation module). No migrations.
+- **Web:** Vercel production deployment `dpl_2ayFris312oSKGC9LUQPpqAR1vxZ` at https://glucoflow.vercel.app, built and scanned by `scripts/deploy-care-web.py`.
+- **Production browser run:** `evaluator-tour.spec.ts` and `landing.spec.ts` against the live site, **8 / 8 passed** (desktop 1440×900 and mobile 390×844).
+  - Showcase screenshots in `completion-evidence/` come from this production run.
+- **Live Gluco turn:** one synthetic question in the showcase workspace replied in 9,985 ms, citing the new scenario encounters with evidence. This is a single observation, not a latency benchmark.
+- **Rollback:**
+  - API: `az containerapp update -g glucoflow-demo -n glucoflow-service --container-name api --image glucoflowwysh2026.azurecr.io/glucoflow-api@sha256:873fbea1e68a6025b79b1e83e8958c3c489828cc3c0732ad452cb7d0b2a1797a`. This is the previous `cross-team-fixes` image; it accepts only the classic seed, so roll back the web first.
+  - Web: restore the previous Vercel production deployment.
 
 ## Limits
 
