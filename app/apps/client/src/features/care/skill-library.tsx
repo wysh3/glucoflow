@@ -175,15 +175,29 @@ export function SkillLibrary({ workspace, state, openSource }: {
       {library.data && !library.data.canReview ? <p className="mb-3 rounded-xl border border-line p-3 text-sm text-ink-soft">A signed-in clinician must approve, reject, retire, or restore shared care routine versions.</p> : null}
       {library.data?.skills.length ? (
         <div className="grid gap-3">
-          {library.data.skills.map((skill) => (
-            <SkillCard key={skill.id} skill={skill} workspace={workspace} canReview={library.data.canReview} busy={busy} openSource={openSource}
-              onApply={() => { close(); setSelection({ skillId: skill.id, action: 'apply' }); }}
-              onAction={(action) => {
-                mutation.reset();
-                if (action === 'test') mutation.mutate({ skillId: skill.id, action });
-                else setSelection({ skillId: skill.id, action });
-              }} />
-          ))}
+          {(() => {
+            const card = (skill: (typeof library.data.skills)[number]) => (
+              <SkillCard key={skill.id} skill={skill} workspace={workspace} canReview={library.data.canReview} busy={busy} openSource={openSource}
+                onApply={() => { close(); setSelection({ skillId: skill.id, action: 'apply' }); }}
+                onAction={(action) => {
+                  mutation.reset();
+                  if (action === 'test') mutation.mutate({ skillId: skill.id, action });
+                  else setSelection({ skillId: skill.id, action });
+                }} />
+            );
+            // Current versions first; retired, superseded and rejected versions stay available but folded away.
+            const archived = new Set(['retired', 'superseded', 'rejected']);
+            const current = library.data.skills.filter((skill) => !archived.has(skill.status));
+            const earlier = library.data.skills.filter((skill) => archived.has(skill.status));
+            return <>
+              {current.map(card)}
+              {!current.length ? <p className="rounded-xl border border-line p-3 text-sm text-ink-soft">No active care routine. Earlier versions can be restored below by a clinician.</p> : null}
+              {earlier.length ? <details className="rounded-xl border border-line bg-surface p-3">
+                <summary className="min-h-9 cursor-pointer text-sm font-medium">Earlier and retired versions ({earlier.length})</summary>
+                <div className="mt-3 grid gap-3">{earlier.map(card)}</div>
+              </details> : null}
+            </>;
+          })()}
         </div>
       ) : library.isSuccess ? (
         <EmptyPanel icon={GitPullRequest} title="No reusable care routines yet">Open a source-confirmed lab task and choose Capture routine draft to start.</EmptyPanel>

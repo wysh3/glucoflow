@@ -75,7 +75,7 @@ export function ClinicPatientsPage(): React.ReactElement {
               </TR>
             </THead>
             <TBody>
-              {patients.data?.items.map((patient) => (
+              {[...(patients.data?.items ?? [])].sort((a, b) => Number(!!b.lastRecordDate || b.pendingCount > 0) - Number(!!a.lastRecordDate || a.pendingCount > 0)).map((patient) => (
                 <TR key={patient.patientId}>
                   <TD>
                     <span className="font-medium text-ink">{patient.displayName}</span><div className="mt-1 text-xs text-ink-soft sm:hidden">{patient.clinicIdentifier}{patient.pendingCount > 0 ? ` · ${patient.pendingCount} awaiting review` : ''}</div>

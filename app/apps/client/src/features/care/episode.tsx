@@ -97,7 +97,7 @@ export function EpisodeDrawer({ workspace, openSource, openDetails, onCoordinate
         <p className="mt-2 font-medium">{encounter.patientCode} · {encounter.bed}</p>
         <p className="mt-1">Current clinical responsibility · {encounter.assignedTo.trim() || 'Unassigned'}</p>
         <p className="mt-1 text-ink-soft">Admitted <When value={encounter.admittedAt} /></p>
-        <p className="mt-1 text-xs text-ink-soft">Registered in Gluco by {encounter.registeredBy ? `${encounter.registeredBy.name} · ${roleLabels[encounter.registeredBy.role]}${encounter.registeredBy.simulated ? ' · Simulated' : ''}` : 'Unknown'}</p>
+        <p className="mt-1 text-xs text-ink-soft">Registered in Gluco by {encounter.registeredBy ? `${encounter.registeredBy.name} · ${roleLabels[encounter.registeredBy.role]}${encounter.registeredBy.simulated ? ' · Simulated' : ''}` : 'Simulation seed (fictional HIS record)'}</p>
       </div>
       <Button onClick={() => { close(); onCoordinate(encounter.id); }}>Coordinate team & handover</Button>
       <section aria-label="Order evidence">

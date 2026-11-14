@@ -33,3 +33,12 @@
 
 [data-tour] { scroll-margin-top: 84px; }
 .gf-tour-body ul + p { margin-top:.5rem; }
+.gf-tour-inline { position:sticky; top:-16px; z-index:5; margin:-4px -4px 14px; }
+.gf-tour-card[data-inline] { position:relative; width:auto; max-width:none; box-shadow:0 10px 30px #1d221f26; border-color:#cfe0d8; background:#fbfdfc; animation:gf-tour-in .3s cubic-bezier(.2,.8,.2,1); }
+[data-tour-highlight] { outline:3px solid var(--color-primary) !important; outline-offset:4px; border-radius:12px; box-shadow:0 0 0 8px #3f70671f; transition:outline-color .3s; }
+.gf-tour-chapters { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.35rem; margin-top:.6rem; }
+.gf-tour-chapters button { text-align:left; padding:.45rem .6rem; border-radius:10px; border:1px solid #e3e6e1; background:#fff; font-size:.72rem; line-height:1.35; }
+.gf-tour-chapters button:hover { border-color:var(--color-primary); background:#f4f8f6; }
+.gf-tour-chapters button strong { display:block; font-size:.74rem; color:var(--color-ink); }
+.gf-tour-chapters button span { color:var(--color-ink-soft); }
+@media (max-width: 420px) { .gf-tour-chapters { grid-template-columns:minmax(0,1fr); } }

@@ -46,6 +46,7 @@ const VisitOverviewPage = React.lazy(() => import('./features/clinic/overview/pa
 const AccountPage = React.lazy(() => import('./features/account/page').then(module => ({ default: module.AccountPage })));
 const HospitalTeamPage = React.lazy(() => import('./features/hospital/page').then(module => ({ default: module.HospitalTeamPage })));
 const ClinicPatientsPage = React.lazy(() => import('./features/clinic/patients/page').then(module => ({ default: module.ClinicPatientsPage })));
+import { TourHost, TourProvider } from './features/tour/host';
 const HowItWorksPage = React.lazy(() => import('./features/how-it-works/page').then(module => ({ default: module.HowItWorksPage })));
 const ShowcasePage = React.lazy(() => import('./features/showcase/page').then(module => ({ default: module.ShowcasePage })));
 const ClinicQueuePage = React.lazy(() => import('./features/clinic/queue/page').then(module => ({ default: module.ClinicQueuePage })));
@@ -86,7 +87,9 @@ const CarePage = React.lazy(async () => {
 export function AppRoutes(): React.ReactElement {
   return (
     <BrowserRouter>
+      <TourProvider>
       <LocaleDocument />
+      <TourHost />
       <React.Suspense fallback={<div className="p-6"><Spinner label="Opening page" /></div>}>
       <Routes>
         <Route path="/" element={<SignInPage />} />
@@ -137,6 +140,7 @@ export function AppRoutes(): React.ReactElement {
       </React.Suspense>
       <RouteTitle />
       <ContextualGuide />
+      </TourProvider>
     </BrowserRouter>
   );
 }

@@ -28,8 +28,7 @@ import { FeedStatus, Simulator } from './simulator';
 import { TaskDialog, type TaskDraft } from './task-dialog';
 import { TeamsPanel } from './teams';
 import { useCareWorkspace, type ChatMode } from './use-care-workspace';
-import { GuidedTour } from './tour';
-import { DOCTOR_TOUR_QUESTION, doctorTourSteps } from './doctor-tour';
+import { useTour } from '../tour/host';
 import { ActivityPanel, TaskDetails, WorklistPanel } from './worklist';
 import '../../vendor/codexapp/conversation.css';
 import './workspace-canvas.css';
@@ -86,7 +85,8 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
   const [playbookDraft, setPlaybookDraft] = useState<Pick<CareProposal, 'title' | 'body'> | null>(null);
   const workspace = state.workspace;
   const workspaceId = workspace?.id;
-  const [tourOpen, setTourOpen] = useState(false);
+  const tour = useTour();
+  const setTourOpen = (open: boolean) => { if (open) tour.start('quick'); };
   const start = params.get('start');
   const autoStarted = useRef(false);
   // Landing links (?start=tour|explore) open a ready showcase workspace instead of an empty card.
@@ -190,6 +190,65 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
 
   useEffect(() => { if (simulatorVisible) openSimulator(); }, [simulatorVisible]);
 
+  // Expose bounded navigation helpers to the guided tour. Every action goes through the same UI and API paths.
+  const bridgeState = useRef({ workspace, state, params });
+  bridgeState.current = { workspace, state, params };
+  useEffect(() => {
+    if (!workspaceId) return;
+    const closeAll = () => {
+      setPipelineOpen(false); setMonitoringOpen(false); setHistoryOpen(false); setTeamOpen(false); setSavedOpen(false);
+      setPreview(null); setEventId(null); setTaskId(null); setTaskDraft(null); setPlaybookDraft(null); setCoordinationId(null);
+      const next = new URLSearchParams(window.location.search);
+      if (next.has('encounter')) { next.delete('encounter'); setParams(next, { replace: true, preventScrollReset: true }); }
+    };
+    tour.registerCare({
+      workspace: () => bridgeState.current.workspace,
+      closeAll,
+      openView: (next) => {
+        const updated = new URLSearchParams(window.location.search);
+        updated.delete('encounter');
+        if (next === 'ask') updated.delete('view'); else updated.set('view', next);
+        setParams(updated, { preventScrollReset: true });
+      },
+      openPipeline: () => setPipelineOpen(true),
+      openMonitoring: () => setMonitoringOpen(true),
+      openHistory: () => setHistoryOpen(true),
+      openEpisode: (name) => {
+        const encounter = bridgeState.current.workspace?.encounters.find((item) => item.patientName === name) ?? bridgeState.current.workspace?.encounters[0];
+        if (!encounter) return;
+        const next = new URLSearchParams(window.location.search);
+        next.set('encounter', encounter.id);
+        setParams(next, { preventScrollReset: true });
+      },
+      openTask: (status) => {
+        const task = bridgeState.current.workspace?.tasks.find((item) => item.status === status);
+        if (task) setTaskId(task.id);
+      },
+      askQuestion: (text, send) => {
+        const updated = new URLSearchParams(window.location.search);
+        updated.delete('view'); updated.delete('encounter');
+        setParams(updated, { preventScrollReset: true });
+        setChatDraft(text);
+        window.setTimeout(() => {
+          const form = document.querySelector<HTMLFormElement>('[data-tour="composer"]');
+          if (send) form?.requestSubmit(); else document.getElementById('care-prompt')?.focus();
+        }, 250);
+      },
+      switchPersona: async (role) => {
+        const { workspace: current, state: actions } = bridgeState.current;
+        if (!current || actions.team.data?.access.shared) return false;
+        const staff = current.coordination?.staff ?? [];
+        const person = role === 'doctor' ? staff.find((item) => item.name === 'Dr Mira Rao') ?? staff.find((item) => item.role === 'doctor' && !item.userId)
+          : staff.find((item) => item.role === role && !item.userId);
+        if (!person || current.demoStaffId === person.id) return true;
+        return actions.command({ type: 'set_demo_staff', staffId: person.id });
+      },
+    });
+    return () => tour.registerCare(null);
+  // The bridge reads live values through bridgeState; re-register only when the workspace changes.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspaceId]);
+
   return (
     <div ref={canvas} className="content-root care-codexapp relative flex-1" data-v-705e1c85="" data-testid="care-workspace" data-app-ready={!state.loading ? true : undefined}>
       <h1 className="sr-only">Care workspace</h1>
@@ -240,7 +299,7 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
             <ClinicNavigation>
               <DemoPersonSwitcher workspace={workspace} state={state} />
               <Button type="button" variant="quiet" size="sm" data-tour="pipeline-button" onClick={() => setPipelineOpen(true)}>Pipeline</Button>
-              {workspace.role === 'doctor' && !workspace.archivedAt ? <Button type="button" variant="quiet" size="sm" onClick={() => { openView('ask'); setTourOpen(true); }} aria-label="Start the guided tour"><Sparkles size={15} aria-hidden /><span className="hidden sm:inline">Tour</span></Button> : null}
+              {workspace.role === 'doctor' && !workspace.archivedAt ? <Button type="button" variant="quiet" size="sm" onClick={() => { openView('ask'); tour.start('full'); }} aria-label="Open the guided tour"><Sparkles size={15} aria-hidden /><span className="hidden sm:inline">Tour</span></Button> : null}
               <Button type="button" variant="quiet" size="sm" onClick={() => setTeamOpen(true)}><Users size={16} aria-hidden /> Team</Button>
               <Button type="button" variant="quiet" size="sm" aria-label="New chat" title="New chat with a fresh simulation; this workspace stays saved" disabled={busy} onClick={() => setResetOpen(true)} className="min-h-11 shrink-0 gap-1.5 px-2">
                 <Plus size={17} aria-hidden /><span className="hidden sm:inline">New chat</span>
@@ -332,13 +391,6 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
       {preview && workspace ? <CareDialog open onOpenChange={open => { if (!open) setPreview(null); }} title={preview === 'appointment' ? 'Appointment message' : 'Unit workload preview'} description="Synthetic preview only. No external action is performed.">
         {preview === 'appointment' ? <AppointmentPreview key={workspace.id} workspace={workspace} /> : <SupervisorPreview />}
       </CareDialog> : null}
-      <GuidedTour label="Doctor tour" open={tourOpen && !!workspace && !workspace.archivedAt} onClose={(finished) => {
-        setTourOpen(false);
-        try { localStorage.setItem('glucoflow.tour.doctor', finished ? 'finished' : 'closed'); } catch { /* Tour can be reopened from the header. */ }
-      }} steps={doctorTourSteps({
-        askQuestion: () => { openView('ask'); setChatDraft(DOCTOR_TOUR_QUESTION); window.setTimeout(() => document.getElementById('care-prompt')?.focus(), 50); },
-        openEncounters: () => { setTourOpen(false); openView('teams'); },
-      })} />
       {teamOpen ? <WorkspaceTeamPanel state={state} close={() => setTeamOpen(false)} /> : null}
       {historyOpen && workspaceId ? <WorkspaceHistory workspaceId={workspaceId} close={() => setHistoryOpen(false)} /> : null}
       <CareDialog title="Open a saved workspace" description="Choose a simulation from this account."
