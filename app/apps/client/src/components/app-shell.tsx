@@ -1,7 +1,7 @@
 import { ClinicNavigation } from './clinic-navigation';
 import * as React from 'react';
 import { Link, NavLink, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
-import { ArrowLeftIcon, FileTextIcon, HeartPulseIcon, FilePenLineIcon, UploadIcon, UserIcon, UsersIcon } from 'lucide-animated';
+import { ArrowLeft as ArrowLeftIcon, FileText as FileTextIcon, HeartPulse as HeartPulseIcon, FilePenLine as FilePenLineIcon, Upload as UploadIcon, User as UserIcon, Users as UsersIcon } from 'lucide-react';
 import { Alert, Button, cn, useAnimatedIcon } from '@glucoflow/ui';
 import { useSession } from '../auth/session';
 import { ClipboardList, History, Inbox, NotebookPen, MessageCircle, TrendingUp, Home, Users, FolderOpen } from 'lucide-react';

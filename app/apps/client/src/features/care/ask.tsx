@@ -12,8 +12,7 @@ import { SpeechDraftInput, ReadAloud } from '../speech';
 import { useEffect, useRef, useState } from 'react';
 import {
   ArrowDown, ArrowUp, LayoutDashboard, ClipboardList, Database, FilePenLine, FlaskConical,
-  MessageCircle, Radio, RefreshCw, ShieldCheck, type LucideIcon,
-} from 'lucide-react';
+  MessageCircle, Radio, RefreshCw, ShieldCheck, type LucideIcon, SlidersHorizontal } from 'lucide-react';
 import { Badge, Button, Label, Select, Spinner, LoadingOrb, cn } from '@glucoflow/ui';
 import type { CareEvent, CareMessage, CareProposal, CareRole, CareWorkspace } from '@glucoflow/contracts';
 import { SourceChip, terminalStatuses, When } from './shared';
@@ -83,6 +82,14 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
   const [overview, setOverview] = useState(false);
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const [optionsOpen, setOptionsOpen] = useState(false);
+  const [narrow, setNarrow] = useState(() => typeof window !== 'undefined' && window.matchMedia?.('(max-width: 639px)').matches);
+  useEffect(() => {
+    const query = window.matchMedia?.('(max-width: 639px)');
+    if (!query) return;
+    const update = () => setNarrow(query.matches);
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
   useEffect(() => { setOverview(false); }, [workspace.id]);
   const runtimeReady = state.runtime?.available === true;
   const sending = state.busy === 'chat';
@@ -214,7 +221,7 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
               <Label htmlFor="care-prompt" className="sr-only">Message Gluco</Label>
               <textarea id="care-prompt" ref={input} className="thread-composer-input" {...composerScope}
                 value={draft} onChange={(event) => onDraft(event.target.value)} rows={2} maxLength={4000}
-                placeholder="Ask about an encounter or pending handoff…" aria-describedby="care-composer-help" disabled={sending}
+                placeholder={narrow ? 'Ask Gluco…' : 'Ask about an encounter or pending handoff…'} aria-describedby="care-composer-help" disabled={sending}
                 onKeyDown={(event) => {
                   if (shouldSendOnEnter({ key: event.key, shiftKey: event.shiftKey, altKey: event.altKey, isComposing: event.nativeEvent.isComposing, keyCode: event.nativeEvent.keyCode })) {
                     event.preventDefault();
@@ -225,7 +232,8 @@ export function AskPanel({ state, workspace, draft, onDraft, mode, setMode, visi
             <div className="thread-composer-controls" {...composerScope}>
               <div className="thread-composer-control" {...composerScope}>
                 <button type="button" className="min-h-11 rounded-lg px-2 text-xs text-ink-soft hover:bg-canvas" aria-expanded={optionsOpen}
-                  aria-controls="care-chat-options" onClick={() => setOptionsOpen(value => !value)}>Chat options</button>
+                  aria-controls="care-chat-options" aria-label="Chat options" title="Chat options" onClick={() => setOptionsOpen(value => !value)}>
+                  <SlidersHorizontal size={16} className="care-options-icon" aria-hidden /><span className="care-options-label">Chat options</span></button>
                 {mode === 'offline' ? <span className="text-xs text-ink-soft">Workspace helper · no AI</span> : null}
                 <span id="care-composer-help" className="sr-only">Enter to send. Shift and Enter for a new line.</span>
               </div>

@@ -41,7 +41,7 @@ test('simplified public and record views remain readable', async ({ page }, test
   await expect(page.getByRole('heading', { name: 'Your care team, a little more connected.' })).toBeVisible();
   const mobileNavigation = page.getByRole('button', { name: 'Open navigation', exact: true });
   if (await mobileNavigation.isVisible()) await mobileNavigation.click();
-  await expect(page.getByRole('link', { name: 'Walkthrough', exact: true })).toHaveCount(1);
+  await expect(page.getByRole('link', { name: 'How it works', exact: true }).first()).toBeVisible();
   if (await page.getByRole('dialog').isVisible()) await page.keyboard.press('Escape');
   await page.screenshot({ path: testInfo.outputPath('landing.png'), fullPage: true });
   await signIn(page, 'clinic');

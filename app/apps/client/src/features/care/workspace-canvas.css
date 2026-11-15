@@ -433,3 +433,26 @@
 @media (prefers-reduced-motion: reduce) {
   .care-board-list > li.is-updated, .care-feed-receipt, .care-board-track > span[data-next="true"] > i { animation:none; }
 }
+
+/* Phone home: the unit board gets the screen; the composer becomes one compact row. */
+@media (max-width: 639px) {
+  .care-home-scroll { padding-top: .5rem; }
+  .care-home-heading { margin-bottom: .55rem; }
+  .care-home-heading > p { font-size: .6rem; }
+  .care-home-heading h2 { font-size: 1.4rem; margin: .1rem 0; }
+  .care-home-heading > span { display: none; }
+  .care-glance { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .4rem; margin-bottom: .65rem; }
+  .care-glance-item { padding: .5rem .65rem; border-radius: 12px; column-gap: .45rem; }
+  .care-glance-item > strong { font-size: 1.2rem; }
+  .care-glance-item > span { font-size: .62rem; }
+  .care-thread-home .care-composer-tools { max-height: none; }
+  .care-thread-home .care-home-suggestions { padding-block: .1rem; }
+  .care-thread-home .thread-composer-shell { display: flex; align-items: flex-end; gap: .25rem; padding: .3rem .35rem .3rem .2rem; }
+  .care-thread-home .thread-composer-input-wrap { flex: 1 1 auto; min-width: 0; }
+  .care-thread-home .thread-composer-input { min-height: 40px; max-height: 30dvh; padding-block: .55rem; field-sizing: content; }
+  .care-thread-home .thread-composer-controls { flex: 0 0 auto; margin: 0; }
+  .care-thread-home .thread-composer-control > :not(button) { display: none; }
+  .care-thread-home .care-options-label { display: none; }
+}
+.care-options-icon { display: none; }
+@media (max-width: 639px) { .care-thread-home .care-options-icon { display: inline; } }

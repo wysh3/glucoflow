@@ -10,7 +10,20 @@
     <title>glucoflow</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Launch screen: paints before the app script loads; React replaces it on first render. -->
+      <div class="gf-launch" aria-hidden="true">
+        <img src="/favicon.svg" width="44" height="44" alt="" />
+        <span>glucoflow</span>
+      </div>
+    </div>
+    <style>
+      .gf-launch { position: fixed; inset: 0; display: grid; place-content: center; justify-items: center; gap: .6rem; background: #faf6f1;
+        font: 600 1.05rem/1.2 system-ui, -apple-system, "Segoe UI", sans-serif; color: #286e64; letter-spacing: -.01em; }
+      .gf-launch img { animation: gf-launch 1.4s ease-in-out infinite; }
+      @keyframes gf-launch { 50% { transform: translateY(-3px); opacity: .85; } }
+      @media (prefers-reduced-motion: reduce) { .gf-launch img { animation: none; } }
+    </style>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

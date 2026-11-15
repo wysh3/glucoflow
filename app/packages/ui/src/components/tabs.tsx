@@ -53,11 +53,12 @@ export const DialogContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { side?: 'center' | 'right' | 'bottom' | 'floating' }
 >(({ className, children, side = 'center', ...props }, ref) => (
   <DialogPrimitive.Portal>
-    <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-ink/30" />
+    <DialogPrimitive.Overlay className="gf-dialog-overlay fixed inset-0 z-40 bg-ink/30" />
     <DialogPrimitive.Content
       ref={ref}
+      data-side={side}
       className={cn(
-        'fixed z-50 border border-line bg-surface p-4 shadow-xl sm:p-6 focus-visible:outline-none',
+        'gf-dialog fixed z-50 border border-line bg-surface p-4 shadow-xl sm:p-6 focus-visible:outline-none',
         side === 'center' &&
           'left-1/2 top-1/2 max-h-[85vh] w-[min(92vw,560px)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-[20px]',
         side === 'right' &&

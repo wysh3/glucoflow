@@ -34,3 +34,49 @@ Together they put three conflicting 3 October values on the progression chart. T
 The backup is in the git-ignored `.local/` directory.
 
 After the cleanup, the live chart shows four results: 8.2 → 7.9 → 7.5 → 7.1 % (January to 30 September 2026). The production tour and landing specs passed again.
+
+## Speed and phone polish (2026-11-15)
+
+### Measurements
+
+All measured on the live site under a throttled phone profile: 390×844, 150 ms latency, about 1.6 Mbit/s down, 4× CPU slowdown. Each figure is a single run, so expect some network variance.
+
+| Measure | Before | After |
+|---|---|---|
+| Landing: first paint | about 4 s (blank until the app loaded) | 0.8 s (branded launch screen) |
+| Landing: largest content | 4.65 s | 2.6 s |
+| Landing → unit board visible | 5.4 s | 3.9 s |
+| Care desk data transferred | 930 KB | 593 KB |
+| Care desk largest content | 3.1 s | 2.7 s |
+| Main script (compressed) | 214 KB | 174 KB |
+| Font | 344 KB | 104 KB |
+| Phone: board rows fully visible above the composer | under 1 | 2 |
+
+### Changes
+
+- **Animated icon package removed from the first load.** `lucide-animated` could not be tree-shaken, so seven icons pulled in its whole set plus framer-motion. Those icons now come from `lucide-react`, and the press feedback is a small CSS "pop" that respects reduced motion. Both packages remain listed as dependencies but are no longer imported.
+- **Inter subset.** The font is cut to Latin, Latin-1 and punctuation, plus arrows, maths symbols and the symbols the UI uses. Both variable axes (weight and optical size) are kept.
+- **Faster first view.** The landing page prefetches the care desk code while idle. `index.html` shows a launch screen that React replaces on first render.
+- **Phone care desk.**
+  - The heading, glance tiles and composer are compact.
+  - The composer is a single row.
+  - "Chat options" becomes an icon button, keeping the same accessible name.
+  - The placeholder is short on phones.
+- **Motion.**
+  - Buttons scale slightly on press.
+  - Dialogs fade and scale in over about 0.2 s.
+  - Reduced motion is respected.
+  - A slide-in for side panels was tried and dropped because it conflicted with how the source panel opens.
+- **Landing.** Spacing is tightened so the page fits a 1440×900 screen without scrolling, as the layout test requires. The removal test now expects the current "How it works" link; "Walkthrough" was replaced earlier in this session.
+
+### Verification
+
+- **Typecheck:** passed.
+- **Unit tests:** 425/425.
+- **Full local browser suite:** 208 passed, 2 skipped, 2 failed. Both failures are `progression.spec.ts:42`, "opens the source document".
+  - That test fails the same way on the previous commit against the same local database: 1 pass in 3 runs on each. I had rebuilt and reseeded the local database, which left duplicate records (React duplicate-key warnings).
+  - On the live site, opening a source shows the quoted source text on desktop and phone.
+- **Earlier failures in this pass:**
+  - The note tests in `polish.spec` fail only when parallel workers write notes for the same patient; alone they pass 8/8.
+  - The progression row-count failure was a race in the test.
+- **Production:** tour and landing specs 10/10 after Vercel deployment `dpl_AdqnUodoJt3YciHHnQ9Tp1J4ip3r`. The API was unchanged in this pass.

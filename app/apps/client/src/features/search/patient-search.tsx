@@ -1,6 +1,6 @@
 import { LoadMore } from '../../components/load-more';
 import * as React from 'react';
-import { SearchIcon } from 'lucide-animated';
+import { Search as SearchIcon } from 'lucide-react';
 import { Badge, Button, Input, Select, Spinner, useAnimatedIcon } from '@glucoflow/ui';
 import { useSearchRecords, useSourceUrl } from '../../lib/queries';
 import { Dialog, DialogContent, DialogHeader } from '@glucoflow/ui';
@@ -84,7 +84,7 @@ export function PatientSearch({ patientId }: { patientId: string }): React.React
           }}
           aria-label="Search this patient's records"
         >
-          <SearchIcon ref={ref as never} size={16} aria-hidden />
+          <SearchIcon ref={ref} size={16} aria-hidden />
           <span className="hidden sm:inline">Search</span>
         </Button>
       </div>

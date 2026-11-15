@@ -176,3 +176,17 @@ details[open] > summary { color:var(--color-ink); }
 @media(prefers-reduced-motion:reduce) { .loading-orb-gaze { transition:none; transform:none!important; } }
 
 @media (hover:hover) and (prefers-reduced-motion:no-preference) { .loading-orb:hover .loading-orb-body { animation:orb-sway 1.1s ease-in-out infinite; } }
+
+/* Icon feedback pop (see useAnimatedIcon) */
+@keyframes gf-icon-pop { 0% { transform: scale(1); } 45% { transform: scale(1.18) translateX(-1px); } 100% { transform: scale(1); } }
+[data-icon-pop] { animation: gf-icon-pop .18s ease-out; transform-origin: center; }
+
+/* Snappy, quiet motion: dialogs ease in, controls respond to the press. */
+@keyframes gf-fade { from { opacity: 0; } }
+@keyframes gf-dialog-in { from { opacity: 0; scale: .97; } }
+@media (prefers-reduced-motion: no-preference) {
+  .gf-dialog-overlay[data-state="open"] { animation: gf-fade .18s ease-out; }
+  .gf-dialog[data-state="open"] { animation: gf-dialog-in .22s cubic-bezier(.2, .9, .3, 1); }
+  .care-board-patient, .care-board-feed { transition: scale .12s ease-out; }
+  .care-board-patient:active, .care-board-feed:active { scale: .98; }
+}

@@ -1,33 +1,25 @@
 import * as React from 'react';
-import { useReducedMotion } from 'motion/react';
 
 /**
- * Lucide Animated icons from the documented package (lucide-animated).
- *
- * An animated icon plays once, after its associated interaction, for 120-200 ms
- * where the icon supports configuration. Reduced motion is respected and clinical
- * values are never animated.
+ * A short CSS "pop" on an icon after its interaction (about 180 ms).
+ * Uses no animation library, so it adds nothing to the first load.
+ * Reduced motion is respected and clinical values are never animated.
  */
-export type AnimatedIconHandle = {
-  startAnimation: () => void;
-  stopAnimation: () => void;
-};
+export type AnimatedIconHandle = SVGSVGElement;
 
 export function useAnimatedIcon(durationMs = 180): {
-  ref: React.RefObject<AnimatedIconHandle | null>;
+  ref: React.RefObject<SVGSVGElement | null>;
   play: () => void;
 } {
-  const ref = React.useRef<AnimatedIconHandle | null>(null);
-  const reducedMotion = useReducedMotion();
-
+  const ref = React.useRef<SVGSVGElement | null>(null);
   const play = React.useCallback(() => {
-    if (reducedMotion) return;
-    const handle = ref.current;
-    if (!handle) return;
-    handle.startAnimation();
-    window.setTimeout(() => handle.stopAnimation(), durationMs);
-  }, [durationMs, reducedMotion]);
-
+    const node = ref.current;
+    if (!node || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    node.removeAttribute('data-icon-pop');
+    void node.getBoundingClientRect(); // restart the animation
+    node.setAttribute('data-icon-pop', '');
+    window.setTimeout(() => node.removeAttribute('data-icon-pop'), durationMs);
+  }, [durationMs]);
   return { ref, play };
 }
 
