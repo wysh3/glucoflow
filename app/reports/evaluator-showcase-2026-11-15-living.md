@@ -21,3 +21,16 @@ Verification:
   - Rollback image: `sha256:5f488f621ad4d734392ae494d979cd8f147553d1670a7dc60f0bbe820c72fd50`.
 - Web: Vercel `dpl_Hj2i6rKyxwxo3aQRQaFwD35EiVUx`. Production tour and landing specs passed 10/10.
 - On the live site I drove the loop as the demo doctor: capture → 5/5 sandbox cases → approve → reuse preview. This left "Verify specimen receipt" v7 approved for the demo clinic.
+
+## Hosted chart cleanup (2026-11-15)
+
+With the user's confirmation, I deleted two old test reports for Asha Rao (synthetic) in one transaction:
+
+- `synthetic-smoke-2026-10-03.pdf`: HbA1c 7.8 %, approved twice.
+- `synthetic-deployment-audit-2026-10-04.pdf`: HbA1c 6.73 %.
+
+Together they put three conflicting 3 October values on the progression chart. The rows that depended on them and 2 finished jobs were removed with them. No `results` rows referenced them.
+
+The backup is in the git-ignored `.local/` directory.
+
+After the cleanup, the live chart shows four results: 8.2 → 7.9 → 7.5 → 7.1 % (January to 30 September 2026). The production tour and landing specs passed again.
