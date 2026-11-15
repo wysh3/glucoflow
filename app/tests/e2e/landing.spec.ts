@@ -4,6 +4,9 @@ test('the public home opens the synthetic inpatient care workspace in one click'
   await page.goto('/');
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole('heading', { name: 'Your care team, a little more connected.', level: 1 })).toBeVisible();
+  const band = page.getByRole('region', { name: 'Problem, solution and scale' });
+  await expect(band).toContainText('The problem');
+  await expect(band).toContainText('Built to scale');
   await page.getByTestId('demo-card-clinic').click();
   await expect(page).toHaveURL(/\/clinic\/care$/);
   await expect(page.getByRole('heading', { name: 'Care workspace', level: 1 })).toBeVisible();

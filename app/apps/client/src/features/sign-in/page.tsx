@@ -1,4 +1,4 @@
-import { ArrowRight, FileText, Users, Check, ArrowUpRight, Sparkles, Database, ShieldCheck, FlaskConical } from 'lucide-react';
+import { ArrowRight, AlertTriangle, Layers, Check, ArrowUpRight, Sparkles, Database, ShieldCheck, FlaskConical } from 'lucide-react';
 import {demoAccounts,demoEnabled,type DemoAccount} from '../../auth/demo';
 import * as React from 'react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
@@ -74,15 +74,17 @@ export function SignInPage(): React.ReactElement {
         </figure>
         </div>
 
-        <div className="mt-8 overflow-hidden rounded-2xl border border-[#e8ddd2] bg-[#fffbf7]/80 shadow-[0_8px_30px_-20px_rgba(96,66,44,0.18)] sm:mt-10" role="region" aria-label="Illustrative workflow preview">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#e8ddd2] px-5 py-3">
-            <p className="text-sm font-medium text-[#263f3b]">“What’s still waiting for a handover?”</p>
-            <span className="text-[11px] text-[#58665e]">Illustrative workflow · Dev Mehta, fictional</span>
-          </div>
-          <div className="grid gap-5 px-5 py-5 sm:grid-cols-3 sm:gap-8">
-            <div className="flex items-start gap-3"><FileText size={18} className="mt-0.5 shrink-0 text-[#34776b]" aria-hidden /><div><p className="text-sm font-medium text-[#263f3b]">Start with the source</p><p className="mt-1 text-xs leading-5 text-[#58665e]">Collection is recorded. Lab receipt is still unconfirmed.</p></div></div>
-            <div className="flex items-start gap-3"><Users size={18} className="mt-0.5 shrink-0 text-[#34776b]" aria-hidden /><div><p className="text-sm font-medium text-[#263f3b]">Keep the owner in view</p><p className="mt-1 text-xs leading-5 text-[#58665e]">Prepare a handover for the lab team, with its supporting events.</p></div></div>
-            <div className="flex items-start gap-3"><Check size={18} className="mt-0.5 shrink-0 text-[#34776b]" aria-hidden /><div><p className="text-sm font-medium text-[#263f3b]">You make the call</p><p className="mt-1 text-xs leading-5 text-[#58665e]">Review the proposed action. Keep its source and approval history.</p></div></div>
+        <div className="mt-8 overflow-hidden rounded-2xl border border-[#e8ddd2] bg-[#fffbf7]/80 shadow-[0_8px_30px_-20px_rgba(96,66,44,0.18)] sm:mt-10" role="region" aria-label="Problem, solution and scale">
+          <div className="grid divide-y divide-[#efe4da] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+            <div className="px-5 py-5"><p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#b0572f]"><AlertTriangle size={14} aria-hidden /> The problem</p>
+              <p className="mt-2 text-sm font-medium leading-6 text-[#263f3b]">In diabetic emergencies like DKA and HHS, care waits on lab results that cross three teams.</p>
+              <p className="mt-1.5 text-xs leading-5 text-[#58665e]">A sample not collected, a specimen the lab never logged, a result nobody acknowledged. Today these gaps surface through phone calls and memory, often at shift change.</p></div>
+            <div className="px-5 py-5"><p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#34776b]"><Check size={14} aria-hidden /> What GlucoFlow does</p>
+              <p className="mt-2 text-sm font-medium leading-6 text-[#263f3b]">One live board shows where every order is stuck and who owns the next step.</p>
+              <p className="mt-1.5 text-xs leading-5 text-[#58665e]">Status comes from hospital-system events, not tick-boxes. Work closes only when the evidence arrives, and a corrected result reopens it. Gluco drafts handovers; a clinician approves.</p></div>
+            <div className="px-5 py-5"><p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#34776b]"><Layers size={14} aria-hidden /> Built to scale</p>
+              <p className="mt-2 text-sm font-medium leading-6 text-[#263f3b]">Driven by the order, collection, receipt and result steps hospitals already record.</p>
+              <p className="mt-1.5 text-xs leading-5 text-[#58665e]">Clinic isolation enforced in the database, stateless cloud containers, and approved care routines one ward can reuse in the next. <Link to="/how-it-works" className="font-medium text-[#286e64] underline underline-offset-2">How it works</Link></p></div>
           </div>
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-3" aria-label="What is real in this demo">

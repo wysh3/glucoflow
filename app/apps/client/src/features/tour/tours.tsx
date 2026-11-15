@@ -25,7 +25,7 @@ export const chapters = [
   { id: 'roles', title: 'Every role, its own work', summary: 'Nurse shift and lab queue views' },
   { id: 'learning', title: 'Learning, governed', summary: 'Care routines, activity, history' },
   { id: 'records', title: 'Patient records', summary: 'Approved results, trends, report review' },
-  { id: 'trust', title: 'Under the hood', summary: 'Architecture and server-enforced rules' },
+  { id: 'trust', title: 'Under the hood', summary: 'Architecture, scale and server-enforced rules' },
 ] as const;
 
 // ——— Shared steps ———
@@ -107,7 +107,8 @@ const quick: TourStep[] = [
   {
     ...careStep({ id: 'quick-welcome', title: 'Your diabetes unit shift starts now', body: null }),
     body: <>
-      <p>In about three minutes you will see how GlucoFlow stops work between doctors, nurses and the lab from falling through the cracks.</p>
+      <p><strong>The problem:</strong> in DKA and HHS care, a sample nobody collected or a result nobody acknowledged can quietly hold up treatment. Today staff find these gaps by phone.</p>
+      <p>In about three minutes you will see GlucoFlow make every gap visible, owned and closed by evidence.</p>
       <ul>
         <li>See what is stuck, and why</li>
         <li>Watch the lab system close a task with <strong>evidence</strong></li>
@@ -126,10 +127,14 @@ const quick: TourStep[] = [
         <li><strong>Evidence:</strong> every status comes from a recorded source event</li>
         <li><strong>Ownership:</strong> every open step has a named owner</li>
         <li><strong>Control:</strong> nothing runs without a person approving it</li>
+        <li><strong>Scale:</strong> the same hospital events in every ward, isolated per clinic in the database</li>
       </ul>
       <p>The full tour adds approval, handover, other roles, learning, patient records and the architecture.</p>
     </>,
-    actions: [{ label: 'Continue: full tour', primary: true, run: (context) => context.start('full', 'reply') }],
+    actions: [
+      { label: 'How it scales', run: (context) => { context.stop(); context.navigate('/how-it-works#hiw-scale'); } },
+      { label: 'Continue: full tour', primary: true, run: (context) => context.start('full', 'reply') },
+    ],
   }),
 ];
 
@@ -291,7 +296,15 @@ const full: TourStep[] = [
     </>,
   },
   {
-    id: 'rules', chapter: 'Under the hood', route: '/how-it-works', target: 'css:.hiw-grid',
+    id: 'scale', chapter: 'Under the hood', route: '/how-it-works', target: 'css:section[aria-labelledby="hiw-scale"]',
+    title: 'From one ward to a hospital network',
+    body: <>
+      <p>GlucoFlow reads the order, collection, receipt and result events hospital systems already record. A new clinic is a new tenant, isolated in the database, not a new deployment.</p>
+      <p>The pilot path: agree sources, measure a baseline, run in shadow mode, then compare.</p>
+    </>,
+  },
+  {
+    id: 'rules', chapter: 'Under the hood', route: '/how-it-works', target: 'css:section[aria-labelledby="hiw-guarantees"]',
     title: 'Rules the server enforces',
     body: <><p>Role-gated events, evidence-based closure, corrections that reopen work, approval before monitoring, append-only history and database-level isolation. Each one holds whatever the screen shows.</p></>,
   },

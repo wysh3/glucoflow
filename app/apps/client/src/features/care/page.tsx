@@ -1,3 +1,5 @@
+import type { CareWorkspace } from '@glucoflow/contracts';
+import { unitBoard } from './unit-board';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import {
@@ -386,7 +388,7 @@ function CareWorkspacePage({ actorId }: { actorId: string }) {
           <EventInspector event={event} workspace={workspace} close={() => setEventId(null)} />
         </>
       ) : null}
-      {pipelineOpen && workspace ? <CarePipeline workspace={workspace} openSource={openSource} close={() => setPipelineOpen(false)} openEpisode={(id) => { setPipelineOpen(false); const next = new URLSearchParams(params); next.set('encounter', id); setParams(next, { preventScrollReset: true }); }} /> : null}
+      {pipelineOpen && workspace ? <CarePipeline workspace={workspace} encounterId={pipelineFocus(workspace)} openSource={openSource} close={() => setPipelineOpen(false)} openEpisode={(id) => { setPipelineOpen(false); const next = new URLSearchParams(params); next.set('encounter', id); setParams(next, { preventScrollReset: true }); }} /> : null}
       {monitoringOpen && workspace ? <ShiftMonitoringPanel workspace={workspace} state={state} openSource={openSource} close={() => setMonitoringOpen(false)} /> : null}
       {preview && workspace ? <CareDialog open onOpenChange={open => { if (!open) setPreview(null); }} title={preview === 'appointment' ? 'Appointment message' : 'Unit workload preview'} description="Synthetic preview only. No external action is performed.">
         {preview === 'appointment' ? <AppointmentPreview key={workspace.id} workspace={workspace} /> : <SupervisorPreview />}
@@ -435,4 +437,11 @@ function CanvasAction({ label, icon: Icon, disabled, onClick }: {
       <Icon size={15} aria-hidden /> <span>{label}</span>
     </Button>
   );
+}
+
+/** Open the pipeline on the encounter a person last recorded evidence for, else the most urgent board row. */
+function pipelineFocus(workspace: CareWorkspace): string | undefined {
+  const recorded = workspace.events.filter((event) => event.recordedBy)
+    .sort((a, b) => Date.parse(b.receivedAt) - Date.parse(a.receivedAt))[0];
+  return recorded?.encounterId ?? unitBoard(workspace, Date.now())[0]?.encounter.id;
 }

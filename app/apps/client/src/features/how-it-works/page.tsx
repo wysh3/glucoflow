@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   ArrowDown, ArrowRight, Bot, CheckCircle2, Database, FileClock, FlaskConical, Globe, Lock,
-  RefreshCcw, ServerCog, ShieldCheck, Smartphone, UserCheck, Workflow, XCircle,
+  RefreshCcw, ServerCog, Plug, Building2, Boxes, Repeat, ShieldCheck, Smartphone, UserCheck, Workflow, XCircle,
 } from 'lucide-react';
 import './how-it-works.css';
 
@@ -53,7 +53,26 @@ function LiveStatus() {
   </div>;
 }
 
+const scale = [
+  { icon: Plug, title: 'Connect, do not replace', text: 'Reads the order, collection, receipt, result and acknowledgement events a hospital system already records. Today they are simulated; a standards-based HIS/LIS adapter is the next integration step.' },
+  { icon: Building2, title: 'A new clinic is a new tenant', text: 'PostgreSQL row-level security isolates every clinic and person in the database itself, so adding a site is configuration, not a new deployment.' },
+  { icon: Boxes, title: 'Stateless, horizontally scaled', text: 'The API and worker run as containers that scale out on Azure. Durable jobs and revisions live in the database, so restarts lose nothing.' },
+  { icon: Repeat, title: 'Learning that travels', text: 'A follow-up pattern one team confirms becomes a versioned care routine. It is tested and approved before another ward reuses it with its own evidence.' },
+];
+const pilot = [
+  { title: 'Agree sources and owners', text: 'Map which hospital events mark each step and who owns the next one.' },
+  { title: 'Measure the baseline', text: 'Record current receipt and acknowledgement delays and time spent chasing.' },
+  { title: 'Run in shadow mode', text: 'GlucoFlow tracks alongside existing practice without changing it.' },
+  { title: 'Compare and decide', text: 'Delays, chasing time and alert burden against the baseline, reviewed with clinicians.' },
+];
+
 export function HowItWorksPage() {
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (!hash) return;
+    const timer = window.setTimeout(() => document.getElementById(hash.slice(1))?.closest('section')?.scrollIntoView({ block: 'start' }), 50);
+    return () => window.clearTimeout(timer);
+  }, [hash]);
   return <main className="hiw">
     <header className="hiw-hero">
       <p className="hiw-kicker">How it works</p>
@@ -80,6 +99,21 @@ export function HowItWorksPage() {
         </div>
         <div className="hiw-node" data-kind="ai"><Bot size={18} aria-hidden /><strong>Gluco assistant runtime</strong><span>Private sidecar with two scoped tools. Replies are validated against workspace IDs; it cannot write data or invent sources.</span></div>
       </div>
+    </section>
+
+    <section className="hiw-section" aria-labelledby="hiw-scale">
+      <h2 id="hiw-scale">From one ward to a hospital network</h2>
+      <p className="hiw-sub">The demo runs one simulated diabetes unit. The design does not change as sites are added.</p>
+      <div className="hiw-grid hiw-grid-4">
+        {scale.map(({ icon: Icon, title, text }) => <article key={title} className="hiw-card">
+          <Icon size={18} aria-hidden /><h3>{title}</h3><p>{text}</p>
+        </article>)}
+      </div>
+      <h3 className="hiw-h3">Path to a hospital pilot</h3>
+      <ol className="hiw-steps">
+        {pilot.map((step, index) => <li key={step.title}><span aria-hidden>{index + 1}</span><div><strong>{step.title}</strong><p>{step.text}</p></div></li>)}
+      </ol>
+      <p className="hiw-note">A proposed 60–90 day single-ward pilot. No time saving or clinical outcome has been measured yet.</p>
     </section>
 
     <section className="hiw-section" aria-labelledby="hiw-guarantees">

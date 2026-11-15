@@ -177,7 +177,8 @@ export function AppShell({ children }: { children: React.ReactNode }): React.Rea
       sidebarFooter={me ? (
         <div className="px-2 py-1 text-xs text-ink-soft">
           <div className="sidebar-workspace-controls">{workspaceControls}</div>
-          <p className="break-words font-medium text-ink">{me.actor.displayName}</p>
+          <p className="text-[11px]">{me.actor.displayName.includes('(synthetic)') ? 'Demo login account' : 'Signed in as'}</p>
+          <p className="mt-0.5 break-words font-medium text-ink">{me.actor.displayName}</p>
           <p className="mt-0.5">{clinicContexts.length === 0 && patientContexts.length === 0 && hospitalAccess && hospitalAccess.length
             ? 'Hospital staff' : describeRoles(me)}</p>
         </div>

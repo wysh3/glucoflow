@@ -128,7 +128,7 @@ export function EpisodeDrawer({ workspace, openSource, openDetails, onCoordinate
           <p className="font-medium">{inspectedRecord.label}: {inspectedRecord.value} {inspectedRecord.dimensionless ? '(dimensionless)' : inspectedRecord.unit}</p>
           <p><When value={inspectedRecord.occurredAt} /> · Reference {inspectedRecord.sourceRef}</p>
           <p>{episodeRecordStatus(inspectedRecord,records)} · Original source not connected</p>
-          <p>Recorded by {inspectedRecord.recorder?.name ?? 'Unknown'}{inspectedRecord.recorder?.simulated ? ' (simulated)' : ''}</p>
+          <p>Recorded by {inspectedRecord.recorder?.name ?? 'simulation seed (fictional HIS/LIS record)'}{inspectedRecord.recorder?.simulated ? ' (simulated)' : ''}</p>
         </div>}
         <div className="text-sm">
           <Button size="sm" variant="quiet" aria-expanded={showRecords ?? series.length===0} onClick={()=>setShowRecords(!(showRecords ?? series.length===0))}>Values and source references ({records.length})</Button>
@@ -136,7 +136,7 @@ export function EpisodeDrawer({ workspace, openSource, openDetails, onCoordinate
             <p className="break-words font-medium">{record.label}{record.kind === 'followup' && <span className="ml-2 text-xs font-normal text-ink-soft">Follow-up</span>}</p>
             <p className="whitespace-pre-wrap break-words">{record.value} {record.dimensionless ? '(dimensionless)' : record.unit}</p>
             <p className="break-words text-xs text-ink-soft"><When value={record.occurredAt} /> · Reference {record.sourceRef}</p>
-            <p className="text-xs text-ink-soft">{episodeRecordStatus(record,records)} · Recorded by {record.recorder?.name ?? 'Unknown'}{record.recorder?.simulated ? ' (simulated)' : ''}</p>
+            <p className="text-xs text-ink-soft">{episodeRecordStatus(record,records)} · Recorded by {record.recorder?.name ?? 'simulation seed'}{record.recorder?.simulated ? ' (simulated)' : ''}</p>
             {record.revisionReason && <p className="text-xs text-ink-soft">Revision reason: {record.revisionReason}</p>}
           </li>)}</ul>}
         </div>

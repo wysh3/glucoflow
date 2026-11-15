@@ -99,6 +99,8 @@ test('the full A–Z tour visits every chapter across pages, dialogs and roles',
   await expect(page).toHaveURL(/\/clinic\/queue$/);
   await next(page); await title(page, 'Real software, simulated hospital');
   await expect(page).toHaveURL(/\/how-it-works$/);
+  await next(page); await title(page, 'From one ward to a hospital network');
+  await evidence('scale', page);
   await next(page); await title(page, 'Rules the server enforces');
   await next(page); await title(page, 'You have seen all of GlucoFlow');
   await card(page).getByRole('button', { name: 'Back to the care desk' }).click();
@@ -111,5 +113,6 @@ test('the how-it-works page reports the live API and what is not claimed', async
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Coordination you can audit');
   await expect(page.getByRole('status')).toContainText(/Live API responded in \d+ ms/);
   await expect(page.getByRole('heading', { name: 'Not claimed' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'From one ward to a hospital network' })).toBeVisible();
   await evidence('how-it-works', page);
 });

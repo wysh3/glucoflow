@@ -162,7 +162,7 @@ export function EpisodeCoordination({ workspace, encounterId, state, close, acto
         {!records.length && <p className="text-ink-soft">No source records added for this encounter.</p>}
         <div className="divide-y divide-border">{records.slice().reverse().map(item => <article key={item.id} className="grid gap-1 py-3"><div className="flex justify-between gap-2"><strong>{item.label}</strong><span className="text-ink-soft">{item.kind === 'followup' ? 'Follow-up' : 'Observation'}</span></div>
           <p className="whitespace-pre-wrap break-words">{item.value} {item.dimensionless ? '(dimensionless)' : item.unit}</p><p className="text-xs text-ink-soft">Observed <When value={item.occurredAt} /> · Reference: {item.sourceRef}</p>
-          <p className="text-xs text-ink-soft">{episodeRecordStatus(item,records)} · Recorded by {item.recorder ? `${item.recorder.name}${item.recorder.simulated ? ' (simulated)' : ''}` : 'Unknown'}</p>
+          <p className="text-xs text-ink-soft">{episodeRecordStatus(item,records)} · Recorded by {item.recorder ? `${item.recorder.name}${item.recorder.simulated ? ' (simulated)' : ''}` : 'simulation seed'}</p>
           {item.revisionReason && <p className="text-xs text-ink-soft">Revision reason: {item.revisionReason}</p>}
           {workspace.role !== 'coordinator' && !records.some(other=>other.supersedesId===item.id) && <div className="flex gap-2">
             <Button size="sm" variant="quiet" disabled={busy} onClick={()=>openForm(`correct:${item.id}`)}>Correct transcription</Button>

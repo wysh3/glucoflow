@@ -97,3 +97,16 @@ Simulated feeds and fictional patients only. No new hospital, ABDM, model-accura
 ## Hosted demo data cleanup (2026-11-15)
 
 With the user's confirmation, removed leftover test data for Asha Rao (synthetic) from the hosted database in a single transaction. The removed rows were 7 uploads with no approved facts (4 repeat `synthetic-lab.pdf`, 1 repeat photo pair and 2 `synthetic-hermes-proof` PDFs), the rows that depend on them, 7 finished jobs and 1 QA note. A guard refused deletion if any approved facts or approval batches existed. Kept: every document that has approved facts, one duplicate (to show duplicate detection), the quarantined wrong-patient PDF and the photo sample awaiting review. The backup is in the git-ignored `.local/` directory. Verified afterwards: the live review queue shows 12 rows, and the production tour and landing specs passed 10/10 (desktop and mobile).
+
+## Judge-perspective pass (2026-11-15)
+
+I walked the live site the way an evaluator would, on desktop (1440×900) and phone (390×844), and fixed what got in the way:
+
+- **Landing:** the illustrative card is replaced by a three-part band: *The problem* (DKA/HHS lab gaps found by phone), *What GlucoFlow does* (an evidence-driven board with human approval) and *Built to scale*. It cites no statistics.
+- **How it works:** new section "From one ward to a hospital network", covering the event-based integration, clinic-as-tenant isolation, stateless containers and approved routines reused across wards. It also gives a four-step pilot path and states that nothing has been measured yet.
+- **Tours:** the quick tour opens with the problem and closes with a *Scale* point and a "How it scales" button. The full tour adds a scale step to "Under the hood".
+- **Pipeline:** it now opens on the patient whose evidence was last recorded (the one the evaluator just updated), not on the first encounter.
+- **Labels:** seeded events say "Simulation seed (fictional HIS/LIS record)" instead of "Unknown". The sidebar labels the login account as "Demo login account", which separates it from the demo person.
+- **Mobile:** the care toolbar scrolls horizontally instead of clipping "Dr Mira Rao".
+
+Verification: typecheck passed; unit tests 424/424; local landing, tour and care e2e 20/20 (desktop and mobile); production tour and landing specs 10/10 after Vercel deployment `dpl_BksTafvkxbJgViQt9HmnZwYJJ24e`. The API was not changed.

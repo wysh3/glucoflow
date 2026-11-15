@@ -4,18 +4,9 @@
       "/Users/wysh/.local/share/fnm/node-versions/v22.23.1/installation/bin/node",
       "/Users/wysh/coding/thon/iitb-health/app/node_modules/.pnpm/@playwright+test@1.63.0/node_modules/@playwright/test/cli.js",
       "test",
-      "tests/e2e/care-workspace.spec.ts",
-      "tests/e2e/care-episode.spec.ts",
-      "tests/e2e/canvas-workspace.spec.ts",
-      "tests/e2e/navigation-audit.spec.ts",
-      "tests/e2e/care-role-work.spec.ts",
-      "tests/e2e/care-shift-monitoring.spec.ts",
-      "tests/e2e/care-preview.spec.ts",
-      "tests/e2e/care-multiactor.spec.ts",
       "tests/e2e/landing.spec.ts",
-      "tests/e2e/progression.spec.ts",
-      "tests/e2e/review.spec.ts",
-      "--project=desktop-chromium"
+      "tests/e2e/evaluator-tour.spec.ts",
+      "tests/e2e/care-workspace.spec.ts"
     ],
     "configFile": "/Users/wysh/coding/thon/iitb-health/app/playwright.config.ts",
     "rootDir": "/Users/wysh/coding/thon/iitb-health/app/tests/e2e",
@@ -93,496 +84,6 @@
   },
   "suites": [
     {
-      "title": "canvas-workspace.spec.ts",
-      "file": "canvas-workspace.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "the upstream shell wraps the public entry and stays within the viewport",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1196,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:32:51.876Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "45a9cbce409d3fea7e4b-2d71640622bbca989b91",
-          "file": "canvas-workspace.spec.ts",
-          "line": 4,
-          "column": 1
-        },
-        {
-          "title": "working panels preserve the conversation draft and browser history",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 4535,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:32:53.372Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "45a9cbce409d3fea7e4b-45a806aeac50c40eb0cf",
-          "file": "canvas-workspace.spec.ts",
-          "line": 11,
-          "column": 1
-        },
-        {
-          "title": "sidebar controls keep authorized record navigation usable",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 10763,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:32:57.919Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "45a9cbce409d3fea7e4b-5ea90aa3fd38d02c34ce",
-          "file": "canvas-workspace.spec.ts",
-          "line": 35,
-          "column": 1
-        },
-        {
-          "title": "resizing the sidebar cannot squeeze the conversation into an unusable split",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 4612,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:33:08.692Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "45a9cbce409d3fea7e4b-81600f18edc26a688617",
-          "file": "canvas-workspace.spec.ts",
-          "line": 57,
-          "column": 1
-        },
-        {
-          "title": "collapsed desktop navigation remains a labelled icon rail after reload",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3277,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:33:13.314Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "45a9cbce409d3fea7e4b-ac1925325d654da4d7ab",
-          "file": "canvas-workspace.spec.ts",
-          "line": 82,
-          "column": 1
-        }
-      ]
-    },
-    {
-      "title": "care-episode.spec.ts",
-      "file": "care-episode.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "episode navigation keeps encounter sources and tasks together and supports browser back",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 5484,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:33:16.613Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "e7b9e15641d10c9ee9db-8b585d607c47cc539ac9",
-          "file": "care-episode.spec.ts",
-          "line": 4,
-          "column": 1
-        },
-        {
-          "title": "appointment preview requires explicit details and review; changing details clears approval",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3856,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:33:22.109Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "e7b9e15641d10c9ee9db-bdd978f53a25be8bdb7b",
-          "file": "care-episode.spec.ts",
-          "line": 27,
-          "column": 1
-        }
-      ]
-    },
-    {
-      "title": "care-multiactor.spec.ts",
-      "file": "care-multiactor.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "separate authenticated staff progress source work and receive a named handover",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 90000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 33840,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:33:26.391Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "04fe1a268ea40f27f9bb-69b98caa48a677e4852f",
-          "file": "care-multiactor.spec.ts",
-          "line": 12,
-          "column": 1
-        }
-      ]
-    },
-    {
-      "title": "care-preview.spec.ts",
-      "file": "care-preview.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "appointment approval resets after every detail change and unit preview stays illustrative",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3749,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:34:00.251Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "f7976015f0614151a21b-b5ffa23e8c3e339f5af0",
-          "file": "care-preview.spec.ts",
-          "line": 40,
-          "column": 1
-        }
-      ]
-    },
-    {
-      "title": "care-role-work.spec.ts",
-      "file": "care-role-work.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "nurse sees a source-backed specimen exception and can soft-acknowledge without closure",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2198,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:34:04.019Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "4db4622bd0a914b71671-1c693dc406d147139c95",
-          "file": "care-role-work.spec.ts",
-          "line": 50,
-          "column": 1
-        },
-        {
-          "title": "lab separates expected and validated specimens from missing processing evidence",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3297,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:34:06.226Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "4db4622bd0a914b71671-a44c9092446781cfeecb",
-          "file": "care-role-work.spec.ts",
-          "line": 68,
-          "column": 1
-        },
-        {
-          "title": "reviewed handover export and named receipt keep the exact saved version",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 8714,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:34:09.533Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "4db4622bd0a914b71671-795676c0e2e24aacbb55",
-          "file": "care-role-work.spec.ts",
-          "line": 86,
-          "column": 1
-        }
-      ]
-    },
-    {
-      "title": "care-shift-monitoring.spec.ts",
-      "file": "care-shift-monitoring.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "real API shift scope requires approval, can pause/edit/reapprove/stop, and opens evidence",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 5829,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:34:18.264Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "282b93392576d142f58d-60f5c1640664f6b201c8",
-          "file": "care-shift-monitoring.spec.ts",
-          "line": 11,
-          "column": 1
-        }
-      ]
-    },
-    {
       "title": "care-workspace.spec.ts",
       "file": "care-workspace.spec.ts",
       "column": 0,
@@ -604,12 +105,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7421,
+                  "duration": 2616,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-14T19:34:24.124Z",
+                  "startTime": "2026-11-15T09:59:07.838Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -638,12 +139,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7572,
+                  "duration": 2384,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-14T19:34:31.559Z",
+                  "startTime": "2026-11-15T09:59:10.625Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -672,12 +173,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 12973,
+                  "duration": 3894,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-14T19:34:39.145Z",
+                  "startTime": "2026-11-15T09:59:13.015Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -706,12 +207,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 17414,
+                  "duration": 5347,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-14T19:34:52.144Z",
+                  "startTime": "2026-11-15T09:59:16.913Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -740,12 +241,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7673,
+                  "duration": 2263,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-14T19:35:09.589Z",
+                  "startTime": "2026-11-15T09:59:22.263Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -756,6 +257,388 @@
           "id": "3e586e7a46530bc31d90-071f1cb14d5c8750016a",
           "file": "care-workspace.spec.ts",
           "line": 215,
+          "column": 1
+        },
+        {
+          "title": "a tester creates a workspace, asks with explicit offline mode, and reloads persisted answers",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile-chromium",
+              "projectName": "mobile-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2436,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T09:59:53.289Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3e586e7a46530bc31d90-7f06b590c4cf3461b9a4",
+          "file": "care-workspace.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "source evidence opens from the worklist without leaving the workspace",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile-chromium",
+              "projectName": "mobile-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2411,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T09:59:55.816Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3e586e7a46530bc31d90-3a80da9b0c0cc5119988",
+          "file": "care-workspace.spec.ts",
+          "line": 27,
+          "column": 1
+        },
+        {
+          "title": "saved workspaces recover after a failed reopen without mixing conversations",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile-chromium",
+              "projectName": "mobile-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3832,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T09:59:58.231Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3e586e7a46530bc31d90-3a2080bd0a5ede209ed3",
+          "file": "care-workspace.spec.ts",
+          "line": 44,
+          "column": 1
+        },
+        {
+          "title": "source-confirmed monitoring becomes a reviewed skill and proposes a new task with target evidence",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile-chromium",
+              "projectName": "mobile-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5492,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T10:00:02.066Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3e586e7a46530bc31d90-dab128ed284c501ea1b5",
+          "file": "care-workspace.spec.ts",
+          "line": 129,
+          "column": 1
+        },
+        {
+          "title": "a workflow layout is tested, approved, and rolled back through human review",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile-chromium",
+              "projectName": "mobile-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2288,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T10:00:07.561Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3e586e7a46530bc31d90-a0c26a249f37688de35a",
+          "file": "care-workspace.spec.ts",
+          "line": 215,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "evaluator-tour.spec.ts",
+      "file": "evaluator-tour.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "the quick tour runs a real source event that closes work by evidence",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chromium",
+              "projectName": "desktop-chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8495,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T09:59:24.534Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ef6292b95c1d96f58db1-f4b0b75c4845ffe1a39c",
+          "file": "evaluator-tour.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "the full A–Z tour visits every chapter across pages, dialogs and roles",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chromium",
+              "projectName": "desktop-chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16106,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T09:59:33.035Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ef6292b95c1d96f58db1-56db72610c23158bb61a",
+          "file": "evaluator-tour.spec.ts",
+          "line": 52,
+          "column": 1
+        },
+        {
+          "title": "the how-it-works page reports the live API and what is not claimed",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-chromium",
+              "projectName": "desktop-chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1401,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T09:59:49.145Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ef6292b95c1d96f58db1-31f74995880bbe6416e2",
+          "file": "evaluator-tour.spec.ts",
+          "line": 111,
+          "column": 1
+        },
+        {
+          "title": "the quick tour runs a real source event that closes work by evidence",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile-chromium",
+              "projectName": "mobile-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5829,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T10:00:09.858Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ef6292b95c1d96f58db1-542a08a68a6d69cb8baa",
+          "file": "evaluator-tour.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "the full A–Z tour visits every chapter across pages, dialogs and roles",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile-chromium",
+              "projectName": "mobile-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10687,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T10:00:15.691Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ef6292b95c1d96f58db1-50575211ca394d8b7c52",
+          "file": "evaluator-tour.spec.ts",
+          "line": 52,
+          "column": 1
+        },
+        {
+          "title": "the how-it-works page reports the live API and what is not claimed",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile-chromium",
+              "projectName": "mobile-chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1126,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-15T10:00:26.382Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ef6292b95c1d96f58db1-0122c11eb85a2fe8655d",
+          "file": "evaluator-tour.spec.ts",
+          "line": 111,
           "column": 1
         }
       ]
@@ -782,12 +665,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2483,
+                  "duration": 1225,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-14T19:35:17.280Z",
+                  "startTime": "2026-11-15T09:59:50.555Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -816,12 +699,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3036,
+                  "duration": 1224,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-14T19:35:19.773Z",
+                  "startTime": "2026-11-15T09:59:51.783Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -831,53 +714,11 @@
           ],
           "id": "4e5b49d369fd48ca0656-447f54d6d3179ecfcecf",
           "file": "landing.spec.ts",
-          "line": 12,
-          "column": 1
-        }
-      ]
-    },
-    {
-      "title": "navigation-audit.spec.ts",
-      "file": "navigation-audit.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "switching accounts opens the new account home rather than the prior clinic route",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 6806,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:35:22.841Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "8ccca855f8a5131d69f3-ce9062f26515ef83e9e0",
-          "file": "navigation-audit.spec.ts",
-          "line": 26,
+          "line": 15,
           "column": 1
         },
         {
-          "title": "first simulator action has matching evidence and exposes completion",
+          "title": "the public home opens the synthetic inpatient care workspace in one click",
           "ok": true,
           "tags": [],
           "tests": [
@@ -885,19 +726,19 @@
               "timeout": 120000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
+              "projectId": "mobile-chromium",
+              "projectName": "mobile-chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5854,
+                  "duration": 1231,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-14T19:35:29.658Z",
+                  "startTime": "2026-11-15T10:00:27.517Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -905,13 +746,13 @@
               "status": "expected"
             }
           ],
-          "id": "8ccca855f8a5131d69f3-caf649ea466bdd958068",
-          "file": "navigation-audit.spec.ts",
-          "line": 41,
+          "id": "4e5b49d369fd48ca0656-958451b260831d56894b",
+          "file": "landing.spec.ts",
+          "line": 3,
           "column": 1
         },
         {
-          "title": "a chosen assistant mode persists on reload for the same workspace",
+          "title": "the demo role cards sign in without a password",
           "ok": true,
           "tags": [],
           "tests": [
@@ -919,19 +760,19 @@
               "timeout": 120000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
+              "projectId": "mobile-chromium",
+              "projectName": "mobile-chromium",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8743,
+                  "duration": 1230,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-14T19:35:35.523Z",
+                  "startTime": "2026-11-15T10:00:28.752Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -939,743 +780,19 @@
               "status": "expected"
             }
           ],
-          "id": "8ccca855f8a5131d69f3-be7fc6c194f006395307",
-          "file": "navigation-audit.spec.ts",
-          "line": 52,
+          "id": "4e5b49d369fd48ca0656-e8a18945cadf8872a42d",
+          "file": "landing.spec.ts",
+          "line": 15,
           "column": 1
-        },
-        {
-          "title": "an unreachable receipt has no completion marks for patient contact or the next step",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1490,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:35:44.280Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "8ccca855f8a5131d69f3-8262060ad62b56ebfd1a",
-          "file": "navigation-audit.spec.ts",
-          "line": 66,
-          "column": 1
-        },
-        {
-          "title": "clinic navigation groups retained closure screens at either viewport",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 4528,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:35:45.782Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "8ccca855f8a5131d69f3-68c59622a4f21095d012",
-          "file": "navigation-audit.spec.ts",
-          "line": 80,
-          "column": 1
-        },
-        {
-          "title": "a simulated event can safely retry after the server saved it but the response was lost",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 6312,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:35:50.347Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "8ccca855f8a5131d69f3-bfadef0fc90cd15423fe",
-          "file": "navigation-audit.spec.ts",
-          "line": 94,
-          "column": 1
-        },
-        {
-          "title": "trailing slash keeps the care section active and hides the retained guide launcher",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 4700,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:35:56.679Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "8ccca855f8a5131d69f3-31c3a122f3cbc567274f",
-          "file": "navigation-audit.spec.ts",
-          "line": 127,
-          "column": 1
-        },
-        {
-          "title": "trailing slash keeps the retained closure section active",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 4891,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:36:01.391Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "8ccca855f8a5131d69f3-3787f286365350a3e187",
-          "file": "navigation-audit.spec.ts",
-          "line": 137,
-          "column": 1
-        }
-      ]
-    },
-    {
-      "title": "progression.spec.ts",
-      "file": "progression.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "custom dates constrain progression to the selected historical range",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 7210,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:37:11.816Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "632bd77fbc565a652e89-1cc1ce37d9431328234f",
-          "file": "progression.spec.ts",
-          "line": 69,
-          "column": 1
-        }
-      ],
-      "suites": [
-        {
-          "title": "progression",
-          "file": "progression.spec.ts",
-          "line": 10,
-          "column": 6,
-          "specs": [
-            {
-              "title": "shows the approved HbA1c progression with the most recent value",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 29135,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:36:06.307Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "632bd77fbc565a652e89-b17b1ee62b2b35d4b4a2",
-              "file": "progression.spec.ts",
-              "line": 16,
-              "column": 3
-            },
-            {
-              "title": "plots three seeded points and exposes the same values in the table",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 9946,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:36:35.458Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "632bd77fbc565a652e89-9aaf507dfcf56c03adab",
-              "file": "progression.spec.ts",
-              "line": 26,
-              "column": 3
-            },
-            {
-              "title": "shows events and patient notes in separate labelled lanes",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 6270,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:36:45.417Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "632bd77fbc565a652e89-f8e5113ed6ccdba9805e",
-              "file": "progression.spec.ts",
-              "line": 35,
-              "column": 3
-            },
-            {
-              "title": "opens the source document for the approved value",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 6077,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:36:51.692Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "632bd77fbc565a652e89-db14368bbc38d1b9d204",
-              "file": "progression.spec.ts",
-              "line": 42,
-              "column": 3
-            },
-            {
-              "title": "opens original prescription evidence from the context lane",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 5868,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:36:57.774Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "632bd77fbc565a652e89-e39d906ee54eb459fc59",
-              "file": "progression.spec.ts",
-              "line": 49,
-              "column": 3
-            },
-            {
-              "title": "offers the summary export action",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 4935,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:37:03.647Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "632bd77fbc565a652e89-0d0fd178aa7fb3bc2136",
-              "file": "progression.spec.ts",
-              "line": 55,
-              "column": 3
-            },
-            {
-              "title": "search in patient context keeps the patient and returns a source action",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3225,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:37:08.588Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "632bd77fbc565a652e89-76af4d02d6d88f2eb2b8",
-              "file": "progression.spec.ts",
-              "line": 60,
-              "column": 3
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "review.spec.ts",
-      "file": "review.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "two uploaded photos remain separately accessible during review",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 6783,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-14T19:37:57.313Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "12f883ce49bb8436c3d7-713e431c8f3ef6e15ea6",
-          "file": "review.spec.ts",
-          "line": 111,
-          "column": 1
-        }
-      ],
-      "suites": [
-        {
-          "title": "review",
-          "file": "review.spec.ts",
-          "line": 10,
-          "column": 6,
-          "specs": [
-            {
-              "title": "the queue lists documents with an observed state",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 1731,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:37:19.035Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "12f883ce49bb8436c3d7-ab09f958d1c59730f125",
-              "file": "review.spec.ts",
-              "line": 11,
-              "column": 3
-            },
-            {
-              "title": "an approved document offers a reasoned correction rather than another initial review",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 3913,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:37:20.771Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "12f883ce49bb8436c3d7-de8db4ac0931af34b1c9",
-              "file": "review.spec.ts",
-              "line": 20,
-              "column": 3
-            },
-            {
-              "title": "the reviewer queue shows the retry control only for a failed run",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 2522,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:37:24.689Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "12f883ce49bb8436c3d7-fd2faf8767c6cf97e67e",
-              "file": "review.spec.ts",
-              "line": 33,
-              "column": 3
-            },
-            {
-              "title": "review screen keeps patient identity and the fixture label visible",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 12560,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:37:27.239Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "12f883ce49bb8436c3d7-e0b1f6846bc92ab34333",
-              "file": "review.spec.ts",
-              "line": 46,
-              "column": 3
-            }
-          ]
-        },
-        {
-          "title": "review on a narrow screen",
-          "file": "review.spec.ts",
-          "line": 61,
-          "column": 6,
-          "specs": [
-            {
-              "title": "shows the review action without horizontal scrolling",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 7103,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:37:39.808Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "12f883ce49bb8436c3d7-ae4c69a0bc5c129c031e",
-              "file": "review.spec.ts",
-              "line": 64,
-              "column": 3
-            },
-            {
-              "title": "offers explicit Source and Fields tabs",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "desktop-chromium",
-                  "projectName": "desktop-chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 10391,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-11-14T19:37:46.918Z",
-                      "annotations": [],
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "12f883ce49bb8436c3d7-09e11f3edce9b1736578",
-              "file": "review.spec.ts",
-              "line": 93,
-              "column": 3
-            }
-          ]
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-14T19:32:47.635Z",
-    "duration": 316902.17600000004,
-    "expected": 43,
+    "startTime": "2026-11-15T09:59:04.943Z",
+    "duration": 85122.807,
+    "expected": 20,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

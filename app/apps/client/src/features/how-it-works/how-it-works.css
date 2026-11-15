@@ -41,6 +41,14 @@
 .hiw-note code { font-size:.7rem; background:#f2f1ef; padding:.1rem .3rem; border-radius:4px; overflow-wrap:anywhere; }
 .hiw-footer { padding-top:2rem; border-top:1px solid #eeece8; font-size:.8rem; color:#58665e; }
 .hiw-footer a { text-decoration:underline; text-underline-offset:3px; }
+.hiw-grid-4 { grid-template-columns:repeat(4,minmax(0,1fr)); }
+.hiw-h3 { margin-top:1.8rem; font-size:1rem; font-weight:600; color:#263f3b; }
+.hiw-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.75rem; margin-top:.9rem; counter-reset:none; }
+.hiw-steps li { display:flex; gap:.65rem; align-items:flex-start; padding:.9rem 1rem; border-radius:16px; background:#f4f8f6; }
+.hiw-steps li > span { flex-shrink:0; display:grid; place-items:center; width:1.6rem; height:1.6rem; border-radius:50%; background:#286e64; color:#fff; font-size:.75rem; font-weight:600; }
+.hiw-steps strong { font-size:.85rem; font-weight:600; }
+.hiw-steps p { margin-top:.2rem; font-size:.75rem; line-height:1.5; color:#58665e; }
+@media (max-width: 1000px) { .hiw-grid-4, .hiw-steps { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width: 760px) {
-  .hiw-row, .hiw-grid, .hiw-split { grid-template-columns:minmax(0,1fr); }
+  .hiw-steps, .hiw-row, .hiw-grid, .hiw-grid-4, .hiw-split { grid-template-columns:minmax(0,1fr); }
 }

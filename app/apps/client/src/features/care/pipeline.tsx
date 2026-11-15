@@ -109,7 +109,7 @@ export function CarePipeline({ workspace, close, openEpisode, openSource, encoun
           {selectedStage ? <><p className="care-pipeline-detail-status">{evidence?.superseded ? evidence.result ? 'A newer result needs acknowledgement.' : 'Acknowledgement recorded. Matching result evidence is missing.' : evidence?.event ? 'Matching source evidence recorded.' : 'No matching evidence has been received.'}</p>
             <dl>
               <dt>Expected performer</dt><dd>{selectedStage.performer}</dd>
-              <dt>Recorded in Gluco by</dt><dd>{actor ? `${actor.name} · ${roleLabels[actor.role]}${actor.simulated ? ' · Simulated' : ''}` : 'Unknown'}</dd>
+              <dt>Recorded in Gluco by</dt><dd>{actor ? `${actor.name} · ${roleLabels[actor.role]}${actor.simulated ? ' · Simulated' : ''}` : 'Simulation seed (fictional HIS/LIS record)'}</dd>
               <dt>Current clinical responsibility</dt><dd>{clinicalOwner}</dd>
               {'followup' in selectedStage && <>
                 <dt>Follow-up assignee</dt><dd>{followup.length ? followup.map(task => <div key={task.id}>{task.owner.trim() || 'Unassigned'}<small className="block">{taskStatusLabels[task.status]}</small></div>) : 'Unassigned'}</dd>
