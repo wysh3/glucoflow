@@ -93,3 +93,7 @@ Simulated feeds and fictional patients only. No new hospital, ABDM, model-accura
 - **Not done:**
   - Android APK not rebuilt. The Android SDK is no longer installed on this machine (`~/Library/Android/sdk` is missing), so the November 7 APK still bundles the earlier interface.
   - Hosted demo data was not cleaned. Earlier test uploads and notes remain visible in the review queue and the patient notes.
+
+## Hosted demo data cleanup (2026-11-15)
+
+With the user's confirmation, removed leftover test data for Asha Rao (synthetic) from the hosted database in a single transaction. The removed rows were 7 uploads with no approved facts (4 repeat `synthetic-lab.pdf`, 1 repeat photo pair and 2 `synthetic-hermes-proof` PDFs), the rows that depend on them, 7 finished jobs and 1 QA note. A guard refused deletion if any approved facts or approval batches existed. Kept: every document that has approved facts, one duplicate (to show duplicate detection), the quarantined wrong-patient PDF and the photo sample awaiting review. The backup is in the git-ignored `.local/` directory. Verified afterwards: the live review queue shows 12 rows, and the production tour and landing specs passed 10/10 (desktop and mobile).
