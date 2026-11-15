@@ -18,8 +18,10 @@ export function SkillApplication({ skill, workspace, state, close, target }: {
   const originEncounter = skill.origin?.workspaceId === workspace.id
     ? workspace.tasks.find((task) => task.id === skill.origin?.taskId)?.encounterId : undefined;
   const eligibleEncounters = workspace.encounters.filter((encounter) => encounter.id !== originEncounter);
-  const [encounterId, setEncounterId] = useState(() => eligibleEncounters.find((item) => item.id === target?.encounterId)?.id ?? '');
-  const [orderId, setOrderId] = useState(() => workspace.orders.find((item) => item.id === target?.orderId && item.encounterId === encounterId)?.id ?? '');
+  // Without an explicit target, suggest the first other encounter whose latest order is at this routine's step.
+  const suggested = target?.encounterId ? undefined : suggestedTarget(skill, workspace, eligibleEncounters.map((item) => item.id));
+  const [encounterId, setEncounterId] = useState(() => eligibleEncounters.find((item) => item.id === (target?.encounterId ?? suggested?.encounterId))?.id ?? '');
+  const [orderId, setOrderId] = useState(() => workspace.orders.find((item) => item.id === (target?.orderId ?? suggested?.orderId) && item.encounterId === encounterId)?.id ?? '');
   const [inspected, setInspected] = useState<CareEvent | null>(null);
   const sourceDetails = useRef<HTMLDivElement>(null);
   const sourceControl = useRef<HTMLDivElement>(null);
@@ -127,4 +129,19 @@ export function SkillApplication({ skill, workspace, state, close, target }: {
       )}
     </CareDialog>
   );
+}
+
+/** A suggestion only: the server still checks applicability before any approval request exists. */
+export function suggestedTarget(skill: Pick<CareSkill, 'pattern'>, workspace: CareWorkspace, encounterIds: string[]) {
+  for (const encounterId of encounterIds) {
+    const order = workspace.orders.filter((item) => item.encounterId === encounterId).at(-1);
+    if (!order) continue;
+    const kinds = new Set(workspace.events.filter((event) => event.orderId === order.id).map((event) => event.kind));
+    if (kinds.has('order_cancelled')) continue;
+    const ready = skill.pattern === 'specimen_receipt'
+      ? kinds.has('specimen_collected') && !kinds.has('specimen_received')
+      : (kinds.has('result_validated') || kinds.has('result_corrected')) && !kinds.has('result_acknowledged');
+    if (ready) return { encounterId, orderId: order.id };
+  }
+  return undefined;
 }

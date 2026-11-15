@@ -4,9 +4,9 @@
       "/Users/wysh/.local/share/fnm/node-versions/v22.23.1/installation/bin/node",
       "/Users/wysh/coding/thon/iitb-health/app/node_modules/.pnpm/@playwright+test@1.63.0/node_modules/@playwright/test/cli.js",
       "test",
-      "tests/e2e/landing.spec.ts",
+      "tests/e2e/care-workspace.spec.ts",
       "tests/e2e/evaluator-tour.spec.ts",
-      "tests/e2e/care-workspace.spec.ts"
+      "--project=desktop-chromium"
     ],
     "configFile": "/Users/wysh/coding/thon/iitb-health/app/playwright.config.ts",
     "rootDir": "/Users/wysh/coding/thon/iitb-health/app/tests/e2e",
@@ -105,12 +105,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2616,
+                  "duration": 11480,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-15T09:59:07.838Z",
+                  "startTime": "2026-11-15T10:54:33.844Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -139,12 +139,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2384,
+                  "duration": 13640,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-15T09:59:10.625Z",
+                  "startTime": "2026-11-15T10:54:47.706Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -173,12 +173,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3894,
+                  "duration": 21972,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-15T09:59:13.015Z",
+                  "startTime": "2026-11-15T10:55:01.376Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -207,12 +207,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5347,
+                  "duration": 15274,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-15T09:59:16.913Z",
+                  "startTime": "2026-11-15T10:55:23.363Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -241,12 +241,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2263,
+                  "duration": 9197,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-15T09:59:22.263Z",
+                  "startTime": "2026-11-15T10:55:38.682Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -255,176 +255,6 @@
             }
           ],
           "id": "3e586e7a46530bc31d90-071f1cb14d5c8750016a",
-          "file": "care-workspace.spec.ts",
-          "line": 215,
-          "column": 1
-        },
-        {
-          "title": "a tester creates a workspace, asks with explicit offline mode, and reloads persisted answers",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "mobile-chromium",
-              "projectName": "mobile-chromium",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2436,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T09:59:53.289Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "3e586e7a46530bc31d90-7f06b590c4cf3461b9a4",
-          "file": "care-workspace.spec.ts",
-          "line": 11,
-          "column": 1
-        },
-        {
-          "title": "source evidence opens from the worklist without leaving the workspace",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "mobile-chromium",
-              "projectName": "mobile-chromium",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2411,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T09:59:55.816Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "3e586e7a46530bc31d90-3a80da9b0c0cc5119988",
-          "file": "care-workspace.spec.ts",
-          "line": 27,
-          "column": 1
-        },
-        {
-          "title": "saved workspaces recover after a failed reopen without mixing conversations",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "mobile-chromium",
-              "projectName": "mobile-chromium",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3832,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T09:59:58.231Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "3e586e7a46530bc31d90-3a2080bd0a5ede209ed3",
-          "file": "care-workspace.spec.ts",
-          "line": 44,
-          "column": 1
-        },
-        {
-          "title": "source-confirmed monitoring becomes a reviewed skill and proposes a new task with target evidence",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "mobile-chromium",
-              "projectName": "mobile-chromium",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 5492,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T10:00:02.066Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "3e586e7a46530bc31d90-dab128ed284c501ea1b5",
-          "file": "care-workspace.spec.ts",
-          "line": 129,
-          "column": 1
-        },
-        {
-          "title": "a workflow layout is tested, approved, and rolled back through human review",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "mobile-chromium",
-              "projectName": "mobile-chromium",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2288,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T10:00:07.561Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "3e586e7a46530bc31d90-a0c26a249f37688de35a",
           "file": "care-workspace.spec.ts",
           "line": 215,
           "column": 1
@@ -453,12 +283,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8495,
+                  "duration": 17126,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-15T09:59:24.534Z",
+                  "startTime": "2026-11-15T10:55:47.963Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -487,12 +317,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 16106,
+                  "duration": 23199,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-15T09:59:33.035Z",
+                  "startTime": "2026-11-15T10:56:05.126Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -521,12 +351,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1401,
+                  "duration": 2007,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-15T09:59:49.145Z",
+                  "startTime": "2026-11-15T10:56:28.356Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -536,253 +366,7 @@
           ],
           "id": "ef6292b95c1d96f58db1-31f74995880bbe6416e2",
           "file": "evaluator-tour.spec.ts",
-          "line": 111,
-          "column": 1
-        },
-        {
-          "title": "the quick tour runs a real source event that closes work by evidence",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "mobile-chromium",
-              "projectName": "mobile-chromium",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 5829,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T10:00:09.858Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "ef6292b95c1d96f58db1-542a08a68a6d69cb8baa",
-          "file": "evaluator-tour.spec.ts",
-          "line": 11,
-          "column": 1
-        },
-        {
-          "title": "the full A–Z tour visits every chapter across pages, dialogs and roles",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 240000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "mobile-chromium",
-              "projectName": "mobile-chromium",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 10687,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T10:00:15.691Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "ef6292b95c1d96f58db1-50575211ca394d8b7c52",
-          "file": "evaluator-tour.spec.ts",
-          "line": 52,
-          "column": 1
-        },
-        {
-          "title": "the how-it-works page reports the live API and what is not claimed",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "mobile-chromium",
-              "projectName": "mobile-chromium",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1126,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T10:00:26.382Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "ef6292b95c1d96f58db1-0122c11eb85a2fe8655d",
-          "file": "evaluator-tour.spec.ts",
-          "line": 111,
-          "column": 1
-        }
-      ]
-    },
-    {
-      "title": "landing.spec.ts",
-      "file": "landing.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "the public home opens the synthetic inpatient care workspace in one click",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1225,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T09:59:50.555Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "4e5b49d369fd48ca0656-8265d4496f1973b87b23",
-          "file": "landing.spec.ts",
-          "line": 3,
-          "column": 1
-        },
-        {
-          "title": "the demo role cards sign in without a password",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop-chromium",
-              "projectName": "desktop-chromium",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1224,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T09:59:51.783Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "4e5b49d369fd48ca0656-447f54d6d3179ecfcecf",
-          "file": "landing.spec.ts",
-          "line": 15,
-          "column": 1
-        },
-        {
-          "title": "the public home opens the synthetic inpatient care workspace in one click",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "mobile-chromium",
-              "projectName": "mobile-chromium",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1231,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T10:00:27.517Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "4e5b49d369fd48ca0656-958451b260831d56894b",
-          "file": "landing.spec.ts",
-          "line": 3,
-          "column": 1
-        },
-        {
-          "title": "the demo role cards sign in without a password",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 120000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "mobile-chromium",
-              "projectName": "mobile-chromium",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 1230,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-11-15T10:00:28.752Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "4e5b49d369fd48ca0656-e8a18945cadf8872a42d",
-          "file": "landing.spec.ts",
-          "line": 15,
+          "line": 112,
           "column": 1
         }
       ]
@@ -790,9 +374,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-15T09:59:04.943Z",
-    "duration": 85122.807,
-    "expected": 20,
+    "startTime": "2026-11-15T10:54:21.487Z",
+    "duration": 129308.29,
+    "expected": 8,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

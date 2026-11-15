@@ -1,3 +1,5 @@
+import { LearningLoop } from './learning-loop';
+import { loopState } from './learning-loop-state';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, CircleX, FlaskConical, GitPullRequest } from 'lucide-react';
@@ -153,6 +155,14 @@ export function SkillLibrary({ workspace, state, openSource }: {
       await queryClient.invalidateQueries({ queryKey: key });
     },
   });
+  const capture = useMutation({
+    mutationFn: (taskId: string) => api.request<CareSkill>(path, { method: 'POST', body: { taskId } }),
+    onSuccess: async () => {
+      toast.push({ title: 'Routine draft captured', tone: 'success' });
+      await queryClient.invalidateQueries({ queryKey: key });
+    },
+  });
+  const loop = library.data ? loopState(workspace, library.data.skills) : null;
   const selected = library.data?.skills.find((skill) => skill.id === selection?.skillId);
   const review = selection && selection.action !== 'apply' ? selection.action : null;
   const busy = mutation.isPending || !!state.busy;
@@ -164,6 +174,12 @@ export function SkillLibrary({ workspace, state, openSource }: {
       <p className="mb-4 max-w-2xl text-sm leading-relaxed text-ink-soft">
         These templates reuse operational steps inside the synthetic clinic. Each application uses its own order evidence and goes through human task approval.
       </p>
+      {loop && library.data ? <LearningLoop workspace={workspace} state={loop} busy={busy} capturing={capture.isPending} canReview={library.data.canReview}
+        onCapture={(task) => capture.mutate(task.id)}
+        onTest={(skill) => { mutation.reset(); mutation.mutate({ skillId: skill.id, action: 'test' }); }}
+        onApprove={(skill) => { mutation.reset(); setSelection({ skillId: skill.id, action: 'approve' }); }}
+        onReuse={(skill) => { close(); setSelection({ skillId: skill.id, action: 'apply' }); }} /> : null}
+      {capture.error ? <p className="mb-3 text-sm text-danger" role="alert">{careErrorText(capture.error)}</p> : null}
       {library.isPending ? <Card className="p-4"><Spinner label="Loading care routines" /></Card> : null}
       {library.error ? (
         <Card className="p-4" role="alert">
@@ -191,7 +207,6 @@ export function SkillLibrary({ workspace, state, openSource }: {
             const earlier = library.data.skills.filter((skill) => archived.has(skill.status));
             return <>
               {current.map(card)}
-              {!current.length ? <p className="rounded-xl border border-line p-3 text-sm text-ink-soft">No active care routine. Earlier versions can be restored below by a clinician.</p> : null}
               {earlier.length ? <details className="rounded-xl border border-line bg-surface p-3">
                 <summary className="min-h-9 cursor-pointer text-sm font-medium">Earlier and retired versions ({earlier.length})</summary>
                 <div className="mt-3 grid gap-3">{earlier.map(card)}</div>

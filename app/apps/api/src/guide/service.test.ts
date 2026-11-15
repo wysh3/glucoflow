@@ -13,7 +13,7 @@ const config: GuideConfig = {
   mode: 'live',
   hermes: null,
   hourlyLimit: 2,
-  timeoutMs: 100,
+  timeoutMs: 2_000, // generous for a local stub under load; the stall test sets its own bound
   maxConcurrent: 2,
 };
 async function provider(payload: unknown, status = 200, delay = 0) {

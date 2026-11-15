@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { CareEncounter, CareEvent, CareOrder, CareTask, CareWorkspace, CareStaff } from '@glucoflow/contracts';
+import type { CareEncounter, CareEvent, CareOrder, CareTask, CareWorkspace, CareStaff, CareAssignment } from '@glucoflow/contracts';
 
 const minutes = (n: number) => n * 60_000;
 const examples = [
@@ -65,6 +65,13 @@ export function seedCareWorkspace(now: Date, preset: CarePreset = 'classic'): Ca
   if (preset === 'showcase') appendScenarios(now, encounters, orders, events, tasks);
 
   const staff = createDemoStaff(now);
+  // Showcase: one pending offer so the nurse view opens with named work to accept or decline.
+  const offerTask = preset === 'showcase' ? tasks.find((task) => task.kind === 'specimen_receipt' && task.status === 'monitoring') : undefined;
+  const nurse = staff.find((person) => person.role === 'nurse');
+  const assignments: CareAssignment[] = offerTask && nurse ? [{
+    id: randomUUID(), taskId: offerTask.id, staffId: nurse.id, capability: 'specimen_followup', status: 'offered',
+    offeredAt: ago(4), expiresAt: new Date(now.getTime() + minutes(240)).toISOString(), sourceRef: 'DEMO-SEED-OFFER-1',
+  }] : [];
   return {
     demoStaffId: staff[0]!.id, demoProfilesVersion: 1,
     id: randomUUID(), revision: 1, name: preset === 'showcase' ? 'Diabetes unit shift demo' : 'Inpatient coordination demo', synthetic: true,
@@ -79,7 +86,7 @@ export function seedCareWorkspace(now: Date, preset: CarePreset = 'classic'): Ca
       createdAt: at, approvedAt: at, tests: [],
     }],
     coordination: {
-      staff,assignments:[],handovers:[],records:[],
+      staff,assignments,handovers:[],records:[],
     },
     messages: [],
     feeds: { HIS: { connected: true, lastSyncAt: at }, LIS: { connected: true, lastSyncAt: at } },

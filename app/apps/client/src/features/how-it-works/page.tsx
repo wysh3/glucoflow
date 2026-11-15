@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   ArrowDown, ArrowRight, Bot, CheckCircle2, Database, FileClock, FlaskConical, Globe, Lock,
-  RefreshCcw, ServerCog, Plug, Building2, Boxes, Repeat, ShieldCheck, Smartphone, UserCheck, Workflow, XCircle,
+  RefreshCcw, ServerCog, Plug, Building2, Boxes, Repeat, Sparkles, LayoutTemplate, Shuffle, ShieldCheck, Smartphone, UserCheck, Workflow, XCircle,
 } from 'lucide-react';
 import './how-it-works.css';
 
@@ -53,6 +53,12 @@ function LiveStatus() {
   </div>;
 }
 
+const living = [
+  { icon: Repeat, title: 'Skills, not hard-coded flows', text: 'A workflow that closed by source evidence becomes a versioned care routine: a reusable skill with tests, an approver and an off-switch.', where: 'Learning → Care routines' },
+  { icon: Sparkles, title: 'A governed learning loop', text: 'Observe → capture → test → approve → reuse. It improves itself, but every version is approved by a clinician and can be rolled back.', where: 'the loop at the top of Care routines' },
+  { icon: Shuffle, title: 'Adapts to any ward', text: 'Built on hospital events, not one hospital’s screens. Diabetes is the first set of skills; other lab-driven pathways reuse the same engine.', where: 'Simulate HIS/LIS on the unit board' },
+  { icon: LayoutTemplate, title: 'An interface built for the question', text: 'Ask in plain language and the answer arrives as the right view: board, pipeline or handover draft, each with its evidence. Each role gets its own desk.', where: 'Ask Gluco, and switch person' },
+];
 const scale = [
   { icon: Plug, title: 'Connect, do not replace', text: 'Reads the order, collection, receipt, result and acknowledgement events a hospital system already records. Today they are simulated; a standards-based HIS/LIS adapter is the next integration step.' },
   { icon: Building2, title: 'A new clinic is a new tenant', text: 'PostgreSQL row-level security isolates every clinic and person in the database itself, so adding a site is configuration, not a new deployment.' },
@@ -84,6 +90,16 @@ export function HowItWorksPage() {
         <a href="#architecture" className="hiw-button">See the architecture <ArrowDown size={16} aria-hidden /></a>
       </div>
     </header>
+
+    <section className="hiw-section hiw-living" aria-labelledby="hiw-living">
+      <p className="hiw-kicker">A living system</p>
+      <h2 id="hiw-living">It learns how your team works, and reshapes itself around each person</h2>
+      <div className="hiw-grid hiw-grid-4">
+        {living.map(({ icon: Icon, title, text, where }) => <article key={title} className="hiw-card">
+          <Icon size={18} aria-hidden /><h3>{title}</h3><p>{text}</p><p className="hiw-where">In the demo: {where}</p>
+        </article>)}
+      </div>
+    </section>
 
     <section id="architecture" className="hiw-section" aria-labelledby="hiw-arch">
       <h2 id="hiw-arch">Architecture</h2>

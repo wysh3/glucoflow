@@ -41,6 +41,9 @@
 .hiw-note code { font-size:.7rem; background:#f2f1ef; padding:.1rem .3rem; border-radius:4px; overflow-wrap:anywhere; }
 .hiw-footer { padding-top:2rem; border-top:1px solid #eeece8; font-size:.8rem; color:#58665e; }
 .hiw-footer a { text-decoration:underline; text-underline-offset:3px; }
+.hiw-living { background:linear-gradient(180deg,#f1f7f4 0%,#fcfbf8 100%); border-radius:24px; padding:2rem 1.5rem; border-top:0; }
+.hiw-living h2 { margin-top:.35rem; max-width:40rem; }
+.hiw-where { margin-top:.55rem !important; font-size:.7rem !important; color:var(--color-primary) !important; font-weight:500; }
 .hiw-grid-4 { grid-template-columns:repeat(4,minmax(0,1fr)); }
 .hiw-h3 { margin-top:1.8rem; font-size:1rem; font-weight:600; color:#263f3b; }
 .hiw-steps { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.75rem; margin-top:.9rem; counter-reset:none; }

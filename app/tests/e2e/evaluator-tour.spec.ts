@@ -81,7 +81,8 @@ test('the full A–Z tour visits every chapter across pages, dialogs and roles',
   await expect(page.getByRole('button', { name: /Switch demo person/ })).toContainText('Priya Shah');
   await next(page); await title(page, 'Back to Dr Mira Rao');
   await expect(page.getByRole('button', { name: /Switch demo person/ })).toContainText('Dr Mira Rao');
-  await next(page); await title(page, 'Care routines: learning without losing control');
+  await next(page); await title(page, 'A system that learns your workflows as skills');
+  await expect(page.getByRole('region', { name: 'Learning loop' })).toBeVisible();
   await expect(page).toHaveURL(/view=learning/);
   await next(page); await title(page, 'An activity log of every change');
   await next(page); await title(page, 'Append-only history');

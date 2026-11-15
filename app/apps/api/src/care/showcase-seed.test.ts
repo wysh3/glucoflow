@@ -64,3 +64,18 @@ it('closes work only when the matching source event arrives from the correct rol
   reconcileCareWorkspace(state, later(3));
   expect(state.tasks.find((item) => item.orderId === receiptOrder.id)!.status).toBe('source_confirmed');
 });
+
+it('gives the showcase nurse one pending, eligible work offer and leaves the classic seed without offers', () => {
+  expect(seedCareWorkspace(new Date(at)).coordination?.assignments).toEqual([]);
+  const state = seedCareWorkspace(new Date(at), 'showcase');
+  const offers = state.coordination!.assignments;
+  expect(offers).toHaveLength(1);
+  const offer = offers[0]!;
+  const nurse = state.coordination!.staff.find((person) => person.id === offer.staffId)!;
+  const task = state.tasks.find((item) => item.id === offer.taskId)!;
+  expect(nurse.role).toBe('nurse');
+  expect(nurse.capabilities).toContain(offer.capability);
+  expect(offer.status).toBe('offered');
+  expect(task.status).toBe('monitoring');
+  expect(offer.expiresAt > at && offer.expiresAt <= nurse.shiftEnd).toBe(true);
+});

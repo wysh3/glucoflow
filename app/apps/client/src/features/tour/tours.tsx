@@ -23,7 +23,7 @@ export const chapters = [
   { id: 'approval', title: 'Nothing runs unapproved', summary: 'Worklist, task approval, shift monitoring' },
   { id: 'handover', title: 'Handover with receipt', summary: 'Versioned handover, named recipient' },
   { id: 'roles', title: 'Every role, its own work', summary: 'Nurse shift and lab queue views' },
-  { id: 'learning', title: 'Learning, governed', summary: 'Care routines, activity, history' },
+  { id: 'learning', title: 'Learning, governed', summary: 'Skills learning loop, activity, history' },
   { id: 'records', title: 'Patient records', summary: 'Approved results, trends, report review' },
   { id: 'trust', title: 'Under the hood', summary: 'Architecture, scale and server-enforced rules' },
 ] as const;
@@ -225,11 +225,11 @@ const full: TourStep[] = [
     </>,
   }),
   careStep({
-    id: 'learning', chapter: 'Learning, governed', target: 'css:.care-working-pane', enter: desk('learning'),
-    title: 'Care routines: learning without losing control',
+    id: 'learning', chapter: 'Learning, governed', target: 'learning-loop', enter: desk('learning'),
+    title: 'A system that learns your workflows as skills',
     body: <>
-      <p>A task that closed with source evidence can become a reusable <strong>Care routine</strong>, a fixed operational pattern rather than a clinical rule.</p>
-      <p>Each version runs sandbox tests and needs clinician approval before reuse, and you can roll it back. Applying it to another patient still needs that patient's own evidence and a new approval.</p>
+      <p>When a task closes by source evidence, GlucoFlow can turn that workflow into a reusable <strong>skill</strong>: <strong>observe → capture → test → approve → reuse</strong>.</p>
+      <p>Try it: the highlighted step shows what comes next. It learns workflows, never diagnoses, and every version needs a clinician’s approval and can be retired.</p>
     </>,
   }),
   careStep({
